@@ -1,0 +1,99 @@
+= Validate Commit Messages in Pull Requests
+:experimental:
+:source-highlighter: highlight.js
+:toc: preamble
+
+This repository implements a reusable GitHub Action that validates commit messages in pull requests on GitHub.
+
+CAUTION: All commands in this README document are to be executed from the project root directory (where this document resides).
+
+== Get Started
+This project uses the https://yarnpkg.com/features/zero-installs[zero-install feature] of the Yarn package manager.
+Upon cloning the Git repository, the `.yarn/cache` directory already contains a cache of the third-party dependencies, effectively replacing the usual `node_modules` directory.
+
+=== Install Node.js and Yarn
+* *macOS* and *Linux* users should install https://nodejs.org/en[Node.js] via https://github.com/nvm-sh/nvm[Node Version Manager] and opt for https://yarnpkg.com/getting-started/install[Yarn] via https://nodejs.org/api/corepack.html[Corepack]:
++
+[source,shell]
+----
+$ curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+$ source ~/.bashrc
+$ nvm install --lts
+$ corepack enable yarn
+----
+
+* *Windows* users should install https://nodejs.org/en[Node.js] via https://github.com/microsoft/winget-cli[Windows Package Manager] and install https://yarnpkg.com/getting-started/install[Yarn] via npm (which is actually a workaround until Corepack supports Windows):
++
+[source,shell]
+----
+$ winget install OpenJS.NodeJS.LTS
+$ npm install --global yarn
+----
+
+=== Prepare Git
+. Generate an SSH key with the *Ed25519* algorithm, for example using https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent[ssh-keygen] or https://developer.1password.com/docs/ssh/manage-keys[1Password], and add it to the SSH agent on your computer.
+If you already have an SSH key on your computer, you may skip this step.
++
+[source,shell,subs="+quotes,+replacements"]
+----
+$ ssh-keygen -t ed25519 -f "$HOME/.ssh/**_<my-ssh-key>_**"
+$ ssh-add ~/.ssh/<my-ssh-key>
+----
+
+* *Windows* users must instruct Git to use https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview[Microsoft OpenSSH] as the SSH agent:
++
+[source,shell]
+----
+$ git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
+----
+
+. Grab the **_public_** key.
+It appears like `ssh-ed25519 AAAAC3(...)`.
++
+[source,shell,subs="+quotes,+replacements"]
+----
+$ cat ~/.ssh/**_<my-ssh-key>_**.pub
+----
+
+. Register the public key in https://github.com/settings/keys[GitHub] as a signing key.
+
+. Obtain your masked email address in https://github.com/settings/emails[GitHub].
+It appears like `**_<id+username>_**@users.noreply.github.com`.
+
+. Declare your identity within the scope of this repository and use the public key to sign your commits:
++
+[source,shell,subs="+quotes,+replacements"]
+----
+$ git config user.name "**_<FirstName> <LastName>_**"
+$ git config user.email "**_<id+username>_**@users.noreply.github.com"
+
+$ git config user.signingkey "ssh-ed25519 AAAAC3**_<PublicKey>_**"
+$ git config gpg.format "ssh"
+$ git config commit.gpgsign "true"
+$ git config tag.gpgsign "true"
+----
+
+=== Prepare Your IDE
+* *IntelliJ IDEA* (and *WebStorm*) users should open the project directory:
++
+[source,shell]
+----
+$ idea .
+----
+
+. Install these plugins (follow the popup message, or go to menu:File[Settings > Plugins]):
+** https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoc]
+
+. Go to menu:File[Settings > Languages & Frameworks > Node.js].
+Select the appropriate Node.js interpreter and enable coding assistance.
+
+* *Visual Studio Code* users should open the project directory:
++
+[source,shell]
+----
+$ code .
+----
+
+. Install these extensions (kbd:[Ctrl+Shift+X] and search for `@recommended`):
++
+** https://marketplace.visualstudio.com/items?itemName=asciidoctor.asciidoctor-vscode[AsciiDoc]
