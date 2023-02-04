@@ -1,4 +1,26 @@
 {
+	"scripts": {
+		"setup": "yarn run __setup.install-dependencies__ && yarn run __setup.install-git-hooks__",
+		"__setup.install-dependencies__": "yarn install --immutable",
+		"__setup.install-git-hooks__": "simple-git-hooks",
+		"validate": "yarn run validate.format",
+		"validate.format": "yarn run __validate.format.base__ --check",
+		"validate.format.fix": "yarn run __validate.format.base__ --list-different --write",
+		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode --cache"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "yarn run validate.format"
+	},
+	"devDependencies": {
+		"@types/prettier": "2.7.2",
+		"prettier": "2.8.3",
+		"simple-git-hooks": "2.8.1"
+	},
+	"devDependencies-comments": {
+		"@types/prettier": "A set of type definitions for Prettier configuration files.",
+		"prettier": "Prettier; an opinionated code formatter that respects the `.editorconfig` file.",
+		"simple-git-hooks": "A tool that manages Git hooks, e.g. to validate the software quality before committing changes to the repository."
+	},
 	"packageManager": "yarn@3.4.1",
 	"private": true
 }

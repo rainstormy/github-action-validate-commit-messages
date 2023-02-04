@@ -1,0 +1,7 @@
+# Exclude certain files and directories from formatting by Prettier.
+#
+# By default, Prettier ignores the `node_modules` directory as well as
+# files and directories with a leading dot (e.g. `.yarn` and `.editorconfig`).
+#
+# Read more:
+# https://prettier.io/docs/en/ignore.html

@@ -1,3 +1,28 @@
 {
-	"tasks": []
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "setup",
+			"problemMatcher": [],
+			"label": "setup"
+		},
+		{
+			"type": "npm",
+			"script": "validate",
+			"problemMatcher": [],
+			"label": "validate"
+		},
+		{
+			"type": "npm",
+			"script": "validate.format",
+			"problemMatcher": [],
+			"label": "validate.format"
+		},
+		{
+			"type": "npm",
+			"script": "validate.format.fix",
+			"problemMatcher": [],
+			"label": "validate.format.fix"
+		}
+	]
 }

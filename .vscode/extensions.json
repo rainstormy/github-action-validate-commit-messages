@@ -1,6 +1,8 @@
 {
 	"recommendations": [
-		"asciidoctor.asciidoctor-vscode"
+		"arcanis.vscode-zipfs",
+		"asciidoctor.asciidoctor-vscode",
+		"esbenp.prettier-vscode"
 	],
 	"unwantedRecommendations": []
 }

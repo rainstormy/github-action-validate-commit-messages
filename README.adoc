@@ -20,6 +20,7 @@ $ curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 $ source ~/.bashrc
 $ nvm install --lts
 $ corepack enable yarn
+$ yarn run setup
 ----
 
 * *Windows* users should install https://nodejs.org/en[Node.js] via https://github.com/microsoft/winget-cli[Windows Package Manager] and install https://yarnpkg.com/getting-started/install[Yarn] via npm (which is actually a workaround until Corepack supports Windows):
@@ -28,6 +29,7 @@ $ corepack enable yarn
 ----
 $ winget install OpenJS.NodeJS.LTS
 $ npm install --global yarn
+$ yarn run setup
 ----
 
 === Prepare Git
@@ -83,6 +85,7 @@ $ idea .
 
 . Install these plugins (follow the popup message, or go to menu:File[Settings > Plugins]):
 ** https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoc]
+** https://plugins.jetbrains.com/plugin/10456-prettier[Prettier]
 
 . Go to menu:File[Settings > Languages & Frameworks > Node.js].
 Select the appropriate Node.js interpreter and enable coding assistance.
@@ -97,3 +100,20 @@ $ code .
 . Install these extensions (kbd:[Ctrl+Shift+X] and search for `@recommended`):
 +
 ** https://marketplace.visualstudio.com/items?itemName=asciidoctor.asciidoctor-vscode[AsciiDoc]
+** https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode[Prettier]
+** https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs[ZipFS] (required by the Yarn SDK)
+
+== Tasks
+The `scripts` field in `package.json` defines a set of work tasks.
+Corresponding configurations for IntelliJ IDEA and Visual Studio Code are located in `.idea/runConfigurations` and `.vscode/tasks.json`, respectively.
+
+=== Validate the Software Quality
+[source,shell]
+----
+$ yarn run validate
+----
+
+It runs the following means of validation:
+
+* *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
+** `validate.format.fix` reformats the files accordingly.

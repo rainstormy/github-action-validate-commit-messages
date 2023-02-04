@@ -10,6 +10,7 @@
 !.idea/*.iml
 !.idea/externalDependencies.xml
 !.idea/modules.xml
+!.idea/prettier.xml
 !.idea/vcs.xml
 
 # Visual Studio Code.
