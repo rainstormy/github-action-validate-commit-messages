@@ -30,7 +30,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@types/prettier", "npm:2.7.2"],\
             ["prettier", "npm:2.8.3"],\
-            ["simple-git-hooks", "npm:2.8.1"]\
+            ["prettier-plugin-organize-imports", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.2"],\
+            ["simple-git-hooks", "npm:2.8.1"],\
+            ["tslib", "npm:2.5.0"],\
+            ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -53,6 +56,40 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["prettier-plugin-organize-imports", [\
+        ["npm:3.2.2", {\
+          "packageLocation": "./.yarn/cache/prettier-plugin-organize-imports-npm-3.2.2-36fd96e896-28620ea73a.zip/node_modules/prettier-plugin-organize-imports/",\
+          "packageDependencies": [\
+            ["prettier-plugin-organize-imports", "npm:3.2.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.2", {\
+          "packageLocation": "./.yarn/__virtual__/prettier-plugin-organize-imports-virtual-a193b20bd5/0/cache/prettier-plugin-organize-imports-npm-3.2.2-36fd96e896-28620ea73a.zip/node_modules/prettier-plugin-organize-imports/",\
+          "packageDependencies": [\
+            ["prettier-plugin-organize-imports", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.2"],\
+            ["@types/prettier", "npm:2.7.2"],\
+            ["@types/typescript", null],\
+            ["@types/volar__vue-language-plugin-pug", null],\
+            ["@types/volar__vue-typescript", null],\
+            ["@volar/vue-language-plugin-pug", null],\
+            ["@volar/vue-typescript", null],\
+            ["prettier", "npm:2.8.3"],\
+            ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"]\
+          ],\
+          "packagePeers": [\
+            "@types/prettier",\
+            "@types/typescript",\
+            "@types/volar__vue-language-plugin-pug",\
+            "@types/volar__vue-typescript",\
+            "@volar/vue-language-plugin-pug",\
+            "@volar/vue-typescript",\
+            "prettier",\
+            "typescript"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["root-workspace-0b6124", [\
         ["workspace:.", {\
           "packageLocation": "./",\
@@ -60,7 +97,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["root-workspace-0b6124", "workspace:."],\
             ["@types/prettier", "npm:2.7.2"],\
             ["prettier", "npm:2.8.3"],\
-            ["simple-git-hooks", "npm:2.8.1"]\
+            ["prettier-plugin-organize-imports", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.2"],\
+            ["simple-git-hooks", "npm:2.8.1"],\
+            ["tslib", "npm:2.5.0"],\
+            ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -70,6 +110,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/simple-git-hooks-npm-2.8.1-284fd0e93b/node_modules/simple-git-hooks/",\
           "packageDependencies": [\
             ["simple-git-hooks", "npm:2.8.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["tslib", [\
+        ["npm:2.5.0", {\
+          "packageLocation": "./.yarn/cache/tslib-npm-2.5.0-bb364efebd-ae3ed5f9ce.zip/node_modules/tslib/",\
+          "packageDependencies": [\
+            ["tslib", "npm:2.5.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["typescript", [\
+        ["patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76", {\
+          "packageLocation": "./.yarn/cache/typescript-patch-72dc6f164f-ab417a2f39.zip/node_modules/typescript/",\
+          "packageDependencies": [\
+            ["typescript", "patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"]\
           ],\
           "linkType": "HARD"\
         }]\

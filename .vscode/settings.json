@@ -5,6 +5,8 @@
 		"**/.pnp.*": true,
 		"**/yarn.lock": true
 	},
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"typescript.tsdk": ".yarn/sdks/typescript/lib",
 	"[css]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},

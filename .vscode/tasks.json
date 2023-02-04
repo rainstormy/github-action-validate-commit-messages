@@ -23,6 +23,12 @@
 			"script": "validate.format.fix",
 			"problemMatcher": [],
 			"label": "validate.format.fix"
+		},
+		{
+			"type": "npm",
+			"script": "validate.types",
+			"problemMatcher": [],
+			"label": "validate.types"
 		}
 	]
 }

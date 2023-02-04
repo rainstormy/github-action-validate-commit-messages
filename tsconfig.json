@@ -1,0 +1,30 @@
+// Read more:
+// https://www.typescriptlang.org/tsconfig
+{
+	"compilerOptions": {
+		"allowJs": true,
+		"baseUrl": ".",
+		"checkJs": true,
+		"esModuleInterop": true,
+		"exactOptionalPropertyTypes": false,
+		"forceConsistentCasingInFileNames": true,
+		"importHelpers": true,
+		"importsNotUsedAsValues": "error",
+		"incremental": true,
+		"isolatedModules": true,
+		"lib": ["DOM", "DOM.Iterable", "ES2021", "WebWorker"],
+		"module": "ES2022",
+		"moduleResolution": "Node",
+		"noEmit": true,
+		"paths": {},
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"target": "ES2021",
+		"tsBuildInfoFile": "./node_modules/.cache/typescript/.tsbuildinfo",
+		"useDefineForClassFields": true
+	},
+	"exclude": [".yarn", "node_modules"],
+	"include": ["**/*.cjs", "**/*.jsx", "**/*.mjs", "**/*.ts", "**/*.tsx"]
+}

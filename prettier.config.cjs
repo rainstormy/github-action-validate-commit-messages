@@ -5,7 +5,7 @@
 const prettierConfig = {
 	// The plugins must be listed explicitly for them to work with Yarn:
 	// https://github.com/prettier/prettier/issues/8474
-	plugins: [],
+	plugins: ["prettier-plugin-organize-imports"],
 	semi: false,
 	trailingComma: "all",
 }

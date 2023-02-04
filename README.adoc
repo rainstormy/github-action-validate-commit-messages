@@ -115,5 +115,6 @@ $ yarn run validate
 
 It runs the following means of validation:
 
+* *Type checking* via https://www.typescriptlang.org[TypeScript] (`validate.types`).
 * *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
 ** `validate.format.fix` reformats the files accordingly.
