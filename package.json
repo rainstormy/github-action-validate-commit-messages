@@ -1,13 +1,18 @@
 {
 	"scripts": {
+		"build": "vite build",
 		"setup": "yarn run __setup.install-dependencies__ && yarn run __setup.install-git-hooks__",
 		"__setup.install-dependencies__": "yarn install --immutable",
 		"__setup.install-git-hooks__": "simple-git-hooks",
-		"validate": "yarn run validate.types && yarn run validate.format",
+		"validate": "yarn run validate.types && yarn run validate.format && yarn run validate.test",
 		"validate.format": "yarn run __validate.format.base__ --check",
 		"validate.format.fix": "yarn run __validate.format.base__ --list-different --write",
 		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode --cache",
-		"validate.types": "tsc"
+		"validate.types": "tsc",
+		"validate.test": "vitest run",
+		"validate.test.coverage": "vitest run --coverage",
+		"validate.test.ui": "vitest watch --ui --open false",
+		"validate.test.watch": "vitest watch"
 	},
 	"simple-git-hooks": {
 		"pre-commit": "yarn run validate.types && yarn run validate.format"
@@ -19,18 +24,28 @@
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
+		"@types/node": "18.13.0",
 		"@types/prettier": "2.7.2",
+		"@vitest/coverage-c8": "0.28.5",
+		"@vitest/ui": "0.28.5",
 		"prettier": "2.8.3",
 		"prettier-plugin-organize-imports": "3.2.2",
 		"simple-git-hooks": "2.8.1",
-		"typescript": "4.9.5"
+		"typescript": "4.9.5",
+		"vite": "4.1.1",
+		"vitest": "0.28.5"
 	},
 	"devDependencies-comments": {
+		"@types/node": "A set of type definitions for Node modules used in configuration files.",
 		"@types/prettier": "A set of type definitions for Prettier configuration files.",
+		"@vitest/coverage-c8": "A Vitest plugin that provides code coverage.",
+		"@vitest/ui": "A Vitest plugin that provides a user interface in the web browser.",
 		"prettier": "Prettier; an opinionated code formatter that respects the `.editorconfig` file.",
 		"prettier-plugin-organize-imports": "A Prettier plugin that sorts import statements and removes unused ones.",
 		"simple-git-hooks": "A tool that manages Git hooks, e.g. to validate the software quality before committing changes to the repository.",
-		"typescript": "TypeScript; a statically typed programming language that extends the JavaScript syntax."
+		"typescript": "TypeScript; a statically typed programming language that extends the JavaScript syntax.",
+		"vite": "Vite; a frontend build tool with native support for hot module replacement.",
+		"vitest": "Vitest; a unit testing framework that uses the Vite build configuration natively."
 	},
 	"packageManager": "yarn@3.4.1",
 	"private": true

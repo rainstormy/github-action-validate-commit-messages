@@ -37,6 +37,10 @@
 !.yarn/versions/
 node_modules/
 
+# Build and test artifacts.
+build/
+coverage/
+
 # Operating system artifacts.
 *~
 .DS_Store

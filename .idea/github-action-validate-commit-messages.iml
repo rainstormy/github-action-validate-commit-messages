@@ -3,7 +3,9 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludePattern pattern=".pnp.cjs" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/coverage" />
+      <excludePattern pattern=".pnp.*" />
       <excludePattern pattern="yarn.lock" />
     </content>
     <orderEntry type="inheritedJdk" />

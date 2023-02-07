@@ -3,3 +3,6 @@
 //
 // Read more:
 // https://www.typescriptlang.org/tsconfig#types
+
+/// <reference types="vite/client" />
+/// <reference types="vitest/globals" />
