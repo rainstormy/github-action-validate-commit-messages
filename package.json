@@ -4,9 +4,9 @@
 		"setup": "yarn run __setup.install-dependencies__ && yarn run __setup.install-git-hooks__",
 		"__setup.install-dependencies__": "yarn install --immutable",
 		"__setup.install-git-hooks__": "simple-git-hooks",
-		"validate": "yarn run validate.types && yarn run validate.lint && yarn run validate.format && yarn run validate.test",
+		"validate": "concurrently \"yarn:validate.types\" \"yarn:validate.lint\" \"yarn:validate.format\" \"yarn:validate.test\" --group --names types,lint,format,test --prefix-colors #3178c6,#8080f2,#c596c7,#fcc72b",
 		"validate.fix": "yarn run validate.lint.fix && yarn run validate.format.fix",
-		"validate.format": "yarn run __validate.format.base__ --check",
+		"validate.format": "yarn run __validate.format.base__ --check --loglevel warn",
 		"validate.format.fix": "yarn run __validate.format.base__ --list-different --write",
 		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode --cache",
 		"validate.lint": "yarn run __validate.lint.base__",
@@ -19,7 +19,7 @@
 		"validate.test.watch": "vitest watch"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "yarn run validate.types && yarn run validate.lint && yarn run validate.format"
+		"pre-commit": "yarn run concurrently \"yarn:validate.types\" \"yarn:validate.lint\" \"yarn:validate.format\" --group --names types,lint,format --prefix-colors #3178c6,#8080f2,#c596c7"
 	},
 	"dependencies": {
 		"tslib": "2.5.0"
@@ -35,6 +35,7 @@
 		"@typescript-eslint/parser": "5.52.0",
 		"@vitest/coverage-c8": "0.28.5",
 		"@vitest/ui": "0.28.5",
+		"concurrently": "7.6.0",
 		"eslint": "8.34.0",
 		"eslint-plugin-eslint-comments": "3.2.0",
 		"eslint-plugin-functional": "5.0.4",
@@ -56,6 +57,7 @@
 		"@typescript-eslint/parser": "An ESLint plugin that lets it parse TypeScript sources. It must always match the version of `@typescript-eslint/eslint-plugin`.",
 		"@vitest/coverage-c8": "A Vitest plugin that provides code coverage.",
 		"@vitest/ui": "A Vitest plugin that provides a user interface in the web browser.",
+		"concurrently": "A tool that executes multiple commands in parallel.",
 		"eslint": "ESLint; a static program analysis tool that uncovers issues in JavaScript code.",
 		"eslint-plugin-eslint-comments": "An ESLint plugin that uncovers issues in the use of ESLint comments.",
 		"eslint-plugin-functional": "An ESLint plugin that encourages principles from the functional programming paradigm.",
