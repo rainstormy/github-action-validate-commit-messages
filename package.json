@@ -4,10 +4,14 @@
 		"setup": "yarn run __setup.install-dependencies__ && yarn run __setup.install-git-hooks__",
 		"__setup.install-dependencies__": "yarn install --immutable",
 		"__setup.install-git-hooks__": "simple-git-hooks",
-		"validate": "yarn run validate.types && yarn run validate.format && yarn run validate.test",
+		"validate": "yarn run validate.types && yarn run validate.lint && yarn run validate.format && yarn run validate.test",
+		"validate.fix": "yarn run validate.lint.fix && yarn run validate.format.fix",
 		"validate.format": "yarn run __validate.format.base__ --check",
 		"validate.format.fix": "yarn run __validate.format.base__ --list-different --write",
 		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode --cache",
+		"validate.lint": "yarn run __validate.lint.base__",
+		"validate.lint.fix": "yarn run __validate.lint.base__ --fix",
+		"__validate.lint.base__": "eslint \"./**/*.{cjs,js,jsx,mjs,ts,tsx}\" --max-warnings 0 --cache",
 		"validate.types": "tsc",
 		"validate.test": "vitest run",
 		"validate.test.coverage": "vitest run --coverage",
@@ -15,7 +19,7 @@
 		"validate.test.watch": "vitest watch"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "yarn run validate.types && yarn run validate.format"
+		"pre-commit": "yarn run validate.types && yarn run validate.lint && yarn run validate.format"
 	},
 	"dependencies": {
 		"tslib": "2.5.0"
@@ -24,10 +28,19 @@
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
+		"@types/eslint": "8.21.1",
 		"@types/node": "18.13.0",
 		"@types/prettier": "2.7.2",
+		"@typescript-eslint/eslint-plugin": "5.52.0",
+		"@typescript-eslint/parser": "5.52.0",
 		"@vitest/coverage-c8": "0.28.5",
 		"@vitest/ui": "0.28.5",
+		"eslint": "8.34.0",
+		"eslint-plugin-eslint-comments": "3.2.0",
+		"eslint-plugin-functional": "5.0.4",
+		"eslint-plugin-jest": "27.2.1",
+		"eslint-plugin-redundant-undefined": "0.4.0",
+		"eslint-plugin-unicorn": "45.0.2",
 		"prettier": "2.8.3",
 		"prettier-plugin-organize-imports": "3.2.2",
 		"simple-git-hooks": "2.8.1",
@@ -36,10 +49,19 @@
 		"vitest": "0.28.5"
 	},
 	"devDependencies-comments": {
+		"@types/eslint": "A set of type definitions for ESLint configuration files.",
 		"@types/node": "A set of type definitions for Node modules used in configuration files.",
 		"@types/prettier": "A set of type definitions for Prettier configuration files.",
+		"@typescript-eslint/eslint-plugin": "An ESLint plugin that uncovers issues in TypeScript code. It must always match the version of `@typescript-eslint/parser`.",
+		"@typescript-eslint/parser": "An ESLint plugin that lets it parse TypeScript sources. It must always match the version of `@typescript-eslint/eslint-plugin`.",
 		"@vitest/coverage-c8": "A Vitest plugin that provides code coverage.",
 		"@vitest/ui": "A Vitest plugin that provides a user interface in the web browser.",
+		"eslint": "ESLint; a static program analysis tool that uncovers issues in JavaScript code.",
+		"eslint-plugin-eslint-comments": "An ESLint plugin that uncovers issues in the use of ESLint comments.",
+		"eslint-plugin-functional": "An ESLint plugin that encourages principles from the functional programming paradigm.",
+		"eslint-plugin-jest": "An ESLint plugin that uncovers issues in test suites in Jest (and Vitest whose API is compatible with that of Jest).",
+		"eslint-plugin-redundant-undefined": "An ESLint plugin that uncovers inconsistencies in optional type declarations.",
+		"eslint-plugin-unicorn": "An ESLint plugin that complements the built-in set of rules.",
 		"prettier": "Prettier; an opinionated code formatter that respects the `.editorconfig` file.",
 		"prettier-plugin-organize-imports": "A Prettier plugin that sorts import statements and removes unused ones.",
 		"simple-git-hooks": "A tool that manages Git hooks, e.g. to validate the software quality before committing changes to the repository.",
@@ -48,5 +70,6 @@
 		"vitest": "Vitest; a unit testing framework that uses the Vite build configuration natively."
 	},
 	"packageManager": "yarn@3.4.1",
-	"private": true
+	"private": true,
+	"type": "module"
 }

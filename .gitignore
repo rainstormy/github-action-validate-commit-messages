@@ -6,6 +6,7 @@
 
 # IntelliJ IDEA.
 .idea/*
+!.idea/jsLinters/
 !.idea/runConfigurations/
 !.idea/*.iml
 !.idea/externalDependencies.xml
@@ -40,6 +41,7 @@ node_modules/
 # Build and test artifacts.
 build/
 coverage/
+.eslintcache
 
 # Operating system artifacts.
 *~

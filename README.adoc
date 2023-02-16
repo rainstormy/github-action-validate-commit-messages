@@ -100,6 +100,7 @@ $ code .
 . Install these extensions (kbd:[Ctrl+Shift+X] and search for `@recommended`):
 +
 ** https://marketplace.visualstudio.com/items?itemName=asciidoctor.asciidoctor-vscode[AsciiDoc]
+** https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint[ESLint]
 ** https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode[Prettier]
 ** https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs[ZipFS] (required by the Yarn SDK)
 
@@ -116,12 +117,16 @@ $ yarn run validate
 It runs the following means of validation:
 
 * *Type checking* via https://www.typescriptlang.org[TypeScript] (`validate.types`).
+* *Static program analysis* (linting) via https://eslint.org[ESLint] (`validate.lint`).
+** `validate.lint.fix` fixes certain issues automatically.
 * *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
 ** `validate.format.fix` reformats the files accordingly.
 * *Automated unit testing* via https://vitest.dev[Vitest] (`validate.test`).
 ** `validate.test.coverage` creates a code coverage report in the `coverage` directory.
 ** `validate.test.ui` launches the https://vitest.dev/guide/ui.html[Vitest user interface] in a web browser.
 ** `validate.test.watch` makes the test suite run continuously.
+
+Run `validate.fix` to automatically fix as much as possible.
 
 === Build for Production
 [source,shell]

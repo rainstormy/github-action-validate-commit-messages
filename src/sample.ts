@@ -1,3 +1,3 @@
-export function sampleValue() {
+export function sampleValue(): boolean {
 	return true
 }

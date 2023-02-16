@@ -20,6 +20,12 @@
 		},
 		{
 			"type": "npm",
+			"script": "validate.fix",
+			"problemMatcher": [],
+			"label": "validate.fix"
+		},
+		{
+			"type": "npm",
 			"script": "validate.format",
 			"problemMatcher": [],
 			"label": "validate.format"
@@ -29,6 +35,18 @@
 			"script": "validate.format.fix",
 			"problemMatcher": [],
 			"label": "validate.format.fix"
+		},
+		{
+			"type": "npm",
+			"script": "validate.lint",
+			"problemMatcher": [],
+			"label": "validate.lint"
+		},
+		{
+			"type": "npm",
+			"script": "validate.lint.fix",
+			"problemMatcher": [],
+			"label": "validate.lint.fix"
 		},
 		{
 			"type": "npm",

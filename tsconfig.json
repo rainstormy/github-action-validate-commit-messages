@@ -2,9 +2,9 @@
 // https://www.typescriptlang.org/tsconfig
 {
 	"compilerOptions": {
-		"allowJs": true,
+		"allowJs": false,
 		"baseUrl": ".",
-		"checkJs": true,
+		"checkJs": false,
 		"esModuleInterop": true,
 		"exactOptionalPropertyTypes": false,
 		"forceConsistentCasingInFileNames": true,
@@ -25,6 +25,20 @@
 		"tsBuildInfoFile": "./node_modules/.cache/typescript/.tsbuildinfo",
 		"useDefineForClassFields": true
 	},
-	"exclude": [".yarn", "node_modules"],
-	"include": ["**/*.cjs", "**/*.jsx", "**/*.mjs", "**/*.ts", "**/*.tsx"]
+	"exclude": [
+		".git",
+		".idea",
+		".vscode",
+		".yarn",
+		"build",
+		"coverage",
+		"node_modules",
+		".pnp.*"
+	],
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
+		"**/eslint.config.js",
+		"**/prettier.config.cjs"
+	]
 }

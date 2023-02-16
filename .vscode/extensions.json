@@ -2,6 +2,7 @@
 	"recommendations": [
 		"arcanis.vscode-zipfs",
 		"asciidoctor.asciidoctor-vscode",
+		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode"
 	],
 	"unwantedRecommendations": []
