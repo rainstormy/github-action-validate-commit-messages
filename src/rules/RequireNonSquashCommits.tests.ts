@@ -4,7 +4,7 @@ import { requireNonSquashCommits } from "+rules"
 const { regularCommits, squashCommits } = dummyCommits
 
 describe("a validation rule that requires non-squash commits", () => {
-	const rule = requireNonSquashCommits
+	const rule = requireNonSquashCommits()
 
 	it.each(squashCommits)(
 		"rejects a squash commit with a subject line of '%s'",

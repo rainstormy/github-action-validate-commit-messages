@@ -1,3 +1,9 @@
+import type {
+	RequireCapitalisedSubjectLines,
+	RequireNonFixupCommits,
+	RequireNonMergeCommits,
+	RequireNonSquashCommits,
+} from "+rules"
 import {
 	requireCapitalisedSubjectLines,
 	requireNonFixupCommits,
@@ -5,12 +11,19 @@ import {
 	requireNonSquashCommits,
 } from "+rules"
 
-export const allApplicableRules = [
-	requireCapitalisedSubjectLines,
-	requireNonFixupCommits,
-	requireNonSquashCommits,
-	requireNonMergeCommits,
-] as const
+export function getAllApplicableRules(): ReadonlyArray<ApplicableRule> {
+	return [
+		requireCapitalisedSubjectLines(),
+		requireNonFixupCommits(),
+		requireNonSquashCommits(),
+		requireNonMergeCommits(),
+	]
+}
 
-export type ApplicableRule = (typeof allApplicableRules)[number]
+export type ApplicableRule =
+	| RequireCapitalisedSubjectLines
+	| RequireNonFixupCommits
+	| RequireNonMergeCommits
+	| RequireNonSquashCommits
+
 export type ApplicableRuleKey = ApplicableRule["key"]

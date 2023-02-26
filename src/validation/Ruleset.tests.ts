@@ -1,30 +1,27 @@
-import {
-	requireNonFixupCommits,
-	requireNonMergeCommits,
-	requireNonSquashCommits,
-} from "+rules"
-import type { Ruleset } from "+validation"
-import { allApplicableRules, rulesetFromString } from "+validation"
+import type { ApplicableRuleKey, Ruleset } from "+validation"
+import { getAllApplicableRules, rulesetFromString } from "+validation"
+
+const allApplicableRuleKeys = getAllApplicableRules().map((rule) => rule.key)
 
 describe.each`
-	commaSeparatedKeys                                                                       | expectedRuleset
-	${"require-non-fixup-commits"}                                                           | ${[requireNonFixupCommits]}
-	${" require-non-fixup-commits "}                                                         | ${[requireNonFixupCommits]}
-	${"require-non-merge-commits"}                                                           | ${[requireNonMergeCommits]}
-	${" require-non-merge-commits"}                                                          | ${[requireNonMergeCommits]}
-	${"require-non-squash-commits"}                                                          | ${[requireNonSquashCommits]}
-	${"require-non-squash-commits,  "}                                                       | ${[requireNonSquashCommits]}
-	${"require-non-fixup-commits,,require-non-squash-commits"}                               | ${[requireNonFixupCommits, requireNonSquashCommits]}
-	${"require-non-fixup-commits,require-non-merge-commits,require-non-squash-commits"}      | ${[requireNonFixupCommits, requireNonMergeCommits, requireNonSquashCommits]}
-	${",require-non-fixup-commits, require-non-merge-commits,  require-non-squash-commits,"} | ${[requireNonFixupCommits, requireNonMergeCommits, requireNonSquashCommits]}
-	${"all"}                                                                                 | ${allApplicableRules}
+	commaSeparatedKeys                                                                       | expectedRuleKeys
+	${"require-non-fixup-commits"}                                                           | ${["require-non-fixup-commits"]}
+	${" require-non-fixup-commits "}                                                         | ${["require-non-fixup-commits"]}
+	${"require-non-merge-commits"}                                                           | ${["require-non-merge-commits"]}
+	${" require-non-merge-commits"}                                                          | ${["require-non-merge-commits"]}
+	${"require-non-squash-commits"}                                                          | ${["require-non-squash-commits"]}
+	${"require-non-squash-commits,  "}                                                       | ${["require-non-squash-commits"]}
+	${"require-non-fixup-commits,,require-non-squash-commits"}                               | ${["require-non-fixup-commits", "require-non-squash-commits"]}
+	${"require-non-fixup-commits,require-non-merge-commits,require-non-squash-commits"}      | ${["require-non-fixup-commits", "require-non-merge-commits", "require-non-squash-commits"]}
+	${",require-non-fixup-commits, require-non-merge-commits,  require-non-squash-commits,"} | ${["require-non-fixup-commits", "require-non-merge-commits", "require-non-squash-commits"]}
+	${"all"}                                                                                 | ${allApplicableRuleKeys}
 `(
 	"a ruleset from a valid string of $commaSeparatedKeys",
 	(testRow: {
 		readonly commaSeparatedKeys: string
-		readonly expectedRuleset: Ruleset
+		readonly expectedRuleKeys: ReadonlyArray<ApplicableRuleKey>
 	}) => {
-		const { commaSeparatedKeys, expectedRuleset } = testRow
+		const { commaSeparatedKeys, expectedRuleKeys } = testRow
 
 		const result = rulesetFromString(commaSeparatedKeys)
 		const ruleset = (result as Ruleset.ParseResult.Valid).ruleset
@@ -33,14 +30,14 @@ describe.each`
 			expect(result.status).toBe("valid")
 		})
 
-		it(`has ${expectedRuleset.length} ${
-			expectedRuleset.length === 1 ? "rule" : "rules" // eslint-disable-line jest/no-conditional-in-test -- The conditional expression affects only the test name to make it grammatically correct.
+		it(`has ${expectedRuleKeys.length} ${
+			expectedRuleKeys.length === 1 ? "rule" : "rules" // eslint-disable-line jest/no-conditional-in-test -- The conditional expression affects only the test name to make it grammatically correct.
 		}`, () => {
-			expect(ruleset).toHaveLength(expectedRuleset.length)
+			expect(ruleset).toHaveLength(expectedRuleKeys.length)
 		})
 
-		it.each(expectedRuleset)("includes $key", (rule) => {
-			expect(ruleset).toContain(rule)
+		it.each(expectedRuleKeys)("includes '%s'", (ruleKey) => {
+			expect(ruleset).toContainEqual(expect.objectContaining({ key: ruleKey }))
 		})
 	},
 )

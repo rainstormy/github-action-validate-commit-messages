@@ -4,7 +4,7 @@ import { requireNonFixupCommits } from "+rules"
 const { regularCommits, fixupCommits } = dummyCommits
 
 describe("a validation rule that requires non-fixup commits", () => {
-	const rule = requireNonFixupCommits
+	const rule = requireNonFixupCommits()
 
 	it.each(fixupCommits)(
 		"rejects a fixup commit with a subject line of '%s'",

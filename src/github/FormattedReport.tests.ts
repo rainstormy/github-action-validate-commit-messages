@@ -1,5 +1,5 @@
 import { dummyCommits } from "+core/dummies"
-import { allApplicableRules, reportFrom } from "+validation"
+import { getAllApplicableRules, reportFrom } from "+validation"
 import { formattedReportFrom } from "./FormattedReport"
 
 const {
@@ -9,6 +9,8 @@ const {
 	regularCommits,
 	squashCommits,
 } = dummyCommits
+
+const allApplicableRules = getAllApplicableRules()
 
 describe("a formatted report generated from regular commits", () => {
 	const report = reportFrom({

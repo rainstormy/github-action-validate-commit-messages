@@ -1,10 +1,16 @@
+import type { Rule } from "+core"
 import { defineRule } from "+core"
 
-export const requireCapitalisedSubjectLines = defineRule({
-	key: "require-capitalised-subject-lines",
-	validate: (commit) =>
-		isCapitalised(commit.naturalSubjectLine) ? "valid" : "invalid",
-})
+const key = "require-capitalised-subject-lines"
+export type RequireCapitalisedSubjectLines = Rule<typeof key>
+
+export function requireCapitalisedSubjectLines(): RequireCapitalisedSubjectLines {
+	return defineRule({
+		key,
+		validate: (commit) =>
+			isCapitalised(commit.naturalSubjectLine) ? "valid" : "invalid",
+	})
+}
 
 const firstCharacterIsUppercaseLetterRegex = /^\p{Lu}/u
 

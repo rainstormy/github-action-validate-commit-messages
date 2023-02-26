@@ -1,6 +1,12 @@
+import type { Rule } from "+core"
 import { defineRule } from "+core"
 
-export const requireNonSquashCommits = defineRule({
-	key: "require-non-squash-commits",
-	validate: (commit) => (commit.isSquash ? "invalid" : "valid"),
-})
+const key = "require-non-squash-commits"
+export type RequireNonSquashCommits = Rule<typeof key>
+
+export function requireNonSquashCommits(): RequireNonSquashCommits {
+	return defineRule({
+		key,
+		validate: (commit) => (commit.isSquash ? "invalid" : "valid"),
+	})
+}

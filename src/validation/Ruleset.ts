@@ -1,5 +1,5 @@
 import type { ApplicableRule, ApplicableRuleKey } from "+validation"
-import { allApplicableRules } from "+validation"
+import { getAllApplicableRules } from "+validation"
 
 export type Ruleset = ReadonlyArray<ApplicableRule>
 
@@ -49,6 +49,11 @@ export function rulesetFromString(
 		}
 	}
 
+	const allApplicableRules = getAllApplicableRules()
+
+	const isApplicableRuleKey = (key: string): key is ApplicableRuleKey =>
+		allApplicableRules.some((rule) => rule.key === key)
+
 	if (uniqueKeys.has("all")) {
 		return uniqueKeys.size === 1
 			? {
@@ -78,8 +83,4 @@ export function rulesetFromString(
 		status: "valid",
 		ruleset: allApplicableRules.filter((rule) => uniqueKeys.has(rule.key)),
 	}
-}
-
-function isApplicableRuleKey(key: string): key is ApplicableRuleKey {
-	return allApplicableRules.some((rule) => rule.key === key)
 }
