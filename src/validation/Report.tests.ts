@@ -39,18 +39,16 @@ describe("an exhaustive report generated from a mix of two regular commits, two 
 	})
 
 	it("reports the fixup commits", () => {
-		expect(report).toHaveProperty("require-non-fixup-commits")
-		expect(report["require-non-fixup-commits"]).toStrictEqual([
+		expect(report).toHaveProperty("no-fixup-commits")
+		expect(report["no-fixup-commits"]).toStrictEqual([
 			fixupCommits[0],
 			fixupCommits[1],
 		])
 	})
 
 	it("reports the squash commit", () => {
-		expect(report).toHaveProperty("require-non-squash-commits")
-		expect(report["require-non-squash-commits"]).toStrictEqual([
-			squashCommits[0],
-		])
+		expect(report).toHaveProperty("no-squash-commits")
+		expect(report["no-squash-commits"]).toStrictEqual([squashCommits[0]])
 	})
 })
 
@@ -65,8 +63,8 @@ describe("an exhaustive report generated from a mix of a merge commit and a regu
 	})
 
 	it("reports the merge commit", () => {
-		expect(report).toHaveProperty("require-non-merge-commits")
-		expect(report["require-non-merge-commits"]).toStrictEqual([mergeCommits[0]])
+		expect(report).toHaveProperty("no-merge-commits")
+		expect(report["no-merge-commits"]).toStrictEqual([mergeCommits[0]])
 	})
 })
 
@@ -87,13 +85,13 @@ describe("an exhaustive report generated from a mix of two regular commits, two 
 	})
 
 	it("reports the fixup commit", () => {
-		expect(report).toHaveProperty("require-non-fixup-commits")
-		expect(report["require-non-fixup-commits"]).toStrictEqual([fixupCommits[0]])
+		expect(report).toHaveProperty("no-fixup-commits")
+		expect(report["no-fixup-commits"]).toStrictEqual([fixupCommits[0]])
 	})
 
 	it("reports the commits with lowercase subject lines", () => {
-		expect(report).toHaveProperty("require-capitalised-subject-lines")
-		expect(report["require-capitalised-subject-lines"]).toStrictEqual([
+		expect(report).toHaveProperty("capitalised-subject-lines")
+		expect(report["capitalised-subject-lines"]).toStrictEqual([
 			commitsWithLowercaseSubjectLines[0],
 			commitsWithLowercaseSubjectLines[1],
 		])

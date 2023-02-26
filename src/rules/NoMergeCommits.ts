@@ -1,10 +1,10 @@
 import type { Rule } from "+core"
 import { defineRule } from "+core"
 
-const key = "require-non-merge-commits"
-export type RequireNonMergeCommits = Rule<typeof key>
+const key = "no-merge-commits"
+export type NoMergeCommits = Rule<typeof key>
 
-export function requireNonMergeCommits(): RequireNonMergeCommits {
+export function noMergeCommits(): NoMergeCommits {
 	return defineRule({
 		key,
 		validate: (commit) => (commit.isMerge ? "invalid" : "valid"),

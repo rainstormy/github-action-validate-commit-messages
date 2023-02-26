@@ -1,29 +1,29 @@
 import type {
-	RequireCapitalisedSubjectLines,
-	RequireNonFixupCommits,
-	RequireNonMergeCommits,
-	RequireNonSquashCommits,
+	CapitalisedSubjectLines,
+	NoFixupCommits,
+	NoMergeCommits,
+	NoSquashCommits,
 } from "+rules"
 import {
-	requireCapitalisedSubjectLines,
-	requireNonFixupCommits,
-	requireNonMergeCommits,
-	requireNonSquashCommits,
+	capitalisedSubjectLines,
+	noFixupCommits,
+	noMergeCommits,
+	noSquashCommits,
 } from "+rules"
 
 export function getAllApplicableRules(): ReadonlyArray<ApplicableRule> {
 	return [
-		requireCapitalisedSubjectLines(),
-		requireNonFixupCommits(),
-		requireNonSquashCommits(),
-		requireNonMergeCommits(),
+		capitalisedSubjectLines(),
+		noFixupCommits(),
+		noSquashCommits(),
+		noMergeCommits(),
 	]
 }
 
 export type ApplicableRule =
-	| RequireCapitalisedSubjectLines
-	| RequireNonFixupCommits
-	| RequireNonMergeCommits
-	| RequireNonSquashCommits
+	| CapitalisedSubjectLines
+	| NoFixupCommits
+	| NoMergeCommits
+	| NoSquashCommits
 
 export type ApplicableRuleKey = ApplicableRule["key"]

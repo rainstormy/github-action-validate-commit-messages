@@ -1,6 +1,6 @@
 import type { Commit } from "+core"
 import { dummyCommits } from "+core/dummies"
-import { requireCapitalisedSubjectLines } from "./RequireCapitalisedSubjectLines"
+import { capitalisedSubjectLines } from "+rules"
 
 const {
 	fixupCommits,
@@ -10,7 +10,7 @@ const {
 } = dummyCommits
 
 describe("a validation rule that requires capitalised subject lines", () => {
-	const rule = requireCapitalisedSubjectLines()
+	const rule = capitalisedSubjectLines()
 
 	it.each<Commit>(commitsWithDecapitalisedSubjectLines)(
 		"rejects a commit with a subject line of '%s' that starts with a lowercase letter",

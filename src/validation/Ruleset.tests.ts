@@ -4,17 +4,17 @@ import { getAllApplicableRules, rulesetFromString } from "+validation"
 const allApplicableRuleKeys = getAllApplicableRules().map((rule) => rule.key)
 
 describe.each`
-	commaSeparatedKeys                                                                       | expectedRuleKeys
-	${"require-non-fixup-commits"}                                                           | ${["require-non-fixup-commits"]}
-	${" require-non-fixup-commits "}                                                         | ${["require-non-fixup-commits"]}
-	${"require-non-merge-commits"}                                                           | ${["require-non-merge-commits"]}
-	${" require-non-merge-commits"}                                                          | ${["require-non-merge-commits"]}
-	${"require-non-squash-commits"}                                                          | ${["require-non-squash-commits"]}
-	${"require-non-squash-commits,  "}                                                       | ${["require-non-squash-commits"]}
-	${"require-non-fixup-commits,,require-non-squash-commits"}                               | ${["require-non-fixup-commits", "require-non-squash-commits"]}
-	${"require-non-fixup-commits,require-non-merge-commits,require-non-squash-commits"}      | ${["require-non-fixup-commits", "require-non-merge-commits", "require-non-squash-commits"]}
-	${",require-non-fixup-commits, require-non-merge-commits,  require-non-squash-commits,"} | ${["require-non-fixup-commits", "require-non-merge-commits", "require-non-squash-commits"]}
-	${"all"}                                                                                 | ${allApplicableRuleKeys}
+	commaSeparatedKeys                                            | expectedRuleKeys
+	${"no-fixup-commits"}                                         | ${["no-fixup-commits"]}
+	${" no-fixup-commits "}                                       | ${["no-fixup-commits"]}
+	${"no-merge-commits"}                                         | ${["no-merge-commits"]}
+	${" no-merge-commits"}                                        | ${["no-merge-commits"]}
+	${"no-squash-commits"}                                        | ${["no-squash-commits"]}
+	${"no-squash-commits,  "}                                     | ${["no-squash-commits"]}
+	${"no-fixup-commits,,no-squash-commits"}                      | ${["no-fixup-commits", "no-squash-commits"]}
+	${"no-fixup-commits,no-merge-commits,no-squash-commits"}      | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${",no-fixup-commits, no-merge-commits,  no-squash-commits,"} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${"all"}                                                      | ${allApplicableRuleKeys}
 `(
 	"a ruleset from a valid string of $commaSeparatedKeys",
 	(testRow: {
@@ -83,7 +83,7 @@ describe("a ruleset from a string of whitespace and commas", () => {
 
 describe("a ruleset from a string that contains unknown rules", () => {
 	const result = rulesetFromString(
-		"require-only-merge-commits,require-non-squash-commits,require-funny-commits,require-non-fixup-commits",
+		"require-only-merge-commits,no-squash-commits,require-funny-commits,no-fixup-commits",
 	)
 	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
 
@@ -99,11 +99,11 @@ describe("a ruleset from a string that contains unknown rules", () => {
 })
 
 describe.each`
-	commaSeparatedKeys                                                                                                                                                  | expectedErrorMessage
-	${"require-non-fixup-commits,require-non-squash-commits,require-non-fixup-commits"}                                                                                 | ${"Duplicate rules: require-non-fixup-commits"}
-	${"require-non-fixup-commits,require-non-merge-commits,require-non-squash-commits,require-non-squash-commits,require-non-fixup-commits,require-non-squash-commits"} | ${"Duplicate rules: require-non-squash-commits, require-non-fixup-commits"}
-	${"require-non-merge-commits,require-non-squash-commits,require-non-merge-commits,require-non-squash-commits"}                                                      | ${"Duplicate rules: require-non-merge-commits, require-non-squash-commits"}
-	${"all,all"}                                                                                                                                                        | ${"Duplicate rules: all"}
+	commaSeparatedKeys                                                                                            | expectedErrorMessage
+	${"no-fixup-commits,no-squash-commits,no-fixup-commits"}                                                      | ${"Duplicate rules: no-fixup-commits"}
+	${"no-fixup-commits,no-merge-commits,no-squash-commits,no-squash-commits,no-fixup-commits,no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
+	${"no-merge-commits,no-squash-commits,no-merge-commits,no-squash-commits"}                                    | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
+	${"all,all"}                                                                                                  | ${"Duplicate rules: all"}
 `(
 	"a ruleset from a string $commaSeparatedKeys that contains duplicate rules",
 	(testRow: {
@@ -126,7 +126,7 @@ describe.each`
 
 describe("a ruleset from a string that mixes rules with 'all'", () => {
 	const result = rulesetFromString(
-		"require-only-merge-commits,all,require-non-fixup-commits",
+		"require-only-merge-commits,all,no-fixup-commits",
 	)
 	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
 

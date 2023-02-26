@@ -1,10 +1,10 @@
 import type { Rule } from "+core"
 import { defineRule } from "+core"
 
-const key = "require-capitalised-subject-lines"
-export type RequireCapitalisedSubjectLines = Rule<typeof key>
+const key = "capitalised-subject-lines"
+export type CapitalisedSubjectLines = Rule<typeof key>
 
-export function requireCapitalisedSubjectLines(): RequireCapitalisedSubjectLines {
+export function capitalisedSubjectLines(): CapitalisedSubjectLines {
 	return defineRule({
 		key,
 		validate: (commit) =>
