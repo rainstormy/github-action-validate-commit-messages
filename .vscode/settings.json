@@ -3,8 +3,8 @@
 	"prettier.prettierPath": ".yarn/sdks/prettier/index.js",
 	"search.exclude": {
 		"**/.yarn": true,
-		"**/build": true,
 		"**/coverage": true,
+		"**/release": true,
 		"**/.pnp.*": true,
 		"**/yarn.lock": true
 	},

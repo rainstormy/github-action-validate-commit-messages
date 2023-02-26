@@ -1,3 +1,4 @@
+import { builtinModules } from "node:module"
 import { join as joinPath, resolve as resolvePath } from "node:path"
 import { fileURLToPath } from "node:url"
 import { defineConfig } from "vitest/config"
@@ -8,16 +9,29 @@ const viteConfig = defineConfig(() => ({
 	build: {
 		emptyOutDir: true,
 		lib: {
-			entry: inProjectDirectory("src/sample.ts"),
+			entry: inProjectDirectory("src/entry.actions.ts"),
 			formats: ["cjs"],
 			fileName: "index",
 		},
-		outDir: inProjectDirectory("build"),
+		outDir: inProjectDirectory("release/"),
 		reportCompressedSize: false,
+		rollupOptions: {
+			external: [
+				...builtinModules,
+				...builtinModules.map((moduleName) => `node:${moduleName}`),
+			],
+		},
 	},
 	plugins: [],
 	resolve: {
-		alias: {},
+		// The first alias takes precedence over the following ones.
+		alias: {
+			"+core/dummies": inProjectDirectory("src/core/dummies/index"),
+			"+core": inProjectDirectory("src/core/index"),
+			"+github": inProjectDirectory("src/github/index"),
+			"+rules": inProjectDirectory("src/rules/index"),
+			"+validation": inProjectDirectory("src/validation/index"),
+		},
 	},
 	test: {
 		coverage: {

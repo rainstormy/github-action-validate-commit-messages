@@ -1,4 +1,4 @@
-import { dummyCommits } from "./Commit.dummies"
+import { dummyCommits } from "+core/dummies"
 
 const { regularCommits, fixupCommits, squashCommits, mergeCommits } =
 	dummyCommits

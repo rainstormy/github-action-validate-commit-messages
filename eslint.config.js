@@ -24,9 +24,9 @@ const eslintConfig = [
 			".idea/**",
 			".vscode/**",
 			".yarn/**",
-			"build/**",
 			"coverage/**",
 			"node_modules/**",
+			"release/**",
 			".pnp.*",
 		],
 		languageOptions: {

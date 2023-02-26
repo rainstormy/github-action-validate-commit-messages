@@ -1,0 +1,14 @@
+name: Validate commit messages in pull requests
+description: Fails with a non-zero exit code if a commit message in a pull request is deemed invalid to remind developers to keep the commit history healthy by rebasing interactively before merging the pull request.
+author: Steffen Diswal
+inputs:
+  github-token:
+    description: The GitHub token that lets the action list the commits in the pull request.
+    required: true
+  rules:
+    description: A comma-separated list of the rules to enforce. If omitted, all rules are enforced.
+    required: false
+    default: all
+runs:
+  using: node16
+  main: release/index.cjs

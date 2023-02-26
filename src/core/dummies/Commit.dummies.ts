@@ -1,5 +1,5 @@
-import type { Commit } from "./Commit"
-import { commitOf } from "./Commit"
+import type { Commit } from "+core"
+import { commitOf } from "+core"
 
 export const dummyCommits = {
 	regularCommits: [

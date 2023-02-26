@@ -1,10 +1,10 @@
-import { dummyCommits } from "../models"
-import { rejectSquashCommits } from "./RejectSquashCommits"
+import { dummyCommits } from "+core/dummies"
+import { requireNonSquashCommits } from "+rules"
 
 const { regularCommits, squashCommits } = dummyCommits
 
-describe("a validation rule that rejects squash commits", () => {
-	const rule = rejectSquashCommits
+describe("a validation rule that requires non-squash commits", () => {
+	const rule = requireNonSquashCommits
 
 	it.each(squashCommits)(
 		"rejects a squash commit with a subject line of '%s'",

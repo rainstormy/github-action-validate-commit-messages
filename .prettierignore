@@ -7,5 +7,5 @@
 # https://prettier.io/docs/en/ignore.html
 
 # Build and test artifacts.
-build/
 coverage/
+release/

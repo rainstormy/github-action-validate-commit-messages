@@ -1,10 +1,10 @@
-import { dummyCommits } from "../models"
-import { rejectFixupCommits } from "./RejectFixupCommits"
+import { dummyCommits } from "+core/dummies"
+import { requireNonFixupCommits } from "+rules"
 
 const { regularCommits, fixupCommits } = dummyCommits
 
-describe("a validation rule that rejects fixup commits", () => {
-	const rule = rejectFixupCommits
+describe("a validation rule that requires non-fixup commits", () => {
+	const rule = requireNonFixupCommits
 
 	it.each(fixupCommits)(
 		"rejects a fixup commit with a subject line of '%s'",

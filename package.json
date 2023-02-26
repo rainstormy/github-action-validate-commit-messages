@@ -22,12 +22,17 @@
 		"pre-commit": "yarn run concurrently \"yarn:validate.types\" \"yarn:validate.lint\" \"yarn:validate.format\" --group --names types,lint,format --prefix-colors #3178c6,#8080f2,#c596c7"
 	},
 	"dependencies": {
+		"@actions/core": "1.10.0",
+		"@actions/github": "5.1.1",
 		"tslib": "2.5.0"
 	},
 	"dependencies-comments": {
+		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
+		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
 	},
 	"devDependencies": {
+		"@octokit/types": "9.0.0",
 		"@types/eslint": "8.21.1",
 		"@types/node": "18.13.0",
 		"@types/prettier": "2.7.2",
@@ -52,6 +57,7 @@
 	"devDependencies-comments": {
 		"@types/eslint": "A set of type definitions for ESLint configuration files.",
 		"@types/node": "A set of type definitions for Node modules used in configuration files.",
+		"@types/octokit": "A set of type definitions for the GitHub REST API via Octokit.",
 		"@types/prettier": "A set of type definitions for Prettier configuration files.",
 		"@typescript-eslint/eslint-plugin": "An ESLint plugin that uncovers issues in TypeScript code. It must always match the version of `@typescript-eslint/parser`.",
 		"@typescript-eslint/parser": "An ESLint plugin that lets it parse TypeScript sources. It must always match the version of `@typescript-eslint/eslint-plugin`.",

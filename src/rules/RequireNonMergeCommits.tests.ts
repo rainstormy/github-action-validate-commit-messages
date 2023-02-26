@@ -1,10 +1,10 @@
-import { dummyCommits } from "../models"
-import { rejectMergeCommits } from "./RejectMergeCommits"
+import { dummyCommits } from "+core/dummies"
+import { requireNonMergeCommits } from "+rules"
 
 const { regularCommits, mergeCommits } = dummyCommits
 
-describe("a validation rule that rejects merge commits", () => {
-	const rule = rejectMergeCommits
+describe("a validation rule that requires non-merge commits", () => {
+	const rule = requireNonMergeCommits
 
 	it.each(mergeCommits)(
 		"rejects a merge commit with a subject line of '%s'",
