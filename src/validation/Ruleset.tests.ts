@@ -11,26 +11,29 @@ const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)
 const parser = rulesetParserFrom(defaultConfiguration)
 
 describe.each`
-	commaSeparatedKeys                                            | expectedRuleKeys
-	${"no-fixup-commits"}                                         | ${["no-fixup-commits"]}
-	${" no-fixup-commits "}                                       | ${["no-fixup-commits"]}
-	${"no-merge-commits"}                                         | ${["no-merge-commits"]}
-	${" no-merge-commits"}                                        | ${["no-merge-commits"]}
-	${"no-squash-commits"}                                        | ${["no-squash-commits"]}
-	${"no-squash-commits,  "}                                     | ${["no-squash-commits"]}
-	${"no-fixup-commits,,no-squash-commits"}                      | ${["no-fixup-commits", "no-squash-commits"]}
-	${"no-fixup-commits,no-merge-commits,no-squash-commits"}      | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
-	${",no-fixup-commits, no-merge-commits,  no-squash-commits,"} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
-	${"all"}                                                      | ${allApplicableRuleKeys}
+	delimitedRuleKeys                                                                     | expectedRuleKeys
+	${"no-fixup-commits"}                                                                 | ${["no-fixup-commits"]}
+	${" no-fixup-commits "}                                                               | ${["no-fixup-commits"]}
+	${"no-merge-commits"}                                                                 | ${["no-merge-commits"]}
+	${" no-merge-commits"}                                                                | ${["no-merge-commits"]}
+	${"no-squash-commits"}                                                                | ${["no-squash-commits"]}
+	${"no-squash-commits,  "}                                                             | ${["no-squash-commits"]}
+	${",capitalised-subject-lines ;"}                                                     | ${["capitalised-subject-lines"]}
+	${"no-fixup-commits , no-squash-commits"}                                             | ${["no-fixup-commits", "no-squash-commits"]}
+	${"capitalised-subject-lines ;no-merge-commits; no-fixup-commits"}                    | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
+	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                           | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${" no-fixup-commits no-merge-commits  no-squash-commits "}                           | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${";no-fixup-commits no-merge-commits; no-squash-commits,capitalised-subject-lines "} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits", "capitalised-subject-lines"]}
+	${"all"}                                                                              | ${allApplicableRuleKeys}
 `(
-	"a ruleset from a valid string of $commaSeparatedKeys",
+	"a ruleset from a valid string of $delimitedRuleKeys",
 	(testRow: {
-		readonly commaSeparatedKeys: string
+		readonly delimitedRuleKeys: string
 		readonly expectedRuleKeys: ReadonlyArray<ApplicableRuleKey>
 	}) => {
-		const { commaSeparatedKeys, expectedRuleKeys } = testRow
+		const { delimitedRuleKeys, expectedRuleKeys } = testRow
 
-		const result = parser.parseCommaSeparatedString(commaSeparatedKeys)
+		const result = parser.parse(delimitedRuleKeys)
 		const ruleset = (result as RulesetParser.Result.Valid).ruleset
 
 		it("is valid", () => {
@@ -50,7 +53,7 @@ describe.each`
 )
 
 describe("a ruleset from an empty string", () => {
-	const result = parser.parseCommaSeparatedString("")
+	const result = parser.parse("")
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -63,7 +66,7 @@ describe("a ruleset from an empty string", () => {
 })
 
 describe("a ruleset from a string of whitespace", () => {
-	const result = parser.parseCommaSeparatedString("  ")
+	const result = parser.parse("  ")
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -75,8 +78,8 @@ describe("a ruleset from a string of whitespace", () => {
 	})
 })
 
-describe("a ruleset from a string of whitespace and commas", () => {
-	const result = parser.parseCommaSeparatedString(" ,   ,, ")
+describe("a ruleset from a string of spaces, commas, and semicolons", () => {
+	const result = parser.parse(" ;   ,, , ;; ")
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -89,8 +92,8 @@ describe("a ruleset from a string of whitespace and commas", () => {
 })
 
 describe("a ruleset from a string that contains unknown rules", () => {
-	const result = parser.parseCommaSeparatedString(
-		"require-only-merge-commits,no-squash-commits,require-funny-commits,no-fixup-commits",
+	const result = parser.parse(
+		"only-merge-commits no-squash-commits no-funny-commits no-fixup-commits",
 	)
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
@@ -100,26 +103,26 @@ describe("a ruleset from a string that contains unknown rules", () => {
 
 	it("reports the unknown rules in order of their appearance", () => {
 		expect(errorMessage).toBe(
-			"Unknown rules: require-only-merge-commits, require-funny-commits",
+			"Unknown rules: only-merge-commits, no-funny-commits",
 		)
 	})
 })
 
 describe.each`
-	commaSeparatedKeys                                                                                            | expectedErrorMessage
-	${"no-fixup-commits,no-squash-commits,no-fixup-commits"}                                                      | ${"Duplicate rules: no-fixup-commits"}
-	${"no-fixup-commits,no-merge-commits,no-squash-commits,no-squash-commits,no-fixup-commits,no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
-	${"no-merge-commits,no-squash-commits,no-merge-commits,no-squash-commits"}                                    | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
-	${"all,all"}                                                                                                  | ${"Duplicate rules: all"}
+	delimitedRuleKeys                                                                                             | expectedErrorMessage
+	${"no-fixup-commits no-squash-commits no-fixup-commits"}                                                      | ${"Duplicate rules: no-fixup-commits"}
+	${"no-fixup-commits no-merge-commits no-squash-commits no-squash-commits no-fixup-commits no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
+	${"no-merge-commits no-squash-commits no-merge-commits no-squash-commits"}                                    | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
+	${"all all"}                                                                                                  | ${"Duplicate rules: all"}
 `(
-	"a ruleset from a string $commaSeparatedKeys that contains duplicate rules",
+	"a ruleset from a string $delimitedRuleKeys that contains duplicate rules",
 	(testRow: {
-		readonly commaSeparatedKeys: string
+		readonly delimitedRuleKeys: string
 		readonly expectedErrorMessage: string
 	}) => {
-		const { commaSeparatedKeys, expectedErrorMessage } = testRow
+		const { delimitedRuleKeys, expectedErrorMessage } = testRow
 
-		const result = parser.parseCommaSeparatedString(commaSeparatedKeys)
+		const result = parser.parse(delimitedRuleKeys)
 		const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 		it("is invalid", () => {
@@ -133,9 +136,7 @@ describe.each`
 )
 
 describe("a ruleset from a string that mixes rules with 'all'", () => {
-	const result = parser.parseCommaSeparatedString(
-		"require-only-merge-commits,all,no-fixup-commits",
-	)
+	const result = parser.parse("only-merge-commits all no-fixup-commits")
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {

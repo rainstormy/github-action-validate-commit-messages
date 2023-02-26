@@ -6,7 +6,7 @@ inputs:
     description: The GitHub token that lets the action list the commits in the pull request.
     required: true
   rules:
-    description: A comma-separated list of the rules to enforce. If omitted, all rules are enforced.
+    description: A list of the rules to enforce, separated by spaces, commas, or semicolons. If omitted, all available rules are enforced.
     required: false
     default: all
 runs:

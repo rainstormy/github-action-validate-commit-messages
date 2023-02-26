@@ -8,9 +8,7 @@ import { getAllApplicableRules } from "+validation"
 export type Ruleset = ReadonlyArray<ApplicableRule>
 
 export type RulesetParser = {
-	readonly parseCommaSeparatedString: (
-		commaSeparatedKeys: string,
-	) => RulesetParser.Result
+	readonly parse: (delimitedRuleKeys: string) => RulesetParser.Result
 }
 
 export namespace RulesetParser {
@@ -29,65 +27,66 @@ export namespace RulesetParser {
 	}
 }
 
+const delimiters = /[ ,;]+/u
+
 export function rulesetParserFrom(configuration: Configuration): RulesetParser {
 	const allApplicableRules = getAllApplicableRules(configuration)
 
-	function parseCommaSeparatedString(
-		commaSeparatedKeys: string,
-	): RulesetParser.Result {
-		const keys = commaSeparatedKeys
-			.split(",")
-			.map((key) => key.trim())
-			.filter((key) => key.length > 0)
+	return {
+		parse: (delimitedRuleKeys: string): RulesetParser.Result => {
+			const keys = delimitedRuleKeys
+				.split(delimiters)
+				.filter((key) => key.length > 0)
 
-		const uniqueKeys = new Set(keys)
+			const uniqueKeys = new Set(keys)
 
-		if (uniqueKeys.size === 0) {
-			return invalid("No rules specified")
-		}
+			if (uniqueKeys.size === 0) {
+				return invalid("No rules specified")
+			}
 
-		if (uniqueKeys.size !== keys.length) {
-			const duplicateKeysInOrderOfAppearance = new Set(
-				keys.filter((key, index) => keys.indexOf(key) !== index),
+			if (uniqueKeys.size !== keys.length) {
+				const duplicateKeysInOrderOfAppearance = new Set(
+					keys.filter((key, index) => keys.indexOf(key) !== index),
+				)
+
+				return invalid(
+					`Duplicate rules: ${[...duplicateKeysInOrderOfAppearance].join(
+						", ",
+					)}`,
+				)
+			}
+
+			if (uniqueKeys.has("all")) {
+				return uniqueKeys.size === 1
+					? valid(allApplicableRules)
+					: invalid("'all' cannot be combined with a specific set of rules")
+			}
+
+			const unknownKeysInOrderOfAppearance = keys.filter(
+				(key) => !isApplicableRuleKey(key),
 			)
 
-			return invalid(
-				`Duplicate rules: ${[...duplicateKeysInOrderOfAppearance].join(", ")}`,
+			if (unknownKeysInOrderOfAppearance.length > 0) {
+				return invalid(
+					`Unknown rules: ${unknownKeysInOrderOfAppearance.join(", ")}`,
+				)
+			}
+
+			return valid(
+				allApplicableRules.filter((rule) => uniqueKeys.has(rule.key)),
 			)
-		}
-
-		if (uniqueKeys.has("all")) {
-			return uniqueKeys.size === 1
-				? valid(allApplicableRules)
-				: invalid("'all' cannot be combined with a specific set of rules")
-		}
-
-		const unknownKeysInOrderOfAppearance = keys.filter(
-			(key) => !isApplicableRuleKey(key),
-		)
-
-		if (unknownKeysInOrderOfAppearance.length > 0) {
-			return invalid(
-				`Unknown rules: ${unknownKeysInOrderOfAppearance.join(", ")}`,
-			)
-		}
-
-		return valid(allApplicableRules.filter((rule) => uniqueKeys.has(rule.key)))
+		},
 	}
 
 	function isApplicableRuleKey(key: string): key is ApplicableRuleKey {
 		return allApplicableRules.some((rule) => rule.key === key)
 	}
+}
 
-	function invalid(errorMessage: string): RulesetParser.Result.Invalid {
-		return { status: "invalid", errorMessage }
-	}
+function invalid(errorMessage: string): RulesetParser.Result.Invalid {
+	return { status: "invalid", errorMessage }
+}
 
-	function valid(ruleset: Ruleset): RulesetParser.Result.Valid {
-		return { status: "valid", ruleset }
-	}
-
-	return {
-		parseCommaSeparatedString,
-	}
+function valid(ruleset: Ruleset): RulesetParser.Result.Valid {
+	return { status: "valid", ruleset }
 }

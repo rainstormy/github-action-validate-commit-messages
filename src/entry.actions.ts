@@ -33,10 +33,10 @@ async function run(): Promise<ActionResult> {
 	}
 
 	const githubToken = core.getInput("github-token", { required: true })
-	const commaSeparatedKeys = core.getInput("rules", { required: false })
+	const delimitedRuleKeys = core.getInput("rules", { required: false })
 
 	const parser = rulesetParserFrom(defaultConfiguration)
-	const result = parser.parseCommaSeparatedString(commaSeparatedKeys)
+	const result = parser.parse(delimitedRuleKeys)
 
 	if (result.status === "invalid") {
 		return actionConfigurationMustBeValid(result.errorMessage)
