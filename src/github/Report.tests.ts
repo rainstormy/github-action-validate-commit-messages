@@ -1,6 +1,6 @@
 import { dummyCommits } from "+core/dummies"
 import { reportOf } from "+github"
-import { getAllApplicableRules } from "+validation"
+import { defaultConfiguration, getAllApplicableRules } from "+validation"
 
 const {
 	fixupCommits,
@@ -10,7 +10,7 @@ const {
 	squashCommits,
 } = dummyCommits
 
-const allApplicableRules = getAllApplicableRules()
+const allApplicableRules = getAllApplicableRules(defaultConfiguration)
 
 describe("a report generated from no commits", () => {
 	const report = reportOf({

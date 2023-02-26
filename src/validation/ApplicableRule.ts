@@ -10,8 +10,11 @@ import {
 	noMergeCommits,
 	noSquashCommits,
 } from "+rules"
+import type { Configuration } from "./Configuration"
 
-export function getAllApplicableRules(): ReadonlyArray<ApplicableRule> {
+export function getAllApplicableRules(
+	configuration: Configuration, // eslint-disable-line typescript/no-unused-vars -- The configuration is unused for now.
+): ReadonlyArray<ApplicableRule> {
 	return [
 		capitalisedSubjectLines(),
 		noFixupCommits(),

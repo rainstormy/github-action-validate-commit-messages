@@ -6,7 +6,7 @@ import {
 	reportOf,
 	someCommitsAreInvalid,
 } from "+github"
-import { rulesetFromString } from "+validation"
+import { defaultConfiguration, rulesetParserFrom } from "+validation"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -35,10 +35,11 @@ async function run(): Promise<ActionResult> {
 	const githubToken = core.getInput("github-token", { required: true })
 	const commaSeparatedKeys = core.getInput("rules", { required: false })
 
-	const rulesetParseResult = rulesetFromString(commaSeparatedKeys)
+	const parser = rulesetParserFrom(defaultConfiguration)
+	const result = parser.parseCommaSeparatedString(commaSeparatedKeys)
 
-	if (rulesetParseResult.status === "invalid") {
-		return actionConfigurationMustBeValid(rulesetParseResult.errorMessage)
+	if (result.status === "invalid") {
+		return actionConfigurationMustBeValid(result.errorMessage)
 	}
 
 	const pullRequest = await pullRequestFromApi({
@@ -47,7 +48,7 @@ async function run(): Promise<ActionResult> {
 	})
 
 	const report = reportOf({
-		ruleset: rulesetParseResult.ruleset,
+		ruleset: result.ruleset,
 		commitsToValidate: pullRequest.commits,
 	})
 

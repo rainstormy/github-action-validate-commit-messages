@@ -1,12 +1,22 @@
-import type { ApplicableRule, ApplicableRuleKey } from "+validation"
+import type {
+	ApplicableRule,
+	ApplicableRuleKey,
+	Configuration,
+} from "+validation"
 import { getAllApplicableRules } from "+validation"
 
 export type Ruleset = ReadonlyArray<ApplicableRule>
 
-export namespace Ruleset {
-	export type ParseResult = ParseResult.Invalid | ParseResult.Valid
+export type RulesetParser = {
+	readonly parseCommaSeparatedString: (
+		commaSeparatedKeys: string,
+	) => RulesetParser.Result
+}
 
-	export namespace ParseResult {
+export namespace RulesetParser {
+	export type Result = Result.Invalid | Result.Valid
+
+	export namespace Result {
 		export type Valid = {
 			readonly status: "valid"
 			readonly ruleset: Ruleset
@@ -19,68 +29,65 @@ export namespace Ruleset {
 	}
 }
 
-export function rulesetFromString(
-	commaSeparatedKeys: string,
-): Ruleset.ParseResult {
-	const keys = commaSeparatedKeys
-		.split(",")
-		.map((key) => key.trim())
-		.filter((key) => key.length > 0)
+export function rulesetParserFrom(configuration: Configuration): RulesetParser {
+	const allApplicableRules = getAllApplicableRules(configuration)
 
-	const uniqueKeys = new Set(keys)
+	function parseCommaSeparatedString(
+		commaSeparatedKeys: string,
+	): RulesetParser.Result {
+		const keys = commaSeparatedKeys
+			.split(",")
+			.map((key) => key.trim())
+			.filter((key) => key.length > 0)
 
-	if (uniqueKeys.size === 0) {
-		return {
-			status: "invalid",
-			errorMessage: "No rules specified",
+		const uniqueKeys = new Set(keys)
+
+		if (uniqueKeys.size === 0) {
+			return invalid("No rules specified")
 		}
-	}
 
-	if (uniqueKeys.size !== keys.length) {
-		const duplicateKeysInOrderOfAppearance = new Set(
-			keys.filter((key, index) => keys.indexOf(key) !== index),
+		if (uniqueKeys.size !== keys.length) {
+			const duplicateKeysInOrderOfAppearance = new Set(
+				keys.filter((key, index) => keys.indexOf(key) !== index),
+			)
+
+			return invalid(
+				`Duplicate rules: ${[...duplicateKeysInOrderOfAppearance].join(", ")}`,
+			)
+		}
+
+		if (uniqueKeys.has("all")) {
+			return uniqueKeys.size === 1
+				? valid(allApplicableRules)
+				: invalid("'all' cannot be combined with a specific set of rules")
+		}
+
+		const unknownKeysInOrderOfAppearance = keys.filter(
+			(key) => !isApplicableRuleKey(key),
 		)
 
-		return {
-			status: "invalid",
-			errorMessage: `Duplicate rules: ${[
-				...duplicateKeysInOrderOfAppearance,
-			].join(", ")}`,
+		if (unknownKeysInOrderOfAppearance.length > 0) {
+			return invalid(
+				`Unknown rules: ${unknownKeysInOrderOfAppearance.join(", ")}`,
+			)
 		}
+
+		return valid(allApplicableRules.filter((rule) => uniqueKeys.has(rule.key)))
 	}
 
-	const allApplicableRules = getAllApplicableRules()
-
-	const isApplicableRuleKey = (key: string): key is ApplicableRuleKey =>
-		allApplicableRules.some((rule) => rule.key === key)
-
-	if (uniqueKeys.has("all")) {
-		return uniqueKeys.size === 1
-			? {
-					status: "valid",
-					ruleset: allApplicableRules,
-			  }
-			: {
-					status: "invalid",
-					errorMessage: "'all' cannot be combined with a specific set of rules",
-			  }
+	function isApplicableRuleKey(key: string): key is ApplicableRuleKey {
+		return allApplicableRules.some((rule) => rule.key === key)
 	}
 
-	const unknownKeysInOrderOfAppearance = keys.filter(
-		(key) => !isApplicableRuleKey(key),
-	)
+	function invalid(errorMessage: string): RulesetParser.Result.Invalid {
+		return { status: "invalid", errorMessage }
+	}
 
-	if (unknownKeysInOrderOfAppearance.length > 0) {
-		return {
-			status: "invalid",
-			errorMessage: `Unknown rules: ${unknownKeysInOrderOfAppearance.join(
-				", ",
-			)}`,
-		}
+	function valid(ruleset: Ruleset): RulesetParser.Result.Valid {
+		return { status: "valid", ruleset }
 	}
 
 	return {
-		status: "valid",
-		ruleset: allApplicableRules.filter((rule) => uniqueKeys.has(rule.key)),
+		parseCommaSeparatedString,
 	}
 }

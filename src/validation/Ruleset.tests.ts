@@ -1,7 +1,14 @@
-import type { ApplicableRuleKey, Ruleset } from "+validation"
-import { getAllApplicableRules, rulesetFromString } from "+validation"
+import type { ApplicableRuleKey, RulesetParser } from "+validation"
+import {
+	defaultConfiguration,
+	getAllApplicableRules,
+	rulesetParserFrom,
+} from "+validation"
 
-const allApplicableRuleKeys = getAllApplicableRules().map((rule) => rule.key)
+const allApplicableRules = getAllApplicableRules(defaultConfiguration)
+const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)
+
+const parser = rulesetParserFrom(defaultConfiguration)
 
 describe.each`
 	commaSeparatedKeys                                            | expectedRuleKeys
@@ -23,8 +30,8 @@ describe.each`
 	}) => {
 		const { commaSeparatedKeys, expectedRuleKeys } = testRow
 
-		const result = rulesetFromString(commaSeparatedKeys)
-		const ruleset = (result as Ruleset.ParseResult.Valid).ruleset
+		const result = parser.parseCommaSeparatedString(commaSeparatedKeys)
+		const ruleset = (result as RulesetParser.Result.Valid).ruleset
 
 		it("is valid", () => {
 			expect(result.status).toBe("valid")
@@ -43,8 +50,8 @@ describe.each`
 )
 
 describe("a ruleset from an empty string", () => {
-	const result = rulesetFromString("")
-	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
+	const result = parser.parseCommaSeparatedString("")
+	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
 		expect(result.status).toBe("invalid")
@@ -56,8 +63,8 @@ describe("a ruleset from an empty string", () => {
 })
 
 describe("a ruleset from a string of whitespace", () => {
-	const result = rulesetFromString("  ")
-	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
+	const result = parser.parseCommaSeparatedString("  ")
+	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
 		expect(result.status).toBe("invalid")
@@ -69,8 +76,8 @@ describe("a ruleset from a string of whitespace", () => {
 })
 
 describe("a ruleset from a string of whitespace and commas", () => {
-	const result = rulesetFromString(" ,   ,, ")
-	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
+	const result = parser.parseCommaSeparatedString(" ,   ,, ")
+	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
 		expect(result.status).toBe("invalid")
@@ -82,10 +89,10 @@ describe("a ruleset from a string of whitespace and commas", () => {
 })
 
 describe("a ruleset from a string that contains unknown rules", () => {
-	const result = rulesetFromString(
+	const result = parser.parseCommaSeparatedString(
 		"require-only-merge-commits,no-squash-commits,require-funny-commits,no-fixup-commits",
 	)
-	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
+	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
 		expect(result.status).toBe("invalid")
@@ -111,8 +118,9 @@ describe.each`
 		readonly expectedErrorMessage: string
 	}) => {
 		const { commaSeparatedKeys, expectedErrorMessage } = testRow
-		const result = rulesetFromString(commaSeparatedKeys)
-		const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
+
+		const result = parser.parseCommaSeparatedString(commaSeparatedKeys)
+		const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 		it("is invalid", () => {
 			expect(result.status).toBe("invalid")
@@ -125,10 +133,10 @@ describe.each`
 )
 
 describe("a ruleset from a string that mixes rules with 'all'", () => {
-	const result = rulesetFromString(
+	const result = parser.parseCommaSeparatedString(
 		"require-only-merge-commits,all,no-fixup-commits",
 	)
-	const errorMessage = (result as Ruleset.ParseResult.Invalid).errorMessage
+	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
 		expect(result.status).toBe("invalid")
