@@ -1,6 +1,6 @@
 export type Commit = {
 	readonly sha: string
-	readonly subjectLine: string
+	readonly naturalSubjectLine: string
 	readonly isFixup: boolean
 	readonly isMerge: boolean
 	readonly isSquash: boolean
@@ -21,12 +21,27 @@ export function commitOf({ sha, commitMessage, parents }: CommitProps): Commit {
 	const lines = commitMessage.split("\n")
 	const subjectLine = lines[0]
 
+	const isFixup = subjectLine.startsWith("fixup!")
+	const isSquash = subjectLine.startsWith("squash!")
+
+	function getNaturalSubjectLine(): string {
+		if (isFixup) {
+			return subjectLine.slice("fixup!".length).trim()
+		}
+
+		if (isSquash) {
+			return subjectLine.slice("squash!".length).trim()
+		}
+
+		return subjectLine
+	}
+
 	return {
 		sha,
-		subjectLine,
-		isFixup: subjectLine.startsWith("fixup!"),
+		naturalSubjectLine: getNaturalSubjectLine(),
+		isFixup,
+		isSquash,
 		isMerge: parents.length > 1,
-		isSquash: subjectLine.startsWith("squash!"),
 		toString: () => subjectLine,
 	}
 }

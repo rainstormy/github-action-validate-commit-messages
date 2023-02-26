@@ -36,6 +36,20 @@ export const dummyCommits = {
 			subjectLine: "Merge branch 'main' into bugfix/dance-party-playlist",
 		}),
 	],
+	commitsWithDecapitalisedSubjectLines: [
+		regularCommitWithDummyBody({
+			subjectLine: "release the robot butler",
+		}),
+		regularCommitWithDummyBody({
+			subjectLine: "fix this confusing plate of spaghetti",
+		}),
+		regularCommitWithDummyBody({
+			subjectLine: "fixup! resolve a bug that thought it was a feature",
+		}),
+		regularCommitWithDummyBody({
+			subjectLine: "squash! organise the bookshelf",
+		}),
+	],
 }
 
 function regularCommitWithDummyBody(props: {

@@ -1,12 +1,15 @@
 import type { ApplicableRuleKey, Report } from "+validation"
 
 const ruleDetectionMessages = {
+	"require-capitalised-subject-lines": "Non-capitalised subject lines detected",
 	"require-non-fixup-commits": "Fixup commits detected",
 	"require-non-merge-commits": "Merge commits detected",
 	"require-non-squash-commits": "Squash commits detected",
 } as const satisfies Readonly<Record<ApplicableRuleKey, string>>
 
 const ruleHints = {
+	"require-capitalised-subject-lines":
+		"Subject lines (the foremost line in the commit message) must start with an uppercase letter. Please rebase interactively to reword the commits before merging the pull request.",
 	"require-non-fixup-commits":
 		"Please rebase interactively to consolidate the fixup commits before merging the pull request.",
 	"require-non-merge-commits":
@@ -24,7 +27,7 @@ export function formattedReportFrom(report: Report): string | null {
 		const ruleDetectionMessage = ruleDetectionMessages[ruleKey]
 		const indentedRuleHint = indent + ruleHints[ruleKey]
 		const indentedShaCodesAndSubjectLines = violatingCommits
-			.map((commit) => `${indent + commit.sha} ${commit.subjectLine}`)
+			.map((commit) => `${indent + commit.sha} ${commit.toString()}`)
 			.join("\n")
 
 		return `${ruleDetectionMessage}:\n${indentedShaCodesAndSubjectLines}\n\n${indentedRuleHint}`

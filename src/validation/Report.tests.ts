@@ -1,13 +1,19 @@
 import { dummyCommits } from "+core/dummies"
 import {
+	requireCapitalisedSubjectLines,
 	requireNonFixupCommits,
 	requireNonMergeCommits,
 	requireNonSquashCommits,
 } from "+rules"
 import { allApplicableRules, reportFrom } from "+validation"
 
-const { regularCommits, fixupCommits, squashCommits, mergeCommits } =
-	dummyCommits
+const {
+	commitsWithLowercaseSubjectLines,
+	fixupCommits,
+	mergeCommits,
+	squashCommits,
+	regularCommits,
+} = dummyCommits
 
 describe("an exhaustive report generated from no commits", () => {
 	const report = reportFrom({
@@ -65,5 +71,35 @@ describe("an exhaustive report generated from a mix of a merge commit and a regu
 	it("reports the merge commit", () => {
 		expect(report).toHaveProperty(requireNonMergeCommits.key)
 		expect(report[requireNonMergeCommits.key]).toStrictEqual([mergeCommits[0]])
+	})
+})
+
+describe("an exhaustive report generated from a mix of two regular commits, two commits with lowercase subject lines, and a fixup commit", () => {
+	const report = reportFrom({
+		ruleset: allApplicableRules,
+		commitsToValidate: [
+			regularCommits[0],
+			commitsWithLowercaseSubjectLines[0],
+			fixupCommits[0],
+			commitsWithLowercaseSubjectLines[1],
+			regularCommits[1],
+		],
+	})
+
+	it("reports two violated rules", () => {
+		expect(Object.keys(report)).toHaveLength(2)
+	})
+
+	it("reports the fixup commit", () => {
+		expect(report).toHaveProperty(requireNonFixupCommits.key)
+		expect(report[requireNonFixupCommits.key]).toStrictEqual([fixupCommits[0]])
+	})
+
+	it("reports the commits with lowercase subject lines", () => {
+		expect(report).toHaveProperty(requireCapitalisedSubjectLines.key)
+		expect(report[requireCapitalisedSubjectLines.key]).toStrictEqual([
+			commitsWithLowercaseSubjectLines[0],
+			commitsWithLowercaseSubjectLines[1],
+		])
 	})
 })
