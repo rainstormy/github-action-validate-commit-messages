@@ -1,6 +1,6 @@
 import { dummyCommits } from "+core/dummies"
-import { getAllApplicableRules, reportFrom } from "+validation"
-import { formattedReportFrom } from "./FormattedReport"
+import { reportOf } from "+github"
+import { getAllApplicableRules } from "+validation"
 
 const {
 	fixupCommits,
@@ -12,27 +12,36 @@ const {
 
 const allApplicableRules = getAllApplicableRules()
 
-describe("a formatted report generated from regular commits", () => {
-	const report = reportFrom({
+describe("a report generated from no commits", () => {
+	const report = reportOf({
 		ruleset: allApplicableRules,
-		commitsToValidate: regularCommits,
+		commitsToValidate: [],
 	})
-	const formattedReport = formattedReportFrom(report)
 
 	it("is empty", () => {
-		expect(formattedReport).toBeNull()
+		expect(report).toBeNull()
 	})
 })
 
-describe("a formatted report generated from a squash commit", () => {
-	const report = reportFrom({
+describe("a report generated from two regular commits", () => {
+	const report = reportOf({
+		ruleset: allApplicableRules,
+		commitsToValidate: [regularCommits[0], regularCommits[1]],
+	})
+
+	it("is empty", () => {
+		expect(report).toBeNull()
+	})
+})
+
+describe("a report generated from a squash commit", () => {
+	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [squashCommits[0]],
 	})
-	const formattedReport = formattedReportFrom(report)
 
 	it("reports one violated rule", () => {
-		expect(formattedReport).toBe(
+		expect(report).toBe(
 			`Squash commits detected:
     ${squashCommits[0].sha} ${squashCommits[0].toString()}
 
@@ -41,15 +50,14 @@ describe("a formatted report generated from a squash commit", () => {
 	})
 })
 
-describe("a formatted report generated from a mix of a merge commit and a regular commit", () => {
-	const report = reportFrom({
+describe("a report generated from a mix of a merge commit and a regular commit", () => {
+	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [mergeCommits[0], regularCommits[0]],
 	})
-	const formattedReport = formattedReportFrom(report)
 
 	it("reports one violated rule", () => {
-		expect(formattedReport).toBe(
+		expect(report).toBe(
 			`Merge commits detected:
     ${mergeCommits[0].sha} ${mergeCommits[0].toString()}
 
@@ -58,8 +66,8 @@ describe("a formatted report generated from a mix of a merge commit and a regula
 	})
 })
 
-describe("a formatted report generated from a mix of regular commits, fixup commits, and a merge commit", () => {
-	const report = reportFrom({
+describe("a report generated from a mix of two regular commits, two fixup commits, and a merge commit", () => {
+	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
 			regularCommits[0],
@@ -69,10 +77,9 @@ describe("a formatted report generated from a mix of regular commits, fixup comm
 			mergeCommits[1],
 		],
 	})
-	const formattedReport = formattedReportFrom(report)
 
 	it("reports two violated rules", () => {
-		expect(formattedReport).toBe(
+		expect(report).toBe(
 			`Fixup commits detected:
     ${fixupCommits[0].sha} ${fixupCommits[0].toString()}
     ${fixupCommits[1].sha} ${fixupCommits[1].toString()}
@@ -87,8 +94,8 @@ Merge commits detected:
 	})
 })
 
-describe("a formatted report generated from a mix of regular commits, squash commits, merge commits, and fixup commits", () => {
-	const report = reportFrom({
+describe("a report generated from a mix of two regular commits, two squash commits, two merge commits, and two fixup commits", () => {
+	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
 			regularCommits[0],
@@ -101,10 +108,9 @@ describe("a formatted report generated from a mix of regular commits, squash com
 			fixupCommits[1],
 		],
 	})
-	const formattedReport = formattedReportFrom(report)
 
 	it("reports three violated rules", () => {
-		expect(formattedReport).toBe(
+		expect(report).toBe(
 			`Fixup commits detected:
     ${fixupCommits[0].sha} ${fixupCommits[0].toString()}
     ${fixupCommits[1].sha} ${fixupCommits[1].toString()}
@@ -126,8 +132,8 @@ Merge commits detected:
 	})
 })
 
-describe("a formatted report generated from a mix of regular commits, commits with decapitalised subject lines, and a fixup commit", () => {
-	const report = reportFrom({
+describe("a report generated from a mix of two regular commits, two commits with decapitalised subject lines, and a fixup commit", () => {
+	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
 			regularCommits[0],
@@ -137,10 +143,9 @@ describe("a formatted report generated from a mix of regular commits, commits wi
 			regularCommits[1],
 		],
 	})
-	const formattedReport = formattedReportFrom(report)
 
 	it("reports two violated rules", () => {
-		expect(formattedReport).toBe(
+		expect(report).toBe(
 			`Non-capitalised subject lines detected:
     ${
 			commitsWithDecapitalisedSubjectLines[0].sha

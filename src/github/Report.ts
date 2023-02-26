@@ -1,4 +1,5 @@
-import type { ApplicableRuleKey, Report } from "+validation"
+import type { Commit } from "+core"
+import type { ApplicableRuleKey, Ruleset } from "+validation"
 
 const ruleDetectionMessages = {
 	"capitalised-subject-lines": "Non-capitalised subject lines detected",
@@ -20,18 +21,32 @@ const ruleHints = {
 
 const indent = "    " // eslint-disable-line unicorn/string-content -- The indent of four spaces is intentional.
 
-export function formattedReportFrom(report: Report): string | null {
-	const messages = Object.entries(report).map(([key, violatingCommits]) => {
-		const ruleKey = key as ApplicableRuleKey
+type ReportProps = {
+	readonly ruleset: Ruleset
+	readonly commitsToValidate: ReadonlyArray<Commit>
+}
 
-		const ruleDetectionMessage = ruleDetectionMessages[ruleKey]
-		const indentedRuleHint = indent + ruleHints[ruleKey]
-		const indentedShaCodesAndSubjectLines = violatingCommits
-			.map((commit) => `${indent + commit.sha} ${commit.toString()}`)
-			.join("\n")
+export function reportOf({
+	ruleset,
+	commitsToValidate,
+}: ReportProps): string | null {
+	const ruleMessages = ruleset
+		.map((rule) => {
+			const invalidCommits = commitsToValidate.filter(
+				(commit) => rule.validate(commit) === "invalid",
+			)
+			return [rule.key, invalidCommits] as const
+		})
+		.filter(([, invalidCommits]) => invalidCommits.length > 0)
+		.map(([key, invalidCommits]) => {
+			const indentedShaCodesAndSubjectLines = invalidCommits
+				.map((commit) => `${indent + commit.sha} ${commit.toString()}`)
+				.join("\n")
 
-		return `${ruleDetectionMessage}:\n${indentedShaCodesAndSubjectLines}\n\n${indentedRuleHint}`
-	})
+			return `${
+				ruleDetectionMessages[key]
+			}:\n${indentedShaCodesAndSubjectLines}\n\n${indent + ruleHints[key]}`
+		})
 
-	return messages.length > 0 ? messages.join("\n\n") : null
+	return ruleMessages.length > 0 ? ruleMessages.join("\n\n") : null
 }

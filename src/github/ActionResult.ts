@@ -27,8 +27,6 @@ type SomeCommitsAreInvalid = {
 	readonly errorMessage: string
 }
 
-export function someCommitsAreInvalid(
-	formattedReport: string,
-): SomeCommitsAreInvalid {
-	return { exitCode: 1, errorMessage: formattedReport }
+export function someCommitsAreInvalid(report: string): SomeCommitsAreInvalid {
+	return { exitCode: 1, errorMessage: report }
 }

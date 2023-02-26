@@ -2,11 +2,11 @@ import type { ActionResult } from "+github"
 import {
 	actionConfigurationMustBeValid,
 	allCommitsAreValid,
-	formattedReportFrom,
 	pullRequestFromApi,
+	reportOf,
 	someCommitsAreInvalid,
 } from "+github"
-import { reportFrom, rulesetFromString } from "+validation"
+import { rulesetFromString } from "+validation"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -46,13 +46,10 @@ async function run(): Promise<ActionResult> {
 		pullRequestNumber,
 	})
 
-	const report = reportFrom({
+	const report = reportOf({
 		ruleset: rulesetParseResult.ruleset,
 		commitsToValidate: pullRequest.commits,
 	})
-	const formattedReport = formattedReportFrom(report)
 
-	return formattedReport === null
-		? allCommitsAreValid()
-		: someCommitsAreInvalid(formattedReport)
+	return report === null ? allCommitsAreValid() : someCommitsAreInvalid(report)
 }
