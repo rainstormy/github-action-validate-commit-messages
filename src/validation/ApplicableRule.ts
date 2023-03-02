@@ -3,23 +3,26 @@ import type {
 	NoFixupCommits,
 	NoMergeCommits,
 	NoSquashCommits,
+	NoTrailingPunctuationInSubjectLines,
 } from "+rules"
 import {
 	capitalisedSubjectLines,
 	noFixupCommits,
 	noMergeCommits,
 	noSquashCommits,
+	noTrailingPunctuationInSubjectLines,
 } from "+rules"
-import type { Configuration } from "./Configuration"
+import type { Configuration } from "+validation"
 
 export function getAllApplicableRules(
-	configuration: Configuration, // eslint-disable-line typescript/no-unused-vars -- The configuration is unused for now.
+	configuration: Configuration,
 ): ReadonlyArray<ApplicableRule> {
 	return [
 		capitalisedSubjectLines(),
 		noFixupCommits(),
 		noSquashCommits(),
 		noMergeCommits(),
+		noTrailingPunctuationInSubjectLines(configuration),
 	]
 }
 
@@ -28,5 +31,6 @@ export type ApplicableRule =
 	| NoFixupCommits
 	| NoMergeCommits
 	| NoSquashCommits
+	| NoTrailingPunctuationInSubjectLines
 
 export type ApplicableRuleKey = ApplicableRule["key"]

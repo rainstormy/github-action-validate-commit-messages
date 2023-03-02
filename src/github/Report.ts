@@ -6,6 +6,8 @@ const ruleDetectionMessages = {
 	"no-fixup-commits": "Fixup commits detected",
 	"no-merge-commits": "Merge commits detected",
 	"no-squash-commits": "Squash commits detected",
+	"no-trailing-punctuation-in-subject-lines":
+		"Subject lines with trailing punctuation detected",
 } as const satisfies Readonly<Record<ApplicableRuleKey, string>>
 
 const ruleHints = {
@@ -17,6 +19,8 @@ const ruleHints = {
 		"They reduce the traceability of the commit history and make it difficult to rebase interactively. Please undo the merge commit and rebase your branch onto the target branch instead.",
 	"no-squash-commits":
 		"Please rebase interactively to consolidate the squash commits before merging the pull request.",
+	"no-trailing-punctuation-in-subject-lines":
+		"Subject lines (the foremost line in the commit message) must not end with a punctuation mark. Please rebase interactively to reword the commits before merging the pull request.",
 } as const satisfies Readonly<Record<ApplicableRuleKey, string>>
 
 const indent = "    " // eslint-disable-line unicorn/string-content -- The indent of four spaces is intentional.

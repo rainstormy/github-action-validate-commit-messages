@@ -1,30 +1,28 @@
+import { count } from "+utilities"
 import type { ApplicableRuleKey, RulesetParser } from "+validation"
-import {
-	defaultConfiguration,
-	getAllApplicableRules,
-	rulesetParserFrom,
-} from "+validation"
+import { getAllApplicableRules, rulesetParserFrom } from "+validation"
+import { dummyConfiguration } from "+validation/dummies"
 
-const allApplicableRules = getAllApplicableRules(defaultConfiguration)
+const allApplicableRules = getAllApplicableRules(dummyConfiguration)
 const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)
 
-const parser = rulesetParserFrom(defaultConfiguration)
+const parser = rulesetParserFrom(dummyConfiguration)
 
 describe.each`
-	delimitedRuleKeys                                                                     | expectedRuleKeys
-	${"no-fixup-commits"}                                                                 | ${["no-fixup-commits"]}
-	${" no-fixup-commits "}                                                               | ${["no-fixup-commits"]}
-	${"no-merge-commits"}                                                                 | ${["no-merge-commits"]}
-	${" no-merge-commits"}                                                                | ${["no-merge-commits"]}
-	${"no-squash-commits"}                                                                | ${["no-squash-commits"]}
-	${"no-squash-commits,  "}                                                             | ${["no-squash-commits"]}
-	${",capitalised-subject-lines ;"}                                                     | ${["capitalised-subject-lines"]}
-	${"no-fixup-commits , no-squash-commits"}                                             | ${["no-fixup-commits", "no-squash-commits"]}
-	${"capitalised-subject-lines ;no-merge-commits; no-fixup-commits"}                    | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
-	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                           | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
-	${" no-fixup-commits no-merge-commits  no-squash-commits "}                           | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
-	${";no-fixup-commits no-merge-commits; no-squash-commits,capitalised-subject-lines "} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits", "capitalised-subject-lines"]}
-	${"all"}                                                                              | ${allApplicableRuleKeys}
+	delimitedRuleKeys                                                                                                                 | expectedRuleKeys
+	${"no-fixup-commits"}                                                                                                             | ${["no-fixup-commits"]}
+	${" no-fixup-commits "}                                                                                                           | ${["no-fixup-commits"]}
+	${"no-merge-commits"}                                                                                                             | ${["no-merge-commits"]}
+	${" no-merge-commits"}                                                                                                            | ${["no-merge-commits"]}
+	${"no-squash-commits"}                                                                                                            | ${["no-squash-commits"]}
+	${"no-squash-commits,  "}                                                                                                         | ${["no-squash-commits"]}
+	${",capitalised-subject-lines ;"}                                                                                                 | ${["capitalised-subject-lines"]}
+	${"no-fixup-commits , no-squash-commits"}                                                                                         | ${["no-fixup-commits", "no-squash-commits"]}
+	${"capitalised-subject-lines ;no-merge-commits; no-fixup-commits"}                                                                | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
+	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                                                                       | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${" no-fixup-commits no-merge-commits  no-squash-commits "}                                                                       | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${";no-fixup-commits no-merge-commits; no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+	${"all"}                                                                                                                          | ${allApplicableRuleKeys}
 `(
 	"a ruleset from a valid string of $delimitedRuleKeys",
 	(testRow: {
@@ -40,9 +38,7 @@ describe.each`
 			expect(result.status).toBe("valid")
 		})
 
-		it(`has ${expectedRuleKeys.length} ${
-			expectedRuleKeys.length === 1 ? "rule" : "rules" // eslint-disable-line jest/no-conditional-in-test -- The conditional expression affects only the test name to make it grammatically correct.
-		}`, () => {
+		it(`has ${count(expectedRuleKeys, "rule", "rules")}`, () => {
 			expect(ruleset).toHaveLength(expectedRuleKeys.length)
 		})
 

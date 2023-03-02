@@ -6,7 +6,7 @@ import {
 	reportOf,
 	someCommitsAreInvalid,
 } from "+github"
-import { defaultConfiguration, rulesetParserFrom } from "+validation"
+import { configurationFrom, rulesetParserFrom } from "+validation"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -34,8 +34,16 @@ async function run(): Promise<ActionResult> {
 
 	const githubToken = core.getInput("github-token", { required: true })
 	const delimitedRuleKeys = core.getInput("rules", { required: false })
+	const delimitedSuffixWhitelist = core.getInput(
+		"no-trailing-punctuation-in-subject-lines--suffix-whitelist",
+		{ required: false },
+	)
 
-	const parser = rulesetParserFrom(defaultConfiguration)
+	const configuration = configurationFrom({
+		delimitedSuffixWhitelist,
+	})
+
+	const parser = rulesetParserFrom(configuration)
 	const result = parser.parse(delimitedRuleKeys)
 
 	if (result.status === "invalid") {

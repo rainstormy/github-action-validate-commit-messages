@@ -30,6 +30,8 @@ const viteConfig = defineConfig(() => ({
 			"+core": inProjectDirectory("src/core/index"),
 			"+github": inProjectDirectory("src/github/index"),
 			"+rules": inProjectDirectory("src/rules/index"),
+			"+utilities": inProjectDirectory("src/utilities/index"),
+			"+validation/dummies": inProjectDirectory("src/validation/dummies/index"),
 			"+validation": inProjectDirectory("src/validation/index"),
 		},
 	},

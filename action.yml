@@ -9,6 +9,9 @@ inputs:
     description: A list of the rules to enforce, separated by spaces, commas, or semicolons. If omitted, all available rules are enforced.
     required: false
     default: all
+  no-trailing-punctuation-in-subject-lines--suffix-whitelist:
+    description: A list of punctuation marks and suffixes to be ignored by `no-trailing-punctuation-in-subject-lines`, separated by spaces.
+    required: false
 runs:
   using: node16
   main: release/index.cjs

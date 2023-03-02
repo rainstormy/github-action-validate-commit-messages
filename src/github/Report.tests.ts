@@ -1,16 +1,18 @@
 import { dummyCommits } from "+core/dummies"
 import { reportOf } from "+github"
-import { defaultConfiguration, getAllApplicableRules } from "+validation"
+import { getAllApplicableRules } from "+validation"
+import { dummyConfiguration } from "+validation/dummies"
 
 const {
 	fixupCommits,
 	commitsWithDecapitalisedSubjectLines,
+	commitsWithTrailingPunctuationInSubjectLines,
 	mergeCommits,
 	regularCommits,
 	squashCommits,
 } = dummyCommits
 
-const allApplicableRules = getAllApplicableRules(defaultConfiguration)
+const allApplicableRules = getAllApplicableRules(dummyConfiguration)
 
 describe("a report generated from no commits", () => {
 	const report = reportOf({
@@ -160,6 +162,32 @@ Fixup commits detected:
     ${fixupCommits[0].sha} ${fixupCommits[0].toString()}
 
     Please rebase interactively to consolidate the fixup commits before merging the pull request.`,
+		)
+	})
+})
+
+describe("a report generated from a mix of a commit with trailing punctuation in the subject line and a squash commit", () => {
+	const report = reportOf({
+		ruleset: allApplicableRules,
+		commitsToValidate: [
+			commitsWithTrailingPunctuationInSubjectLines[0],
+			squashCommits[0],
+		],
+	})
+
+	it("reports two violated rules", () => {
+		expect(report).toBe(
+			`Squash commits detected:
+    ${squashCommits[0].sha} ${squashCommits[0].toString()}
+
+    Please rebase interactively to consolidate the squash commits before merging the pull request.
+
+Subject lines with trailing punctuation detected:
+    ${
+			commitsWithTrailingPunctuationInSubjectLines[0].sha
+		} ${commitsWithTrailingPunctuationInSubjectLines[0].toString()}
+
+    Subject lines (the foremost line in the commit message) must not end with a punctuation mark. Please rebase interactively to reword the commits before merging the pull request.`,
 		)
 	})
 })
