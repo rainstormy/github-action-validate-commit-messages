@@ -7,6 +7,6 @@ export type NoFixupCommits = Rule<typeof key>
 export function noFixupCommits(): NoFixupCommits {
 	return defineRule({
 		key,
-		validate: (commit) => (commit.isFixup ? "invalid" : "valid"),
+		validate: ({ modifier }) => (modifier === "fixup!" ? "invalid" : "valid"),
 	})
 }

@@ -1,1 +1,1 @@
-export * from "./Commit.dummies"
+export * from "./DummyCommitFactory.dummies"

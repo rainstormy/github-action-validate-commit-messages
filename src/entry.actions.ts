@@ -1,3 +1,4 @@
+import { commitFactoryOf, defaultCommitFactoryConfiguration } from "+core"
 import type { ActionResult } from "+github"
 import {
 	actionConfigurationMustBeValid,
@@ -53,6 +54,7 @@ async function run(): Promise<ActionResult> {
 	const pullRequest = await pullRequestFromApi({
 		githubToken,
 		pullRequestNumber,
+		commitFactory: commitFactoryOf(defaultCommitFactoryConfiguration),
 	})
 
 	const report = reportOf({

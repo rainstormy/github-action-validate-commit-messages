@@ -26,8 +26,8 @@ export function noTrailingPunctuationInSubjectLines({
 	return defineRule({
 		key,
 		validate: (commit) =>
-			hasTrailingPunctuation(commit.naturalSubjectLine) &&
-			!hasWhitelistedSuffix(commit.naturalSubjectLine)
+			hasTrailingPunctuation(commit.subjectLine) &&
+			!hasWhitelistedSuffix(commit.subjectLine)
 				? "invalid"
 				: "valid",
 	})

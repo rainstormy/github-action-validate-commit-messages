@@ -1,41 +1,39 @@
-import type { Commit } from "+core"
-import { dummyCommits } from "+core/dummies"
+import { dummyCommitFactory } from "+core/dummies"
 import { capitalisedSubjectLines } from "+rules"
 
-const {
-	fixupCommits,
-	commitsWithDecapitalisedSubjectLines,
-	regularCommits,
-	squashCommits,
-} = dummyCommits
+const { commitOf } = dummyCommitFactory()
 
 describe("a validation rule that requires capitalised subject lines", () => {
 	const rule = capitalisedSubjectLines()
 
-	it.each<Commit>(commitsWithDecapitalisedSubjectLines)(
-		"rejects a commit with a subject line of '%s' that starts with a lowercase letter",
-		(commit) => {
+	it.each`
+		subjectLine
+		${"release the robot butler"}
+		${"fix this confusing plate of spaghetti"}
+		${"fixup! resolve a bug that thought it was a feature"}
+		${"squash! organise the bookshelf"}
+	`(
+		"rejects a commit with a subject line of $subjectLine that starts with a lowercase letter",
+		(testRow: { readonly subjectLine: string }) => {
+			const { subjectLine } = testRow
+
+			const commit = commitOf(subjectLine)
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)
 
-	it.each<Commit>(regularCommits)(
-		"accepts a commit with a subject line of '%s' that starts with an uppercase letter",
-		(commit) => {
-			expect(rule.validate(commit)).toBe("valid")
-		},
-	)
+	it.each`
+		subjectLine
+		${"Release the robot butler"}
+		${"Fix this confusing plate of spaghetti"}
+		${"fixup! Resolve a bug that thought it was a feature"}
+		${"squash! Organise the bookshelf"}
+	`(
+		"accepts a commit with a subject line of $subjectLine that starts with an uppercase letter",
+		(testRow: { readonly subjectLine: string }) => {
+			const { subjectLine } = testRow
 
-	it.each(fixupCommits)(
-		"accepts a fixup commit with a subject line of '%s'",
-		(commit) => {
-			expect(rule.validate(commit)).toBe("valid")
-		},
-	)
-
-	it.each(squashCommits)(
-		"accepts a squash commit with a subject line of '%s'",
-		(commit) => {
+			const commit = commitOf(subjectLine)
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)

@@ -14,6 +14,6 @@ export function capitalisedSubjectLines(): CapitalisedSubjectLines {
 	return defineRule({
 		key,
 		validate: (commit) =>
-			isCapitalised(commit.naturalSubjectLine) ? "valid" : "invalid",
+			isCapitalised(commit.subjectLine) ? "valid" : "invalid",
 	})
 }

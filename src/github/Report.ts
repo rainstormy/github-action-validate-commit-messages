@@ -44,7 +44,7 @@ export function reportOf({
 		.filter(([, invalidCommits]) => invalidCommits.length > 0)
 		.map(([key, invalidCommits]) => {
 			const indentedShaCodesAndSubjectLines = invalidCommits
-				.map((commit) => `${indent + commit.sha} ${commit.toString()}`)
+				.map((commit) => `${indent + commit.sha} ${commit.originalSubjectLine}`)
 				.join("\n")
 
 			return `${

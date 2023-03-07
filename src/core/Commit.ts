@@ -1,47 +1,57 @@
 export type Commit = {
 	readonly sha: string
-	readonly naturalSubjectLine: string
-	readonly isFixup: boolean
-	readonly isMerge: boolean
-	readonly isSquash: boolean
-	readonly toString: () => string
+	readonly parents: ReadonlyArray<ParentCommit>
+	readonly originalSubjectLine: string
+	readonly modifier: string | null
+	readonly subjectLine: string
 }
 
-type CommitProps = {
+export type UnparsedCommit = {
 	readonly sha: string
-	readonly commitMessage: string
 	readonly parents: ReadonlyArray<ParentCommit>
+	readonly commitMessage: string
 }
 
 type ParentCommit = {
 	readonly sha: string
 }
 
-export function commitOf({ sha, commitMessage, parents }: CommitProps): Commit {
-	const lines = commitMessage.split("\n")
-	const subjectLine = lines[0]
+export type CommitFactoryConfiguration = {
+	readonly modifiers: ReadonlyArray<string>
+}
 
-	const isFixup = subjectLine.startsWith("fixup!")
-	const isSquash = subjectLine.startsWith("squash!")
+export const defaultCommitFactoryConfiguration: CommitFactoryConfiguration = {
+	modifiers: ["fixup!", "squash!"],
+}
 
-	function getNaturalSubjectLine(): string {
-		if (isFixup) {
-			return subjectLine.slice("fixup!".length).trim()
-		}
+export type CommitFactory = {
+	readonly commitOf: (unparsedCommit: UnparsedCommit) => Commit
+}
 
-		if (isSquash) {
-			return subjectLine.slice("squash!".length).trim()
-		}
-
-		return subjectLine
-	}
+export function commitFactoryOf({
+	modifiers,
+}: CommitFactoryConfiguration): CommitFactory {
+	const subjectLineRegex = new RegExp(
+		`^(?<modifier>${modifiers.join("|")})?\\s*(?<subject>.*)$`,
+		"u",
+	)
 
 	return {
-		sha,
-		naturalSubjectLine: getNaturalSubjectLine(),
-		isFixup,
-		isSquash,
-		isMerge: parents.length > 1,
-		toString: () => subjectLine,
+		commitOf: ({ sha, parents, commitMessage }) => {
+			const lines = commitMessage.split("\n")
+			const originalSubjectLine = lines[0]
+
+			const subjectLineMatch = subjectLineRegex.exec(originalSubjectLine)
+			const modifier = subjectLineMatch?.groups?.modifier ?? null
+			const subjectLine = subjectLineMatch?.groups?.subject ?? ""
+
+			return {
+				sha,
+				parents,
+				originalSubjectLine,
+				modifier,
+				subjectLine,
+			}
+		},
 	}
 }
