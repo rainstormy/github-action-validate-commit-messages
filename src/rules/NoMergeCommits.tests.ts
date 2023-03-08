@@ -1,4 +1,4 @@
-import { dummyCommitFactory } from "+core/dummies"
+import { dummyCommitFactory } from "+core"
 import { noMergeCommits } from "+rules"
 
 const { commitOf, mergeCommitOf } = dummyCommitFactory()

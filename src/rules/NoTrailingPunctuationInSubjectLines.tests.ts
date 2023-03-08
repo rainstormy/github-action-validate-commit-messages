@@ -1,6 +1,6 @@
-import { dummyCommitFactory } from "+core/dummies"
+import { dummyCommitFactory } from "+core"
 import { noTrailingPunctuationInSubjectLines } from "+rules"
-import { dummyConfiguration } from "+validation/dummies"
+import { dummyConfiguration } from "+validation"
 
 const { commitOf } = dummyCommitFactory()
 

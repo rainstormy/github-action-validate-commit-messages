@@ -1,7 +1,10 @@
 import { count } from "+utilities"
 import type { ApplicableRuleKey, RulesetParser } from "+validation"
-import { getAllApplicableRules, rulesetParserFrom } from "+validation"
-import { dummyConfiguration } from "+validation/dummies"
+import {
+	dummyConfiguration,
+	getAllApplicableRules,
+	rulesetParserFrom,
+} from "+validation"
 
 const allApplicableRules = getAllApplicableRules(dummyConfiguration)
 const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)

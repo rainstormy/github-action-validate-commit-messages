@@ -1,7 +1,6 @@
-import { dummyCommitFactory } from "+core/dummies"
+import { dummyCommitFactory } from "+core"
 import { reportOf } from "+github"
-import { getAllApplicableRules } from "+validation"
-import { dummyConfiguration } from "+validation/dummies"
+import { dummyConfiguration, getAllApplicableRules } from "+validation"
 
 const { commitOf, mergeCommitOf } = dummyCommitFactory()
 
