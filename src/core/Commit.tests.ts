@@ -52,12 +52,14 @@ describe.each`
 )
 
 describe.each`
-	originalSubjectLine                                      | originalBody                                  | expectedSubjectLine                               | expectedModifier
-	${"fixup! Resolve a bug that thought it was a feature"}  | ${""}                                         | ${"Resolve a bug that thought it was a feature"}  | ${"fixup!"}
-	${"fixup!  Add some extra love to the code"}             | ${""}                                         | ${"Add some extra love to the code"}              | ${"fixup!"}
-	${"fixup! fixup! Fix this confusing plate of spaghetti"} | ${""}                                         | ${"fixup! Fix this confusing plate of spaghetti"} | ${"fixup!"}
-	${"squash!Make the formatter happy again :)"}            | ${""}                                         | ${"Make the formatter happy again :)"}            | ${"squash!"}
-	${"squash!   Organise the bookshelf"}                    | ${"\n\nThis is a dummy commit message body."} | ${"Organise the bookshelf"}                       | ${"squash!"}
+	originalSubjectLine                                      | originalBody                                  | expectedSubjectLine                                | expectedModifier
+	${"fixup! Resolve a bug that thought it was a feature"}  | ${""}                                         | ${"Resolve a bug that thought it was a feature"}   | ${"fixup!"}
+	${"fixup!  Add some extra love to the code"}             | ${""}                                         | ${"Add some extra love to the code"}               | ${"fixup!"}
+	${"fixup! fixup! Fix this confusing plate of spaghetti"} | ${""}                                         | ${"fixup! Fix this confusing plate of spaghetti"}  | ${"fixup!"}
+	${"amend!Apply strawberry jam to make the code sweeter"} | ${"\n\nThis is a dummy commit message body."} | ${"Apply strawberry jam to make the code sweeter"} | ${"amend!"}
+	${"amend! Solve the problem"}                            | ${""}                                         | ${"Solve the problem"}                             | ${"amend!"}
+	${"squash!Make the formatter happy again :)"}            | ${""}                                         | ${"Make the formatter happy again :)"}             | ${"squash!"}
+	${"squash!   Organise the bookshelf"}                    | ${"\n\nThis is a dummy commit message body."} | ${"Organise the bookshelf"}                        | ${"squash!"}
 `(
 	"a commit with a subject line of $originalSubjectLine",
 	(testRow: {

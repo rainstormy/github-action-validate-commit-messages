@@ -10,6 +10,8 @@ describe("a validation rule that rejects fixup commits", () => {
 		subjectLine
 		${"fixup! Resolve a bug that thought it was a feature"}
 		${"fixup! Add some extra love to the code"}
+		${"amend! Apply strawberry jam to make the code sweeter"}
+		${"amend! Solve the problem"}
 	`(
 		"rejects a commit with a subject line of $subjectLine",
 		(testRow: { readonly subjectLine: string }) => {

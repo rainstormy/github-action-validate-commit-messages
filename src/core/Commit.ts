@@ -21,7 +21,7 @@ export type CommitFactoryConfiguration = {
 }
 
 export const defaultCommitFactoryConfiguration: CommitFactoryConfiguration = {
-	modifiers: ["fixup!", "squash!"],
+	modifiers: ["amend!", "fixup!", "squash!"],
 }
 
 export type CommitFactory = {

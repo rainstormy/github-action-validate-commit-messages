@@ -11,6 +11,7 @@ describe("a validation rule that requires capitalised subject lines", () => {
 		${"release the robot butler"}
 		${"fix this confusing plate of spaghetti"}
 		${"fixup! resolve a bug that thought it was a feature"}
+		${"amend! make the program act like a clown"}
 		${"squash! organise the bookshelf"}
 	`(
 		"rejects a commit with a subject line of $subjectLine that starts with a lowercase letter",
@@ -27,6 +28,7 @@ describe("a validation rule that requires capitalised subject lines", () => {
 		${"Release the robot butler"}
 		${"Fix this confusing plate of spaghetti"}
 		${"fixup! Resolve a bug that thought it was a feature"}
+		${"amend! Make the program act like a clown"}
 		${"squash! Organise the bookshelf"}
 	`(
 		"accepts a commit with a subject line of $subjectLine that starts with an uppercase letter",

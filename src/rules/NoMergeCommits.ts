@@ -7,6 +7,9 @@ export type NoMergeCommits = Rule<typeof key>
 export function noMergeCommits(): NoMergeCommits {
 	return defineRule({
 		key,
-		validate: ({ parents }) => (parents.length > 1 ? "invalid" : "valid"),
+		validate: ({ parents }) => {
+			const isMergeCommit = parents.length > 1
+			return isMergeCommit ? "invalid" : "valid"
+		},
 	})
 }

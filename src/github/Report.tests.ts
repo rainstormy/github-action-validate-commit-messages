@@ -89,7 +89,7 @@ describe("a report generated from a mix of three regular commits, two fixup comm
 				"d06f00d",
 			),
 			commitOf("Fix this confusing plate of spaghetti"),
-			commitOf("fixup! Add some extra love to the code", "0ff1ce"),
+			commitOf("amend! Add some extra love to the code", "0ff1ce"),
 			commitOf("Apply strawberry jam to make the code sweeter"),
 		],
 	})
@@ -98,7 +98,7 @@ describe("a report generated from a mix of three regular commits, two fixup comm
 		expect(report).toBe(
 			`Fixup commits detected:
     cafed00d fixup! Resolve a bug that thought it was a feature
-    0ff1ce fixup! Add some extra love to the code
+    0ff1ce amend! Add some extra love to the code
 
     Please rebase interactively to consolidate the fixup commits before merging the pull request.
 
@@ -127,7 +127,7 @@ describe("a report generated from a mix of two regular commits, two squash commi
 				"deadc0de",
 			),
 			commitOf(
-				"fixup! Resolve a bug that thought it was a feature",
+				"amend! Resolve a bug that thought it was a feature",
 				"cafed00d",
 			),
 			commitOf("squash! Organise the bookshelf", "d06f00d"),
@@ -139,7 +139,7 @@ describe("a report generated from a mix of two regular commits, two squash commi
 	it("reports three violated rules", () => {
 		expect(report).toBe(
 			`Fixup commits detected:
-    cafed00d fixup! Resolve a bug that thought it was a feature
+    cafed00d amend! Resolve a bug that thought it was a feature
     0ff1ce fixup! Add some extra love to the code
 
     Please rebase interactively to consolidate the fixup commits before merging the pull request.
