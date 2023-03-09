@@ -1,28 +1,22 @@
 import { dummyConfiguration } from "+core"
 import { count } from "+utilities"
 import type { ApplicableRuleKey, RulesetParser } from "+validation"
-import { getAllApplicableRules, rulesetParserFrom } from "+validation"
-
-const allApplicableRules = getAllApplicableRules(dummyConfiguration)
-const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)
+import { rulesetParserFrom } from "+validation"
 
 const parser = rulesetParserFrom(dummyConfiguration)
 
 describe.each`
-	rules                                                                                                                             | expectedRules
-	${"no-fixup-commits"}                                                                                                             | ${["no-fixup-commits"]}
-	${" no-fixup-commits "}                                                                                                           | ${["no-fixup-commits"]}
-	${"no-merge-commits"}                                                                                                             | ${["no-merge-commits"]}
-	${" no-merge-commits"}                                                                                                            | ${["no-merge-commits"]}
-	${"no-squash-commits"}                                                                                                            | ${["no-squash-commits"]}
-	${"no-squash-commits,  "}                                                                                                         | ${["no-squash-commits"]}
-	${",capitalised-subject-lines ;"}                                                                                                 | ${["capitalised-subject-lines"]}
-	${"no-fixup-commits , no-squash-commits"}                                                                                         | ${["no-fixup-commits", "no-squash-commits"]}
-	${"capitalised-subject-lines ;no-merge-commits; no-fixup-commits"}                                                                | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
-	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                                                                       | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
-	${" no-fixup-commits no-merge-commits  no-squash-commits "}                                                                       | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
-	${";no-fixup-commits no-merge-commits; no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-	${"all"}                                                                                                                          | ${allApplicableRuleKeys}
+	rules                                                                                            | expectedRules
+	${"no-fixup-commits"}                                                                            | ${["no-fixup-commits"]}
+	${" no-merge-commits  "}                                                                         | ${["no-merge-commits"]}
+	${"no-squash-commits,  "}                                                                        | ${["no-squash-commits"]}
+	${",capitalised-subject-lines "}                                                                 | ${["capitalised-subject-lines"]}
+	${"   no-trailing-punctuation-in-subject-lines ,"}                                               | ${["no-trailing-punctuation-in-subject-lines"]}
+	${"no-fixup-commits , no-squash-commits"}                                                        | ${["no-fixup-commits", "no-squash-commits"]}
+	${"capitalised-subject-lines ,no-merge-commits, no-fixup-commits"}                               | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
+	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                                      | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+	${"all"}                                                                                         | ${["capitalised-subject-lines", "no-fixup-commits", "no-merge-commits", "no-squash-commits", "no-trailing-punctuation-in-subject-lines"]}
 `(
 	"a ruleset from a valid string of $rules",
 	(testRow: {
@@ -74,8 +68,8 @@ describe("a ruleset from a string of whitespace", () => {
 	})
 })
 
-describe("a ruleset from a string of spaces, commas, and semicolons", () => {
-	const result = parser.parse({ rules: " ;   ,, , ;; " })
+describe("a ruleset from a string of spaces and commas", () => {
+	const result = parser.parse({ rules: " ,   ,, , ,,, " })
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -90,7 +84,7 @@ describe("a ruleset from a string of spaces, commas, and semicolons", () => {
 describe("a ruleset from a string that contains unknown rules", () => {
 	const result = parser.parse({
 		rules:
-			"only-merge-commits no-squash-commits no-funny-commits no-fixup-commits",
+			"only-merge-commits, no-squash-commits, no-funny-commits, no-fixup-commits",
 	})
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
@@ -106,11 +100,11 @@ describe("a ruleset from a string that contains unknown rules", () => {
 })
 
 describe.each`
-	rules                                                                                                         | expectedErrorMessage
-	${"no-fixup-commits no-squash-commits no-fixup-commits"}                                                      | ${"Duplicate rules: no-fixup-commits"}
-	${"no-fixup-commits no-merge-commits no-squash-commits no-squash-commits no-fixup-commits no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
-	${"no-merge-commits no-squash-commits no-merge-commits no-squash-commits"}                                    | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
-	${"all all"}                                                                                                  | ${"Duplicate rules: all"}
+	rules                                                                                                              | expectedErrorMessage
+	${"no-fixup-commits, no-squash-commits, no-fixup-commits"}                                                         | ${"Duplicate rules: no-fixup-commits"}
+	${"no-fixup-commits, no-merge-commits, no-squash-commits, no-squash-commits, no-fixup-commits, no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
+	${"no-merge-commits, no-squash-commits, no-merge-commits, no-squash-commits"}                                      | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
+	${"all, all"}                                                                                                      | ${"Duplicate rules: all"}
 `(
 	"a ruleset from a string $rules that contains duplicate rules",
 	(testRow: {
@@ -134,7 +128,7 @@ describe.each`
 
 describe("a ruleset from a string that mixes rules with 'all'", () => {
 	const result = parser.parse({
-		rules: "only-merge-commits all no-fixup-commits",
+		rules: "only-merge-commits, all, no-fixup-commits",
 	})
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 

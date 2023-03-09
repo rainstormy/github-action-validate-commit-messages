@@ -28,14 +28,15 @@ export namespace RulesetParser {
 	}
 }
 
-const delimiters = /[ ,;]+/u
-
 export function rulesetParserFrom(configuration: Configuration): RulesetParser {
 	const allApplicableRules = getAllApplicableRules(configuration)
 
 	return {
 		parse: ({ rules }): RulesetParser.Result => {
-			const keys = rules.split(delimiters).filter((key) => key.length > 0)
+			const keys = rules
+				.split(",")
+				.map((key) => key.trim())
+				.filter((key) => key.length > 0)
 
 			const uniqueKeys = new Set(keys)
 
