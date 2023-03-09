@@ -1,8 +1,6 @@
-import { dummyCommitFactory } from "+core"
+import { dummyCommit, dummyConfiguration, dummyMergeCommit } from "+core"
 import { reportOf } from "+github"
-import { dummyConfiguration, getAllApplicableRules } from "+validation"
-
-const { commitOf, mergeCommitOf } = dummyCommitFactory()
+import { getAllApplicableRules } from "+validation"
 
 const allApplicableRules = getAllApplicableRules(dummyConfiguration)
 
@@ -21,9 +19,11 @@ describe("a report generated from three regular commits", () => {
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			commitOf("Make the program act like a clown"),
-			commitOf("Apply strawberry jam to make the code sweeter"),
-			commitOf("Fix a typo"),
+			dummyCommit({ subjectLine: "Make the program act like a clown" }),
+			dummyCommit({
+				subjectLine: "Apply strawberry jam to make the code sweeter",
+			}),
+			dummyCommit({ subjectLine: "Fix a typo" }),
 		],
 	})
 
@@ -36,8 +36,11 @@ describe("a report generated from a squash commit and a regular commit", () => {
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			commitOf("squash! Make the formatter happy again :)", "0ff1ce"),
-			commitOf("Release the robot butler"),
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "squash! Make the formatter happy again :)",
+			}),
+			dummyCommit({ subjectLine: "Release the robot butler" }),
 		],
 	})
 
@@ -55,12 +58,12 @@ describe("a report generated from a merge commit and a regular commit", () => {
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			mergeCommitOf(
-				"Merge branch 'master' into feature/robot-butler",
-				["cafebabe", "cafed00d"],
-				"d06f00d",
-			),
-			commitOf("Fix this confusing plate of spaghetti"),
+			dummyMergeCommit({
+				sha: "d06f00d",
+				subjectLine: "Merge branch 'master' into feature/robot-butler",
+				parentShas: ["cafebabe", "cafed00d"],
+			}),
+			dummyCommit({ subjectLine: "Fix this confusing plate of spaghetti" }),
 		],
 	})
 
@@ -78,19 +81,24 @@ describe("a report generated from a mix of three regular commits, two fixup comm
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			commitOf("Make the program act like a clown"),
-			commitOf(
-				"fixup! Resolve a bug that thought it was a feature",
-				"cafed00d",
-			),
-			mergeCommitOf(
-				"Keep my branch up to date",
-				["badf00d", "deadc0de", "d15ea5e"],
-				"d06f00d",
-			),
-			commitOf("Fix this confusing plate of spaghetti"),
-			commitOf("amend! Add some extra love to the code", "0ff1ce"),
-			commitOf("Apply strawberry jam to make the code sweeter"),
+			dummyCommit({ subjectLine: "Make the program act like a clown" }),
+			dummyCommit({
+				sha: "cafed00d",
+				subjectLine: "fixup! Resolve a bug that thought it was a feature",
+			}),
+			dummyMergeCommit({
+				sha: "d06f00d",
+				subjectLine: "Keep my branch up to date",
+				parentShas: ["badf00d", "deadc0de", "d15ea5e"],
+			}),
+			dummyCommit({ subjectLine: "Fix this confusing plate of spaghetti" }),
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "amend! Add some extra love to the code",
+			}),
+			dummyCommit({
+				subjectLine: "Apply strawberry jam to make the code sweeter",
+			}),
 		],
 	})
 
@@ -114,25 +122,34 @@ describe("a report generated from a mix of two regular commits, two squash commi
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			commitOf("Fix this confusing plate of spaghetti"),
-			commitOf("squash! Make the formatter happy again :)", "b105f00d"),
-			mergeCommitOf(
-				"Merge branch 'main' into bugfix/dance-party-playlist",
-				["badf00d", "cafed00d"],
-				"cafebabe",
-			),
-			mergeCommitOf(
-				"Keep my branch up to date",
-				["badf00d", "d15ea5e"],
-				"deadc0de",
-			),
-			commitOf(
-				"amend! Resolve a bug that thought it was a feature",
-				"cafed00d",
-			),
-			commitOf("squash! Organise the bookshelf", "d06f00d"),
-			commitOf("Release the robot butler"),
-			commitOf("fixup! Add some extra love to the code", "0ff1ce"),
+			dummyCommit({ subjectLine: "Fix this confusing plate of spaghetti" }),
+			dummyCommit({
+				sha: "b105f00d",
+				subjectLine: "squash! Make the formatter happy again :)",
+			}),
+			dummyMergeCommit({
+				sha: "cafebabe",
+				subjectLine: "Merge branch 'main' into bugfix/dance-party-playlist",
+				parentShas: ["badf00d", "cafed00d"],
+			}),
+			dummyMergeCommit({
+				sha: "deadc0de",
+				subjectLine: "Keep my branch up to date",
+				parentShas: ["badf00d", "d15ea5e"],
+			}),
+			dummyCommit({
+				sha: "cafed00d",
+				subjectLine: "amend! Resolve a bug that thought it was a feature",
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "squash! Organise the bookshelf",
+			}),
+			dummyCommit({ subjectLine: "Release the robot butler" }),
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "fixup! Add some extra love to the code",
+			}),
 		],
 	})
 
@@ -163,11 +180,14 @@ describe("a report generated from a mix of two regular commits, two commits with
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			commitOf("Release the robot butler"),
-			commitOf("throw a tantrum", "d15ea5e"),
-			commitOf("fixup! Add some extra love to the code", "0ff1ce"),
-			commitOf("squash! make it work", "cafed00d"),
-			commitOf("Fix this confusing plate of spaghetti"),
+			dummyCommit({ subjectLine: "Release the robot butler" }),
+			dummyCommit({ sha: "d15ea5e", subjectLine: "throw a tantrum" }),
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "fixup! Add some extra love to the code",
+			}),
+			dummyCommit({ sha: "cafed00d", subjectLine: "squash! make it work" }),
+			dummyCommit({ subjectLine: "Fix this confusing plate of spaghetti" }),
 		],
 	})
 
@@ -196,8 +216,14 @@ describe("a report generated from a mix of a commit with trailing punctuation in
 	const report = reportOf({
 		ruleset: allApplicableRules,
 		commitsToValidate: [
-			commitOf("Make the program act like a clown.", "0ff1ce"),
-			commitOf("squash! Organise the bookshelf", "d06f00d"),
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "Make the program act like a clown.",
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "squash! Organise the bookshelf",
+			}),
 		],
 	})
 

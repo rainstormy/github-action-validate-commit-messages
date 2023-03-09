@@ -1,7 +1,5 @@
-import { dummyCommitFactory } from "+core"
+import { dummyCommit } from "+core"
 import { noSquashCommits } from "+rules"
-
-const { commitOf } = dummyCommitFactory()
 
 describe("a validation rule that rejects squash commits", () => {
 	const rule = noSquashCommits()
@@ -15,7 +13,7 @@ describe("a validation rule that rejects squash commits", () => {
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)
@@ -29,7 +27,7 @@ describe("a validation rule that rejects squash commits", () => {
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)

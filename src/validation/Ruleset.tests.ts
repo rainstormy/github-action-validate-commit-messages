@@ -1,10 +1,7 @@
+import { dummyConfiguration } from "+core"
 import { count } from "+utilities"
 import type { ApplicableRuleKey, RulesetParser } from "+validation"
-import {
-	dummyConfiguration,
-	getAllApplicableRules,
-	rulesetParserFrom,
-} from "+validation"
+import { getAllApplicableRules, rulesetParserFrom } from "+validation"
 
 const allApplicableRules = getAllApplicableRules(dummyConfiguration)
 const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)
@@ -12,7 +9,7 @@ const allApplicableRuleKeys = allApplicableRules.map((rule) => rule.key)
 const parser = rulesetParserFrom(dummyConfiguration)
 
 describe.each`
-	delimitedRuleKeys                                                                                                                 | expectedRuleKeys
+	rules                                                                                                                             | expectedRules
 	${"no-fixup-commits"}                                                                                                             | ${["no-fixup-commits"]}
 	${" no-fixup-commits "}                                                                                                           | ${["no-fixup-commits"]}
 	${"no-merge-commits"}                                                                                                             | ${["no-merge-commits"]}
@@ -27,32 +24,32 @@ describe.each`
 	${";no-fixup-commits no-merge-commits; no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 	${"all"}                                                                                                                          | ${allApplicableRuleKeys}
 `(
-	"a ruleset from a valid string of $delimitedRuleKeys",
+	"a ruleset from a valid string of $rules",
 	(testRow: {
-		readonly delimitedRuleKeys: string
-		readonly expectedRuleKeys: ReadonlyArray<ApplicableRuleKey>
+		readonly rules: string
+		readonly expectedRules: ReadonlyArray<ApplicableRuleKey>
 	}) => {
-		const { delimitedRuleKeys, expectedRuleKeys } = testRow
+		const { rules, expectedRules } = testRow
 
-		const result = parser.parse(delimitedRuleKeys)
+		const result = parser.parse({ rules })
 		const ruleset = (result as RulesetParser.Result.Valid).ruleset
 
 		it("is valid", () => {
 			expect(result.status).toBe("valid")
 		})
 
-		it(`has ${count(expectedRuleKeys, "rule", "rules")}`, () => {
-			expect(ruleset).toHaveLength(expectedRuleKeys.length)
+		it(`has ${count(expectedRules, "rule", "rules")}`, () => {
+			expect(ruleset).toHaveLength(expectedRules.length)
 		})
 
-		it.each(expectedRuleKeys)("includes '%s'", (ruleKey) => {
+		it.each(expectedRules)("includes '%s'", (ruleKey) => {
 			expect(ruleset).toContainEqual(expect.objectContaining({ key: ruleKey }))
 		})
 	},
 )
 
 describe("a ruleset from an empty string", () => {
-	const result = parser.parse("")
+	const result = parser.parse({ rules: "" })
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -65,7 +62,7 @@ describe("a ruleset from an empty string", () => {
 })
 
 describe("a ruleset from a string of whitespace", () => {
-	const result = parser.parse("  ")
+	const result = parser.parse({ rules: "  " })
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -78,7 +75,7 @@ describe("a ruleset from a string of whitespace", () => {
 })
 
 describe("a ruleset from a string of spaces, commas, and semicolons", () => {
-	const result = parser.parse(" ;   ,, , ;; ")
+	const result = parser.parse({ rules: " ;   ,, , ;; " })
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -91,9 +88,10 @@ describe("a ruleset from a string of spaces, commas, and semicolons", () => {
 })
 
 describe("a ruleset from a string that contains unknown rules", () => {
-	const result = parser.parse(
-		"only-merge-commits no-squash-commits no-funny-commits no-fixup-commits",
-	)
+	const result = parser.parse({
+		rules:
+			"only-merge-commits no-squash-commits no-funny-commits no-fixup-commits",
+	})
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {
@@ -108,20 +106,20 @@ describe("a ruleset from a string that contains unknown rules", () => {
 })
 
 describe.each`
-	delimitedRuleKeys                                                                                             | expectedErrorMessage
+	rules                                                                                                         | expectedErrorMessage
 	${"no-fixup-commits no-squash-commits no-fixup-commits"}                                                      | ${"Duplicate rules: no-fixup-commits"}
 	${"no-fixup-commits no-merge-commits no-squash-commits no-squash-commits no-fixup-commits no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
 	${"no-merge-commits no-squash-commits no-merge-commits no-squash-commits"}                                    | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
 	${"all all"}                                                                                                  | ${"Duplicate rules: all"}
 `(
-	"a ruleset from a string $delimitedRuleKeys that contains duplicate rules",
+	"a ruleset from a string $rules that contains duplicate rules",
 	(testRow: {
-		readonly delimitedRuleKeys: string
+		readonly rules: string
 		readonly expectedErrorMessage: string
 	}) => {
-		const { delimitedRuleKeys, expectedErrorMessage } = testRow
+		const { rules, expectedErrorMessage } = testRow
 
-		const result = parser.parse(delimitedRuleKeys)
+		const result = parser.parse({ rules })
 		const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 		it("is invalid", () => {
@@ -135,7 +133,9 @@ describe.each`
 )
 
 describe("a ruleset from a string that mixes rules with 'all'", () => {
-	const result = parser.parse("only-merge-commits all no-fixup-commits")
+	const result = parser.parse({
+		rules: "only-merge-commits all no-fixup-commits",
+	})
 	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
 
 	it("is invalid", () => {

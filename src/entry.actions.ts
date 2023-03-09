@@ -1,4 +1,4 @@
-import { commitFactoryOf, defaultCommitFactoryConfiguration } from "+core"
+import { commitRefinerFrom, parseCommit, parseConfiguration } from "+core"
 import type { ActionResult } from "+github"
 import {
 	actionConfigurationMustBeValid,
@@ -7,7 +7,7 @@ import {
 	reportOf,
 	someCommitsAreInvalid,
 } from "+github"
-import { configurationFrom, rulesetParserFrom } from "+validation"
+import { rulesetParserFrom } from "+validation"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -33,33 +33,37 @@ async function run(): Promise<ActionResult> {
 		)
 	}
 
-	const githubToken = core.getInput("github-token", { required: true })
-	const delimitedRuleKeys = core.getInput("rules", { required: false })
-	const delimitedSuffixWhitelist = core.getInput(
-		"no-trailing-punctuation-in-subject-lines--suffix-whitelist",
-		{ required: false },
-	)
-
-	const configuration = configurationFrom({
-		delimitedSuffixWhitelist,
+	const configuration = parseConfiguration({
+		"no-trailing-punctuation-in-subject-lines": {
+			whitelist: core.getInput(
+				"no-trailing-punctuation-in-subject-lines--whitelist",
+				{ required: false },
+			),
+		},
 	})
 
-	const parser = rulesetParserFrom(configuration)
-	const result = parser.parse(delimitedRuleKeys)
+	const rulesetParser = rulesetParserFrom(configuration)
+	const rulesetParseResult = rulesetParser.parse({
+		rules: core.getInput("rules", { required: false }),
+	})
 
-	if (result.status === "invalid") {
-		return actionConfigurationMustBeValid(result.errorMessage)
+	if (rulesetParseResult.status === "invalid") {
+		return actionConfigurationMustBeValid(rulesetParseResult.errorMessage)
 	}
 
 	const pullRequest = await pullRequestFromApi({
-		githubToken,
+		githubToken: core.getInput("github-token", { required: true }),
 		pullRequestNumber,
-		commitFactory: commitFactoryOf(defaultCommitFactoryConfiguration),
 	})
 
+	const commitRefiner = commitRefinerFrom()
+	const commits = pullRequest.rawCommits.map((rawCommit) =>
+		parseCommit(rawCommit, commitRefiner),
+	)
+
 	const report = reportOf({
-		ruleset: result.ruleset,
-		commitsToValidate: pullRequest.commits,
+		ruleset: rulesetParseResult.ruleset,
+		commitsToValidate: commits,
 	})
 
 	return report === null ? allCommitsAreValid() : someCommitsAreInvalid(report)

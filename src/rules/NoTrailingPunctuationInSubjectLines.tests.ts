@@ -1,8 +1,5 @@
-import { dummyCommitFactory } from "+core"
+import { dummyCommit, dummyConfiguration, dummyConfigurationFor } from "+core"
 import { noTrailingPunctuationInSubjectLines } from "+rules"
-import { dummyConfiguration } from "+validation"
-
-const { commitOf } = dummyCommitFactory()
 
 describe("a validation rule that rejects trailing punctuation in subject lines", () => {
 	const rule = noTrailingPunctuationInSubjectLines(dummyConfiguration)
@@ -32,7 +29,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)
@@ -46,7 +43,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
@@ -65,7 +62,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
@@ -84,7 +81,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)
@@ -100,7 +97,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
@@ -114,7 +111,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
@@ -142,7 +139,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
@@ -159,17 +156,20 @@ describe("a validation rule that rejects trailing punctuation in subject lines",
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
 })
 
 describe("a validation rule that rejects trailing punctuation in subject lines with a set of whitelisted suffixes", () => {
-	const rule = noTrailingPunctuationInSubjectLines({
-		...dummyConfiguration,
-		suffixWhitelist: [".", ","],
-	})
+	const configuration = dummyConfigurationFor(
+		"no-trailing-punctuation-in-subject-lines",
+		{
+			whitelist: [".", ","],
+		},
+	)
+	const rule = noTrailingPunctuationInSubjectLines(configuration)
 
 	it.each`
 		subjectLine
@@ -180,7 +180,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines w
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)
@@ -194,7 +194,7 @@ describe("a validation rule that rejects trailing punctuation in subject lines w
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)

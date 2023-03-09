@@ -1,7 +1,5 @@
-import { dummyCommitFactory } from "+core"
+import { dummyCommit } from "+core"
 import { capitalisedSubjectLines } from "+rules"
-
-const { commitOf } = dummyCommitFactory()
 
 describe("a validation rule that requires capitalised subject lines", () => {
 	const rule = capitalisedSubjectLines()
@@ -18,7 +16,7 @@ describe("a validation rule that requires capitalised subject lines", () => {
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)
@@ -35,7 +33,7 @@ describe("a validation rule that requires capitalised subject lines", () => {
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)

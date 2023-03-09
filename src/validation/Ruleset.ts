@@ -1,14 +1,15 @@
-import type {
-	ApplicableRule,
-	ApplicableRuleKey,
-	Configuration,
-} from "+validation"
+import type { Configuration } from "+core"
+import type { ApplicableRule, ApplicableRuleKey } from "+validation"
 import { getAllApplicableRules } from "+validation"
 
 export type Ruleset = ReadonlyArray<ApplicableRule>
 
+type RulesetParserProps = {
+	readonly rules: string
+}
+
 export type RulesetParser = {
-	readonly parse: (delimitedRuleKeys: string) => RulesetParser.Result
+	readonly parse: (props: RulesetParserProps) => RulesetParser.Result
 }
 
 export namespace RulesetParser {
@@ -33,10 +34,8 @@ export function rulesetParserFrom(configuration: Configuration): RulesetParser {
 	const allApplicableRules = getAllApplicableRules(configuration)
 
 	return {
-		parse: (delimitedRuleKeys: string): RulesetParser.Result => {
-			const keys = delimitedRuleKeys
-				.split(delimiters)
-				.filter((key) => key.length > 0)
+		parse: ({ rules }): RulesetParser.Result => {
+			const keys = rules.split(delimiters).filter((key) => key.length > 0)
 
 			const uniqueKeys = new Set(keys)
 

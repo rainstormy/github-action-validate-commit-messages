@@ -7,8 +7,8 @@ export type NoSquashCommits = Rule<typeof key>
 export function noSquashCommits(): NoSquashCommits {
 	return defineRule({
 		key,
-		validate: ({ modifier }) => {
-			const isSquashCommit = modifier === "squash!"
+		validate: ({ modifiers }) => {
+			const isSquashCommit = modifiers.includes("squash!")
 			return isSquashCommit ? "invalid" : "valid"
 		},
 	})

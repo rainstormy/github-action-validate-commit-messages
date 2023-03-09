@@ -1,7 +1,5 @@
-import { dummyCommitFactory } from "+core"
+import { dummyCommit } from "+core"
 import { noFixupCommits } from "+rules"
-
-const { commitOf } = dummyCommitFactory()
 
 describe("a validation rule that rejects fixup commits", () => {
 	const rule = noFixupCommits()
@@ -17,7 +15,7 @@ describe("a validation rule that rejects fixup commits", () => {
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("invalid")
 		},
 	)
@@ -31,7 +29,7 @@ describe("a validation rule that rejects fixup commits", () => {
 		(testRow: { readonly subjectLine: string }) => {
 			const { subjectLine } = testRow
 
-			const commit = commitOf(subjectLine)
+			const commit = dummyCommit({ subjectLine })
 			expect(rule.validate(commit)).toBe("valid")
 		},
 	)

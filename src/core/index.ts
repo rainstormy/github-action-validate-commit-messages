@@ -1,3 +1,3 @@
-export * from "./Commit"
-export * from "./Commit.dummies"
-export * from "./Rule"
+export * from "./commit"
+export * from "./configuration"
+export * from "./rule"

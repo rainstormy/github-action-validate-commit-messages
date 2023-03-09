@@ -1,3 +1,4 @@
+import type { Configuration } from "+core"
 import type {
 	CapitalisedSubjectLines,
 	NoFixupCommits,
@@ -12,7 +13,6 @@ import {
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
 } from "+rules"
-import type { Configuration } from "+validation"
 
 export function getAllApplicableRules(
 	configuration: Configuration,
