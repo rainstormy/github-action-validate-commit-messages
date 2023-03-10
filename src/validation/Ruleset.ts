@@ -56,12 +56,6 @@ export function rulesetParserFrom(configuration: Configuration): RulesetParser {
 				)
 			}
 
-			if (uniqueKeys.has("all")) {
-				return uniqueKeys.size === 1
-					? valid(allApplicableRules)
-					: invalid("'all' cannot be combined with a specific set of rules")
-			}
-
 			const unknownKeysInOrderOfAppearance = keys.filter(
 				(key) => !isApplicableRuleKey(key),
 			)

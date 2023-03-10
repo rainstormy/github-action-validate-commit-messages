@@ -16,7 +16,6 @@ describe.each`
 	${"capitalised-subject-lines ,no-merge-commits, no-fixup-commits"}                               | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
 	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                                      | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
 	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-	${"all"}                                                                                         | ${["capitalised-subject-lines", "no-fixup-commits", "no-merge-commits", "no-squash-commits", "no-trailing-punctuation-in-subject-lines"]}
 `(
 	"a ruleset from a valid string of $rules",
 	(testRow: {
@@ -104,7 +103,6 @@ describe.each`
 	${"no-fixup-commits, no-squash-commits, no-fixup-commits"}                                                         | ${"Duplicate rules: no-fixup-commits"}
 	${"no-fixup-commits, no-merge-commits, no-squash-commits, no-squash-commits, no-fixup-commits, no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
 	${"no-merge-commits, no-squash-commits, no-merge-commits, no-squash-commits"}                                      | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
-	${"all, all"}                                                                                                      | ${"Duplicate rules: all"}
 `(
 	"a ruleset from a string $rules that contains duplicate rules",
 	(testRow: {
@@ -125,20 +123,3 @@ describe.each`
 		})
 	},
 )
-
-describe("a ruleset from a string that mixes rules with 'all'", () => {
-	const result = parser.parse({
-		rules: "only-merge-commits, all, no-fixup-commits",
-	})
-	const errorMessage = (result as RulesetParser.Result.Invalid).errorMessage
-
-	it("is invalid", () => {
-		expect(result.status).toBe("invalid")
-	})
-
-	it("reports the mix of rules and 'all'", () => {
-		expect(errorMessage).toBe(
-			"'all' cannot be combined with a specific set of rules",
-		)
-	})
-})

@@ -6,9 +6,8 @@ inputs:
     description: The GitHub token that lets the action list the commits in the pull request.
     required: true
   rules:
-    description: A comma-separated list of the rules to enforce. If omitted, all available rules are enforced.
-    required: false
-    default: all
+    description: A comma-separated list of the rules to enforce.
+    required: true
   no-trailing-punctuation-in-subject-lines--whitelist:
     description: A space-separated list of punctuation marks to be ignored by `no-trailing-punctuation-in-subject-lines`.
     required: false
