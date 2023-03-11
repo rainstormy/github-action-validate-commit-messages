@@ -43,7 +43,7 @@ async function run(): Promise<ActionResult> {
 
 	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
-	const commitRefiner = commitRefinerFrom()
+	const commitRefiner = commitRefinerFrom(configuration.data)
 	const commits = pullRequest.rawCommits.map((rawCommit) =>
 		parseCommit(rawCommit, commitRefiner),
 	)

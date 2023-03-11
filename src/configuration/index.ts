@@ -1,3 +1,5 @@
 export * from "./Configuration"
+export * from "./Configuration.dummies"
+export * from "./no-squash-commits"
 export * from "./no-trailing-punctuation-in-subject-lines"
 export * from "./RulesConfiguration"

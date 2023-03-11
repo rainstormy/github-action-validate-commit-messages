@@ -3,7 +3,6 @@ import type { Configuration } from "+configuration"
 import type { Rule, RuleKey } from "+rules"
 import {
 	capitalisedSubjectLines,
-	noFixupCommits,
 	noMergeCommits,
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
@@ -44,7 +43,6 @@ export function reportFrom({
 function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 	const rules = {
 		"capitalised-subject-lines": capitalisedSubjectLines(),
-		"no-fixup-commits": noFixupCommits(),
 		"no-squash-commits": noSquashCommits(),
 		"no-merge-commits": noMergeCommits(),
 		"no-trailing-punctuation-in-subject-lines":
@@ -59,7 +57,6 @@ function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 function getDetectionMessage(ruleKey: RuleKey): string {
 	const detectionMessages = {
 		"capitalised-subject-lines": "Non-capitalised subject lines detected",
-		"no-fixup-commits": "Fixup commits detected",
 		"no-merge-commits": "Merge commits detected",
 		"no-squash-commits": "Squash commits detected",
 		"no-trailing-punctuation-in-subject-lines":
@@ -73,12 +70,10 @@ function getHint(ruleKey: RuleKey): string {
 	const hints = {
 		"capitalised-subject-lines":
 			"Subject lines (the foremost line in the commit message) must start with an uppercase letter. Please rebase interactively to reword the commits before merging the pull request.",
-		"no-fixup-commits":
-			"Please rebase interactively to consolidate the fixup commits before merging the pull request.",
 		"no-merge-commits":
 			"They reduce the traceability of the commit history and make it difficult to rebase interactively. Please undo the merge commit and rebase your branch onto the target branch instead.",
 		"no-squash-commits":
-			"Please rebase interactively to consolidate the squash commits before merging the pull request.",
+			"Please rebase interactively to consolidate the commits before merging the pull request.",
 		"no-trailing-punctuation-in-subject-lines":
 			"Subject lines (the foremost line in the commit message) must not end with a punctuation mark. Please rebase interactively to reword the commits before merging the pull request.",
 	} satisfies Record<RuleKey, string>

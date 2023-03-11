@@ -6,6 +6,11 @@ export function configurationFromInputs(): ReturnType<
 > {
 	return parseConfiguration({
 		ruleKeys: core.getInput("rules"),
+		noSquashCommits: {
+			disallowedPrefixes: core.getInput(
+				"no-squash-commits--disallowed-prefixes",
+			),
+		},
 		noTrailingPunctuationInSubjectLines: {
 			customWhitelist: core.getInput(
 				"no-trailing-punctuation-in-subject-lines--whitelist",

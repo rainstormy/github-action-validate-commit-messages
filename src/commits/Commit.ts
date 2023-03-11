@@ -10,11 +10,9 @@ export type Commit = {
 	readonly sha: string
 	readonly parents: ReadonlyArray<ParentCommit>
 	readonly originalSubjectLine: string
-	readonly modifiers: ReadonlyArray<CommitModifier>
+	readonly squashPrefixes: ReadonlyArray<string>
 	readonly refinedSubjectLine: string
 }
-
-export type CommitModifier = "amend!" | "fixup!" | "squash!"
 
 export type ParentCommit = {
 	readonly sha: string
@@ -31,7 +29,7 @@ export function parseCommit(
 		sha,
 		parents,
 		originalSubjectLine,
-		modifiers: [],
+		squashPrefixes: [],
 		refinedSubjectLine: originalSubjectLine,
 	}
 

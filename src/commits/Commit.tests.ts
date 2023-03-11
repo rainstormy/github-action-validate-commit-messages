@@ -1,9 +1,9 @@
-import type { CommitModifier } from "+commits"
 import { commitRefinerFrom, parseCommit } from "+commits"
+import { dummyConfiguration } from "+configuration"
 import { count } from "+utilities"
 
 describe.each`
-	sha          | subjectLine                                               | body                                                                     | parentShas                            | modifiers               | refinedSubjectLine
+	sha          | subjectLine                                               | body                                                                     | parentShas                            | squashPrefixes          | refinedSubjectLine
 	${"0ff1ce"}  | ${"Release the robot butler"}                             | ${"\n\nThis is a dummy commit message body."}                            | ${["c0ffee"]}                         | ${[]}                   | ${"Release the robot butler"}
 	${"d06f00d"} | ${"Fix this confusing plate of spaghetti"}                | ${""}                                                                    | ${["deadc0de"]}                       | ${[]}                   | ${"Fix this confusing plate of spaghetti"}
 	${"0ff1ce"}  | ${"fixup! Resolve a bug that thought it was a feature"}   | ${""}                                                                    | ${["c0ffee"]}                         | ${["fixup!"]}           | ${"Resolve a bug that thought it was a feature"}
@@ -13,8 +13,9 @@ describe.each`
 	${"0ff1ce"}  | ${"amend! Solve the problem"}                             | ${""}                                                                    | ${["c0ffee"]}                         | ${["amend!"]}           | ${"Solve the problem"}
 	${"d06f00d"} | ${"squash!Make the formatter happy again :)"}             | ${""}                                                                    | ${["deadc0de"]}                       | ${["squash!"]}          | ${"Make the formatter happy again :)"}
 	${"0ff1ce"}  | ${"squash!   Organise the bookshelf"}                     | ${"\n\nThis is a dummy commit message body."}                            | ${["c0ffee"]}                         | ${["squash!"]}          | ${"Organise the bookshelf"}
-	${"d06f00d"} | ${"Keep my branch up to date"}                            | ${""}                                                                    | ${["badf00d", "deadc0de", "d15ea5e"]} | ${[]}                   | ${"Keep my branch up to date"}
-	${"0ff1ce"}  | ${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${"\n\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"} | ${["cafebabe", "cafed00d"]}           | ${[]}                   | ${"Merge branch 'main' into bugfix/dance-party-playlist"}
+	${"d06f00d"} | ${"Make the commit scream fixup! again"}                  | ${""}                                                                    | ${["deadc0de"]}                       | ${[]}                   | ${"Make the commit scream fixup! again"}
+	${"0ff1ce"}  | ${"Keep my branch up to date"}                            | ${""}                                                                    | ${["badf00d", "deadc0de", "d15ea5e"]} | ${[]}                   | ${"Keep my branch up to date"}
+	${"d06f00d"} | ${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${"\n\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"} | ${["cafebabe", "cafed00d"]}           | ${[]}                   | ${"Merge branch 'main' into bugfix/dance-party-playlist"}
 `(
 	"a commit with a subject line of $subjectLine",
 	(testRow: {
@@ -22,7 +23,7 @@ describe.each`
 		readonly subjectLine: string
 		readonly body: string
 		readonly parentShas: ReadonlyArray<string>
-		readonly modifiers: ReadonlyArray<CommitModifier>
+		readonly squashPrefixes: ReadonlyArray<string>
 		readonly issueReferences: ReadonlyArray<string>
 		readonly refinedSubjectLine: string
 	}) => {
@@ -31,11 +32,11 @@ describe.each`
 			subjectLine,
 			body,
 			parentShas,
-			modifiers,
+			squashPrefixes,
 			refinedSubjectLine,
 		} = testRow
 
-		const commitRefiner = commitRefinerFrom()
+		const commitRefiner = commitRefinerFrom(dummyConfiguration)
 		const commit = parseCommit(
 			{
 				sha,
@@ -57,12 +58,16 @@ describe.each`
 			expect(commit.refinedSubjectLine).toStrictEqual(refinedSubjectLine)
 		})
 
-		it(`has ${count(modifiers, "modifier", "modifiers")}`, () => {
-			expect(commit.modifiers).toHaveLength(modifiers.length)
+		it(`has ${count(
+			squashPrefixes,
+			"squash prefix",
+			"squash prefixes",
+		)}`, () => {
+			expect(commit.squashPrefixes).toHaveLength(squashPrefixes.length)
 		})
 
-		it.each(modifiers)(`has a modifier of '%s'`, (modifier) => {
-			expect(commit.modifiers).toContain(modifier)
+		it.each(squashPrefixes)(`has a squash prefix of '%s'`, (prefix) => {
+			expect(commit.squashPrefixes).toContain(prefix)
 		})
 
 		it(`has ${count(parentShas, "parent", "parents")}`, () => {

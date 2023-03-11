@@ -3,8 +3,8 @@ import type { Rule } from "+rules"
 export function noSquashCommits(): Rule {
 	return {
 		key: "no-squash-commits",
-		validate: ({ modifiers }) => {
-			const isSquashCommit = modifiers.includes("squash!")
+		validate: ({ squashPrefixes }) => {
+			const isSquashCommit = squashPrefixes.length > 0
 			return isSquashCommit ? "invalid" : "valid"
 		},
 	}

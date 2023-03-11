@@ -4,17 +4,16 @@ import { count } from "+utilities"
 
 describe.each`
 	rawRuleKeys                                                                                      | expectedRuleKeys
-	${"no-fixup-commits"}                                                                            | ${["no-fixup-commits"]}
 	${" no-merge-commits  "}                                                                         | ${["no-merge-commits"]}
 	${"no-squash-commits,  "}                                                                        | ${["no-squash-commits"]}
 	${",capitalised-subject-lines "}                                                                 | ${["capitalised-subject-lines"]}
 	${"   no-trailing-punctuation-in-subject-lines ,"}                                               | ${["no-trailing-punctuation-in-subject-lines"]}
-	${"no-fixup-commits , no-squash-commits"}                                                        | ${["no-fixup-commits", "no-squash-commits"]}
-	${"capitalised-subject-lines ,no-merge-commits, no-fixup-commits"}                               | ${["capitalised-subject-lines", "no-merge-commits", "no-fixup-commits"]}
-	${"no-fixup-commits,, no-merge-commits, no-squash-commits"}                                      | ${["no-fixup-commits", "no-merge-commits", "no-squash-commits"]}
+	${"capitalised-subject-lines , no-squash-commits"}                                               | ${["capitalised-subject-lines", "no-squash-commits"]}
+	${"capitalised-subject-lines ,no-merge-commits, no-squash-commits"}                              | ${["capitalised-subject-lines", "no-merge-commits", "no-squash-commits"]}
+	${"no-trailing-punctuation-in-subject-lines,, no-merge-commits, no-squash-commits"}              | ${["no-trailing-punctuation-in-subject-lines", "no-merge-commits", "no-squash-commits"]}
 	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 `(
-	"a ruleset from a valid string of $rules",
+	"a ruleset from a valid string of $rawRuleKeys",
 	(testRow: {
 		readonly rawRuleKeys: string
 		readonly expectedRuleKeys: ReadonlyArray<RuleKey>
@@ -64,7 +63,7 @@ describe("a ruleset from a string of spaces and commas", () => {
 
 describe("a ruleset from a string that contains unknown rules", () => {
 	const rawRuleKeys =
-		"only-merge-commits, no-squash-commits, no-funny-commits, no-fixup-commits"
+		"only-merge-commits, no-squash-commits, no-funny-commits, capitalised-subject-lines"
 
 	it("reports the unknown rules in order of their appearance", () => {
 		expect(() => ruleKeysConfigurationSchema.parse(rawRuleKeys)).toThrow(
@@ -74,12 +73,12 @@ describe("a ruleset from a string that contains unknown rules", () => {
 })
 
 describe.each`
-	rawRuleKeys                                                                                                        | expectedErrorMessage
-	${"no-fixup-commits, no-squash-commits, no-fixup-commits"}                                                         | ${"Duplicate rules: no-fixup-commits"}
-	${"no-fixup-commits, no-merge-commits, no-squash-commits, no-squash-commits, no-fixup-commits, no-squash-commits"} | ${"Duplicate rules: no-squash-commits, no-fixup-commits"}
-	${"no-merge-commits, no-squash-commits, no-merge-commits, no-squash-commits"}                                      | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
+	rawRuleKeys                                                                                                                          | expectedErrorMessage
+	${"capitalised-subject-lines, no-squash-commits, no-squash-commits"}                                                                 | ${"Duplicate rules: no-squash-commits"}
+	${"capitalised-subject-lines, no-merge-commits, no-squash-commits, no-squash-commits, capitalised-subject-lines, no-squash-commits"} | ${"Duplicate rules: capitalised-subject-lines, no-squash-commits"}
+	${"no-merge-commits, no-squash-commits, no-merge-commits, no-squash-commits"}                                                        | ${"Duplicate rules: no-merge-commits, no-squash-commits"}
 `(
-	"a ruleset from a string $rules that contains duplicate rules",
+	"a ruleset from a string $rawRuleKeys that contains duplicate rules",
 	(testRow: {
 		readonly rawRuleKeys: string
 		readonly expectedErrorMessage: string
@@ -96,7 +95,7 @@ describe.each`
 
 describe("a ruleset from a string that contains duplicate rules as well as unknown rules", () => {
 	const rawRuleKeys =
-		"no-easter-eggs, no-fixup-commits, no-easter-eggs, no-letters-in-subject-lines, no-fixup-commits"
+		"no-easter-eggs, no-squash-commits, no-easter-eggs, no-letters-in-subject-lines, no-squash-commits"
 
 	it("reports the unknown rules (without duplicates) in order of their appearance", () => {
 		expect(() => ruleKeysConfigurationSchema.parse(rawRuleKeys)).toThrow(
@@ -106,7 +105,7 @@ describe("a ruleset from a string that contains duplicate rules as well as unkno
 
 	it("reports the duplicate rules (including unknown rules) in order of their appearance", () => {
 		expect(() => ruleKeysConfigurationSchema.parse(rawRuleKeys)).toThrow(
-			"Duplicate rules: no-easter-eggs, no-fixup-commits",
+			"Duplicate rules: no-easter-eggs, no-squash-commits",
 		)
 	})
 })

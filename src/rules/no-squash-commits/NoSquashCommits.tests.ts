@@ -6,6 +6,10 @@ describe("a validation rule that rejects squash commits", () => {
 
 	it.each`
 		subjectLine
+		${"amend! Apply strawberry jam to make the code sweeter"}
+		${"amend! Solve the problem"}
+		${"fixup! Resolve a bug that thought it was a feature"}
+		${"fixup! Add some extra love to the code"}
 		${"squash! Make the formatter happy again :)"}
 		${"squash! Organise the bookshelf"}
 	`(

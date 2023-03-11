@@ -2,7 +2,6 @@ import type { Commit } from "+commits"
 
 export const ruleKeys = [
 	"capitalised-subject-lines",
-	"no-fixup-commits",
 	"no-merge-commits",
 	"no-squash-commits",
 	"no-trailing-punctuation-in-subject-lines",

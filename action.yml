@@ -8,6 +8,10 @@ inputs:
   rules:
     description: A comma-separated list of the rules to enforce.
     required: true
+  no-squash-commits--disallowed-prefixes:
+    description: A comma-separated list of subject line prefixes to be rejected by `no-squash-commits`.
+    required: false
+    default: amend!, fixup!, squash!
   no-trailing-punctuation-in-subject-lines--whitelist:
     description: A space-separated list of punctuation marks to be ignored by `no-trailing-punctuation-in-subject-lines`.
     required: false

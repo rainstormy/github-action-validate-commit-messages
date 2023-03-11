@@ -1,5 +1,6 @@
 import type { Commit, CommitRefiner } from "+commits"
 import { commitRefinerFrom, parseCommit } from "+commits"
+import { dummyConfiguration } from "+configuration"
 
 type DummyCommitProps = {
 	readonly sha?: string
@@ -46,5 +47,5 @@ export function dummyMergeCommit({
 }
 
 function dummyCommitRefiner(): CommitRefiner {
-	return commitRefinerFrom()
+	return commitRefinerFrom(dummyConfiguration)
 }

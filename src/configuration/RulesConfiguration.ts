@@ -27,7 +27,9 @@ function hasNoDuplicatedRuleKeys(keys: ReadonlyArray<string>): boolean {
 function getDuplicatedRuleKeys(
 	keys: ReadonlyArray<string>,
 ): ReadonlyArray<string> {
-	return [...new Set(keys.filter((key, index) => keys.indexOf(key) !== index))]
+	return [
+		...new Set(keys.filter((key, index) => keys.lastIndexOf(key) !== index)),
+	]
 }
 
 function hasNoUnknownRuleKeys(
