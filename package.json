@@ -24,12 +24,14 @@
 	"dependencies": {
 		"@actions/core": "1.10.0",
 		"@actions/github": "5.1.1",
-		"tslib": "2.5.0"
+		"tslib": "2.5.0",
+		"zod": "3.21.4"
 	},
 	"dependencies-comments": {
 		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
 		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
-		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
+		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.",
+		"zod": "Zod; a TypeScript-based data validation library."
 	},
 	"devDependencies": {
 		"@octokit/types": "9.0.0",

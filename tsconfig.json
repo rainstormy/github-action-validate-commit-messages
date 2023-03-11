@@ -17,11 +17,11 @@
 		"moduleResolution": "Node",
 		"noEmit": true,
 		"paths": {
-			"+core": ["./src/core/index"],
+			"+commits": ["./src/commits/index"],
+			"+configuration": ["./src/configuration/index"],
 			"+github": ["./src/github/index"],
 			"+rules": ["./src/rules/index"],
-			"+utilities": ["./src/utilities/index"],
-			"+validation": ["./src/validation/index"]
+			"+utilities": ["./src/utilities/index"]
 		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,

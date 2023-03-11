@@ -1,13 +1,13 @@
-import { commitRefinerFrom, parseCommit, parseConfiguration } from "+core"
+import { commitRefinerFrom, parseCommit } from "+commits"
 import type { ActionResult } from "+github"
 import {
 	actionConfigurationMustBeValid,
 	allCommitsAreValid,
-	pullRequestFromApi,
-	reportOf,
+	configurationFromInputs,
+	getPullRequestFromApi,
 	someCommitsAreInvalid,
 } from "+github"
-import { rulesetParserFrom } from "+validation"
+import { reportFrom } from "+rules"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -33,38 +33,25 @@ async function run(): Promise<ActionResult> {
 		)
 	}
 
-	const configuration = parseConfiguration({
-		"no-trailing-punctuation-in-subject-lines": {
-			whitelist: core.getInput(
-				"no-trailing-punctuation-in-subject-lines--whitelist",
-				{ required: false },
-			),
-		},
-	})
+	const configuration = configurationFromInputs()
 
-	const rulesetParser = rulesetParserFrom(configuration)
-	const rulesetParseResult = rulesetParser.parse({
-		rules: core.getInput("rules", { required: false }),
-	})
-
-	if (rulesetParseResult.status === "invalid") {
-		return actionConfigurationMustBeValid(rulesetParseResult.errorMessage)
+	if (!configuration.success) {
+		return actionConfigurationMustBeValid(
+			configuration.error.flatten().formErrors.join("\n\n"),
+		)
 	}
 
-	const pullRequest = await pullRequestFromApi({
-		githubToken: core.getInput("github-token", { required: true }),
-		pullRequestNumber,
-	})
+	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
 	const commitRefiner = commitRefinerFrom()
 	const commits = pullRequest.rawCommits.map((rawCommit) =>
 		parseCommit(rawCommit, commitRefiner),
 	)
 
-	const report = reportOf({
-		ruleset: rulesetParseResult.ruleset,
+	const report = reportFrom({
+		configuration: configuration.data,
 		commitsToValidate: commits,
 	})
 
-	return report === null ? allCommitsAreValid() : someCommitsAreInvalid(report)
+	return report === "" ? allCommitsAreValid() : someCommitsAreInvalid(report)
 }

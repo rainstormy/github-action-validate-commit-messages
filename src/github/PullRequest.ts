@@ -1,4 +1,5 @@
-import type { RawCommit } from "+core"
+import type { RawCommit } from "+commits"
+import core from "@actions/core"
 import github from "@actions/github"
 import type { Endpoints } from "@octokit/types"
 
@@ -9,17 +10,11 @@ export type PullRequest = {
 	readonly rawCommits: ReadonlyArray<RawCommit>
 }
 
-type PullRequestFromApiProps = {
-	readonly githubToken: string
-	readonly pullRequestNumber: number
-}
-
-export async function pullRequestFromApi({
-	githubToken,
-	pullRequestNumber,
-}: PullRequestFromApiProps): Promise<PullRequest> {
+export async function getPullRequestFromApi(
+	pullRequestNumber: number,
+): Promise<PullRequest> {
 	const { owner, repo } = github.context.repo
-	const octokit = github.getOctokit(githubToken)
+	const octokit = getOctokit()
 
 	const commitDtos = await octokit.paginate(
 		octokit.rest.pulls.listCommits,
@@ -34,6 +29,12 @@ export async function pullRequestFromApi({
 	return {
 		rawCommits: commitDtos.map((commit) => rawCommitFromDto(commit)),
 	}
+}
+
+function getOctokit(): ReturnType<typeof github.getOctokit> {
+	// The lexical scope of the GitHub token should be as small as possible to prevent leaks.
+	const githubToken = core.getInput("github-token", { required: true })
+	return github.getOctokit(githubToken)
 }
 
 const shaLengthToDisplay = 7
