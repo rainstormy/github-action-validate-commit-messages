@@ -1,4 +1,4 @@
-import type { RawCommit } from "+commits"
+import type { RawCommit } from "+rules"
 import core from "@actions/core"
 import github from "@actions/github"
 import type { Endpoints } from "@octokit/types"

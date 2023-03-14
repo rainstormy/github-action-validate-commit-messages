@@ -1,13 +1,13 @@
-import { commitRefinerFrom, parseCommit } from "+commits"
 import type { ActionResult } from "+github"
 import {
 	actionConfigurationMustBeValid,
 	allCommitsAreValid,
 	configurationFromInputs,
+	formatIssue,
 	getPullRequestFromApi,
 	someCommitsAreInvalid,
 } from "+github"
-import { reportFrom } from "+rules"
+import { hintedCommitListReporter, validatorFrom } from "+validator"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -36,22 +36,17 @@ async function run(): Promise<ActionResult> {
 	const configuration = configurationFromInputs()
 
 	if (!configuration.success) {
-		return actionConfigurationMustBeValid(
-			configuration.error.flatten().formErrors.join("\n\n"),
-		)
+		const formattedErrors = configuration.error.issues
+			.map((issue) => formatIssue(issue))
+			.join("\n")
+
+		return actionConfigurationMustBeValid(formattedErrors)
 	}
 
 	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
-	const commitRefiner = commitRefinerFrom(configuration.data)
-	const commits = pullRequest.rawCommits.map((rawCommit) =>
-		parseCommit(rawCommit, commitRefiner),
-	)
-
-	const report = reportFrom({
-		configuration: configuration.data,
-		commitsToValidate: commits,
-	})
+	const validate = validatorFrom(configuration.data)
+	const report = validate(pullRequest.rawCommits, hintedCommitListReporter())
 
 	return report === "" ? allCommitsAreValid() : someCommitsAreInvalid(report)
 }

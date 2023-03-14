@@ -1,4 +1,4 @@
-import type { Commit } from "+commits"
+import type { Commit, CommitRefiner } from "+rules"
 
 export const ruleKeys = [
 	"capitalised-subject-lines",
@@ -7,13 +7,10 @@ export const ruleKeys = [
 	"no-trailing-punctuation-in-subject-lines",
 ] as const
 
-export function isRuleKey(key: string): key is RuleKey {
-	return (ruleKeys as ReadonlyArray<string>).includes(key)
-}
-
 export type RuleKey = (typeof ruleKeys)[number]
 
 export type Rule = {
 	readonly key: RuleKey
+	readonly refine?: CommitRefiner
 	readonly validate: (commit: Commit) => "invalid" | "valid"
 }

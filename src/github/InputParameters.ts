@@ -1,5 +1,6 @@
-import { parseConfiguration } from "+configuration"
+import { parseConfiguration } from "+validator"
 import core from "@actions/core"
+import type { ZodIssue } from "zod"
 
 export function configurationFromInputs(): ReturnType<
 	typeof parseConfiguration
@@ -17,4 +18,9 @@ export function configurationFromInputs(): ReturnType<
 			),
 		},
 	})
+}
+
+export function formatIssue(issue: ZodIssue): string {
+	const parameterName = issue.path.at(-1) ?? issue.path.join(".")
+	return `Input parameter '${parameterName}' ${issue.message}`
 }

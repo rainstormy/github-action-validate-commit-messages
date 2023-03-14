@@ -1,7 +1,7 @@
-import type { Configuration } from "+configuration"
 import { ruleKeys } from "+rules"
+import type { Configuration } from "+validator"
 
-export const dummyConfiguration: Configuration = {
+export const dummyDefaultConfiguration: Configuration = {
 	ruleKeys,
 	noSquashCommits: {
 		disallowedPrefixes: ["amend!", "fixup!", "squash!"],

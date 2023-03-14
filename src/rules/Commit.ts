@@ -1,5 +1,3 @@
-import type { CommitRefiner } from "+commits"
-
 export type RawCommit = {
 	readonly sha: string
 	readonly parents: ReadonlyArray<ParentCommit>
@@ -18,20 +16,15 @@ export type ParentCommit = {
 	readonly sha: string
 }
 
-export function parseCommit(
-	rawCommit: RawCommit,
-	refiner: CommitRefiner,
-): Commit {
+export function parseCommit(rawCommit: RawCommit): Commit {
 	const { sha, parents, commitMessage } = rawCommit
 	const [originalSubjectLine] = commitMessage.split("\n")
 
-	const baseCommit: Commit = {
+	return {
 		sha,
 		parents,
 		originalSubjectLine,
 		squashPrefixes: [],
 		refinedSubjectLine: originalSubjectLine,
 	}
-
-	return refiner.refineCommit(baseCommit)
 }

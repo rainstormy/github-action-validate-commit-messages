@@ -26,11 +26,10 @@ const viteConfig = defineConfig(() => ({
 	resolve: {
 		// The first alias takes precedence over the following ones.
 		alias: {
-			"+commits": inProjectDirectory("src/commits/index"),
-			"+configuration": inProjectDirectory("src/configuration/index"),
 			"+github": inProjectDirectory("src/github/index"),
 			"+rules": inProjectDirectory("src/rules/index"),
 			"+utilities": inProjectDirectory("src/utilities/index"),
+			"+validator": inProjectDirectory("src/validator/index"),
 		},
 	},
 	test: {
