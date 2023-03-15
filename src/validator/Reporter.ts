@@ -28,6 +28,7 @@ export function hintedCommitListReporter(
 		const detectionMessages: Readonly<Record<RuleKey, string>> = {
 			"capitalised-subject-lines": `Non-capitalised subject lines detected`,
 			"issue-references-in-subject-lines": `Subject lines without issue reference detected`,
+			"multi-word-subject-lines": `Subject lines with less than two words detected`,
 			"no-merge-commits": `Merge commits detected`,
 			"no-squash-commits": `Squash commits detected`,
 			"no-trailing-punctuation-in-subject-lines": `Subject lines with trailing punctuation detected`,
@@ -43,6 +44,7 @@ export function hintedCommitListReporter(
 		const hints: Readonly<Record<RuleKey, string>> = {
 			"capitalised-subject-lines": `Subject lines (the foremost line in the commit message) must start with an uppercase letter.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"issue-references-in-subject-lines": `Subject lines (the foremost line in the commit message) must include a reference to an issue in an issue tracking system.\n${indent}Valid patterns: ${validIssueReferencePatterns}\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
+			"multi-word-subject-lines": `Subject lines (the foremost line in the commit message) must contain at least two words.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"no-merge-commits": `They reduce the traceability of the commit history and make it difficult to rebase interactively.\n${indent}Please undo the merge commit and rebase your branch onto the target branch instead.`,
 			"no-squash-commits": `Please rebase interactively to consolidate the commits before merging the pull request.`,
 			"no-trailing-punctuation-in-subject-lines": `Subject lines (the foremost line in the commit message) must not end with a punctuation mark.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,

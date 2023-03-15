@@ -3,6 +3,7 @@ import type { Configuration } from "+validator"
 export const dummyDefaultConfiguration: Configuration = {
 	ruleKeys: [
 		"capitalised-subject-lines",
+		"multi-word-subject-lines",
 		"no-merge-commits",
 		"no-squash-commits",
 		"no-trailing-punctuation-in-subject-lines",

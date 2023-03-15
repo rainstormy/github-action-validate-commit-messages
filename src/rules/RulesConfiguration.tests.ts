@@ -9,10 +9,11 @@ describe.each`
 	${",capitalised-subject-lines "}                                                                 | ${["capitalised-subject-lines"]}
 	${"   no-trailing-punctuation-in-subject-lines ,"}                                               | ${["no-trailing-punctuation-in-subject-lines"]}
 	${"issue-references-in-subject-lines"}                                                           | ${["issue-references-in-subject-lines"]}
+	${"multi-word-subject-lines"}                                                                    | ${["multi-word-subject-lines"]}
 	${"capitalised-subject-lines , no-squash-commits"}                                               | ${["capitalised-subject-lines", "no-squash-commits"]}
 	${"capitalised-subject-lines ,no-merge-commits, no-squash-commits"}                              | ${["capitalised-subject-lines", "no-merge-commits", "no-squash-commits"]}
 	${"no-trailing-punctuation-in-subject-lines,, no-merge-commits, no-squash-commits"}              | ${["no-trailing-punctuation-in-subject-lines", "no-merge-commits", "no-squash-commits"]}
-	${"issue-references-in-subject-lines, capitalised-subject-lines"}                                | ${["issue-references-in-subject-lines", "capitalised-subject-lines"]}
+	${"issue-references-in-subject-lines,multi-word-subject-lines, capitalised-subject-lines"}       | ${["issue-references-in-subject-lines", "multi-word-subject-lines", "capitalised-subject-lines"]}
 	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "} | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 `(
 	"a ruleset from a valid string of $rawRuleKeys",

@@ -16,6 +16,11 @@ describe("when the configuration has default settings", () => {
 		subjectLine                                              | expectedViolatedRuleKeys
 		${"Release the robot butler"}                            | ${[]}
 		${"Fix this confusing plate of spaghetti"}               | ${[]}
+		${""}                                                    | ${["multi-word-subject-lines"]}
+		${" "}                                                   | ${["multi-word-subject-lines"]}
+		${"fixup!"}                                              | ${["multi-word-subject-lines", "no-squash-commits"]}
+		${"test"}                                                | ${["capitalised-subject-lines", "multi-word-subject-lines"]}
+		${"Formatting."}                                         | ${["multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"fixup! Resolve a bug that thought it was a feature"}  | ${["no-squash-commits"]}
 		${"fixup!  Add some extra love to the code"}             | ${["no-squash-commits"]}
 		${"fixup! fixup! Fix this confusing plate of spaghetti"} | ${["no-squash-commits"]}
@@ -138,6 +143,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		${"Release the robot butler"}                                 | ${["issue-references-in-subject-lines"]}
 		${"Fix this confusing plate of spaghetti"}                    | ${["issue-references-in-subject-lines"]}
 		${'Revert "Release the robot butler"'}                        | ${[]}
+		${"#1"}                                                       | ${["multi-word-subject-lines"]}
 		${"fixup! Resolve a bug that thought it was a feature"}       | ${["no-squash-commits", "issue-references-in-subject-lines"]}
 		${"fixup! #1 Fix this confusing plate of spaghetti"}          | ${["no-squash-commits"]}
 		${"(#42)amend!Apply strawberry jam to make the code sweeter"} | ${["no-squash-commits"]}

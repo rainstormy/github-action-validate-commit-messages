@@ -18,6 +18,7 @@ export function noTrailingPunctuationInSubjectLines({
 	return {
 		key: "no-trailing-punctuation-in-subject-lines",
 		validate: ({ refinedSubjectLine }) =>
+			refinedSubjectLine.length > 0 &&
 			hasTrailingPunctuation(refinedSubjectLine) &&
 			!hasWhitelistedSuffix(refinedSubjectLine)
 				? "invalid"

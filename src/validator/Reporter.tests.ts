@@ -230,6 +230,29 @@ Subject lines with trailing punctuation detected:
 			)
 		})
 	})
+
+	describe("a report generated from a commit with a decapitalised single-word subject line", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({ sha: "d06f00d", subjectLine: "test" }),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Non-capitalised subject lines detected:
+    d06f00d test
+
+    Subject lines (the foremost line in the commit message) must start with an uppercase letter.
+    Please rebase interactively to reword the commits before merging the pull request.
+
+Subject lines with less than two words detected:
+    d06f00d test
+
+    Subject lines (the foremost line in the commit message) must contain at least two words.
+    Please rebase interactively to reword the commits before merging the pull request.`,
+			)
+		})
+	})
 })
 
 describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with GitHub-style issue references as prefix", () => {

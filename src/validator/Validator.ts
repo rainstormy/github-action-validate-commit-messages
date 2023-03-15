@@ -3,6 +3,7 @@ import {
 	capitalisedSubjectLines,
 	commitRefinerFrom,
 	issueReferencesInSubjectLines,
+	multiWordSubjectLines,
 	noMergeCommits,
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
@@ -53,6 +54,7 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 		"issue-references-in-subject-lines": issueReferencesInSubjectLines(
 			configuration.issueReferencesInSubjectLines,
 		),
+		"multi-word-subject-lines": multiWordSubjectLines(),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),
 		"no-merge-commits": noMergeCommits(),
 		"no-trailing-punctuation-in-subject-lines":
