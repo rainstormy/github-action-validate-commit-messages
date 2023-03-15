@@ -193,7 +193,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 	const validate = validateViolatedRulesFrom({
 		...dummyDefaultConfiguration,
 		noTrailingPunctuationInSubjectLines: {
-			customWhitelist: [".", ","],
+			whitelist: [".", ","],
 		},
 	})
 

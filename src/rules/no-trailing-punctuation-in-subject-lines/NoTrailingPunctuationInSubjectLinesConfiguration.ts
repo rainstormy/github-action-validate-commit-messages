@@ -6,14 +6,14 @@ import {
 import { z } from "zod"
 
 export const noTrailingPunctuationInSubjectLinesConfigurationSchema = z.object({
-	customWhitelist: z
+	whitelist: z
 		.string()
 		.transform(splitBySpace)
 		.refine(requireNoDuplicateValues, (suffixes) => ({
 			message: `must not contain duplicates: ${getDuplicateValues(
 				suffixes,
 			).join(" ")}`,
-			path: ["no-trailing-punctuation-in-subject-lines--custom-whitelist"],
+			path: ["no-trailing-punctuation-in-subject-lines--whitelist"],
 		})),
 })
 

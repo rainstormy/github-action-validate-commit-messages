@@ -19,7 +19,7 @@ export function configurationFromInputs(): ReturnType<
 			),
 		},
 		noTrailingPunctuationInSubjectLines: {
-			customWhitelist: core.getInput(
+			whitelist: core.getInput(
 				"no-trailing-punctuation-in-subject-lines--whitelist",
 			),
 		},

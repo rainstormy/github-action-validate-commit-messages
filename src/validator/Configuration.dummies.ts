@@ -16,7 +16,7 @@ export const dummyDefaultConfiguration: Configuration = {
 		disallowedPrefixes: ["amend!", "fixup!", "squash!"],
 	},
 	noTrailingPunctuationInSubjectLines: {
-		customWhitelist: [],
+		whitelist: [],
 	},
 }
 

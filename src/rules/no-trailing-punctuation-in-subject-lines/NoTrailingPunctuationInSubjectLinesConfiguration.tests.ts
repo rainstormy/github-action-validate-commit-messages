@@ -23,8 +23,8 @@ describe.each`
 		const { rawSuffixes, expectedSuffixes } = testRow
 
 		it(`includes ${formatSuffixes(expectedSuffixes)}`, () => {
-			const { customWhitelist: actualSuffixes } = parseConfiguration({
-				customWhitelist: rawSuffixes,
+			const { whitelist: actualSuffixes } = parseConfiguration({
+				whitelist: rawSuffixes,
 			})
 
 			expect(actualSuffixes).toStrictEqual(expectedSuffixes)
@@ -46,11 +46,9 @@ describe.each`
 		const { rawSuffixes, expectedErrorMessage } = testRow
 
 		it(`raises an error: '${expectedErrorMessage}'`, () => {
-			expect(() =>
-				parseConfiguration({
-					customWhitelist: rawSuffixes,
-				}),
-			).toThrow(expectedErrorMessage)
+			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(
+				expectedErrorMessage,
+			)
 		})
 	},
 )

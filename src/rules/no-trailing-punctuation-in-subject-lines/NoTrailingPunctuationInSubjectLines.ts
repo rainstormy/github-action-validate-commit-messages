@@ -4,7 +4,7 @@ import type {
 } from "+rules"
 
 export function noTrailingPunctuationInSubjectLines({
-	customWhitelist,
+	whitelist: customWhitelist,
 }: NoTrailingPunctuationInSubjectLinesConfiguration): Rule {
 	const builtInWhitelist = ["C++", "C#", "F#", "F*", "VDM++"]
 	const whitelist = [...customWhitelist, ...builtInWhitelist]
