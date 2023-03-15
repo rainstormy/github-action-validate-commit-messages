@@ -2,6 +2,7 @@ import type { Commit, CommitRefiner } from "+rules"
 
 export const ruleKeys = [
 	"capitalised-subject-lines",
+	"issue-references-in-subject-lines",
 	"no-merge-commits",
 	"no-squash-commits",
 	"no-trailing-punctuation-in-subject-lines",

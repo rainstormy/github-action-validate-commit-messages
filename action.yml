@@ -8,10 +8,18 @@ inputs:
   rules:
     description: A comma-separated list of the rules to enforce.
     required: true
+  issue-references-in-subject-lines--allowed-positions:
+    description: A comma-separated list of positions where the issue reference is allowed to appear in the subject line. Valid positions are `as-prefix` and `as-suffix`. It is enforced by `issue-reference-in-subject-lines`.
+    required: false
+    default: as-prefix,as-suffix
+  issue-references-in-subject-lines--patterns:
+    description: A space-separated list of regular expressions for issue references, e.g. `#[1-9][0-9]*` for GitHub issues or `ABC-[1-9][0-9]*` for Jira or YouTrack issues in a project named `ABC`. It is required for `issue-reference-in-subject-lines`.
+    required: false
+    default: ^\b$
   no-squash-commits--disallowed-prefixes:
     description: A comma-separated list of subject line prefixes to be rejected by `no-squash-commits`.
     required: false
-    default: amend!, fixup!, squash!
+    default: amend!,fixup!,squash!
   no-trailing-punctuation-in-subject-lines--whitelist:
     description: A space-separated list of punctuation marks to be ignored by `no-trailing-punctuation-in-subject-lines`.
     required: false

@@ -2,6 +2,7 @@ import type { RawCommit, Rule, RuleKey } from "+rules"
 import {
 	capitalisedSubjectLines,
 	commitRefinerFrom,
+	issueReferencesInSubjectLines,
 	noMergeCommits,
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
@@ -49,6 +50,9 @@ export function validatorFrom(configuration: Configuration): Validator {
 export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 	const rules: Readonly<Record<RuleKey, Rule>> = {
 		"capitalised-subject-lines": capitalisedSubjectLines(),
+		"issue-references-in-subject-lines": issueReferencesInSubjectLines(
+			configuration.issueReferencesInSubjectLines,
+		),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),
 		"no-merge-commits": noMergeCommits(),
 		"no-trailing-punctuation-in-subject-lines":

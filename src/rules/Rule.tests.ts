@@ -4,6 +4,7 @@ import { count } from "+utilities"
 import type { Configuration } from "+validator"
 import {
 	dummyDefaultConfiguration,
+	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	validatorFrom,
 	violatedRulesReporter,
 } from "+validator"
@@ -127,7 +128,62 @@ describe("when the configuration has default settings", () => {
 	)
 })
 
-describe("when the configuration overrides 'no-trailing-punctuation-in-subject-lines--whitelist'", () => {
+describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with GitHub-style issue references as prefix", () => {
+	const validate = validateViolatedRulesFrom(
+		dummyGithubStyleIssueReferencesAsPrefixConfiguration,
+	)
+
+	describe.each`
+		subjectLine                                                   | expectedViolatedRuleKeys
+		${"Release the robot butler"}                                 | ${["issue-references-in-subject-lines"]}
+		${"Fix this confusing plate of spaghetti"}                    | ${["issue-references-in-subject-lines"]}
+		${'Revert "Release the robot butler"'}                        | ${[]}
+		${"fixup! Resolve a bug that thought it was a feature"}       | ${["no-squash-commits", "issue-references-in-subject-lines"]}
+		${"fixup! #1 Fix this confusing plate of spaghetti"}          | ${["no-squash-commits"]}
+		${"(#42)amend!Apply strawberry jam to make the code sweeter"} | ${["no-squash-commits"]}
+		${"#7044: Solve the problem"}                                 | ${[]}
+		${"squash! #3 Make the formatter happy again :)"}             | ${["no-squash-commits"]}
+		${"#7 #8 resolve a bug that thought it was a feature"}        | ${["capitalised-subject-lines"]}
+		${"amend! #55: make the program act like a clown"}            | ${["capitalised-subject-lines", "no-squash-commits"]}
+	`(
+		"a commit with a subject line of $subjectLine",
+		(testRow: {
+			readonly subjectLine: string
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLine, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+
+	describe.each`
+		subjectLine                                               | numberOfParents | expectedViolatedRuleKeys
+		${"#1 Keep my branch up to date"}                         | ${3}            | ${["no-merge-commits"]}
+		${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${2}            | ${["no-merge-commits"]}
+	`(
+		"a merge commit with a subject line of $subjectLine",
+		(testRow: {
+			readonly subjectLine: string
+			readonly numberOfParents: number
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLine, numberOfParents, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					dummyCommit({ subjectLine, numberOfParents }),
+				)
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+})
+
+describe("when the configuration overrides 'no-trailing-punctuation-in-subject-lines--whitelist' with . and ,", () => {
 	const validate = validateViolatedRulesFrom({
 		...dummyDefaultConfiguration,
 		noTrailingPunctuationInSubjectLines: {

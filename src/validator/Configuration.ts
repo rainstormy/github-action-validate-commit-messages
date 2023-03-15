@@ -1,4 +1,5 @@
 import {
+	issueReferencesInSubjectLinesConfigurationSchema,
 	noSquashCommitsConfigurationSchema,
 	noTrailingPunctuationInSubjectLinesConfigurationSchema,
 	ruleKeysConfigurationSchema,
@@ -7,6 +8,8 @@ import { z } from "zod"
 
 const configurationSchema = z.object({
 	ruleKeys: ruleKeysConfigurationSchema,
+	issueReferencesInSubjectLines:
+		issueReferencesInSubjectLinesConfigurationSchema,
 	noSquashCommits: noSquashCommitsConfigurationSchema,
 	noTrailingPunctuationInSubjectLines:
 		noTrailingPunctuationInSubjectLinesConfigurationSchema,

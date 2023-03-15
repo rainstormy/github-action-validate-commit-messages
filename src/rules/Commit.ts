@@ -9,6 +9,7 @@ export type Commit = {
 	readonly parents: ReadonlyArray<ParentCommit>
 	readonly originalSubjectLine: string
 	readonly squashPrefixes: ReadonlyArray<string>
+	readonly issueReferences: ReadonlyArray<string>
 	readonly refinedSubjectLine: string
 }
 
@@ -25,6 +26,7 @@ export function parseCommit(rawCommit: RawCommit): Commit {
 		parents,
 		originalSubjectLine,
 		squashPrefixes: [],
-		refinedSubjectLine: originalSubjectLine,
+		issueReferences: [],
+		refinedSubjectLine: originalSubjectLine.trim(),
 	}
 }

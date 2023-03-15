@@ -7,6 +7,12 @@ export function configurationFromInputs(): ReturnType<
 > {
 	return parseConfiguration({
 		ruleKeys: core.getInput("rules"),
+		issueReferencesInSubjectLines: {
+			allowedPositions: core.getInput(
+				"issue-references-in-subject-lines--allowed-positions",
+			),
+			patterns: core.getInput("issue-references-in-subject-lines--patterns"),
+		},
 		noSquashCommits: {
 			disallowedPrefixes: core.getInput(
 				"no-squash-commits--disallowed-prefixes",

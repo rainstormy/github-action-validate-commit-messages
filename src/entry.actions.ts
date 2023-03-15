@@ -46,7 +46,10 @@ async function run(): Promise<ActionResult> {
 	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
 	const validate = validatorFrom(configuration.data)
-	const report = validate(pullRequest.rawCommits, hintedCommitListReporter())
+	const report = validate(
+		pullRequest.rawCommits,
+		hintedCommitListReporter(configuration.data),
+	)
 
 	return report === "" ? allCommitsAreValid() : someCommitsAreInvalid(report)
 }
