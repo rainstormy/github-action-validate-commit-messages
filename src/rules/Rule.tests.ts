@@ -122,17 +122,19 @@ describe("when the configuration has default settings", () => {
 	)
 
 	describe.each`
-		subjectLine                | body                                                                                                                                                              | expectedViolatedRuleKeys
-		${" fix it"}               | ${""}                                                                                                                                                             | ${["capitalised-subject-lines", "no-inappropriate-whitespace"]}
-		${"Do it over "}           | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
-		${"Make  it work"}         | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
-		${"Bring it   on  "}       | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
-		${"Help fix the bug"}      | ${"\nIt was just a matter of time. "}                                                                                                                             | ${[]}
-		${"Write unit tests"}      | ${"\n Finally..."}                                                                                                                                                | ${[]}
-		${"Resolve the conflicts"} | ${"\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                            | ${[]}
-		${"Adjust the procedure"}  | ${"\nIt was totally  wrong until now."}                                                                                                                           | ${["no-inappropriate-whitespace"]}
-		${"Refactor some stuff"}   | ${"\nThe code looks much better now \nas we finally took the  time to improve it. "}                                                                              | ${["no-inappropriate-whitespace"]}
-		${"Improve the code"}      | ${"\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."} | ${[]}
+		subjectLine                   | body                                                                                                                                                              | expectedViolatedRuleKeys
+		${" fix it"}                  | ${""}                                                                                                                                                             | ${["capitalised-subject-lines", "no-inappropriate-whitespace"]}
+		${"Do it over "}              | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
+		${"Make  it work"}            | ${"\n"}                                                                                                                                                           | ${["empty-line-after-subject-lines", "no-inappropriate-whitespace"]}
+		${"Bring it   on  "}          | ${"\n\nThe code is prepared for anything."}                                                                                                                       | ${["empty-line-after-subject-lines", "no-inappropriate-whitespace"]}
+		${"Introduce a cool feature"} | ${"It is really awesome!"}                                                                                                                                        | ${["empty-line-after-subject-lines"]}
+		${"Help fix the bug"}         | ${"\nIt was just a matter of time. "}                                                                                                                             | ${[]}
+		${"Write unit tests"}         | ${" Finally..."}                                                                                                                                                  | ${["empty-line-after-subject-lines"]}
+		${"Resolve the conflicts"}    | ${"\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                            | ${[]}
+		${"Adjust the procedure"}     | ${"\nIt was totally  wrong until now."}                                                                                                                           | ${["no-inappropriate-whitespace"]}
+		${"Refactor some stuff"}      | ${" \nThe code looks much better now \nas we finally took the  time to improve it. "}                                                                             | ${["empty-line-after-subject-lines", "no-inappropriate-whitespace"]}
+		${"Release the robot butler"} | ${"\n\nIt'll go on an adventure."}                                                                                                                                | ${["empty-line-after-subject-lines"]}
+		${"Improve the code"}         | ${"\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."} | ${[]}
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {

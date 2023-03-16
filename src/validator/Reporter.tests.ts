@@ -302,25 +302,53 @@ Subject lines with less than two words detected:
 		})
 	})
 
-	describe("a report generated from a commit with leading whitespace in the subject line and a commit with consecutive whitespace in the body", () => {
+	describe("a report generated from a commit with leading whitespace in the subject line and a commit without an empty line between the subject line and body which also contains consecutive whitespace", () => {
 		const commits: ReadonlyArray<RawCommit> = [
 			dummyCommit({ sha: "off1ce", subjectLine: " Do it right this time" }),
 			dummyCommit({
 				sha: "d06f00d",
 				subjectLine: "Make it work",
-				body: "\nIt'd better  work this time.",
+				body: "It'd better  work this time.",
 			}),
 		]
 		const report = validate(commits)
 
 		it("contains a list of violated rules and invalid commits", () => {
 			expect(report).toBe(
-				`Inappropriate whitespace detected:
+				`Missing separator between subject line and body detected:
+    d06f00d Make it work
+
+    One empty line must separate the subject line (the foremost line) from the following lines in the commit message.
+    Please rebase interactively to reword the commits before merging the pull request.
+
+Inappropriate whitespace detected:
     off1ce Do it right this time
     d06f00d Make it work
 
     Subject lines (the foremost line in the commit message) must not contain leading, trailing, or consecutive whitespace characters.
     Commit message bodies must not contain consecutive whitespace characters, except for indentation.
+    Please rebase interactively to reword the commits before merging the pull request.`,
+			)
+		})
+	})
+
+	describe("a report generated from a regular commit and a commit without an empty line between the subject line and body", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({ subjectLine: "Make it right this time" }),
+			dummyCommit({
+				sha: "off1ce",
+				subjectLine: "Improve some stuff",
+				body: "This makes things even better.",
+			}),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Missing separator between subject line and body detected:
+    off1ce Improve some stuff
+
+    One empty line must separate the subject line (the foremost line) from the following lines in the commit message.
     Please rebase interactively to reword the commits before merging the pull request.`,
 			)
 		})

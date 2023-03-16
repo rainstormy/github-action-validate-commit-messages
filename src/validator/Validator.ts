@@ -2,6 +2,7 @@ import type { RawCommit, Rule, RuleKey } from "+rules"
 import {
 	capitalisedSubjectLines,
 	commitRefinerFrom,
+	emptyLineAfterSubjectLines,
 	imperativeSubjectLines,
 	issueReferencesInSubjectLines,
 	multiWordSubjectLines,
@@ -53,6 +54,7 @@ export function validatorFrom(configuration: Configuration): Validator {
 export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 	const rules: Readonly<Record<RuleKey, Rule>> = {
 		"capitalised-subject-lines": capitalisedSubjectLines(),
+		"empty-line-after-subject-lines": emptyLineAfterSubjectLines(),
 		"imperative-subject-lines": imperativeSubjectLines(
 			configuration.imperativeSubjectLines,
 		),

@@ -27,6 +27,7 @@ export function hintedCommitListReporter(
 	function getDetectionMessage(ruleKey: RuleKey): string {
 		const detectionMessages: Readonly<Record<RuleKey, string>> = {
 			"capitalised-subject-lines": `Non-capitalised subject lines detected`,
+			"empty-line-after-subject-line": `Missing separator between subject line and body detected`,
 			"imperative-subject-lines": `Subject lines in non-imperative mood detected`,
 			"issue-references-in-subject-lines": `Subject lines without issue reference detected`,
 			"multi-word-subject-lines": `Subject lines with less than two words detected`,
@@ -45,6 +46,7 @@ export function hintedCommitListReporter(
 
 		const hints: Readonly<Record<RuleKey, string>> = {
 			"capitalised-subject-lines": `${indent}Subject lines (the foremost line in the commit message) must start with an uppercase letter.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
+			"empty-line-after-subject-lines": `${indent}One empty line must separate the subject line (the foremost line) from the following lines in the commit message.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"imperative-subject-lines": `${indent}Subject lines (the foremost line in the commit message) must start with a verb in the imperative mood.\n${indent}The subject line should read like an instruction to satisfy this sentence: "When applied, this commit will [subject line]."\n\n${indent}For example, prefer "this commit will [Add a feature]" or "this commit will [Format the code]" or "this commit will [Make it work]"\n${indent}instead of "this commit will [Added a feature]" or "this commit will [Formatting]" or "this commit will [It works]".\n\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"issue-references-in-subject-lines": `${indent}Subject lines (the foremost line in the commit message) must include a reference to an issue in an issue tracking system.\n${indent}Valid patterns: ${validIssueReferencePatterns}\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"multi-word-subject-lines": `${indent}Subject lines (the foremost line in the commit message) must contain at least two words.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,

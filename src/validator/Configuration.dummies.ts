@@ -3,6 +3,7 @@ import type { Configuration } from "+validator"
 export const dummyDefaultConfiguration: Configuration = {
 	ruleKeys: [
 		"capitalised-subject-lines",
+		"empty-line-after-subject-lines",
 		"imperative-subject-lines",
 		"multi-word-subject-lines",
 		"no-inappropriate-whitespace",
