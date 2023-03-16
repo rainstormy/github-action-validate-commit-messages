@@ -5,6 +5,7 @@ export const dummyDefaultConfiguration: Configuration = {
 		"capitalised-subject-lines",
 		"imperative-subject-lines",
 		"multi-word-subject-lines",
+		"no-inappropriate-whitespace",
 		"no-merge-commits",
 		"no-squash-commits",
 		"no-trailing-punctuation-in-subject-lines",

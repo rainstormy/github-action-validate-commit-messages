@@ -5,6 +5,7 @@ export const ruleKeys = [
 	"imperative-subject-lines",
 	"issue-references-in-subject-lines",
 	"multi-word-subject-lines",
+	"no-inappropriate-whitespace",
 	"no-merge-commits",
 	"no-squash-commits",
 	"no-trailing-punctuation-in-subject-lines",

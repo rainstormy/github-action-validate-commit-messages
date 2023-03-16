@@ -21,7 +21,7 @@ describe("when the configuration has default settings", () => {
 		${"Dockerize the application"}                           | ${[]}
 		${"Hunt down the bugs"}                                  | ${[]}
 		${""}                                                    | ${["multi-word-subject-lines"]}
-		${" "}                                                   | ${["multi-word-subject-lines"]}
+		${" "}                                                   | ${["multi-word-subject-lines", "no-inappropriate-whitespace"]}
 		${"fixup!"}                                              | ${["multi-word-subject-lines", "no-squash-commits"]}
 		${"test"}                                                | ${["capitalised-subject-lines", "multi-word-subject-lines"]}
 		${"Formatting."}                                         | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
@@ -31,12 +31,12 @@ describe("when the configuration has default settings", () => {
 		${"never give up!!"}                                     | ${["capitalised-subject-lines", "imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"Finally..."}                                          | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"fixup! Resolve a bug that thought it was a feature"}  | ${["no-squash-commits"]}
-		${"fixup!  Added some extra love to the code"}           | ${["imperative-subject-lines", "no-squash-commits"]}
+		${"fixup!  Added some extra love to the code"}           | ${["imperative-subject-lines", "no-inappropriate-whitespace", "no-squash-commits"]}
 		${"fixup! fixup! Fix this confusing plate of spaghetti"} | ${["no-squash-commits"]}
 		${"amend!Apply strawberry jam to make the code sweeter"} | ${["no-squash-commits"]}
 		${"amend! Solved the problem"}                           | ${["imperative-subject-lines", "no-squash-commits"]}
 		${"squash!Make the formatter happy again :)"}            | ${["no-squash-commits"]}
-		${"squash!   Organise the bookshelf"}                    | ${["no-squash-commits"]}
+		${"squash!   Organise the bookshelf"}                    | ${["no-inappropriate-whitespace", "no-squash-commits"]}
 		${"Make the commit scream fixup! again"}                 | ${[]}
 		${"Bugfix"}                                              | ${["imperative-subject-lines", "multi-word-subject-lines"]}
 		${"release the robot butler"}                            | ${["capitalised-subject-lines"]}
@@ -116,6 +116,36 @@ describe("when the configuration has default settings", () => {
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
 				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+
+	describe.each`
+		subjectLine                | body                                                                                                                                                              | expectedViolatedRuleKeys
+		${" fix it"}               | ${""}                                                                                                                                                             | ${["capitalised-subject-lines", "no-inappropriate-whitespace"]}
+		${"Do it over "}           | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
+		${"Make  it work"}         | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
+		${"Bring it   on  "}       | ${""}                                                                                                                                                             | ${["no-inappropriate-whitespace"]}
+		${"Help fix the bug"}      | ${"\nIt was just a matter of time. "}                                                                                                                             | ${[]}
+		${"Write unit tests"}      | ${"\n Finally..."}                                                                                                                                                | ${[]}
+		${"Resolve the conflicts"} | ${"\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                            | ${[]}
+		${"Adjust the procedure"}  | ${"\nIt was totally  wrong until now."}                                                                                                                           | ${["no-inappropriate-whitespace"]}
+		${"Refactor some stuff"}   | ${"\nThe code looks much better now \nas we finally took the  time to improve it. "}                                                                              | ${["no-inappropriate-whitespace"]}
+		${"Improve the code"}      | ${"\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."} | ${[]}
+	`(
+		"a commit with a subject line of $subjectLine and a body of $body",
+		(testRow: {
+			readonly subjectLine: string
+			readonly body: string
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					dummyCommit({ subjectLine, body }),
+				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},

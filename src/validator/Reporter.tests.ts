@@ -242,9 +242,9 @@ Subject lines with trailing punctuation detected:
 		})
 	})
 
-	describe("a report generated from a commit with a decapitalised single-word subject line", () => {
+	describe("a report generated from a commit with a decapitalised single-word subject line with trailing whitespace", () => {
 		const commits: ReadonlyArray<RawCommit> = [
-			dummyCommit({ sha: "d06f00d", subjectLine: "test" }),
+			dummyCommit({ sha: "d06f00d", subjectLine: "test " }),
 		]
 		const report = validate(commits)
 
@@ -260,6 +260,13 @@ Subject lines with less than two words detected:
     d06f00d test
 
     Subject lines (the foremost line in the commit message) must contain at least two words.
+    Please rebase interactively to reword the commits before merging the pull request.
+
+Inappropriate whitespace detected:
+    d06f00d test
+
+    Subject lines (the foremost line in the commit message) must not contain leading, trailing, or consecutive whitespace characters.
+    Commit message bodies must not contain consecutive whitespace characters, except for indentation.
     Please rebase interactively to reword the commits before merging the pull request.`,
 			)
 		})
@@ -290,6 +297,30 @@ Subject lines with less than two words detected:
     d06f00d Formatting
 
     Subject lines (the foremost line in the commit message) must contain at least two words.
+    Please rebase interactively to reword the commits before merging the pull request.`,
+			)
+		})
+	})
+
+	describe("a report generated from a commit with leading whitespace in the subject line and a commit with consecutive whitespace in the body", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({ sha: "off1ce", subjectLine: " Do it right this time" }),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Make it work",
+				body: "\nIt'd better  work this time.",
+			}),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Inappropriate whitespace detected:
+    off1ce Do it right this time
+    d06f00d Make it work
+
+    Subject lines (the foremost line in the commit message) must not contain leading, trailing, or consecutive whitespace characters.
+    Commit message bodies must not contain consecutive whitespace characters, except for indentation.
     Please rebase interactively to reword the commits before merging the pull request.`,
 			)
 		})

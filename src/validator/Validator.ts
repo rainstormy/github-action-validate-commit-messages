@@ -5,6 +5,7 @@ import {
 	imperativeSubjectLines,
 	issueReferencesInSubjectLines,
 	multiWordSubjectLines,
+	noInappropriateWhitespace,
 	noMergeCommits,
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
@@ -59,6 +60,7 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 			configuration.issueReferencesInSubjectLines,
 		),
 		"multi-word-subject-lines": multiWordSubjectLines(),
+		"no-inappropriate-whitespace": noInappropriateWhitespace(),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),
 		"no-merge-commits": noMergeCommits(),
 		"no-trailing-punctuation-in-subject-lines":
