@@ -7,6 +7,9 @@ export function configurationFromInputs(): ReturnType<
 > {
 	return parseConfiguration({
 		ruleKeys: core.getInput("rules"),
+		imperativeSubjectLines: {
+			whitelist: core.getInput("imperative-subject-lines--whitelist"),
+		},
 		issueReferencesInSubjectLines: {
 			allowedPositions: core.getInput(
 				"issue-references-in-subject-lines--allowed-positions",

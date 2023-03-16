@@ -1,3 +1,4 @@
+export * from "./binary-search"
 export * from "./pluralise"
 export * from "./require-no-duplicate-values"
 export * from "./require-no-unknown-values"

@@ -16,20 +16,31 @@ describe("when the configuration has default settings", () => {
 		subjectLine                                              | expectedViolatedRuleKeys
 		${"Release the robot butler"}                            | ${[]}
 		${"Fix this confusing plate of spaghetti"}               | ${[]}
+		${"Refactor the taxi module"}                            | ${[]}
+		${"Unsubscribe from the service"}                        | ${[]}
+		${"Dockerize the application"}                           | ${[]}
+		${"Hunt down the bugs"}                                  | ${[]}
 		${""}                                                    | ${["multi-word-subject-lines"]}
 		${" "}                                                   | ${["multi-word-subject-lines"]}
 		${"fixup!"}                                              | ${["multi-word-subject-lines", "no-squash-commits"]}
 		${"test"}                                                | ${["capitalised-subject-lines", "multi-word-subject-lines"]}
-		${"Formatting."}                                         | ${["multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"Formatting."}                                         | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"WIP"}                                                 | ${["imperative-subject-lines", "multi-word-subject-lines"]}
+		${"Updated some dependencies"}                           | ${["imperative-subject-lines"]}
+		${"Always use the newest data"}                          | ${["imperative-subject-lines"]}
+		${"never give up!!"}                                     | ${["capitalised-subject-lines", "imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"Finally..."}                                          | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"fixup! Resolve a bug that thought it was a feature"}  | ${["no-squash-commits"]}
-		${"fixup!  Add some extra love to the code"}             | ${["no-squash-commits"]}
+		${"fixup!  Added some extra love to the code"}           | ${["imperative-subject-lines", "no-squash-commits"]}
 		${"fixup! fixup! Fix this confusing plate of spaghetti"} | ${["no-squash-commits"]}
 		${"amend!Apply strawberry jam to make the code sweeter"} | ${["no-squash-commits"]}
-		${"amend! Solve the problem"}                            | ${["no-squash-commits"]}
+		${"amend! Solved the problem"}                           | ${["imperative-subject-lines", "no-squash-commits"]}
 		${"squash!Make the formatter happy again :)"}            | ${["no-squash-commits"]}
 		${"squash!   Organise the bookshelf"}                    | ${["no-squash-commits"]}
 		${"Make the commit scream fixup! again"}                 | ${[]}
+		${"Bugfix"}                                              | ${["imperative-subject-lines", "multi-word-subject-lines"]}
 		${"release the robot butler"}                            | ${["capitalised-subject-lines"]}
+		${"some refactoring"}                                    | ${["capitalised-subject-lines", "imperative-subject-lines"]}
 		${"fix this confusing plate of spaghetti"}               | ${["capitalised-subject-lines"]}
 		${"fixup! resolve a bug that thought it was a feature"}  | ${["capitalised-subject-lines", "no-squash-commits"]}
 		${"amend! make the program act like a clown"}            | ${["capitalised-subject-lines", "no-squash-commits"]}
@@ -38,7 +49,7 @@ describe("when the configuration has default settings", () => {
 		${"Spot a UFO,"}                                         | ${["no-trailing-punctuation-in-subject-lines"]}
 		${"Solve the following issue:"}                          | ${["no-trailing-punctuation-in-subject-lines"]}
 		${"Throw a tantrum;"}                                    | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Make it work!"}                                       | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"It works!"}                                           | ${["imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"Wonder if this will work?"}                           | ${["no-trailing-punctuation-in-subject-lines"]}
 		${"Apply strawberry jam to make the code sweeter-"}      | ${["no-trailing-punctuation-in-subject-lines"]}
 		${"Write the answer ="}                                  | ${["no-trailing-punctuation-in-subject-lines"]}
@@ -127,6 +138,34 @@ describe("when the configuration has default settings", () => {
 				const actualViolatedRuleKeys = validate(
 					dummyCommit({ subjectLine, numberOfParents }),
 				)
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+})
+
+describe("when the configuration overrides 'imperative-subject-lines--whitelist' with 'chatify'", () => {
+	const validate = validateViolatedRulesFrom({
+		...dummyDefaultConfiguration,
+		imperativeSubjectLines: {
+			whitelist: ["chatify"],
+		},
+	})
+
+	describe.each`
+		subjectLine               | expectedViolatedRuleKeys
+		${"chatify the module"}   | ${["capitalised-subject-lines"]}
+		${"deckenize the module"} | ${["capitalised-subject-lines", "imperative-subject-lines"]}
+	`(
+		"a commit with a subject line of $subjectLine",
+		(testRow: {
+			readonly subjectLine: string
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLine, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},

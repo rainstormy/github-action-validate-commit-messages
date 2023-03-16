@@ -171,13 +171,13 @@ Squash commits detected:
 		})
 	})
 
-	describe("a report generated from two regular commits, two commits with decapitalised subject lines (of which one is also a squash commit), and a squash commit", () => {
+	describe("a report generated from two regular commits, a squash commit, and two commits with decapitalised subject lines of which one is also a squash commit that does not start with a verb in the imperative mood", () => {
 		const commits: ReadonlyArray<RawCommit> = [
 			dummyCommit({ subjectLine: "Release the robot butler" }),
 			dummyCommit({ sha: "d15ea5e", subjectLine: "throw a tantrum" }),
 			dummyCommit({
 				sha: "0ff1ce",
-				subjectLine: "fixup! Add some extra love to the code",
+				subjectLine: "fixup! Added some extra love to the code",
 			}),
 			dummyCommit({ sha: "cafed00d", subjectLine: "squash! make it work" }),
 			dummyCommit({ subjectLine: "Fix this confusing plate of spaghetti" }),
@@ -193,8 +193,19 @@ Squash commits detected:
     Subject lines (the foremost line in the commit message) must start with an uppercase letter.
     Please rebase interactively to reword the commits before merging the pull request.
 
+Subject lines in non-imperative mood detected:
+    0ff1ce fixup! Added some extra love to the code
+
+    Subject lines (the foremost line in the commit message) must start with a verb in the imperative mood.
+    The subject line should read like an instruction to satisfy this sentence: "When applied, this commit will [subject line]."
+
+    For example, prefer "this commit will [Add a feature]" or "this commit will [Format the code]" or "this commit will [Make it work]"
+    instead of "this commit will [Added a feature]" or "this commit will [Formatting]" or "this commit will [It works]".
+
+    Please rebase interactively to reword the commits before merging the pull request.
+
 Squash commits detected:
-    0ff1ce fixup! Add some extra love to the code
+    0ff1ce fixup! Added some extra love to the code
     cafed00d squash! make it work
 
     Please rebase interactively to consolidate the commits before merging the pull request.`,
@@ -247,6 +258,36 @@ Subject lines with trailing punctuation detected:
 
 Subject lines with less than two words detected:
     d06f00d test
+
+    Subject lines (the foremost line in the commit message) must contain at least two words.
+    Please rebase interactively to reword the commits before merging the pull request.`,
+			)
+		})
+	})
+
+	describe("a report generated from commits with subject lines that do not start with a verb in the imperative mood of which one also consists of just a single word", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({ sha: "0ff1ce", subjectLine: "Fixed a typo" }),
+			dummyCommit({ sha: "d06f00d", subjectLine: "Formatting" }),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Subject lines in non-imperative mood detected:
+    0ff1ce Fixed a typo
+    d06f00d Formatting
+
+    Subject lines (the foremost line in the commit message) must start with a verb in the imperative mood.
+    The subject line should read like an instruction to satisfy this sentence: "When applied, this commit will [subject line]."
+
+    For example, prefer "this commit will [Add a feature]" or "this commit will [Format the code]" or "this commit will [Make it work]"
+    instead of "this commit will [Added a feature]" or "this commit will [Formatting]" or "this commit will [It works]".
+
+    Please rebase interactively to reword the commits before merging the pull request.
+
+Subject lines with less than two words detected:
+    d06f00d Formatting
 
     Subject lines (the foremost line in the commit message) must contain at least two words.
     Please rebase interactively to reword the commits before merging the pull request.`,

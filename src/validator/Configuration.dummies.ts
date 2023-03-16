@@ -3,11 +3,15 @@ import type { Configuration } from "+validator"
 export const dummyDefaultConfiguration: Configuration = {
 	ruleKeys: [
 		"capitalised-subject-lines",
+		"imperative-subject-lines",
 		"multi-word-subject-lines",
 		"no-merge-commits",
 		"no-squash-commits",
 		"no-trailing-punctuation-in-subject-lines",
 	],
+	imperativeSubjectLines: {
+		whitelist: [],
+	},
 	issueReferencesInSubjectLines: {
 		patterns: ["^\\b$"], // A regular expression that never matches anything.
 		allowedPositions: ["as-prefix", "as-suffix"],

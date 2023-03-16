@@ -8,6 +8,9 @@ inputs:
   rules:
     description: A comma-separated list of the rules to enforce.
     required: true
+  imperative-subject-lines--whitelist:
+    description: A comma-separated list of additional words to be accepted by `imperative-subject-lines`.
+    required: false
   issue-references-in-subject-lines--allowed-positions:
     description: A comma-separated list of positions where the issue reference is allowed to appear in the subject line. Valid positions are `as-prefix` and `as-suffix`. It is enforced by `issue-reference-in-subject-lines`.
     required: false
