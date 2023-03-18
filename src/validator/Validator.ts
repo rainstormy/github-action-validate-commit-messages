@@ -5,6 +5,7 @@ import {
 	emptyLineAfterSubjectLines,
 	imperativeSubjectLines,
 	issueReferencesInSubjectLines,
+	limitLineLengths,
 	multiWordSubjectLines,
 	noInappropriateWhitespace,
 	noMergeCommits,
@@ -61,6 +62,7 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 		"issue-references-in-subject-lines": issueReferencesInSubjectLines(
 			configuration.issueReferencesInSubjectLines,
 		),
+		"limit-line-lengths": limitLineLengths(configuration.limitLineLengths),
 		"multi-word-subject-lines": multiWordSubjectLines(),
 		"no-inappropriate-whitespace": noInappropriateWhitespace(),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),

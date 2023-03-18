@@ -16,6 +16,14 @@ export function configurationFromInputs(): ReturnType<
 			),
 			patterns: core.getInput("issue-references-in-subject-lines--patterns"),
 		},
+		limitLineLengths: {
+			maximumCharactersInSubjectLine: core.getInput(
+				"limit-line-lengths--max-subject-line-characters",
+			),
+			maximumCharactersInBodyLine: core.getInput(
+				"limit-line-lengths--max-body-line-characters",
+			),
+		},
 		noSquashCommits: {
 			disallowedPrefixes: core.getInput(
 				"no-squash-commits--disallowed-prefixes",

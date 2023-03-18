@@ -1,4 +1,5 @@
 export * from "./binary-search"
+export * from "./count-occurrences"
 export * from "./pluralise"
 export * from "./require-no-duplicate-values"
 export * from "./require-no-unknown-values"

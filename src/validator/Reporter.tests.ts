@@ -302,6 +302,35 @@ Subject lines with less than two words detected:
 		})
 	})
 
+	describe("a report generated from a commit with a subject line that is too long and a commit with a body line that is too long", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine:
+					"Compare the list of items to the objects downloaded from the server",
+				body: "\nThat is good.",
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Install necessary dependencies",
+				body: "\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```",
+			}),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Commits with long lines detected:
+    0ff1ce Compare the list of items to the objects downloaded from the server
+    d06f00d Install necessary dependencies
+
+    Subject lines (the foremost line in the commit message) must not exceed 50 characters.
+    Lines in the commit message body must not exceed 72 characters.
+    Please rebase interactively to reword the commits before merging the pull request.`,
+			)
+		})
+	})
+
 	describe("a report generated from a commit with leading whitespace in the subject line and a commit without an empty line between the subject line and body which also contains consecutive whitespace", () => {
 		const commits: ReadonlyArray<RawCommit> = [
 			dummyCommit({ sha: "off1ce", subjectLine: " Do it right this time" }),
@@ -426,6 +455,44 @@ Subject lines without issue reference detected:
 
     Subject lines (the foremost line in the commit message) must include a reference to an issue in an issue tracking system.
     Valid patterns: \\(UNICORN-[1-9][0-9]*\\) UNICORN-[1-9][0-9]*: UNICORN-[1-9][0-9]*
+    Please rebase interactively to reword the commits before merging the pull request.`,
+			)
+		})
+	})
+})
+
+describe("when the configuration overrides 'limit-line-lengths--max-subject-line-characters' with 1 and 'limit-line-lengths--max-body-line-characters' with 32", () => {
+	const validate = validateHintedCommitListFrom({
+		...dummyDefaultConfiguration,
+		limitLineLengths: {
+			maximumCharactersInSubjectLine: 1,
+			maximumCharactersInBodyLine: 32,
+		},
+	})
+
+	describe("a report generated from a commit with a subject line that is too long and a commit with a body line that is too long", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "Introduce a cool feature",
+				body: "\nThat is good.",
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Help fix the bug",
+				body: "\nIt was really just a matter of time.",
+			}),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Commits with long lines detected:
+    0ff1ce Introduce a cool feature
+    d06f00d Help fix the bug
+
+    Subject lines (the foremost line in the commit message) must not exceed 1 character.
+    Lines in the commit message body must not exceed 32 characters.
     Please rebase interactively to reword the commits before merging the pull request.`,
 			)
 		})

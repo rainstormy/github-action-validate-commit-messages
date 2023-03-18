@@ -1,6 +1,7 @@
 import {
 	imperativeSubjectLinesConfigurationSchema,
 	issueReferencesInSubjectLinesConfigurationSchema,
+	limitLineLengthsConfigurationSchema,
 	noSquashCommitsConfigurationSchema,
 	noTrailingPunctuationInSubjectLinesConfigurationSchema,
 	ruleKeysConfigurationSchema,
@@ -12,6 +13,7 @@ const configurationSchema = z.object({
 	imperativeSubjectLines: imperativeSubjectLinesConfigurationSchema,
 	issueReferencesInSubjectLines:
 		issueReferencesInSubjectLinesConfigurationSchema,
+	limitLineLengths: limitLineLengthsConfigurationSchema,
 	noSquashCommits: noSquashCommitsConfigurationSchema,
 	noTrailingPunctuationInSubjectLines:
 		noTrailingPunctuationInSubjectLinesConfigurationSchema,
