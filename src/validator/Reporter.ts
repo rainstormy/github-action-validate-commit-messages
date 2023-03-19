@@ -35,6 +35,7 @@ export function hintedCommitListReporter(
 			"multi-word-subject-lines": `Subject lines with less than two words detected`,
 			"no-inappropriate-whitespace": `Inappropriate whitespace detected`,
 			"no-merge-commits": `Merge commits detected`,
+			"no-revert-revert-commits": `Revert of revert commits detected`,
 			"no-squash-commits": `Squash commits detected`,
 			"no-trailing-punctuation-in-subject-lines": `Subject lines with trailing punctuation detected`,
 		}
@@ -63,6 +64,7 @@ export function hintedCommitListReporter(
 			"multi-word-subject-lines": `${indent}Subject lines (the foremost line in the commit message) must contain at least two words.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"no-inappropriate-whitespace": `${indent}Subject lines (the foremost line in the commit message) must not contain leading, trailing, or consecutive whitespace characters.\n${indent}Commit message bodies must not contain consecutive whitespace characters, except for indentation.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 			"no-merge-commits": `${indent}They reduce the traceability of the commit history and make it difficult to rebase interactively.\n${indent}Please undo the merge commit and rebase your branch onto the target branch instead.`,
+			"no-revert-revert-commits": `${indent}They reduce the traceability of the commit history.\n${indent}Please undo the revert of the revert commit and re-apply the original commit before merging the pull request.`,
 			"no-squash-commits": `${indent}Please rebase interactively to consolidate the commits before merging the pull request.`,
 			"no-trailing-punctuation-in-subject-lines": `${indent}Subject lines (the foremost line in the commit message) must not end with a punctuation mark.\n${indent}Please rebase interactively to reword the commits before merging the pull request.`,
 		}

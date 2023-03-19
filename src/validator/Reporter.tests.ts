@@ -382,6 +382,32 @@ Inappropriate whitespace detected:
 			)
 		})
 	})
+
+	describe("a report generated from a revert commit, a revert of the revert commit, and a revert of the doubly revert commit", () => {
+		const commits: ReadonlyArray<RawCommit> = [
+			dummyCommit({ subjectLine: 'Revert "Repair the soft ice machine"' }),
+			dummyCommit({
+				sha: "off1ce",
+				subjectLine: 'Revert "Revert "Repair the soft ice machine""',
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: 'Revert "Revert "Revert "Repair the soft ice machine"""',
+			}),
+		]
+		const report = validate(commits)
+
+		it("contains a list of violated rules and invalid commits", () => {
+			expect(report).toBe(
+				`Revert of revert commits detected:
+    off1ce Revert "Revert "Repair the soft ice machine""
+    d06f00d Revert "Revert "Revert "Repair the soft ice machine"""
+
+    They reduce the traceability of the commit history.
+    Please undo the revert of the revert commit and re-apply the original commit before merging the pull request.`,
+			)
+		})
+	})
 })
 
 describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with GitHub-style issue references as prefix", () => {

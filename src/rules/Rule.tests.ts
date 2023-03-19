@@ -13,105 +13,109 @@ describe("when the configuration has default settings", () => {
 	const validate = validateViolatedRulesFrom(dummyDefaultConfiguration)
 
 	describe.each`
-		subjectLine                                                              | expectedViolatedRuleKeys
-		${"Release the robot butler"}                                            | ${[]}
-		${"Fix this confusing plate of spaghetti"}                               | ${[]}
-		${"Refactor the taxi module"}                                            | ${[]}
-		${"Unsubscribe from the service"}                                        | ${[]}
-		${"Dockerize the application"}                                           | ${[]}
-		${"Hunt down the bugs"}                                                  | ${[]}
-		${""}                                                                    | ${["multi-word-subject-lines"]}
-		${" "}                                                                   | ${["multi-word-subject-lines", "no-inappropriate-whitespace"]}
-		${"fixup!"}                                                              | ${["multi-word-subject-lines", "no-squash-commits"]}
-		${"test"}                                                                | ${["capitalised-subject-lines", "multi-word-subject-lines"]}
-		${"Formatting."}                                                         | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-		${"WIP"}                                                                 | ${["imperative-subject-lines", "multi-word-subject-lines"]}
-		${"Updated some dependencies"}                                           | ${["imperative-subject-lines"]}
-		${"Always use the newest data"}                                          | ${["imperative-subject-lines"]}
-		${"never give up!!"}                                                     | ${["capitalised-subject-lines", "imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-		${"Finally..."}                                                          | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-		${"fixup! Resolve a bug that thought it was a feature"}                  | ${["no-squash-commits"]}
-		${"fixup!  Added some extra love to the code"}                           | ${["imperative-subject-lines", "no-inappropriate-whitespace", "no-squash-commits"]}
-		${"fixup! fixup! Fix this confusing plate of spaghetti"}                 | ${["no-squash-commits"]}
-		${"amend!Apply strawberry jam to make the code sweeter"}                 | ${["no-squash-commits"]}
-		${"amend! Solved the problem"}                                           | ${["imperative-subject-lines", "no-squash-commits"]}
-		${"squash!Make the formatter happy again :)"}                            | ${["no-squash-commits"]}
-		${"squash!   Organise the bookshelf"}                                    | ${["no-inappropriate-whitespace", "no-squash-commits"]}
-		${"Make the commit scream fixup! again"}                                 | ${[]}
-		${"Bugfix"}                                                              | ${["imperative-subject-lines", "multi-word-subject-lines"]}
-		${"release the robot butler"}                                            | ${["capitalised-subject-lines"]}
-		${"some refactoring"}                                                    | ${["capitalised-subject-lines", "imperative-subject-lines"]}
-		${"fix this confusing plate of spaghetti"}                               | ${["capitalised-subject-lines"]}
-		${"fixup! resolve a bug that thought it was a feature"}                  | ${["capitalised-subject-lines", "no-squash-commits"]}
-		${"amend! make the program act like a clown"}                            | ${["capitalised-subject-lines", "no-squash-commits"]}
-		${"squash! organise the bookshelf"}                                      | ${["capitalised-subject-lines", "no-squash-commits"]}
-		${"Retrieve data from the exclusive third-party service"}                | ${["limit-line-lengths"]}
-		${'Revert "Retrieve data from the exclusive third-party service"'}       | ${[]}
-		${"Compare the list of items to the objects downloaded from the server"} | ${["limit-line-lengths"]}
-		${"Handle the exceptions thrown by `MalfunctioningOrderService`"}        | ${[]}
-		${"Let `SoftIceMachineAdapter` produce the goods that we need"}          | ${[]}
-		${"Forget to close the backtick section in `RapidTransportService"}      | ${["limit-line-lengths"]}
-		${"Make the program act like a clown."}                                  | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Spot a UFO,"}                                                         | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Solve the following issue:"}                                          | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Throw a tantrum;"}                                                    | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"It works!"}                                                           | ${["imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-		${"Wonder if this will work?"}                                           | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Apply strawberry jam to make the code sweeter-"}                      | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Write the answer ="}                                                  | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Begin the implementation with more to come+"}                         | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Fix a typo: set up*"}                                                 | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Fix a typo: 'setup' ->"}                                              | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Fix another typo: 'checkout' =>"}                                     | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Short-circuit the loop with &&"}                                      | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Short-circuit the loop with ||"}                                      | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Ignore the parameter with _"}                                         | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Replace Math.pow() with **"}                                          | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Replace block comments with //"}                                      | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Introduce an observable named event$"}                                | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Finish the job (after the lunch break)"}                              | ${[]}
-		${"Proceed with the job [work in progress]"}                             | ${[]}
-		${"Support more delimiters for `rules`"}                                 | ${[]}
-		${"Rename the 'strategy'"}                                               | ${[]}
-		${'Enclose the text in "quotes"'}                                        | ${[]}
-		${"Quote the «text»"}                                                    | ${[]}
-		${"Emphasise even more »well-written prose«"}                            | ${[]}
-		${"Finish the job after the lunch break)"}                               | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Proceed with the job which is a work in progress]"}                   | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Support more delimiters for rules`"}                                  | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Rename the strategy'"}                                                | ${["no-trailing-punctuation-in-subject-lines"]}
-		${'Enclose the text in quotes"'}                                         | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Quote the text»"}                                                     | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Emphasise even more well-written prose«"}                             | ${["no-trailing-punctuation-in-subject-lines"]}
-		${"Increase the tax level to 100%"}                                      | ${[]}
-		${'Adjust to print margin to 2"'}                                        | ${[]}
-		${"Restrict the content to ages 3+"}                                     | ${[]}
-		${"Display 120 as the result of 5!"}                                     | ${[]}
-		${"Sneak in a funny easter egg :joy:"}                                   | ${[]}
-		${"Have fun :slightly_smiling_face:"}                                    | ${[]}
-		${"Sneak in a funny easter egg :)"}                                      | ${[]}
-		${"Sneak in a funny easter egg :-)"}                                     | ${[]}
-		${"Sneak in a funny easter egg =)"}                                      | ${[]}
-		${"Sneak in a funny easter egg ^^"}                                      | ${[]}
-		${"Sneak in a funny easter egg ^_^"}                                     | ${[]}
-		${"Fix your mistakes ;)"}                                                | ${[]}
-		${"Fix your mistakes ;-)"}                                               | ${[]}
-		${"Attempt to fix the bug again :("}                                     | ${[]}
-		${"Attempt to fix the bug again :-("}                                    | ${[]}
-		${"Attempt to fix the bug again =("}                                     | ${[]}
-		${"Make the user interface less chaotic :/"}                             | ${[]}
-		${"Make the user interface less chaotic :-/"}                            | ${[]}
-		${"Make the user interface less chaotic :\\"}                            | ${[]}
-		${"Make the user interface less chaotic :-\\"}                           | ${[]}
-		${"Confuse the bug to make it go away :|"}                               | ${[]}
-		${"Confuse the bug to make it go away :-|"}                              | ${[]}
-		${"Threaten the bug with C++"}                                           | ${[]}
-		${"Attempt to solve the problem in C#"}                                  | ${[]}
-		${"Rewrite the program in F#"}                                           | ${[]}
-		${"Prove it in F*"}                                                      | ${[]}
-		${"Validate the model in VDM++"}                                         | ${[]}
-		${"organise the bookshelf."}                                             | ${["capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-		${"amend! solve the problem!"}                                           | ${["capitalised-subject-lines", "no-squash-commits", "no-trailing-punctuation-in-subject-lines"]}
+		subjectLine                                                                 | expectedViolatedRuleKeys
+		${"Release the robot butler"}                                               | ${[]}
+		${"Fix this confusing plate of spaghetti"}                                  | ${[]}
+		${"Refactor the taxi module"}                                               | ${[]}
+		${"Unsubscribe from the service"}                                           | ${[]}
+		${"Dockerize the application"}                                              | ${[]}
+		${"Hunt down the bugs"}                                                     | ${[]}
+		${""}                                                                       | ${["multi-word-subject-lines"]}
+		${" "}                                                                      | ${["multi-word-subject-lines", "no-inappropriate-whitespace"]}
+		${"fixup!"}                                                                 | ${["multi-word-subject-lines", "no-squash-commits"]}
+		${"test"}                                                                   | ${["capitalised-subject-lines", "multi-word-subject-lines"]}
+		${"Formatting."}                                                            | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"WIP"}                                                                    | ${["imperative-subject-lines", "multi-word-subject-lines"]}
+		${"Updated some dependencies"}                                              | ${["imperative-subject-lines"]}
+		${"Always use the newest data"}                                             | ${["imperative-subject-lines"]}
+		${"never give up!!"}                                                        | ${["capitalised-subject-lines", "imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"Finally..."}                                                             | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"fixup! Resolve a bug that thought it was a feature"}                     | ${["no-squash-commits"]}
+		${"fixup!  Added some extra love to the code"}                              | ${["imperative-subject-lines", "no-inappropriate-whitespace", "no-squash-commits"]}
+		${"fixup! fixup! Fix this confusing plate of spaghetti"}                    | ${["no-squash-commits"]}
+		${"amend!Apply strawberry jam to make the code sweeter"}                    | ${["no-squash-commits"]}
+		${"amend! Solved the problem"}                                              | ${["imperative-subject-lines", "no-squash-commits"]}
+		${"squash!Make the formatter happy again :)"}                               | ${["no-squash-commits"]}
+		${"squash!   Organise the bookshelf"}                                       | ${["no-inappropriate-whitespace", "no-squash-commits"]}
+		${"Make the commit scream fixup! again"}                                    | ${[]}
+		${"Bugfix"}                                                                 | ${["imperative-subject-lines", "multi-word-subject-lines"]}
+		${'Revert "Bugfix"'}                                                        | ${[]}
+		${'Revert "Revert "Bugfix""'}                                               | ${["no-revert-revert-commits"]}
+		${'Revert "Revert "Revert "Bugfix"""'}                                      | ${["no-revert-revert-commits"]}
+		${"release the robot butler"}                                               | ${["capitalised-subject-lines"]}
+		${"some refactoring"}                                                       | ${["capitalised-subject-lines", "imperative-subject-lines"]}
+		${"fix this confusing plate of spaghetti"}                                  | ${["capitalised-subject-lines"]}
+		${"fixup! resolve a bug that thought it was a feature"}                     | ${["capitalised-subject-lines", "no-squash-commits"]}
+		${"amend! make the program act like a clown"}                               | ${["capitalised-subject-lines", "no-squash-commits"]}
+		${"squash! organise the bookshelf"}                                         | ${["capitalised-subject-lines", "no-squash-commits"]}
+		${"Retrieve data from the exclusive third-party service"}                   | ${["limit-line-lengths"]}
+		${'Revert "Retrieve data from the exclusive third-party service"'}          | ${[]}
+		${'Revert "Revert "Retrieve data from the exclusive third-party service""'} | ${["no-revert-revert-commits"]}
+		${"Compare the list of items to the objects downloaded from the server"}    | ${["limit-line-lengths"]}
+		${"Handle the exceptions thrown by `MalfunctioningOrderService`"}           | ${[]}
+		${"Let `SoftIceMachineAdapter` produce the goods that we need"}             | ${[]}
+		${"Forget to close the backtick section in `RapidTransportService"}         | ${["limit-line-lengths"]}
+		${"Make the program act like a clown."}                                     | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Spot a UFO,"}                                                            | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Solve the following issue:"}                                             | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Throw a tantrum;"}                                                       | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"It works!"}                                                              | ${["imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"Wonder if this will work?"}                                              | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Apply strawberry jam to make the code sweeter-"}                         | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Write the answer ="}                                                     | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Begin the implementation with more to come+"}                            | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Fix a typo: set up*"}                                                    | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Fix a typo: 'setup' ->"}                                                 | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Fix another typo: 'checkout' =>"}                                        | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Short-circuit the loop with &&"}                                         | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Short-circuit the loop with ||"}                                         | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Ignore the parameter with _"}                                            | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Replace Math.pow() with **"}                                             | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Replace block comments with //"}                                         | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Introduce an observable named event$"}                                   | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Finish the job (after the lunch break)"}                                 | ${[]}
+		${"Proceed with the job [work in progress]"}                                | ${[]}
+		${"Support more delimiters for `rules`"}                                    | ${[]}
+		${"Rename the 'strategy'"}                                                  | ${[]}
+		${'Enclose the text in "quotes"'}                                           | ${[]}
+		${"Quote the «text»"}                                                       | ${[]}
+		${"Emphasise even more »well-written prose«"}                               | ${[]}
+		${"Finish the job after the lunch break)"}                                  | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Proceed with the job which is a work in progress]"}                      | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Support more delimiters for rules`"}                                     | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Rename the strategy'"}                                                   | ${["no-trailing-punctuation-in-subject-lines"]}
+		${'Enclose the text in quotes"'}                                            | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Quote the text»"}                                                        | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Emphasise even more well-written prose«"}                                | ${["no-trailing-punctuation-in-subject-lines"]}
+		${"Increase the tax level to 100%"}                                         | ${[]}
+		${'Adjust to print margin to 2"'}                                           | ${[]}
+		${"Restrict the content to ages 3+"}                                        | ${[]}
+		${"Display 120 as the result of 5!"}                                        | ${[]}
+		${"Sneak in a funny easter egg :joy:"}                                      | ${[]}
+		${"Have fun :slightly_smiling_face:"}                                       | ${[]}
+		${"Sneak in a funny easter egg :)"}                                         | ${[]}
+		${"Sneak in a funny easter egg :-)"}                                        | ${[]}
+		${"Sneak in a funny easter egg =)"}                                         | ${[]}
+		${"Sneak in a funny easter egg ^^"}                                         | ${[]}
+		${"Sneak in a funny easter egg ^_^"}                                        | ${[]}
+		${"Fix your mistakes ;)"}                                                   | ${[]}
+		${"Fix your mistakes ;-)"}                                                  | ${[]}
+		${"Attempt to fix the bug again :("}                                        | ${[]}
+		${"Attempt to fix the bug again :-("}                                       | ${[]}
+		${"Attempt to fix the bug again =("}                                        | ${[]}
+		${"Make the user interface less chaotic :/"}                                | ${[]}
+		${"Make the user interface less chaotic :-/"}                               | ${[]}
+		${"Make the user interface less chaotic :\\"}                               | ${[]}
+		${"Make the user interface less chaotic :-\\"}                              | ${[]}
+		${"Confuse the bug to make it go away :|"}                                  | ${[]}
+		${"Confuse the bug to make it go away :-|"}                                 | ${[]}
+		${"Threaten the bug with C++"}                                              | ${[]}
+		${"Attempt to solve the problem in C#"}                                     | ${[]}
+		${"Rewrite the program in F#"}                                              | ${[]}
+		${"Prove it in F*"}                                                         | ${[]}
+		${"Validate the model in VDM++"}                                            | ${[]}
+		${"organise the bookshelf."}                                                | ${["capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+		${"amend! solve the problem!"}                                              | ${["capitalised-subject-lines", "no-squash-commits", "no-trailing-punctuation-in-subject-lines"]}
 	`(
 		"a commit with a subject line of $subjectLine",
 		(testRow: {

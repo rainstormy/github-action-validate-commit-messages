@@ -9,6 +9,7 @@ import {
 	multiWordSubjectLines,
 	noInappropriateWhitespace,
 	noMergeCommits,
+	noRevertRevertCommits,
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
 	parseCommit,
@@ -67,6 +68,7 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 		"no-inappropriate-whitespace": noInappropriateWhitespace(),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),
 		"no-merge-commits": noMergeCommits(),
+		"no-revert-revert-commits": noRevertRevertCommits(),
 		"no-trailing-punctuation-in-subject-lines":
 			noTrailingPunctuationInSubjectLines(
 				configuration.noTrailingPunctuationInSubjectLines,

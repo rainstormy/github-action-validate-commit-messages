@@ -12,6 +12,7 @@ describe.each`
 	${",multi-word-subject-lines "}                                                                    | ${["multi-word-subject-lines"]}
 	${"    no-inappropriate-whitespace ,, "}                                                           | ${["no-inappropriate-whitespace"]}
 	${" no-merge-commits  "}                                                                           | ${["no-merge-commits"]}
+	${",,,no-revert-revert-commits"}                                                                   | ${["no-revert-revert-commits"]}
 	${"no-squash-commits,  "}                                                                          | ${["no-squash-commits"]}
 	${"   no-trailing-punctuation-in-subject-lines ,"}                                                 | ${["no-trailing-punctuation-in-subject-lines"]}
 	${"imperative-subject-lines,capitalised-subject-lines , no-squash-commits"}                        | ${["imperative-subject-lines", "capitalised-subject-lines", "no-squash-commits"]}
@@ -21,6 +22,7 @@ describe.each`
 	${"no-trailing-punctuation-in-subject-lines,, no-merge-commits, no-squash-commits"}                | ${["no-trailing-punctuation-in-subject-lines", "no-merge-commits", "no-squash-commits"]}
 	${"issue-references-in-subject-lines,multi-word-subject-lines, capitalised-subject-lines"}         | ${["issue-references-in-subject-lines", "multi-word-subject-lines", "capitalised-subject-lines"]}
 	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "}   | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+	${",multi-word-subject-lines ,no-revert-revert-commits"}                                           | ${["multi-word-subject-lines", "no-revert-revert-commits"]}
 `(
 	"a ruleset from a valid string of $rawRuleKeys",
 	(testRow: {
