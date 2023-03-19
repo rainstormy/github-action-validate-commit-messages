@@ -361,9 +361,14 @@ Inappropriate whitespace detected:
 		})
 	})
 
-	describe("a report generated from a regular commit and a commit without an empty line between the subject line and body", () => {
+	describe("a report generated from a regular commit, a commit with a co-author, and a commit without an empty line between the subject line and body", () => {
 		const commits: ReadonlyArray<RawCommit> = [
 			dummyCommit({ subjectLine: "Make it right this time" }),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Do some pair programming",
+				body: "\nCo-authored-by: Santa Claus <santa.claus@example.com>",
+			}),
 			dummyCommit({
 				sha: "off1ce",
 				subjectLine: "Improve some stuff",
@@ -378,7 +383,13 @@ Inappropriate whitespace detected:
     off1ce Improve some stuff
 
     One empty line must separate the subject line (the foremost line) from the following lines in the commit message.
-    Please rebase interactively to reword the commits before merging the pull request.`,
+    Please rebase interactively to reword the commits before merging the pull request.
+
+Commits with co-authors detected:
+    d06f00d Do some pair programming
+
+    Commits are not allowed to have co-authors.
+    Please rebase interactively to reword the commits to remove the 'Co-authored-by:' trailers in the commit message body before merging the pull request.`,
 			)
 		})
 	})

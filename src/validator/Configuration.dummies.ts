@@ -7,6 +7,7 @@ export const dummyDefaultConfiguration: Configuration = {
 		"imperative-subject-lines",
 		"limit-line-lengths",
 		"multi-word-subject-lines",
+		"no-co-authors",
 		"no-inappropriate-whitespace",
 		"no-merge-commits",
 		"no-revert-revert-commits",
