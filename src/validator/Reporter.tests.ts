@@ -295,47 +295,6 @@ describe("when the configuration has default settings", () => {
 		})
 	})
 
-	describe("a report generated from a valid commit and a commit with unexpected whitespace", () => {
-		const report = validate([
-			dummyCommit({ subjectLine: "Hunt down the bugs" }),
-			dummyCommit({ sha: "d06f00d", subjectLine: "Do it right this  time" }),
-		])
-
-		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
-				`Please avoid unexpected whitespace:
-    d06f00d Do it right this  time
-
-    Reword the commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
-    Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
-		})
-	})
-
-	describe("a report generated from three commits with unexpected whitespace", () => {
-		const report = validate([
-			dummyCommit({ sha: "0ff1ce", subjectLine: " Do it over" }),
-			dummyCommit({ sha: "badf00d", subjectLine: "Bring it on  " }),
-			dummyCommit({
-				sha: "d06f00d",
-				subjectLine: "Make it work",
-				body: "\nIt'd better  work this time.",
-			}),
-		])
-
-		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
-				`Please avoid unexpected whitespace:
-    0ff1ce Do it over
-    badf00d Bring it on
-    d06f00d Make it work
-
-    Reword each commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
-    Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
-		})
-	})
-
 	describe("a report generated from a valid commit and a merge commit", () => {
 		const report = validate([
 			dummyCommit({ subjectLine: "Fix this confusing plate of spaghetti" }),
@@ -515,6 +474,47 @@ describe("when the configuration has default settings", () => {
     cafed00d Wonder if this will work?
 
     Reword each commit message to delete the punctuation characters at the end of the foremost line.
+    Standardising the commit message format will help you preserve the readability of the commit history.`,
+			)
+		})
+	})
+
+	describe("a report generated from a valid commit and a commit with unexpected whitespace", () => {
+		const report = validate([
+			dummyCommit({ subjectLine: "Hunt down the bugs" }),
+			dummyCommit({ sha: "d06f00d", subjectLine: "Do it right this  time" }),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please avoid unexpected whitespace:
+    d06f00d Do it right this  time
+
+    Reword the commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
+    Standardising the commit message format will help you preserve the readability of the commit history.`,
+			)
+		})
+	})
+
+	describe("a report generated from three commits with unexpected whitespace", () => {
+		const report = validate([
+			dummyCommit({ sha: "0ff1ce", subjectLine: " Do it over" }),
+			dummyCommit({ sha: "badf00d", subjectLine: "Bring it on  " }),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Make it work",
+				body: "\nIt'd better  work this time.",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please avoid unexpected whitespace:
+    0ff1ce Do it over
+    badf00d Bring it on
+    d06f00d Make it work
+
+    Reword each commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
 			)
 		})

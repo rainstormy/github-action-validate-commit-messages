@@ -120,11 +120,6 @@ ${indentedListOfCommits}\n
 ${indent}Reword ${theOrEach} commit message to remove the 'Co-authored-by:' trailers in the message body.
 ${indent}Removing the co-authors will help you preserve the authenticity of the ${commitOrCommits}, as co-authors are unable to sign commits.`,
 
-			"no-inappropriate-whitespace": `Please avoid unexpected whitespace:
-${indentedListOfCommits}\n
-${indent}Reword ${theOrEach} commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
-${indent}Standardising the commit message format will help you preserve the readability of the commit history.`,
-
 			"no-merge-commits": `Please avoid the merge ${commitOrCommits}:
 ${indentedListOfCommits}\n
 ${indent}Undo the merge ${commitOrCommits} and rebase your branch onto the target branch instead.
@@ -143,6 +138,11 @@ ${indent}Avoiding unnecessary commits will help you preserve the traceability of
 			"no-trailing-punctuation-in-subject-lines": `Please avoid trailing punctuation in the subject ${lineOrLines}:
 ${indentedListOfCommits}\n
 ${indent}Reword ${theOrEach} commit message to delete the punctuation characters at the end of the foremost line.
+${indent}Standardising the commit message format will help you preserve the readability of the commit history.`,
+
+			"no-unexpected-whitespace": `Please avoid unexpected whitespace:
+${indentedListOfCommits}\n
+${indent}Reword ${theOrEach} commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
 ${indent}Standardising the commit message format will help you preserve the readability of the commit history.`,
 		} as const satisfies Record<RuleKey, string>
 

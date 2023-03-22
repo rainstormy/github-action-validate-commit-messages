@@ -8,11 +8,11 @@ export const ruleKeys = [
 	"limit-line-lengths",
 	"multi-word-subject-lines",
 	"no-co-authors",
-	"no-inappropriate-whitespace",
 	"no-merge-commits",
 	"no-revert-revert-commits",
 	"no-squash-commits",
 	"no-trailing-punctuation-in-subject-lines",
+	"no-unexpected-whitespace",
 ] as const
 
 export type RuleKey = (typeof ruleKeys)[number]

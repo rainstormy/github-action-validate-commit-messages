@@ -8,11 +8,11 @@ import {
 	limitLineLengths,
 	multiWordSubjectLines,
 	noCoAuthors,
-	noInappropriateWhitespace,
 	noMergeCommits,
 	noRevertRevertCommits,
 	noSquashCommits,
 	noTrailingPunctuationInSubjectLines,
+	noUnexpectedWhitespace,
 	parseCommit,
 } from "+rules"
 import type {
@@ -67,7 +67,6 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 		"limit-line-lengths": limitLineLengths(configuration.limitLineLengths),
 		"multi-word-subject-lines": multiWordSubjectLines(),
 		"no-co-authors": noCoAuthors(),
-		"no-inappropriate-whitespace": noInappropriateWhitespace(),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),
 		"no-merge-commits": noMergeCommits(),
 		"no-revert-revert-commits": noRevertRevertCommits(),
@@ -75,6 +74,7 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 			noTrailingPunctuationInSubjectLines(
 				configuration.noTrailingPunctuationInSubjectLines,
 			),
+		"no-unexpected-whitespace": noUnexpectedWhitespace(),
 	}
 
 	return configuration.ruleKeys.map((ruleKey) => rules[ruleKey])

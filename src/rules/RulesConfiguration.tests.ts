@@ -11,16 +11,16 @@ describe.each`
 	${"limit-line-lengths"}                                                                            | ${["limit-line-lengths"]}
 	${",multi-word-subject-lines "}                                                                    | ${["multi-word-subject-lines"]}
 	${"no-co-authors"}                                                                                 | ${["no-co-authors"]}
-	${"    no-inappropriate-whitespace ,, "}                                                           | ${["no-inappropriate-whitespace"]}
+	${"    no-unexpected-whitespace ,, "}                                                              | ${["no-unexpected-whitespace"]}
 	${" no-merge-commits  "}                                                                           | ${["no-merge-commits"]}
 	${",,,no-revert-revert-commits"}                                                                   | ${["no-revert-revert-commits"]}
 	${"no-squash-commits,  "}                                                                          | ${["no-squash-commits"]}
 	${"   no-trailing-punctuation-in-subject-lines ,"}                                                 | ${["no-trailing-punctuation-in-subject-lines"]}
 	${"imperative-subject-lines,capitalised-subject-lines , no-squash-commits"}                        | ${["imperative-subject-lines", "capitalised-subject-lines", "no-squash-commits"]}
-	${"limit-line-lengths,empty-line-after-subject-lines,no-inappropriate-whitespace"}                 | ${["limit-line-lengths", "empty-line-after-subject-lines", "no-inappropriate-whitespace"]}
+	${"limit-line-lengths,empty-line-after-subject-lines,no-unexpected-whitespace"}                    | ${["limit-line-lengths", "empty-line-after-subject-lines", "no-unexpected-whitespace"]}
 	${"capitalised-subject-lines,empty-line-after-subject-lines ,no-merge-commits, no-squash-commits"} | ${["capitalised-subject-lines", "empty-line-after-subject-lines", "no-merge-commits", "no-squash-commits"]}
 	${"no-co-authors, no-merge-commits"}                                                               | ${["no-co-authors", "no-merge-commits"]}
-	${"no-inappropriate-whitespace, imperative-subject-lines "}                                        | ${["no-inappropriate-whitespace", "imperative-subject-lines"]}
+	${"no-unexpected-whitespace, imperative-subject-lines "}                                           | ${["no-unexpected-whitespace", "imperative-subject-lines"]}
 	${"no-trailing-punctuation-in-subject-lines,, no-merge-commits, no-squash-commits"}                | ${["no-trailing-punctuation-in-subject-lines", "no-merge-commits", "no-squash-commits"]}
 	${"issue-references-in-subject-lines,multi-word-subject-lines, capitalised-subject-lines"}         | ${["issue-references-in-subject-lines", "multi-word-subject-lines", "capitalised-subject-lines"]}
 	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "}   | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
