@@ -77,10 +77,6 @@ export const dummyJiraStyleIssueReferencesConfiguration: Configuration = {
 	],
 	issueReferencesInSubjectLines: {
 		...dummyDefaultConfiguration.issueReferencesInSubjectLines,
-		patterns: [
-			`\\(${jiraStyleIssueReference}\\)`,
-			`${jiraStyleIssueReference}:`,
-			jiraStyleIssueReference,
-		],
+		patterns: [`\\(${jiraStyleIssueReference}\\)`, jiraStyleIssueReference],
 	},
 }

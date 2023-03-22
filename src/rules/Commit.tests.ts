@@ -282,7 +282,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		subjectLine                                                               | body                                          | squashPrefixes | issueReferences       | refinedSubjectLine
 		${"UNICORN-1 Release the robot butler"}                                   | ${"\n\nThis is a dummy commit message body."} | ${[]}          | ${["UNICORN-1"]}      | ${"Release the robot butler"}
 		${"(UNICORN-12) Fix this confusing plate of spaghetti"}                   | ${""}                                         | ${[]}          | ${["(UNICORN-12)"]}   | ${"Fix this confusing plate of spaghetti"}
-		${"amend!UNICORN-59: Sneak in a funny easter egg"}                        | ${""}                                         | ${["amend!"]}  | ${["UNICORN-59:"]}    | ${"Sneak in a funny easter egg"}
+		${"amend!UNICORN-59 Sneak in a funny easter egg"}                         | ${""}                                         | ${["amend!"]}  | ${["UNICORN-59"]}     | ${"Sneak in a funny easter egg"}
 		${"Add some extra love to the code UNICORN-7"}                            | ${""}                                         | ${[]}          | ${["UNICORN-7"]}      | ${"Add some extra love to the code"}
 		${"squash! Apply strawberry jam to make the code sweeter (UNICORN-7044)"} | ${"\n\nThis is a dummy commit message body."} | ${["squash!"]} | ${["(UNICORN-7044)"]} | ${"Apply strawberry jam to make the code sweeter"}
 		${"fixup! Close UNICORN-1337 by fixing the bug"}                          | ${""}                                         | ${["fixup!"]}  | ${[]}                 | ${"Close UNICORN-1337 by fixing the bug"}

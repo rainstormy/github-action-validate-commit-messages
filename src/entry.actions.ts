@@ -7,7 +7,7 @@ import {
 	getPullRequestFromApi,
 	someCommitsAreInvalid,
 } from "+github"
-import { hintedCommitListReporter, validatorFrom } from "+validator"
+import { instructiveReporter, validatorFrom } from "+validator"
 import core from "@actions/core"
 import github from "@actions/github"
 
@@ -48,7 +48,7 @@ async function run(): Promise<ActionResult> {
 	const validate = validatorFrom(configuration.data)
 	const report = validate(
 		pullRequest.rawCommits,
-		hintedCommitListReporter(configuration.data),
+		instructiveReporter(configuration.data),
 	)
 
 	return report === "" ? allCommitsAreValid() : someCommitsAreInvalid(report)

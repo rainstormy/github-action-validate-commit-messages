@@ -124,7 +124,7 @@ Implement the rule logic to make the unit tests pass.
 .. Add the schema to `configurationSchema` in `src/validator/Configuration.ts` and use its default value for the dummy configurations.
 .. Grab the value of the corresponding input parameter in `src/github/InputParameters.ts`.
 . Write unit tests for the reporter in `src/validator/Reporter.tests.ts`.
-. Add a detection message and a hint to the reporter in `src/validator/Reporter.ts` to make the unit tests pass.
+. Add instructions to the reporter in `src/validator/Reporter.ts` to make the unit tests pass.
 
 === Validate the Software Quality
 [source,shell]
