@@ -5,7 +5,8 @@ import {
 	emptyLineAfterSubjectLines,
 	imperativeSubjectLines,
 	issueReferencesInSubjectLines,
-	limitLineLengths,
+	limitLengthOfBodyLines,
+	limitLengthOfSubjectLines,
 	multiWordSubjectLines,
 	noCoAuthors,
 	noMergeCommits,
@@ -64,7 +65,12 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 		"issue-references-in-subject-lines": issueReferencesInSubjectLines(
 			configuration.issueReferencesInSubjectLines,
 		),
-		"limit-line-lengths": limitLineLengths(configuration.limitLineLengths),
+		"limit-length-of-body-lines": limitLengthOfBodyLines(
+			configuration.limitLengthOfBodyLines,
+		),
+		"limit-length-of-subject-lines": limitLengthOfSubjectLines(
+			configuration.limitLengthOfSubjectLines,
+		),
 		"multi-word-subject-lines": multiWordSubjectLines(),
 		"no-co-authors": noCoAuthors(),
 		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),

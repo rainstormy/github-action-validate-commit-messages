@@ -42,12 +42,16 @@ describe.each`
 	}) => {
 		const { rawWords, expectedErrorMessage } = testRow
 
-		it(`raises an error: '${expectedErrorMessage}'`, () => {
-			expect(() =>
-				parseConfiguration({
-					whitelist: rawWords,
-				}),
-			).toThrow(expectedErrorMessage)
+		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
+			expect(() => parseConfiguration({ whitelist: rawWords })).toThrow(
+				expectedErrorMessage,
+			)
+		})
+
+		it(`raises an error that points out the name of the incorrect parameter`, () => {
+			expect(() => parseConfiguration({ whitelist: rawWords })).toThrow(
+				"imperative-subject-lines--whitelist",
+			)
 		})
 	},
 )

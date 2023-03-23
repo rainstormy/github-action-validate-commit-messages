@@ -16,12 +16,14 @@ export function configurationFromInputs(): ReturnType<
 			),
 			patterns: core.getInput("issue-references-in-subject-lines--patterns"),
 		},
-		limitLineLengths: {
-			maximumCharactersInSubjectLine: core.getInput(
-				"limit-line-lengths--max-subject-line-characters",
+		limitLengthOfBodyLines: {
+			maximumCharacters: core.getInput(
+				"limit-length-of-body-lines--max-characters",
 			),
-			maximumCharactersInBodyLine: core.getInput(
-				"limit-line-lengths--max-body-line-characters",
+		},
+		limitLengthOfSubjectLines: {
+			maximumCharacters: core.getInput(
+				"limit-length-of-subject-lines--max-characters",
 			),
 		},
 		noSquashCommits: {

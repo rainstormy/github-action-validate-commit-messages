@@ -48,13 +48,13 @@ describe("when the configuration has default settings", () => {
 		${"fixup! resolve a bug that thought it was a feature"}                     | ${["capitalised-subject-lines", "no-squash-commits"]}
 		${"amend! make the program act like a clown"}                               | ${["capitalised-subject-lines", "no-squash-commits"]}
 		${"squash! organise the bookshelf"}                                         | ${["capitalised-subject-lines", "no-squash-commits"]}
-		${"Retrieve data from the exclusive third-party service"}                   | ${["limit-line-lengths"]}
+		${"Retrieve data from the exclusive third-party service"}                   | ${["limit-length-of-subject-lines"]}
 		${'Revert "Retrieve data from the exclusive third-party service"'}          | ${[]}
 		${'Revert "Revert "Retrieve data from the exclusive third-party service""'} | ${["no-revert-revert-commits"]}
-		${"Compare the list of items to the objects downloaded from the server"}    | ${["limit-line-lengths"]}
+		${"Compare the list of items to the objects downloaded from the server"}    | ${["limit-length-of-subject-lines"]}
 		${"Handle the exceptions thrown by `MalfunctioningOrderService`"}           | ${[]}
 		${"Let `SoftIceMachineAdapter` produce the goods that we need"}             | ${[]}
-		${"Forget to close the backtick section in `RapidTransportService"}         | ${["limit-line-lengths"]}
+		${"Forget to close the backtick section in `RapidTransportService"}         | ${["limit-length-of-subject-lines"]}
 		${"Make the program act like a clown."}                                     | ${["no-trailing-punctuation-in-subject-lines"]}
 		${"Spot a UFO,"}                                                            | ${["no-trailing-punctuation-in-subject-lines"]}
 		${"Solve the following issue:"}                                             | ${["no-trailing-punctuation-in-subject-lines"]}
@@ -138,19 +138,19 @@ describe("when the configuration has default settings", () => {
 		${"Make  it work"}                      | ${"\n"}                                                                                                                                                                                                                                                                                                             | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
 		${"Bring it   on  "}                    | ${"\n\nThe code is prepared for anything."}                                                                                                                                                                                                                                                                         | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
 		${"Introduce a cool feature"}           | ${"It is really awesome!"}                                                                                                                                                                                                                                                                                          | ${["empty-line-after-subject-lines"]}
-		${"Help fix the bug"}                   | ${"\nIt was just a matter of time before it would cause customers to complain. "}                                                                                                                                                                                                                                   | ${["limit-line-lengths"]}
+		${"Help fix the bug"}                   | ${"\nIt was just a matter of time before it would cause customers to complain. "}                                                                                                                                                                                                                                   | ${["limit-length-of-body-lines"]}
 		${"Produce the goods"}                  | ${"\nThe `SoftIceMachineAdapter` is totally going to make the customers happy from now on."}                                                                                                                                                                                                                        | ${[]}
 		${"Transport the goods"}                | ${"\nThis commit moves the goods from one place to another via the `RapidTransportService`."}                                                                                                                                                                                                                       | ${[]}
-		${"Forget to close a backtick section"} | ${"\nThis commit forgets to close the backtick section in `RapidTransportService."}                                                                                                                                                                                                                                 | ${["limit-line-lengths"]}
+		${"Forget to close a backtick section"} | ${"\nThis commit forgets to close the backtick section in `RapidTransportService."}                                                                                                                                                                                                                                 | ${["limit-length-of-body-lines"]}
 		${"Write unit tests"}                   | ${" Finally..."}                                                                                                                                                                                                                                                                                                    | ${["empty-line-after-subject-lines"]}
 		${"Resolve the conflicts"}              | ${"\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                                                                                                                                                                              | ${[]}
 		${"Adjust the procedure"}               | ${"\nIt was totally  wrong until now."}                                                                                                                                                                                                                                                                             | ${["no-unexpected-whitespace"]}
 		${"Refactor some stuff"}                | ${" \nThe code looks much better now \nas we finally took the  time to improve it. "}                                                                                                                                                                                                                               | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
-		${"Release the robot butler"}           | ${"\n\nIt'll go on a big adventure to meet some unusually interesting characters."}                                                                                                                                                                                                                                 | ${["empty-line-after-subject-lines", "limit-line-lengths"]}
+		${"Release the robot butler"}           | ${"\n\nIt'll go on a big adventure to meet some unusually interesting characters."}                                                                                                                                                                                                                                 | ${["empty-line-after-subject-lines", "limit-length-of-body-lines"]}
 		${"Improve the code"}                   | ${"\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."}                                                                                                                                                   | ${[]}
 		${"Update dependencies"}                | ${"\nWe discovered some outdated dependencies after running this command:\n\n```shell\nyarn install\n```\n\nThis commit updates some third-party dependencies.\n\n```shell\nyarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"}                                     | ${[]}
-		${"Install necessary dependencies"}     | ${"\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${["limit-line-lengths"]}
-		${"Update src/main.ts"}                 | ${"\nCo-Authored-By: Easter Bunny <easter.bunny@example.com>"}                                                                                                                                                                                                                                                      | ${["no-co-authors"]}
+		${"Install necessary dependencies"}     | ${"\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${["limit-length-of-body-lines"]}
+		${"Update src/main.ts"}                 | ${"\nCo-Authored-By: Everloving Easter Bunny <everloving.easter.bunny@example.com>"}                                                                                                                                                                                                                                | ${["no-co-authors"]}
 		${"Do some pair programming"}           | ${"\nThis commit is a collab.\nCo-authored-by: Santa Claus <santa.claus@example.com>\nCo-authored-by: Gingerbread Man <gingerbread.man@example.com>\nReported-by: Little Mermaid <little.mermaid@example.com>"}                                                                                                     | ${["no-co-authors"]}
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
@@ -171,21 +171,23 @@ describe("when the configuration has default settings", () => {
 	)
 
 	describe.each`
-		subjectLine                                               | numberOfParents | expectedViolatedRuleKeys
-		${"Keep my branch up to date"}                            | ${3}            | ${["no-merge-commits"]}
-		${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${2}            | ${["no-merge-commits"]}
+		subjectLine                                               | body                                                                                                                                      | numberOfParents | expectedViolatedRuleKeys
+		${"Keep my branch up to date"}                            | ${""}                                                                                                                                     | ${3}            | ${["no-merge-commits"]}
+		${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${"\nConflicts:\n\n src/some/very/nested/directory/extremely-grumpy-cat-with-surprising-features.test.ts\n src/summer-vacation-plans.ts"} | ${2}            | ${["no-merge-commits"]}
 	`(
-		"a merge commit with a subject line of $subjectLine",
+		"a merge commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
 			readonly subjectLine: string
+			readonly body: string
 			readonly numberOfParents: number
 			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
 		}) => {
-			const { subjectLine, numberOfParents, expectedViolatedRuleKeys } = testRow
+			const { subjectLine, body, numberOfParents, expectedViolatedRuleKeys } =
+				testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
 				const actualViolatedRuleKeys = validate(
-					dummyCommit({ subjectLine, numberOfParents }),
+					dummyCommit({ subjectLine, body, numberOfParents }),
 				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
@@ -277,21 +279,20 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	)
 })
 
-describe("when the configuration overrides 'limit-line-lengths--max-subject-line-characters' with 20 and 'limit-line-lengths--max-body-line-characters' with 32", () => {
+describe("when the configuration overrides 'limit-length-of-body-lines--max-characters' with 32", () => {
 	const validate = validateViolatedRulesFrom({
 		...dummyDefaultConfiguration,
-		limitLineLengths: {
-			maximumCharactersInSubjectLine: 20,
-			maximumCharactersInBodyLine: 32,
+		limitLengthOfBodyLines: {
+			maximumCharacters: 32,
 		},
 	})
 
 	describe.each`
-		subjectLine                   | body                                                                                                                                                                                                                                                                                                             | expectedViolatedRuleKeys
-		${"Introduce a cool feature"} | ${"\nIt is really awesome!"}                                                                                                                                                                                                                                                                                     | ${["limit-line-lengths"]}
-		${"Help fix the bug"}         | ${"\nIt was really just a matter of time."}                                                                                                                                                                                                                                                                      | ${["limit-line-lengths"]}
-		${"Write unit tests"}         | ${"\nIt's about time."}                                                                                                                                                                                                                                                                                          | ${[]}
-		${"Update dependencies"}      | ${"\nWe discovered some outdated\ndependencies after running this\ncommand:\n\n```shell\nyarn update --exact @elements/*\nyarn update --recursive @elements/*\n```\n\nThis commit updates them.\n\n```shell\nyarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${[]}
+		subjectLine                    | body                                                                                                                                                                                                                                                                                                             | expectedViolatedRuleKeys
+		${"Introduce a cool feature"}  | ${"\nIt is really awesome!"}                                                                                                                                                                                                                                                                                     | ${[]}
+		${"Help fix the annoying bug"} | ${"\nIt was really just a matter of time."}                                                                                                                                                                                                                                                                      | ${["limit-length-of-body-lines"]}
+		${"Write unit tests"}          | ${"\nIt was about time that we did this."}                                                                                                                                                                                                                                                                       | ${["limit-length-of-body-lines"]}
+		${"Update dependencies"}       | ${"\nWe discovered some outdated\ndependencies after running this\ncommand:\n\n```shell\nyarn update --exact @elements/*\nyarn update --recursive @elements/*\n```\n\nThis commit updates them.\n\n```shell\nyarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${[]}
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
@@ -311,51 +312,20 @@ describe("when the configuration overrides 'limit-line-lengths--max-subject-line
 	)
 })
 
-describe("when the configuration overrides 'limit-line-lengths--max-subject-line-characters' with 0", () => {
+describe("when the configuration overrides 'limit-length-of-subject-lines--max-characters' with 20", () => {
 	const validate = validateViolatedRulesFrom({
 		...dummyDefaultConfiguration,
-		limitLineLengths: {
-			...dummyDefaultConfiguration.limitLineLengths,
-			maximumCharactersInSubjectLine: 0,
+		limitLengthOfSubjectLines: {
+			maximumCharacters: 20,
 		},
 	})
 
 	describe.each`
-		subjectLine                                                              | body                                                                                                                                                                                                                                                                                                                | expectedViolatedRuleKeys
-		${"Compare the list of items to the objects downloaded from the server"} | ${""}                                                                                                                                                                                                                                                                                                               | ${[]}
-		${"Install necessary dependencies"}                                      | ${"\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${["limit-line-lengths"]}
-	`(
-		"a commit with a subject line of $subjectLine and a body of $body",
-		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
-		}) => {
-			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
-
-			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
-					dummyCommit({ subjectLine, body }),
-				)
-				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
-			})
-		},
-	)
-})
-
-describe("when the configuration overrides 'limit-line-lengths--max-body-line-characters' with 0", () => {
-	const validate = validateViolatedRulesFrom({
-		...dummyDefaultConfiguration,
-		limitLineLengths: {
-			...dummyDefaultConfiguration.limitLineLengths,
-			maximumCharactersInBodyLine: 0,
-		},
-	})
-
-	describe.each`
-		subjectLine                                                              | body                                                                                                                                                                                                                                                                                                                | expectedViolatedRuleKeys
-		${"Compare the list of items to the objects downloaded from the server"} | ${""}                                                                                                                                                                                                                                                                                                               | ${["limit-line-lengths"]}
-		${"Install necessary dependencies"}                                      | ${"\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${[]}
+		subjectLine                    | body                                                                                                                                                                                                                                                                                                             | expectedViolatedRuleKeys
+		${"Introduce a cool feature"}  | ${"\nIt is really awesome!"}                                                                                                                                                                                                                                                                                     | ${["limit-length-of-subject-lines"]}
+		${"Help fix the annoying bug"} | ${"\nIt was really just a matter of time."}                                                                                                                                                                                                                                                                      | ${["limit-length-of-subject-lines"]}
+		${"Write unit tests"}          | ${"\nIt was about time that we did this."}                                                                                                                                                                                                                                                                       | ${[]}
+		${"Update dependencies"}       | ${"\nWe discovered some outdated\ndependencies after running this\ncommand:\n\n```shell\nyarn update --exact @elements/*\nyarn update --recursive @elements/*\n```\n\nThis commit updates them.\n\n```shell\nyarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${[]}
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {

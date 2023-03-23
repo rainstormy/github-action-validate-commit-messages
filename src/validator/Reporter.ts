@@ -45,14 +45,14 @@ export function instructiveReporter(
 			.map((pattern) => `${indent}${pattern}`)
 			.join("\n")
 
-	const maximumSubjectLineLength = count(
-		configuration.limitLineLengths.maximumCharactersInSubjectLine,
+	const maximumBodyLineLength = count(
+		configuration.limitLengthOfBodyLines.maximumCharacters,
 		"character",
 		"characters",
 	)
 
-	const maximumBodyLineLength = count(
-		configuration.limitLineLengths.maximumCharactersInBodyLine,
+	const maximumSubjectLineLength = count(
+		configuration.limitLengthOfSubjectLines.maximumCharacters,
 		"character",
 		"characters",
 	)
@@ -103,12 +103,15 @@ ${indent}Providing more context in the commit ${messageOrMessages} will help you
 ${indent}Valid issue reference patterns:
 ${indentedListOfIssueReferencePatterns}`,
 
-			"limit-line-lengths": `Please wrap long lines of text:
+			"limit-length-of-body-lines": `Please wrap long lines in the message ${bodyOrBodies}:
 ${indentedListOfCommits}\n
-${indent}Reword ${theOrEach} commit message to shorten or wrap long lines of text.
-${indent}Keeping the lines short will help you preserve the readability of the commit history in various Git clients.\n
-${indent}The foremost line in the commit message must not exceed ${maximumSubjectLineLength}.
-${indent}Each line in the message body must not exceed ${maximumBodyLineLength}.`,
+${indent}Reword ${theOrEach} commit message to keep each line in the message body within ${maximumBodyLineLength}.
+${indent}Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
+
+			"limit-length-of-subject-lines": `Please keep the subject ${lineOrLines} concise:
+${indentedListOfCommits}\n
+${indent}Reword ${theOrEach} commit message to keep the foremost line within ${maximumSubjectLineLength}.
+${indent}Keeping the subject ${lineOrLines} short will help you preserve the readability of the commit history in various Git clients.`,
 
 			"multi-word-subject-lines": `Please include at least two words in the subject ${lineOrLines}:
 ${indentedListOfCommits}\n

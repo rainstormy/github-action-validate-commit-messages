@@ -46,12 +46,16 @@ describe.each`
 	}) => {
 		const { rawPrefixes, expectedErrorMessage } = testRow
 
-		it(`raises an error: '${expectedErrorMessage}'`, () => {
+		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
 			expect(() =>
-				parseConfiguration({
-					disallowedPrefixes: rawPrefixes,
-				}),
+				parseConfiguration({ disallowedPrefixes: rawPrefixes }),
 			).toThrow(expectedErrorMessage)
+		})
+
+		it(`raises an error that points out the name of the incorrect parameter`, () => {
+			expect(() =>
+				parseConfiguration({ disallowedPrefixes: rawPrefixes }),
+			).toThrow("no-squash-commits--disallowed-prefixes")
 		})
 	},
 )

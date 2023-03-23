@@ -44,13 +44,22 @@ describe.each`
 	}) => {
 		const { rawPatterns, expectedErrorMessage } = testRow
 
-		it(`raises an error: '${expectedErrorMessage}'`, () => {
+		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
 			expect(() =>
 				parseConfiguration({
 					allowedPositions: "as-prefix,as-suffix",
 					patterns: rawPatterns,
 				}),
 			).toThrow(expectedErrorMessage)
+		})
+
+		it(`raises an error that points out the name of the incorrect parameter`, () => {
+			expect(() =>
+				parseConfiguration({
+					allowedPositions: "as-prefix,as-suffix",
+					patterns: rawPatterns,
+				}),
+			).toThrow("issue-references-in-subject-lines--patterns")
 		})
 	},
 )
@@ -97,13 +106,22 @@ describe.each`
 	}) => {
 		const { rawPositions, expectedErrorMessage } = testRow
 
-		it(`raises an error: '${expectedErrorMessage}'`, () => {
+		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
 			expect(() =>
 				parseConfiguration({
 					allowedPositions: rawPositions,
 					patterns: "UNICORN-[1-9][0-9]*",
 				}),
 			).toThrow(expectedErrorMessage)
+		})
+
+		it(`raises an error that points out the name of the incorrect parameter`, () => {
+			expect(() =>
+				parseConfiguration({
+					allowedPositions: rawPositions,
+					patterns: "UNICORN-[1-9][0-9]*",
+				}),
+			).toThrow("issue-references-in-subject-lines--allowed-positions")
 		})
 	},
 )

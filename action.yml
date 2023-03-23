@@ -19,12 +19,12 @@ inputs:
     description: A space-separated list of regular expressions for issue references, e.g. `#[1-9][0-9]*` for GitHub issues or `ABC-[1-9][0-9]*` for Jira or YouTrack issues in a project named `ABC`. It is required for `issue-reference-in-subject-lines`.
     required: false
     default: ^\b$
-  limit-line-lengths--max-body-line-characters:
-    description: The maximum number of characters allowed per line in the commit message body. It is enforced by `limit-line-lengths`. Use `0` to disable the limit on body lines.
+  limit-length-of-body-lines--max-characters:
+    description: A positive integer that specifies the maximum number of characters allowed per line in the commit message body. It is enforced by `limit-length-of-body-lines`.
     required: false
     default: "72"
-  limit-line-lengths--max-subject-line-characters:
-    description: The maximum number of characters allowed in the subject line. It is enforced by `limit-line-lengths`. Use `0` to disable the limit on subject lines.
+  limit-length-of-subject-lines--max-characters:
+    description: A positive integer that specifies the maximum number of characters allowed in the subject line. It is enforced by `limit-length-of-subject-lines`.
     required: false
     default: "50"
   no-squash-commits--disallowed-prefixes:

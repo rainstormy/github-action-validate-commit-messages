@@ -5,7 +5,8 @@ export const dummyDefaultConfiguration: Configuration = {
 		"capitalised-subject-lines",
 		"empty-line-after-subject-lines",
 		"imperative-subject-lines",
-		"limit-line-lengths",
+		"limit-length-of-body-lines",
+		"limit-length-of-subject-lines",
 		"multi-word-subject-lines",
 		"no-co-authors",
 		"no-merge-commits",
@@ -21,9 +22,11 @@ export const dummyDefaultConfiguration: Configuration = {
 		patterns: ["^\\b$"], // A regular expression that never matches anything.
 		allowedPositions: ["as-prefix", "as-suffix"],
 	},
-	limitLineLengths: {
-		maximumCharactersInBodyLine: 72,
-		maximumCharactersInSubjectLine: 50,
+	limitLengthOfBodyLines: {
+		maximumCharacters: 72,
+	},
+	limitLengthOfSubjectLines: {
+		maximumCharacters: 50,
 	},
 	noSquashCommits: {
 		disallowedPrefixes: ["amend!", "fixup!", "squash!"],

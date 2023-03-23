@@ -45,9 +45,15 @@ describe.each`
 	}) => {
 		const { rawSuffixes, expectedErrorMessage } = testRow
 
-		it(`raises an error: '${expectedErrorMessage}'`, () => {
+		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
 			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(
 				expectedErrorMessage,
+			)
+		})
+
+		it(`raises an error that points out the name of the incorrect parameter`, () => {
+			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(
+				"no-trailing-punctuation-in-subject-lines--whitelist",
 			)
 		})
 	},

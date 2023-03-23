@@ -161,7 +161,54 @@ describe("when the configuration has default settings", () => {
 		})
 	})
 
-	describe("a report generated from a valid commit and a commit with long lines of text", () => {
+	describe("a report generated from a valid commit and a commit with a body line that is too long", () => {
+		const report = validate([
+			dummyCommit({ subjectLine: "Enforce server-side validation" }),
+			dummyCommit({
+				sha: "c0ffee",
+				subjectLine: "Ship to production",
+				body: "\nWe have decided to give the customers an amazing surprise in this version.",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please wrap long lines in the message body:
+    c0ffee Ship to production
+
+    Reword the commit message to keep each line in the message body within 72 characters.
+    Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
+			)
+		})
+	})
+
+	describe("a report generated from two commits with body lines that are too long", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Install necessary dependencies",
+				body: "\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```",
+			}),
+			dummyCommit({
+				sha: "badf00d",
+				subjectLine: "Retrieve some exclusive data",
+				body: "\nWe have to retrieve some rare data from the third-party service. This commit adds the necessary code to do so.",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please wrap long lines in the message bodies:
+    d06f00d Install necessary dependencies
+    badf00d Retrieve some exclusive data
+
+    Reword each commit message to keep each line in the message body within 72 characters.
+    Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
+			)
+		})
+	})
+
+	describe("a report generated from a valid commit and a commit with a subject line that is too long", () => {
 		const report = validate([
 			dummyCommit({ subjectLine: "Enforce server-side validation" }),
 			dummyCommit({
@@ -173,24 +220,22 @@ describe("when the configuration has default settings", () => {
 
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toBe(
-				`Please wrap long lines of text:
+				`Please keep the subject line concise:
     0ff1ce Ship the evaluation of ultra-rare objects to production
 
-    Reword the commit message to shorten or wrap long lines of text.
-    Keeping the lines short will help you preserve the readability of the commit history in various Git clients.
-
-    The foremost line in the commit message must not exceed 50 characters.
-    Each line in the message body must not exceed 72 characters.`,
+    Reword the commit message to keep the foremost line within 50 characters.
+    Keeping the subject line short will help you preserve the readability of the commit history in various Git clients.`,
 			)
 		})
 	})
 
-	describe("a report generated from two commits with long lines of text", () => {
+	describe("a report generated from two commits with subject lines that are too long", () => {
 		const report = validate([
 			dummyCommit({
 				sha: "d06f00d",
-				subjectLine: "Install necessary dependencies",
-				body: "\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```",
+				subjectLine:
+					"Install some extremely redundant heavyweight dependencies",
+				body: "\nWe had to make the bundle heavier to make it appear more valuable.",
 			}),
 			dummyCommit({
 				sha: "badf00d",
@@ -200,15 +245,12 @@ describe("when the configuration has default settings", () => {
 
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toBe(
-				`Please wrap long lines of text:
-    d06f00d Install necessary dependencies
+				`Please keep the subject lines concise:
+    d06f00d Install some extremely redundant heavyweight dependencies
     badf00d Retrieve data from the exclusive third-party service
 
-    Reword each commit message to shorten or wrap long lines of text.
-    Keeping the lines short will help you preserve the readability of the commit history in various Git clients.
-
-    The foremost line in the commit message must not exceed 50 characters.
-    Each line in the message body must not exceed 72 characters.`,
+    Reword each commit message to keep the foremost line within 50 characters.
+    Keeping the subject lines short will help you preserve the readability of the commit history in various Git clients.`,
 			)
 		})
 	})
@@ -274,7 +316,7 @@ describe("when the configuration has default settings", () => {
 			dummyCommit({
 				sha: "cafebabe",
 				subjectLine: "Update src/main.ts",
-				body: "\nCo-Authored-By: Easter Bunny <easter.bunny@example.com>",
+				body: "\nCo-Authored-By: Everloving Easter Bunny <everloving.easter.bunny@example.com>",
 			}),
 			dummyCommit({
 				sha: "cafed00d",
@@ -712,36 +754,70 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	})
 })
 
-describe("when the configuration overrides 'limit-line-lengths--max-subject-line-characters' with 1 and 'limit-line-lengths--max-body-line-characters' with 32", () => {
+describe("when the configuration overrides 'limit-length-of-body-lines--max-characters' with 32 and 'limit-length-of-subject-lines--max-characters' with 1", () => {
 	const validate = validateInstructionsFrom({
 		...dummyDefaultConfiguration,
-		limitLineLengths: {
-			maximumCharactersInSubjectLine: 1,
-			maximumCharactersInBodyLine: 32,
+		limitLengthOfBodyLines: {
+			maximumCharacters: 32,
+		},
+		limitLengthOfSubjectLines: {
+			maximumCharacters: 1,
 		},
 	})
 
-	describe("a report generated from two commits with long lines of text", () => {
+	describe("a report generated from two commits with subject lines that are too long and with a body line in one of the commits that is too long", () => {
 		const report = validate([
 			dummyCommit({
 				sha: "0ff1ce",
 				subjectLine: "Investigate further",
 				body: "\nWe discovered something cool after running a magical command.",
 			}),
-			dummyCommit({ sha: "c0ffee", subjectLine: "Help fix the bug" }),
+			dummyCommit({ sha: "c0ffee", subjectLine: "Help fix the bug", body: "" }),
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toBe(
-				`Please wrap long lines of text:
+				`Please wrap long lines in the message body:
+    0ff1ce Investigate further
+
+    Reword the commit message to keep each line in the message body within 32 characters.
+    Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.
+
+Please keep the subject lines concise:
     0ff1ce Investigate further
     c0ffee Help fix the bug
 
-    Reword each commit message to shorten or wrap long lines of text.
-    Keeping the lines short will help you preserve the readability of the commit history in various Git clients.
+    Reword each commit message to keep the foremost line within 1 character.
+    Keeping the subject lines short will help you preserve the readability of the commit history in various Git clients.`,
+			)
+		})
+	})
+})
 
-    The foremost line in the commit message must not exceed 1 character.
-    Each line in the message body must not exceed 32 characters.`,
+describe("when the configuration overrides 'limit-length-of-body-lines--max-characters' with 1", () => {
+	const validate = validateInstructionsFrom({
+		...dummyDefaultConfiguration,
+		limitLengthOfBodyLines: {
+			maximumCharacters: 1,
+		},
+	})
+
+	describe("a report generated from a commit with a body line that is too long", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "Investigate further",
+				body: "\nWe discovered something cool after running a magical command.",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please wrap long lines in the message body:
+    0ff1ce Investigate further
+
+    Reword the commit message to keep each line in the message body within 1 character.
+    Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
 			)
 		})
 	})
