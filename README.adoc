@@ -113,10 +113,12 @@ Corresponding configurations for IntelliJ IDEA and Visual Studio Code are locate
 This directory is to contain the implementation of the rule and its configuration.
 . Write unit tests for the rule key configuration in `src/rules/RulesConfiguration.tests.ts`.
 . Add the rule key to `ruleKeys` in `src/rules/Rule.ts` to make the unit tests pass.
+. Create a factory function for the rule and activate the rule in the `rulesFrom` function in `src/validator/Validator.ts`.
+.. If the rule performs any commit refinement, write unit tests for the commit refinement logic in `src/rules/Commit.tests.ts`.
+.. Implement the commit refinement in the `refine` function of the rule to make the unit tests pass.
 . Write unit tests for the rule logic in `src/validator/Validator.tests.ts`.
 Register the rule key in the necessary dummy configurations in `src/validator/Configuration.dummies.ts`.
-. Create a factory function for the rule and activate the rule in the `rulesFrom` function in `src/validator/Validator.ts`.
-Implement the rule logic to make the unit tests pass.
+. Implement the rule logic in the `validate` function of the rule to make the unit tests pass.
 .. If the rule is configurable, invent an appropriately named configuration key in dash-case, having the rule key as a prefix followed by two dashes (e.g. `my-rule-key--my-configuration-key`).
 .. Describe the configuration in `action.yml`.
 .. Write unit tests for the configuration parser in the rule directory.

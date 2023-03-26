@@ -14,22 +14,22 @@ describe("when the configuration has default settings", () => {
 	const refineCommit = commitRefinerFrom(rules)
 
 	describe.each`
-		sha          | subjectLine                                               | body                                                                                                                                                                                                              | parentShas                            | squashPrefixes          | refinedSubjectLine                                        | bodyLines                                                                                       | coAuthors
-		${"0ff1ce"}  | ${"Release the robot butler"}                             | ${"\n\nThis is a dummy commit message body."}                                                                                                                                                                     | ${["c0ffee"]}                         | ${[]}                   | ${"Release the robot butler"}                             | ${["", "This is a dummy commit message body."]}                                                 | ${[]}
-		${"d06f00d"} | ${"Fix this confusing plate of spaghetti"}                | ${""}                                                                                                                                                                                                             | ${["deadc0de"]}                       | ${[]}                   | ${"Fix this confusing plate of spaghetti"}                | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"fixup!"}                                               | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${["fixup!"]}           | ${""}                                                     | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"fixup! Resolve a bug that thought it was a feature"}   | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${["fixup!"]}           | ${"Resolve a bug that thought it was a feature"}          | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"fixup!  Add some extra love to the code"}              | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${["fixup!"]}           | ${"Add some extra love to the code"}                      | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"fixup! fixup! Fix this confusing plate of spaghetti"}  | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${["fixup!", "fixup!"]} | ${"Fix this confusing plate of spaghetti"}                | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${" amend!Apply strawberry jam to make the code sweeter"} | ${"\n\nThis is a dummy commit message body."}                                                                                                                                                                     | ${["c0ffee"]}                         | ${["amend!"]}           | ${"Apply strawberry jam to make the code sweeter"}        | ${["", "This is a dummy commit message body."]}                                                 | ${[]}
-		${"0ff1ce"}  | ${"amend! Solve the problem"}                             | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${["amend!"]}           | ${"Solve the problem"}                                    | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"squash!Make the formatter happy again :)"}             | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${["squash!"]}          | ${"Make the formatter happy again :)"}                    | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"squash!   Organise the bookshelf"}                     | ${"\n\nThis is a dummy commit message body."}                                                                                                                                                                     | ${["c0ffee"]}                         | ${["squash!"]}          | ${"Organise the bookshelf"}                               | ${["", "This is a dummy commit message body."]}                                                 | ${[]}
-		${"0ff1ce"}  | ${"Make the commit scream fixup! again"}                  | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${[]}                   | ${"Make the commit scream fixup! again"}                  | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"Update src/main.ts"}                                   | ${"\n\nCo-Authored-By: Easter Bunny <easter.bunny@example.com>"}                                                                                                                                                  | ${["c0ffee"]}                         | ${[]}                   | ${"Update src/main.ts"}                                   | ${[""]}                                                                                         | ${["Easter Bunny <easter.bunny@example.com>"]}
-		${"0ff1ce"}  | ${"Do some pair programming"}                             | ${"\n\nThis commit is a collab.\nCo-authored-by: Santa Claus <santa.claus@example.com>\nCo-authored-by: Gingerbread Man <gingerbread.man@example.com>\nReported-by: Little Mermaid <little.mermaid@example.com>"} | ${["c0ffee"]}                         | ${[]}                   | ${"Do some pair programming"}                             | ${["", "This commit is a collab.", "Reported-by: Little Mermaid <little.mermaid@example.com>"]} | ${["Santa Claus <santa.claus@example.com>", "Gingerbread Man <gingerbread.man@example.com>"]}
-		${"0ff1ce"}  | ${"Keep my branch up to date"}                            | ${""}                                                                                                                                                                                                             | ${["badf00d", "deadc0de", "d15ea5e"]} | ${[]}                   | ${"Keep my branch up to date"}                            | ${[]}                                                                                           | ${[]}
-		${"0ff1ce"}  | ${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${"\n\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                                                                          | ${["cafebabe", "cafed00d"]}           | ${[]}                   | ${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${["", "Conflicts:", "", " src/grumpy-cat.ts", " src/summer-vacation-plans.ts"]}                | ${[]}
+		sha          | subjectLine                                               | body                                                                                                                                                                                                              | parentShas                            | authorName           | authorEmailAddress                                    | committerName       | committerEmailAddress                               | squashPrefixes          | refinedSubjectLine                                        | bodyLines                                                                                       | coAuthors
+		${"0ff1ce"}  | ${"Release the robot butler"}                             | ${"\n\nThis is a dummy commit message body."}                                                                                                                                                                     | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${[]}                   | ${"Release the robot butler"}                             | ${["", "This is a dummy commit message body."]}                                                 | ${[]}
+		${"d06f00d"} | ${"Fix this confusing plate of spaghetti"}                | ${""}                                                                                                                                                                                                             | ${["deadc0de"]}                       | ${"Gingerbread Man"} | ${"23456789+gingerbreadman@users.noreply.github.com"} | ${"Little Mermaid"} | ${"87654321+littlemermaid@user.noreply.github.com"} | ${[]}                   | ${"Fix this confusing plate of spaghetti"}                | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"fixup!"}                                               | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${null}              | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"GitHub"}         | ${"noreply@github.com"}                             | ${["fixup!"]}           | ${""}                                                     | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"fixup! Resolve a bug that thought it was a feature"}   | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${null}                                               | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${["fixup!"]}           | ${"Resolve a bug that thought it was a feature"}          | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"fixup!  Add some extra love to the code"}              | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${null}              | ${null}                                               | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${["fixup!"]}           | ${"Add some extra love to the code"}                      | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"fixup! fixup! Fix this confusing plate of spaghetti"}  | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${null}             | ${"98765432+easterbunny@user.noreply.github.com"}   | ${["fixup!", "fixup!"]} | ${"Fix this confusing plate of spaghetti"}                | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${" amend!Apply strawberry jam to make the code sweeter"} | ${"\n\nThis is a dummy commit message body."}                                                                                                                                                                     | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${null}                                             | ${["amend!"]}           | ${"Apply strawberry jam to make the code sweeter"}        | ${["", "This is a dummy commit message body."]}                                                 | ${[]}
+		${"0ff1ce"}  | ${"amend! Solve the problem"}                             | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${null}             | ${null}                                             | ${["amend!"]}           | ${"Solve the problem"}                                    | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"squash!Make the formatter happy again :)"}             | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${["squash!"]}          | ${"Make the formatter happy again :)"}                    | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"squash!   Organise the bookshelf"}                     | ${"\n\nThis is a dummy commit message body."}                                                                                                                                                                     | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${["squash!"]}          | ${"Organise the bookshelf"}                               | ${["", "This is a dummy commit message body."]}                                                 | ${[]}
+		${"0ff1ce"}  | ${"Make the commit scream fixup! again"}                  | ${""}                                                                                                                                                                                                             | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${[]}                   | ${"Make the commit scream fixup! again"}                  | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"Update src/main.ts"}                                   | ${"\n\nCo-Authored-By: Easter Bunny <easter.bunny@example.com>"}                                                                                                                                                  | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${[]}                   | ${"Update src/main.ts"}                                   | ${[""]}                                                                                         | ${["Easter Bunny <easter.bunny@example.com>"]}
+		${"0ff1ce"}  | ${"Do some pair programming"}                             | ${"\n\nThis commit is a collab.\nCo-authored-by: Santa Claus <santa.claus@example.com>\nCo-authored-by: Gingerbread Man <gingerbread.man@example.com>\nReported-by: Little Mermaid <little.mermaid@example.com>"} | ${["c0ffee"]}                         | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${[]}                   | ${"Do some pair programming"}                             | ${["", "This commit is a collab.", "Reported-by: Little Mermaid <little.mermaid@example.com>"]} | ${["Santa Claus <santa.claus@example.com>", "Gingerbread Man <gingerbread.man@example.com>"]}
+		${"0ff1ce"}  | ${"Keep my branch up to date"}                            | ${""}                                                                                                                                                                                                             | ${["badf00d", "deadc0de", "d15ea5e"]} | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${[]}                   | ${"Keep my branch up to date"}                            | ${[]}                                                                                           | ${[]}
+		${"0ff1ce"}  | ${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${"\n\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                                                                          | ${["cafebabe", "cafed00d"]}           | ${"Santa Claus"}     | ${"12345678+santaclaus@users.noreply.github.com"}     | ${"Easter Bunny"}   | ${"98765432+easterbunny@user.noreply.github.com"}   | ${[]}                   | ${"Merge branch 'main' into bugfix/dance-party-playlist"} | ${["", "Conflicts:", "", " src/grumpy-cat.ts", " src/summer-vacation-plans.ts"]}                | ${[]}
 	`(
 		"a commit with a subject line of $subjectLine that is a child of $parentShas",
 		(testRow: {
@@ -37,6 +37,10 @@ describe("when the configuration has default settings", () => {
 			readonly subjectLine: string
 			readonly body: string
 			readonly parentShas: ReadonlyArray<string>
+			readonly authorName: string | null
+			readonly authorEmailAddress: string | null
+			readonly committerName: string | null
+			readonly committerEmailAddress: string | null
 			readonly squashPrefixes: ReadonlyArray<string>
 			readonly refinedSubjectLine: string
 			readonly bodyLines: ReadonlyArray<string>
@@ -47,6 +51,10 @@ describe("when the configuration has default settings", () => {
 				subjectLine,
 				body,
 				parentShas,
+				authorName,
+				authorEmailAddress,
+				committerName,
+				committerEmailAddress,
 				squashPrefixes,
 				refinedSubjectLine,
 				bodyLines,
@@ -56,6 +64,14 @@ describe("when the configuration has default settings", () => {
 			const commit = refineCommit(
 				parseCommit({
 					sha,
+					author: {
+						name: authorName,
+						emailAddress: authorEmailAddress,
+					},
+					committer: {
+						name: committerName,
+						emailAddress: committerEmailAddress,
+					},
 					commitMessage: `${subjectLine}${body}`,
 					parents: parentShas.map((parentSha) => ({ sha: parentSha })),
 				}),
@@ -84,6 +100,24 @@ describe("when the configuration has default settings", () => {
 			it(`has ${formatParents(parentShas)}`, () => {
 				const parents = parentShas.map((parentSha) => ({ sha: parentSha }))
 				expect(commit.parents).toStrictEqual(parents)
+			})
+
+			it(`has ${formatAuthorName(authorName)}`, () => {
+				expect(commit.author.name).toStrictEqual(authorName)
+			})
+
+			it(`has ${formatAuthorEmailAddress(authorEmailAddress)}`, () => {
+				expect(commit.author.emailAddress).toStrictEqual(authorEmailAddress)
+			})
+
+			it(`has ${formatCommitterName(committerName)}`, () => {
+				expect(commit.committer.name).toStrictEqual(committerName)
+			})
+
+			it(`has ${formatCommitterEmailAddress(committerEmailAddress)}`, () => {
+				expect(commit.committer.emailAddress).toStrictEqual(
+					committerEmailAddress,
+				)
 			})
 
 			it(`has ${formatBodyLines(bodyLines)}`, () => {
@@ -126,6 +160,14 @@ describe("when the configuration overrides 'no-squash-commits--disallowed-prefix
 			const commit = refineCommit(
 				parseCommit({
 					sha: "0ff1ce",
+					author: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
+					committer: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
 					commitMessage: `${subjectLine}${body}`,
 					parents: [{ sha: "deadc0de" }],
 				}),
@@ -185,6 +227,14 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const commit = refineCommit(
 				parseCommit({
 					sha: "0ff1ce",
+					author: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
+					committer: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
 					commitMessage: `${subjectLine}${body}`,
 					parents: [{ sha: "deadc0de" }],
 				}),
@@ -248,6 +298,14 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const commit = refineCommit(
 				parseCommit({
 					sha: "0ff1ce",
+					author: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
+					committer: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
 					commitMessage: `${subjectLine}${body}`,
 					parents: [{ sha: "deadc0de" }],
 				}),
@@ -306,6 +364,14 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const commit = refineCommit(
 				parseCommit({
 					sha: "0ff1ce",
+					author: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
+					committer: {
+						name: "Santa Claus",
+						emailAddress: "12345678+santaclaus@users.noreply.github.com",
+					},
 					commitMessage: `${subjectLine}${body}`,
 					parents: [{ sha: "deadc0de" }],
 				}),
@@ -354,6 +420,32 @@ function formatParents(parentShas: ReadonlyArray<string>): string {
 		"parent commit",
 		"parent commits",
 	)}: ${parentShas.join(", ")}`
+}
+
+function formatAuthorName(authorName: string | null): string {
+	return authorName === null
+		? "no author name"
+		: `an author name of '${authorName}'`
+}
+
+function formatAuthorEmailAddress(authorEmailAddress: string | null): string {
+	return authorEmailAddress === null
+		? "no author email address"
+		: `an author email address of '${authorEmailAddress}'`
+}
+
+function formatCommitterName(committerName: string | null): string {
+	return committerName === null
+		? "no committer name"
+		: `a committer name of '${committerName}'`
+}
+
+function formatCommitterEmailAddress(
+	committerEmailAddress: string | null,
+): string {
+	return committerEmailAddress === null
+		? "no committer email address"
+		: `a committer email address of '${committerEmailAddress}'`
 }
 
 function formatBodyLines(bodyLines: ReadonlyArray<string>): string {

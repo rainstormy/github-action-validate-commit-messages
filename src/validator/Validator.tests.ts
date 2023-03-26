@@ -5,6 +5,7 @@ import type { Configuration } from "+validator"
 import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
+	dummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
 	validatorFrom,
 	violatedRulesReporter,
 } from "+validator"
@@ -188,6 +189,66 @@ describe("when the configuration has default settings", () => {
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
 				const actualViolatedRuleKeys = validate(
 					dummyCommit({ subjectLine, body, numberOfParents }),
+				)
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+})
+
+describe("when the configuration overrides 'acknowledged-author-email-addresses--patterns' and 'acknowledged-committer-email-addresses--patterns' with GitHub-noreply or fictive company email addresses and 'acknowledged-author-names--patterns' and 'acknowledged-committer-names--patterns' with a two-word or three-letter requirement", () => {
+	const validate = validateViolatedRulesFrom(
+		dummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
+	)
+
+	describe.each`
+		authorName          | authorEmailAddress                                   | committerName       | committerEmailAddress                                | expectedViolatedRuleKeys
+		${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${[]}
+		${"scl"}            | ${"scl@fictivecompany.com"}                          | ${"lme"}            | ${"lme@fictivecompany.com"}                          | ${[]}
+		${"Little Mermaid"} | ${"87654321+littlemermaid@users.noreply.github.com"} | ${"Little Mermaid"} | ${"87654321+littlemermaid@users.noreply.github.com"} | ${[]}
+		${"lme"}            | ${"lme@fictivecompany.com"}                          | ${"scl"}            | ${"scl@fictivecompany.com"}                          | ${[]}
+		${"Unicorn"}        | ${"12345678+unicorn@users.noreply.github.com"}       | ${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${["acknowledged-author-names"]}
+		${null}             | ${"12345678+unicorn@users.noreply.github.com"}       | ${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${["acknowledged-author-names"]}
+		${"Santa Claus"}    | ${"claus@santasworkshop.com"}                        | ${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${["acknowledged-author-email-addresses"]}
+		${"Santa Claus"}    | ${null}                                              | ${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${["acknowledged-author-email-addresses"]}
+		${"Easter-Bunny"}   | ${"bunny@theeastercompany.com"}                      | ${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${["acknowledged-author-email-addresses", "acknowledged-author-names"]}
+		${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${"Unicorn"}        | ${"12345678+unicorn@users.noreply.github.com"}       | ${["acknowledged-committer-names"]}
+		${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${null}             | ${"12345678+unicorn@users.noreply.github.com"}       | ${["acknowledged-committer-names"]}
+		${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${"Santa Claus"}    | ${"claus@santasworkshop.com"}                        | ${["acknowledged-committer-email-addresses"]}
+		${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${"Santa Claus"}    | ${null}                                              | ${["acknowledged-committer-email-addresses"]}
+		${"Santa Claus"}    | ${"12345678+santaclaus@users.noreply.github.com"}    | ${"Easter-Bunny"}   | ${"bunny@theeastercompany.com"}                      | ${["acknowledged-committer-email-addresses", "acknowledged-committer-names"]}
+		${"Santa Claus"}    | ${"claus@santasworkshop.com"}                        | ${"GitHub"}         | ${"noreply@github.com"}                              | ${["acknowledged-author-email-addresses", "acknowledged-committer-email-addresses", "acknowledged-committer-names"]}
+		${null}             | ${null}                                              | ${null}             | ${null}                                              | ${["acknowledged-author-email-addresses", "acknowledged-author-names", "acknowledged-committer-email-addresses", "acknowledged-committer-names"]}
+	`(
+		"a commit with an author with a name of $authorName and an email address of $authorEmailAddress and a committer with a name of $committerName and an email address of $committerEmailAddress",
+		(testRow: {
+			readonly authorName: string | null
+			readonly authorEmailAddress: string | null
+			readonly committerName: string | null
+			readonly committerEmailAddress: string | null
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const {
+				authorName,
+				authorEmailAddress,
+				committerName,
+				committerEmailAddress,
+				expectedViolatedRuleKeys,
+			} = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					dummyCommit({
+						subjectLine: "Craft something amazing for us",
+						author: {
+							name: authorName,
+							emailAddress: authorEmailAddress,
+						},
+						committer: {
+							name: committerName,
+							emailAddress: committerEmailAddress,
+						},
+					}),
 				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})

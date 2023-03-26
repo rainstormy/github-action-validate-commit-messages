@@ -1,5 +1,9 @@
 import type { RawCommit, Rule, RuleKey } from "+rules"
 import {
+	acknowledgedAuthorEmailAddresses,
+	acknowledgedAuthorNames,
+	acknowledgedCommitterEmailAddresses,
+	acknowledgedCommitterNames,
 	capitalisedSubjectLines,
 	commitRefinerFrom,
 	emptyLineAfterSubjectLines,
@@ -57,6 +61,19 @@ export function validatorFrom(configuration: Configuration): Validator {
 
 export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 	const rules: Readonly<Record<RuleKey, Rule>> = {
+		"acknowledged-author-email-addresses": acknowledgedAuthorEmailAddresses(
+			configuration.acknowledgedAuthorEmailAddresses,
+		),
+		"acknowledged-author-names": acknowledgedAuthorNames(
+			configuration.acknowledgedAuthorNames,
+		),
+		"acknowledged-committer-email-addresses":
+			acknowledgedCommitterEmailAddresses(
+				configuration.acknowledgedCommitterEmailAddresses,
+			),
+		"acknowledged-committer-names": acknowledgedCommitterNames(
+			configuration.acknowledgedCommitterNames,
+		),
 		"capitalised-subject-lines": capitalisedSubjectLines(),
 		"empty-line-after-subject-lines": emptyLineAfterSubjectLines(),
 		"imperative-subject-lines": imperativeSubjectLines(

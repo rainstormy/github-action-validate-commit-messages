@@ -20,6 +20,26 @@ export function instructiveReporter(
 ): Reporter<string> {
 	const indent = "    " // eslint-disable-line unicorn/string-content -- The indent of four spaces is intentional.
 
+	const indentedListOfAuthorEmailAddressPatterns =
+		configuration.acknowledgedAuthorEmailAddresses.patterns
+			.map((pattern) => `${indent}${pattern}`)
+			.join("\n")
+
+	const indentedListOfAuthorNamePatterns =
+		configuration.acknowledgedAuthorNames.patterns
+			.map((pattern) => `${indent}${pattern}`)
+			.join("\n")
+
+	const indentedListOfCommitterEmailAddressPatterns =
+		configuration.acknowledgedCommitterEmailAddresses.patterns
+			.map((pattern) => `${indent}${pattern}`)
+			.join("\n")
+
+	const indentedListOfCommitterNamePatterns =
+		configuration.acknowledgedCommitterNames.patterns
+			.map((pattern) => `${indent}${pattern}`)
+			.join("\n")
+
 	const nounsByIssueReferencePosition = {
 		"as-prefix": "the start",
 		"as-suffix": "the end",
@@ -63,10 +83,13 @@ export function instructiveReporter(
 	): string {
 		const commitCount = invalidCommits.length
 
+		const addressOrAddresses = pluralise(commitCount, "address", "addresses")
+		const anOrNothing = pluralise(commitCount, "an ", "")
 		const bodyOrBodies = pluralise(commitCount, "body", "bodies")
 		const commitOrCommits = pluralise(commitCount, "commit", "commits")
 		const lineOrLines = pluralise(commitCount, "line", "lines")
 		const messageOrMessages = pluralise(commitCount, "message", "messages")
+		const nameOrNames = pluralise(commitCount, "name", "names")
 		const oneOrOnes = pluralise(commitCount, "one", "ones")
 		const revertOrReverts = pluralise(commitCount, "revert", "reverts")
 		const theOrEach = pluralise(commitCount, "the", "each")
@@ -79,6 +102,34 @@ export function instructiveReporter(
 			.join("\n")
 
 		const instructionsByRule = {
+			"acknowledged-author-email-addresses": `Please use ${anOrNothing}acknowledged author email ${addressOrAddresses}:
+${indentedListOfCommits}\n
+${indent}Edit ${theOrEach} commit to change the email address of its author.
+${indent}Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.\n
+${indent}Valid author email address patterns:
+${indentedListOfAuthorEmailAddressPatterns}`,
+
+			"acknowledged-author-names": `Please use ${anOrNothing}acknowledged author ${nameOrNames}:
+${indentedListOfCommits}\n
+${indent}Edit ${theOrEach} commit to change the name of its author.
+${indent}Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.\n
+${indent}Valid author name patterns:
+${indentedListOfAuthorNamePatterns}`,
+
+			"acknowledged-committer-email-addresses": `Please use ${anOrNothing}acknowledged committer email ${addressOrAddresses}:
+${indentedListOfCommits}\n
+${indent}Edit ${theOrEach} commit to change the email address of its committer.
+${indent}Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.\n
+${indent}Valid committer email address patterns:
+${indentedListOfCommitterEmailAddressPatterns}`,
+
+			"acknowledged-committer-names": `Please use ${anOrNothing}acknowledged committer ${nameOrNames}:
+${indentedListOfCommits}\n
+${indent}Edit ${theOrEach} commit to change the name of its committer.
+${indent}Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.\n
+${indent}Valid committer name patterns:
+${indentedListOfCommitterNamePatterns}`,
+
 			"capitalised-subject-lines": `Please capitalise the subject ${lineOrLines}:
 ${indentedListOfCommits}\n
 ${indent}Reword ${theOrEach} commit message to make the foremost line start with an uppercase letter.

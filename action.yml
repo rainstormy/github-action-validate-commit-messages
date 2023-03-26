@@ -8,23 +8,39 @@ inputs:
   rules:
     description: A comma-separated list of the rules to enforce.
     required: true
+  acknowledged-author-email-addresses--patterns:
+    description: A space-separated list of regular expressions for email addresses of commit authors to be accepted by `acknowledged-author-email-addresses`, e.g. `\d+\+.+@users\.noreply\.github\.com` for personal noreply email addresses on GitHub.
+    required: false
+    default: ^\b$
+  acknowledged-author-names--patterns:
+    description: A space-separated list of regular expressions for names of commit authors to be accepted by `acknowledged-author-names`, e.g. `.+\s.+` for names of at least two words.
+    required: false
+    default: ^\b$
+  acknowledged-committer-email-addresses--patterns:
+    description: A space-separated list of regular expressions for email addresses of committers to be accepted by `acknowledged-committer-email-addresses`, e.g. `\d+\+.+@users\.noreply\.github\.com` for personal noreply email addresses on GitHub.
+    required: false
+    default: ^\b$
+  acknowledged-committer-names--patterns:
+    description: A space-separated list of regular expressions for names of committers to be accepted by `acknowledged-committer-names`, e.g. `.+\s.+` for names of at least two words.
+    required: false
+    default: ^\b$
   imperative-subject-lines--whitelist:
     description: A comma-separated list of additional words to be accepted by `imperative-subject-lines`.
     required: false
   issue-references-in-subject-lines--allowed-positions:
-    description: A comma-separated list of positions where the issue reference is allowed to appear in the subject line. Valid positions are `as-prefix` and `as-suffix`. It is enforced by `issue-reference-in-subject-lines`.
+    description: A comma-separated list of positions where the issue reference is allowed to appear in the subject line to be enforced by `issue-reference-in-subject-lines`. Valid positions are `as-prefix` and `as-suffix`.
     required: false
     default: as-prefix,as-suffix
   issue-references-in-subject-lines--patterns:
-    description: A space-separated list of regular expressions for issue references, e.g. `#[1-9][0-9]*` for GitHub issues or `ABC-[1-9][0-9]*` for Jira or YouTrack issues in a project named `ABC`. It is required for `issue-reference-in-subject-lines`.
+    description: A space-separated list of regular expressions for issue references to be accepted by `issue-reference-in-subject-lines`, e.g. `#[1-9][0-9]*` for GitHub issues or `ABC-[1-9][0-9]*` for Jira or YouTrack issues in a project named `ABC`.
     required: false
     default: ^\b$
   limit-length-of-body-lines--max-characters:
-    description: A positive integer that specifies the maximum number of characters allowed per line in the commit message body. It is enforced by `limit-length-of-body-lines`.
+    description: A positive integer that specifies the maximum number of characters per line in the commit message body to be accepted by `limit-length-of-body-lines`.
     required: false
     default: "72"
   limit-length-of-subject-lines--max-characters:
-    description: A positive integer that specifies the maximum number of characters allowed in the subject line. It is enforced by `limit-length-of-subject-lines`.
+    description: A positive integer that specifies the maximum number of characters in the subject line to be accepted by `limit-length-of-subject-lines`.
     required: false
     default: "50"
   no-squash-commits--disallowed-prefixes:

@@ -1,3 +1,7 @@
+export * from "./acknowledged-author-email-addresses"
+export * from "./acknowledged-author-names"
+export * from "./acknowledged-committer-email-addresses"
+export * from "./acknowledged-committer-names"
 export * from "./capitalised-subject-lines"
 export * from "./Commit"
 export * from "./Commit.dummies"

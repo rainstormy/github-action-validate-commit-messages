@@ -7,6 +7,20 @@ export function configurationFromInputs(): ReturnType<
 > {
 	return parseConfiguration({
 		ruleKeys: core.getInput("rules"),
+		acknowledgedAuthorEmailAddresses: {
+			patterns: core.getInput("acknowledged-author-email-addresses--patterns"),
+		},
+		acknowledgedAuthorNames: {
+			patterns: core.getInput("acknowledged-author-names--patterns"),
+		},
+		acknowledgedCommitterEmailAddresses: {
+			patterns: core.getInput(
+				"acknowledged-committer-email-addresses--patterns",
+			),
+		},
+		acknowledgedCommitterNames: {
+			patterns: core.getInput("acknowledged-committer-names--patterns"),
+		},
 		imperativeSubjectLines: {
 			whitelist: core.getInput("imperative-subject-lines--whitelist"),
 		},

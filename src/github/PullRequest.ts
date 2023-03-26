@@ -46,6 +46,14 @@ function rawCommitFromDto({
 }: OctokitCommitDto): RawCommit {
 	return {
 		sha: sha.slice(0, shaLengthToDisplay),
+		author: {
+			name: commit.author?.name ?? null,
+			emailAddress: commit.author?.email ?? null,
+		},
+		committer: {
+			name: commit.committer?.name ?? null,
+			emailAddress: commit.committer?.email ?? null,
+		},
 		parents: parents.map((parent) => ({ sha: parent.sha })),
 		commitMessage: commit.message,
 	}

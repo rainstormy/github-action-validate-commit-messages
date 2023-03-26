@@ -1,31 +1,40 @@
 import type { RuleKey } from "+rules"
-import { ruleKeysConfigurationSchema } from "+rules"
+import {
+	ruleKeys as allAvailableRuleKeys,
+	ruleKeysConfigurationSchema,
+} from "+rules"
 import { count } from "+utilities"
 
 describe.each`
-	rawRuleKeys                                                                                                           | expectedRuleKeys
-	${"capitalised-subject-lines"}                                                                                        | ${["capitalised-subject-lines"]}
-	${"empty-line-after-subject-lines"}                                                                                   | ${["empty-line-after-subject-lines"]}
-	${"imperative-subject-lines"}                                                                                         | ${["imperative-subject-lines"]}
-	${"issue-references-in-subject-lines"}                                                                                | ${["issue-references-in-subject-lines"]}
-	${"limit-length-of-body-lines"}                                                                                       | ${["limit-length-of-body-lines"]}
-	${"limit-length-of-subject-lines"}                                                                                    | ${["limit-length-of-subject-lines"]}
-	${",multi-word-subject-lines "}                                                                                       | ${["multi-word-subject-lines"]}
-	${"no-co-authors"}                                                                                                    | ${["no-co-authors"]}
-	${"    no-unexpected-whitespace ,, "}                                                                                 | ${["no-unexpected-whitespace"]}
-	${" no-merge-commits  "}                                                                                              | ${["no-merge-commits"]}
-	${",,,no-revert-revert-commits"}                                                                                      | ${["no-revert-revert-commits"]}
-	${"no-squash-commits,  "}                                                                                             | ${["no-squash-commits"]}
-	${"   no-trailing-punctuation-in-subject-lines ,"}                                                                    | ${["no-trailing-punctuation-in-subject-lines"]}
-	${"imperative-subject-lines,capitalised-subject-lines , no-squash-commits"}                                           | ${["imperative-subject-lines", "capitalised-subject-lines", "no-squash-commits"]}
-	${"limit-length-of-body-lines,empty-line-after-subject-lines,limit-length-of-subject-lines,no-unexpected-whitespace"} | ${["limit-length-of-body-lines", "empty-line-after-subject-lines", "limit-length-of-subject-lines", "no-unexpected-whitespace"]}
-	${"capitalised-subject-lines,empty-line-after-subject-lines ,no-merge-commits, no-squash-commits"}                    | ${["capitalised-subject-lines", "empty-line-after-subject-lines", "no-merge-commits", "no-squash-commits"]}
-	${"no-co-authors, no-merge-commits"}                                                                                  | ${["no-co-authors", "no-merge-commits"]}
-	${"no-unexpected-whitespace, imperative-subject-lines "}                                                              | ${["no-unexpected-whitespace", "imperative-subject-lines"]}
-	${"no-trailing-punctuation-in-subject-lines,, no-merge-commits, no-squash-commits"}                                   | ${["no-trailing-punctuation-in-subject-lines", "no-merge-commits", "no-squash-commits"]}
-	${"issue-references-in-subject-lines,multi-word-subject-lines, capitalised-subject-lines"}                            | ${["issue-references-in-subject-lines", "multi-word-subject-lines", "capitalised-subject-lines"]}
-	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "}                      | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
-	${",multi-word-subject-lines ,no-revert-revert-commits"}                                                              | ${["multi-word-subject-lines", "no-revert-revert-commits"]}
+	rawRuleKeys                                                                                                                                 | expectedRuleKeys
+	${"acknowledged-author-email-addresses"}                                                                                                    | ${["acknowledged-author-email-addresses"]}
+	${"acknowledged-author-names"}                                                                                                              | ${["acknowledged-author-names"]}
+	${"acknowledged-committer-email-addresses"}                                                                                                 | ${["acknowledged-committer-email-addresses"]}
+	${"acknowledged-committer-names"}                                                                                                           | ${["acknowledged-committer-names"]}
+	${"capitalised-subject-lines"}                                                                                                              | ${["capitalised-subject-lines"]}
+	${"empty-line-after-subject-lines"}                                                                                                         | ${["empty-line-after-subject-lines"]}
+	${"imperative-subject-lines"}                                                                                                               | ${["imperative-subject-lines"]}
+	${"issue-references-in-subject-lines"}                                                                                                      | ${["issue-references-in-subject-lines"]}
+	${"limit-length-of-body-lines"}                                                                                                             | ${["limit-length-of-body-lines"]}
+	${"limit-length-of-subject-lines"}                                                                                                          | ${["limit-length-of-subject-lines"]}
+	${",multi-word-subject-lines "}                                                                                                             | ${["multi-word-subject-lines"]}
+	${"no-co-authors"}                                                                                                                          | ${["no-co-authors"]}
+	${"    no-unexpected-whitespace ,, "}                                                                                                       | ${["no-unexpected-whitespace"]}
+	${" no-merge-commits  "}                                                                                                                    | ${["no-merge-commits"]}
+	${",,,no-revert-revert-commits"}                                                                                                            | ${["no-revert-revert-commits"]}
+	${"no-squash-commits,  "}                                                                                                                   | ${["no-squash-commits"]}
+	${"   no-trailing-punctuation-in-subject-lines ,"}                                                                                          | ${["no-trailing-punctuation-in-subject-lines"]}
+	${"acknowledged-author-email-addresses, acknowledged-committer-email-addresses, acknowledged-author-names, acknowledged-committer-names, "} | ${["acknowledged-author-email-addresses", "acknowledged-committer-email-addresses", "acknowledged-author-names", "acknowledged-committer-names"]}
+	${"imperative-subject-lines,capitalised-subject-lines , no-squash-commits"}                                                                 | ${["imperative-subject-lines", "capitalised-subject-lines", "no-squash-commits"]}
+	${"limit-length-of-body-lines,empty-line-after-subject-lines,limit-length-of-subject-lines,no-unexpected-whitespace"}                       | ${["limit-length-of-body-lines", "empty-line-after-subject-lines", "limit-length-of-subject-lines", "no-unexpected-whitespace"]}
+	${"capitalised-subject-lines,empty-line-after-subject-lines ,no-merge-commits, no-squash-commits"}                                          | ${["capitalised-subject-lines", "empty-line-after-subject-lines", "no-merge-commits", "no-squash-commits"]}
+	${"no-co-authors, no-merge-commits"}                                                                                                        | ${["no-co-authors", "no-merge-commits"]}
+	${"no-unexpected-whitespace, imperative-subject-lines "}                                                                                    | ${["no-unexpected-whitespace", "imperative-subject-lines"]}
+	${"no-trailing-punctuation-in-subject-lines,, no-merge-commits, no-squash-commits"}                                                         | ${["no-trailing-punctuation-in-subject-lines", "no-merge-commits", "no-squash-commits"]}
+	${"issue-references-in-subject-lines,multi-word-subject-lines, capitalised-subject-lines"}                                                  | ${["issue-references-in-subject-lines", "multi-word-subject-lines", "capitalised-subject-lines"]}
+	${",, no-squash-commits,capitalised-subject-lines , no-trailing-punctuation-in-subject-lines  "}                                            | ${["no-squash-commits", "capitalised-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
+	${",multi-word-subject-lines ,no-revert-revert-commits"}                                                                                    | ${["multi-word-subject-lines", "no-revert-revert-commits"]}
+	${allAvailableRuleKeys.join(",")}                                                                                                           | ${allAvailableRuleKeys}
 `(
 	"a ruleset from a valid string of $rawRuleKeys",
 	(testRow: {

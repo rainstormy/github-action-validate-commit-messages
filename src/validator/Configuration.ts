@@ -1,4 +1,8 @@
 import {
+	acknowledgedAuthorEmailAddressesConfigurationSchema,
+	acknowledgedAuthorNamesConfigurationSchema,
+	acknowledgedCommitterEmailAddressesConfigurationSchema,
+	acknowledgedCommitterNamesConfigurationSchema,
 	imperativeSubjectLinesConfigurationSchema,
 	issueReferencesInSubjectLinesConfigurationSchema,
 	limitLengthOfBodyLinesConfigurationSchema,
@@ -11,6 +15,12 @@ import { z } from "zod"
 
 const configurationSchema = z.object({
 	ruleKeys: ruleKeysConfigurationSchema,
+	acknowledgedAuthorEmailAddresses:
+		acknowledgedAuthorEmailAddressesConfigurationSchema,
+	acknowledgedAuthorNames: acknowledgedAuthorNamesConfigurationSchema,
+	acknowledgedCommitterEmailAddresses:
+		acknowledgedCommitterEmailAddressesConfigurationSchema,
+	acknowledgedCommitterNames: acknowledgedCommitterNamesConfigurationSchema,
 	imperativeSubjectLines: imperativeSubjectLinesConfigurationSchema,
 	issueReferencesInSubjectLines:
 		issueReferencesInSubjectLinesConfigurationSchema,

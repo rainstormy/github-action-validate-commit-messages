@@ -1,6 +1,10 @@
 import type { Commit, CommitRefiner } from "+rules"
 
 export const ruleKeys = [
+	"acknowledged-author-email-addresses",
+	"acknowledged-author-names",
+	"acknowledged-committer-email-addresses",
+	"acknowledged-committer-names",
 	"capitalised-subject-lines",
 	"empty-line-after-subject-lines",
 	"imperative-subject-lines",

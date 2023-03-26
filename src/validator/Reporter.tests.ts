@@ -5,6 +5,8 @@ import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	dummyJiraStyleIssueReferencesConfiguration,
+	dummyLegendaryCompanyEmailAddressesAndFourLetterNamesConfiguration,
+	dummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
 	instructiveReporter,
 	validatorFrom,
 } from "+validator"
@@ -635,6 +637,435 @@ Please consolidate the squash commit:
 
     Rebase interactively to combine the commit with the original one.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
+			)
+		})
+	})
+})
+
+describe("when the configuration overrides 'acknowledged-author-email-addresses--patterns' and 'acknowledged-committer-email-addresses--patterns' with GitHub-noreply or fictive company email addresses and 'acknowledged-author-names--patterns' and 'acknowledged-committer-names--patterns' with a two-word or three-letter requirement", () => {
+	const validate = validateInstructionsFrom(
+		dummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
+	)
+
+	describe("a report generated from a valid commit and a commit with a bad author email address", () => {
+		const report = validate([
+			dummyCommit({
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Make the program act like a clown",
+			}),
+			dummyCommit({
+				sha: "0ff1ce",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "claus@santasworkshop.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Apply strawberry jam to make the code sweeter",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use an acknowledged author email address:
+    0ff1ce Apply strawberry jam to make the code sweeter
+
+    Edit the commit to change the email address of its author.
+    Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid author email address patterns:
+    \\d+\\+.+@users\\.noreply\\.github\\.com
+    .+@fictivecompany\\.com`,
+			)
+		})
+	})
+
+	describe("a report generated from two commits with bad author email addresses", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "600d1dea",
+				author: {
+					name: "Easter Bunny",
+					emailAddress: "bunny@theeastercompany.com",
+				},
+				committer: {
+					name: "Easter Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				subjectLine: "Hunt down the bugs",
+			}),
+			dummyCommit({
+				sha: "bad1dea",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "claus@santasworkshop.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Refactor the taxi module",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use acknowledged author email addresses:
+    600d1dea Hunt down the bugs
+    bad1dea Refactor the taxi module
+
+    Edit each commit to change the email address of its author.
+    Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid author email address patterns:
+    \\d+\\+.+@users\\.noreply\\.github\\.com
+    .+@fictivecompany\\.com`,
+			)
+		})
+	})
+
+	describe("a report generated from a valid commit and a commit with a bad author name", () => {
+		const report = validate([
+			dummyCommit({
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Make the program act like a clown",
+			}),
+			dummyCommit({
+				sha: "0ff1ce",
+				author: {
+					name: "Santa",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Apply strawberry jam to make the code sweeter",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use an acknowledged author name:
+    0ff1ce Apply strawberry jam to make the code sweeter
+
+    Edit the commit to change the name of its author.
+    Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid author name patterns:
+    .+\\s.+
+    \\w{3}`,
+			)
+		})
+	})
+
+	describe("a report generated from two commits with bad author names", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "600d1dea",
+				author: {
+					name: "Easter-Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				committer: {
+					name: "Easter Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				subjectLine: "Hunt down the bugs",
+			}),
+			dummyCommit({
+				sha: "bad1dea",
+				author: {
+					name: "Santa-Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Refactor the taxi module",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use acknowledged author names:
+    600d1dea Hunt down the bugs
+    bad1dea Refactor the taxi module
+
+    Edit each commit to change the name of its author.
+    Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid author name patterns:
+    .+\\s.+
+    \\w{3}`,
+			)
+		})
+	})
+
+	describe("a report generated from a valid commit and a commit with a bad committer email address", () => {
+		const report = validate([
+			dummyCommit({
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Fix this confusing plate of spaghetti",
+			}),
+			dummyCommit({
+				sha: "badc0de",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "claus@santasworkshop.com",
+				},
+				subjectLine: "Release the robot butler",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use an acknowledged committer email address:
+    badc0de Release the robot butler
+
+    Edit the commit to change the email address of its committer.
+    Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid committer email address patterns:
+    \\d+\\+.+@users\\.noreply\\.github\\.com
+    .+@fictivecompany\\.com`,
+			)
+		})
+	})
+
+	describe("a report generated from two commits with bad committer email addresses", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "600d1dea",
+				author: {
+					name: "Easter Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				committer: {
+					name: "Easter Bunny",
+					emailAddress: "bunny@theeastercompany.com",
+				},
+				subjectLine: "Hunt down the bugs",
+			}),
+			dummyCommit({
+				sha: "bad1dea",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "claus@santasworkshop.com",
+				},
+				subjectLine: "Refactor the taxi module",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use acknowledged committer email addresses:
+    600d1dea Hunt down the bugs
+    bad1dea Refactor the taxi module
+
+    Edit each commit to change the email address of its committer.
+    Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid committer email address patterns:
+    \\d+\\+.+@users\\.noreply\\.github\\.com
+    .+@fictivecompany\\.com`,
+			)
+		})
+	})
+
+	describe("a report generated from a valid commit and a commit with a bad committer name", () => {
+		const report = validate([
+			dummyCommit({
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Fix this confusing plate of spaghetti",
+			}),
+			dummyCommit({
+				sha: "badc0de",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Release the robot butler",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use an acknowledged committer name:
+    badc0de Release the robot butler
+
+    Edit the commit to change the name of its committer.
+    Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid committer name patterns:
+    .+\\s.+
+    \\w{3}`,
+			)
+		})
+	})
+
+	describe("a report generated from two commits with bad committer names", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "600d1dea",
+				author: {
+					name: "Easter Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				committer: {
+					name: "Easter-Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				subjectLine: "Hunt down the bugs",
+			}),
+			dummyCommit({
+				sha: "bad1dea",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa-Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Refactor the taxi module",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toBe(
+				`Please use acknowledged committer names:
+    600d1dea Hunt down the bugs
+    bad1dea Refactor the taxi module
+
+    Edit each commit to change the name of its committer.
+    Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid committer name patterns:
+    .+\\s.+
+    \\w{3}`,
+			)
+		})
+	})
+})
+
+describe("when the configuration overrides 'acknowledged-author-email-addresses--patterns' and 'acknowledged-committer-email-addresses--patterns' with legendary company email addresses and 'acknowledged-author-names--patterns' and 'acknowledged-committer-names--patterns' with a four-letter requirement", () => {
+	const validate = validateInstructionsFrom(
+		dummyLegendaryCompanyEmailAddressesAndFourLetterNamesConfiguration,
+	)
+
+	describe("a report generated from two commits with bad author email addresses and names and bad committer email addresses and names", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "600d1dea",
+				author: {
+					name: "Easter Bunny",
+					emailAddress: "45678901+easterbunny@users.noreply.github.com",
+				},
+				committer: {
+					name: "GitHub",
+					emailAddress: "noreply@github.com",
+				},
+				subjectLine: "Subscribe to the service",
+			}),
+			dummyCommit({
+				sha: "bad1dea",
+				author: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				committer: {
+					name: "Santa Claus",
+					emailAddress: "12345678+santaclaus@users.noreply.github.com",
+				},
+				subjectLine: "Update the dependencies",
+			}),
+		])
+
+		it("contains a series of instructions on how to resolve the violated rules", () => {
+			expect(report).toBe(
+				`Please use acknowledged author email addresses:
+    600d1dea Subscribe to the service
+    bad1dea Update the dependencies
+
+    Edit each commit to change the email address of its author.
+    Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid author email address patterns:
+    .+@thelegendary\\.com
+
+Please use acknowledged author names:
+    600d1dea Subscribe to the service
+    bad1dea Update the dependencies
+
+    Edit each commit to change the name of its author.
+    Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid author name patterns:
+    \\w{4}
+
+Please use acknowledged committer email addresses:
+    600d1dea Subscribe to the service
+    bad1dea Update the dependencies
+
+    Edit each commit to change the email address of its committer.
+    Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid committer email address patterns:
+    .+@thelegendary\\.com
+
+Please use acknowledged committer names:
+    600d1dea Subscribe to the service
+    bad1dea Update the dependencies
+
+    Edit each commit to change the name of its committer.
+    Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+    Valid committer name patterns:
+    \\w{4}`,
 			)
 		})
 	})
