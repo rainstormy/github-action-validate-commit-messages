@@ -32,11 +32,14 @@ describe("when the configuration has default settings", () => {
 		${"never give up!!"}                                                        | ${["capitalised-subject-lines", "imperative-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"Finally..."}                                                             | ${["imperative-subject-lines", "multi-word-subject-lines", "no-trailing-punctuation-in-subject-lines"]}
 		${"fixup! Resolve a bug that thought it was a feature"}                     | ${["no-squash-commits"]}
+		${"Fixup! Resolve a bug that thought it was a feature"}                     | ${["imperative-subject-lines"]}
 		${"fixup!  Added some extra love to the code"}                              | ${["imperative-subject-lines", "no-squash-commits", "no-unexpected-whitespace"]}
 		${"fixup! fixup! Fix this confusing plate of spaghetti"}                    | ${["no-squash-commits"]}
 		${"amend!Apply strawberry jam to make the code sweeter"}                    | ${["no-squash-commits"]}
+		${"Amend!Apply strawberry jam to make the code sweeter"}                    | ${["imperative-subject-lines", "limit-length-of-subject-lines"]}
 		${"amend! Solved the problem"}                                              | ${["imperative-subject-lines", "no-squash-commits"]}
 		${"squash!Make the formatter happy again :)"}                               | ${["no-squash-commits"]}
+		${"Squash!Make the formatter happy again :)"}                               | ${["imperative-subject-lines"]}
 		${"squash!   Organise the bookshelf"}                                       | ${["no-squash-commits", "no-unexpected-whitespace"]}
 		${"Make the commit scream fixup! again"}                                    | ${[]}
 		${"Bugfix"}                                                                 | ${["imperative-subject-lines", "multi-word-subject-lines"]}
@@ -266,6 +269,38 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 
 	describe.each`
 		subjectLine               | expectedViolatedRuleKeys
+		${"Chatify the module"}   | ${[]}
+		${"Deckenize the module"} | ${["imperative-subject-lines"]}
+		${"chatify the module"}   | ${["capitalised-subject-lines"]}
+		${"deckenize the module"} | ${["capitalised-subject-lines", "imperative-subject-lines"]}
+	`(
+		"a commit with a subject line of $subjectLine",
+		(testRow: {
+			readonly subjectLine: string
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLine, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+})
+
+describe("when the configuration overrides 'imperative-subject-lines--whitelist' with 'Chatify' (capitalised)", () => {
+	const validate = validateViolatedRulesFrom({
+		...dummyDefaultConfiguration,
+		imperativeSubjectLines: {
+			whitelist: ["Chatify"],
+		},
+	})
+
+	describe.each`
+		subjectLine               | expectedViolatedRuleKeys
+		${"Chatify the module"}   | ${[]}
+		${"Deckenize the module"} | ${["imperative-subject-lines"]}
 		${"chatify the module"}   | ${["capitalised-subject-lines"]}
 		${"deckenize the module"} | ${["capitalised-subject-lines", "imperative-subject-lines"]}
 	`(

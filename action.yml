@@ -13,7 +13,7 @@ inputs:
     required: false
     default: ^\b$
   acknowledged-author-names--patterns:
-    description: A space-separated list of regular expressions for names of commit authors to be accepted by `acknowledged-author-names`, e.g. `.+\s.+` for names of at least two words.
+    description: A space-separated list of regular expressions for names of commit authors to be accepted by `acknowledged-author-names`, e.g. `\p{Lu}.*\s.+` for names that have at least two words where the first one starts with an uppercase letter.
     required: false
     default: ^\b$
   acknowledged-committer-email-addresses--patterns:
@@ -21,11 +21,11 @@ inputs:
     required: false
     default: ^\b$
   acknowledged-committer-names--patterns:
-    description: A space-separated list of regular expressions for names of committers to be accepted by `acknowledged-committer-names`, e.g. `.+\s.+` for names of at least two words.
+    description: A space-separated list of regular expressions for names of committers to be accepted by `acknowledged-committer-names`, e.g. `\p{Lu}.*\s.+` for names that have at least two words where the first one starts with an uppercase letter.
     required: false
     default: ^\b$
   imperative-subject-lines--whitelist:
-    description: A comma-separated list of additional words to be accepted by `imperative-subject-lines`.
+    description: A comma-separated, case-insensitive list of additional words to be accepted by `imperative-subject-lines`.
     required: false
   issue-references-in-subject-lines--allowed-positions:
     description: A comma-separated list of positions where the issue reference is allowed to appear in the subject line to be enforced by `issue-reference-in-subject-lines`. Valid positions are `as-prefix` and `as-suffix`.
@@ -44,11 +44,11 @@ inputs:
     required: false
     default: "50"
   no-squash-commits--disallowed-prefixes:
-    description: A comma-separated list of subject line prefixes to be rejected by `no-squash-commits`.
+    description: A comma-separated, case-sensitive list of subject line prefixes to be rejected by `no-squash-commits`.
     required: false
     default: amend!,fixup!,squash!
   no-trailing-punctuation-in-subject-lines--whitelist:
-    description: A space-separated list of punctuation marks to be ignored by `no-trailing-punctuation-in-subject-lines`.
+    description: A space-separated list of punctuation characters to be ignored by `no-trailing-punctuation-in-subject-lines`.
     required: false
 runs:
   using: node16
