@@ -140,20 +140,15 @@ const eslintConfig = [
 					],
 				},
 			],
-			"functional/no-classes": "off",
-			"functional/no-conditional-statements": [
-				"error",
-				{
-					allowReturningBranches: true,
-				},
-			],
-			"functional/no-expression-statements": "off", // This rule would have disallowed class member assignments.
+			"functional/no-classes": "error",
+			"functional/no-conditional-statements": "off", // This rule would have disallowed side effects which are sometimes inevitable when interoperating with third-parties.
+			"functional/no-expression-statements": "off", // This rule would have disallowed side effects which are sometimes inevitable when interoperating with third-parties.
 			"functional/no-let": "error",
-			"functional/no-loop-statements": "error",
+			"functional/no-loop-statements": "off", // Not applicable with `unicorn/no-array-for-each`.
 			"functional/no-mixed-type": "off", // This rule would have disallowed render props in components.
 			"functional/no-promise-reject": "off",
 			"functional/no-return-void": "off", // This rule would have disallowed event handlers in components.
-			"functional/no-this-expressions": "off", // This rule would effectively have disallowed the use of classes.
+			"functional/no-this-expressions": "error",
 			"functional/no-throw-statement": "off", // This rule would have disallowed throwing exceptions to indicate programming errors.
 			"functional/no-try-statement": "off", // This rule would have disallowed interoperability with browser APIs and third-party libraries that throw exceptions.
 			"functional/prefer-immutable-types": "off", // For now, this rule is disabled in favour of the deprecated `functional/prefer-readonly-type` which provides better feedback.
@@ -270,7 +265,7 @@ const eslintConfig = [
 			"no-loss-of-precision": "off", // Overridden by `typescript/no-loss-of-precision`.
 			"no-magic-numbers": "off", // Overridden by `typescript/no-magic-numbers`.
 			"no-misleading-character-class": "error",
-			"no-mixed-operators": "error",
+			"no-mixed-operators": "off", // Not applicable with Prettier.
 			"no-mixed-spaces-and-tabs": "off", // Not applicable with Prettier.
 			"no-multi-assign": "error",
 			"no-multi-spaces": "off", // Not applicable with Prettier.
@@ -324,7 +319,7 @@ const eslintConfig = [
 			"no-undef": "error",
 			"no-undef-init": "off", // Not applicable with `init-declarations`.
 			"no-undefined": "off",
-			"no-underscore-dangle": "error",
+			"no-underscore-dangle": "off", // Redundant with `typescript/naming-convention`.
 			"no-unexpected-multiline": "error",
 			"no-unmodified-loop-condition": "error",
 			"no-unneeded-ternary": "error",
@@ -642,9 +637,7 @@ const eslintConfig = [
 			"unicorn/import-style": [
 				"error",
 				{
-					styles: {
-						clsx: { default: false, named: true },
-					},
+					styles: {},
 				},
 			],
 			"unicorn/new-for-builtins": "error",
@@ -664,7 +657,7 @@ const eslintConfig = [
 			"unicorn/no-invalid-remove-event-listener": "error",
 			"unicorn/no-keyword-prefix": "off",
 			"unicorn/no-lonely-if": "error",
-			"unicorn/no-negated-condition": "error",
+			"unicorn/no-negated-condition": "off", // This rule would have disallowed non-null checks, e.g. `if (value !== null) { ... }`.
 			"unicorn/no-nested-ternary": "off", // Not applicable with Prettier.
 			"unicorn/no-new-array": "error",
 			"unicorn/no-new-buffer": "error",
@@ -744,9 +737,13 @@ const eslintConfig = [
 				{
 					checkProperties: true,
 					ignore: [
+						"^.*[aA]rg[s]?",
 						"^.*[dD]ev[s]?",
 						"^.*[dD]ir[s]?",
+						"^.*[dD]oc[s]?",
 						"^.*[eE]nv[s]?",
+						"^.*[lL]ib[s]?",
+						"^.*[pP]aram[s]?",
 						"^.*[pP]rop[s]?",
 						"^.*[rR]ef[s]?",
 						"^.*[vV]ar[s]?",
@@ -780,18 +777,6 @@ const eslintConfig = [
 			"wrap-regex": "off", // Not applicable with Prettier.
 			"yield-star-spacing": "off", // Not applicable with Prettier.
 			yoda: ["error", "never"],
-		},
-	},
-	{
-		files: ["**/*.config.+(cjs|js|jsx|mjs|ts|tsx)"],
-		rules: {
-			"unicorn/prevent-abbreviations": [
-				"error",
-				{
-					checkProperties: true,
-					ignore: ["^.*[dD]ir[s]?", "^.*[lL]ib[s]?", "^.*[vV]ar[s]?"],
-				},
-			],
 		},
 	},
 	{
@@ -881,6 +866,39 @@ const eslintConfig = [
 			"**/*.+(fakes|dummies|mocks|spies|stubs|stories|tests).+(cjs|js|jsx|mjs|ts|tsx)",
 		],
 		rules: {
+			"typescript/naming-convention": [
+				"error",
+				{
+					selector: "variableLike",
+					format: [
+						"strictCamelCase", // Default.
+						"PascalCase", // Components.
+					],
+					leadingUnderscore: "allow",
+				},
+				{
+					selector: "variable",
+					types: ["boolean"],
+					format: ["PascalCase"],
+					prefix: ["has", "is"],
+				},
+				{
+					selector: "property",
+					format: [
+						"strictCamelCase", // Default.
+						"PascalCase", // Components.
+					],
+					leadingUnderscore: "forbid",
+				},
+				{
+					selector: "objectLiteralProperty",
+					format: null, // Allows keys with special formatting such HTTP headers etc.
+				},
+				{
+					selector: "typeLike",
+					format: ["PascalCase"],
+				},
+			],
 			"typescript/no-magic-numbers": "off", // This rule would have disallowed magic numbers in test data.
 			"typescript/no-non-null-assertion": "off", // This rule would have disallowed non-null assertions in test data.
 			"unicorn/numeric-separators-style": "off", // This rule would have disallowed article ids and Unix epoch timestamps in test data.
