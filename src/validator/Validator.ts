@@ -26,19 +26,19 @@ import type {
 	Reporter,
 } from "+validator"
 
-export type Validator = <Report>(
+export type Validator = <Result>(
 	rawCommits: ReadonlyArray<RawCommit>,
-	reporter: Reporter<Report>,
-) => Report
+	reporter: Reporter<Result>,
+) => ReadonlyArray<Result>
 
 export function validatorFrom(configuration: Configuration): Validator {
 	const rules: ReadonlyArray<Rule> = rulesFrom(configuration)
 	const refineCommit = commitRefinerFrom(rules)
 
-	return <Report>(
+	return <Result>(
 		rawCommits: ReadonlyArray<RawCommit>,
-		makeReport: Reporter<Report>,
-	): Report => {
+		makeReport: Reporter<Result>,
+	): ReadonlyArray<Result> => {
 		const refinedCommits = rawCommits
 			.map((rawCommit) => parseCommit(rawCommit))
 			.map((parsedCommit) => refineCommit(parsedCommit))
@@ -60,45 +60,73 @@ export function validatorFrom(configuration: Configuration): Validator {
 }
 
 export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
-	const rules: Readonly<Record<RuleKey, Rule>> = {
-		"acknowledged-author-email-addresses": acknowledgedAuthorEmailAddresses(
-			configuration.acknowledgedAuthorEmailAddresses,
-		),
-		"acknowledged-author-names": acknowledgedAuthorNames(
-			configuration.acknowledgedAuthorNames,
-		),
-		"acknowledged-committer-email-addresses":
-			acknowledgedCommitterEmailAddresses(
-				configuration.acknowledgedCommitterEmailAddresses,
-			),
-		"acknowledged-committer-names": acknowledgedCommitterNames(
-			configuration.acknowledgedCommitterNames,
-		),
-		"capitalised-subject-lines": capitalisedSubjectLines(),
-		"empty-line-after-subject-lines": emptyLineAfterSubjectLines(),
-		"imperative-subject-lines": imperativeSubjectLines(
-			configuration.imperativeSubjectLines,
-		),
-		"issue-references-in-subject-lines": issueReferencesInSubjectLines(
-			configuration.issueReferencesInSubjectLines,
-		),
-		"limit-length-of-body-lines": limitLengthOfBodyLines(
-			configuration.limitLengthOfBodyLines,
-		),
-		"limit-length-of-subject-lines": limitLengthOfSubjectLines(
-			configuration.limitLengthOfSubjectLines,
-		),
-		"multi-word-subject-lines": multiWordSubjectLines(),
-		"no-co-authors": noCoAuthors(),
-		"no-squash-commits": noSquashCommits(configuration.noSquashCommits),
-		"no-merge-commits": noMergeCommits(),
-		"no-revert-revert-commits": noRevertRevertCommits(),
-		"no-trailing-punctuation-in-subject-lines":
-			noTrailingPunctuationInSubjectLines(
-				configuration.noTrailingPunctuationInSubjectLines,
-			),
-		"no-unexpected-whitespace": noUnexpectedWhitespace(),
+	function getRuleFromKey(ruleKey: RuleKey): Rule {
+		switch (ruleKey) {
+			case "acknowledged-author-email-addresses": {
+				return acknowledgedAuthorEmailAddresses(
+					configuration.acknowledgedAuthorEmailAddresses,
+				)
+			}
+			case "acknowledged-author-names": {
+				return acknowledgedAuthorNames(configuration.acknowledgedAuthorNames)
+			}
+			case "acknowledged-committer-email-addresses": {
+				return acknowledgedCommitterEmailAddresses(
+					configuration.acknowledgedCommitterEmailAddresses,
+				)
+			}
+			case "acknowledged-committer-names": {
+				return acknowledgedCommitterNames(
+					configuration.acknowledgedCommitterNames,
+				)
+			}
+			case "capitalised-subject-lines": {
+				return capitalisedSubjectLines()
+			}
+			case "empty-line-after-subject-lines": {
+				return emptyLineAfterSubjectLines()
+			}
+			case "imperative-subject-lines": {
+				return imperativeSubjectLines(configuration.imperativeSubjectLines)
+			}
+			case "issue-references-in-subject-lines": {
+				return issueReferencesInSubjectLines(
+					configuration.issueReferencesInSubjectLines,
+				)
+			}
+			case "limit-length-of-body-lines": {
+				return limitLengthOfBodyLines(configuration.limitLengthOfBodyLines)
+			}
+			case "limit-length-of-subject-lines": {
+				return limitLengthOfSubjectLines(
+					configuration.limitLengthOfSubjectLines,
+				)
+			}
+			case "multi-word-subject-lines": {
+				return multiWordSubjectLines()
+			}
+			case "no-co-authors": {
+				return noCoAuthors()
+			}
+			case "no-squash-commits": {
+				return noSquashCommits(configuration.noSquashCommits)
+			}
+			case "no-merge-commits": {
+				return noMergeCommits()
+			}
+			case "no-revert-revert-commits": {
+				return noRevertRevertCommits()
+			}
+			case "no-trailing-punctuation-in-subject-lines": {
+				return noTrailingPunctuationInSubjectLines(
+					configuration.noTrailingPunctuationInSubjectLines,
+				)
+			}
+			case "no-unexpected-whitespace": {
+				return noUnexpectedWhitespace()
+			}
+		}
 	}
 
-	return configuration.ruleKeys.map((ruleKey) => rules[ruleKey])
+	return configuration.ruleKeys.map((ruleKey) => getRuleFromKey(ruleKey))
 }

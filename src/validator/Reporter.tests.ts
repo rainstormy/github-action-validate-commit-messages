@@ -18,7 +18,7 @@ describe("when the configuration has default settings", () => {
 		const report = validate([])
 
 		it("is empty", () => {
-			expect(report).toBe("")
+			expect(report).toHaveLength(0)
 		})
 	})
 
@@ -32,7 +32,7 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("is empty", () => {
-			expect(report).toBe("")
+			expect(report).toHaveLength(0)
 		})
 	})
 
@@ -43,13 +43,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please capitalise the subject line:
     d15ea5e throw a tantrum
 
     Reword the commit message to make the foremost line start with an uppercase letter.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -60,14 +60,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please capitalise the subject lines:
     badd06 have fun
     c0ffee release the robot butler
 
     Reword each commit message to make the foremost line start with an uppercase letter.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -82,13 +82,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please separate the subject line from the message body with an empty line:
     0ff1ce Improve some stuff
 
     Reword the commit message to insert an empty line before the message body.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -107,14 +107,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please separate the subject lines from the message bodies with an empty line:
     badf00d Introduce a cool feature
     d06f00d Write unit tests
 
     Reword each commit message to insert an empty line before the message body.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -125,7 +125,7 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please start the subject line with a verb in the imperative mood:
     badf00d WIP for now
 
@@ -134,7 +134,7 @@ describe("when the configuration has default settings", () => {
 
     For example, instead of 'Added a feature', 'Formatting', 'It works', or 'Always validate',
     prefer 'Add a feature', 'Format the code', 'Make it work', or 'Do the validation every time'.`,
-			)
+			])
 		})
 	})
 
@@ -147,7 +147,7 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please start the subject lines with a verb in the imperative mood:
     badf00d Yet another fix
     d15ea5e Formatting again
@@ -159,7 +159,7 @@ describe("when the configuration has default settings", () => {
 
     For example, instead of 'Added a feature', 'Formatting', 'It works', or 'Always validate',
     prefer 'Add a feature', 'Format the code', 'Make it work', or 'Do the validation every time'.`,
-			)
+			])
 		})
 	})
 
@@ -174,13 +174,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please wrap long lines in the message body:
     c0ffee Ship to production
 
     Reword the commit message to keep each line in the message body within 72 characters.
     Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
-			)
+			])
 		})
 	})
 
@@ -199,14 +199,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please wrap long lines in the message bodies:
     d06f00d Install necessary dependencies
     badf00d Retrieve some exclusive data
 
     Reword each commit message to keep each line in the message body within 72 characters.
     Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
-			)
+			])
 		})
 	})
 
@@ -221,13 +221,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please keep the subject line concise:
     0ff1ce Ship the evaluation of ultra-rare objects to production
 
     Reword the commit message to keep the foremost line within 50 characters.
     Keeping the subject line short will help you preserve the readability of the commit history in various Git clients.`,
-			)
+			])
 		})
 	})
 
@@ -246,14 +246,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please keep the subject lines concise:
     d06f00d Install some extremely redundant heavyweight dependencies
     badf00d Retrieve data from the exclusive third-party service
 
     Reword each commit message to keep the foremost line within 50 characters.
     Keeping the subject lines short will help you preserve the readability of the commit history in various Git clients.`,
-			)
+			])
 		})
 	})
 
@@ -264,13 +264,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please include at least two words in the subject line:
     c0ffee Test
 
     Reword the commit message to make the foremost line contain at least two words.
     Providing more context in the commit message will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -281,14 +281,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please include at least two words in the subject lines:
     0ff1ce Fix
     c0ffee Update
 
     Reword each commit message to make the foremost line contain at least two words.
     Providing more context in the commit messages will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -303,13 +303,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid having co-authors in the commit:
     d06f00d Do some pair programming
 
     Reword the commit message to remove the 'Co-authored-by:' trailers in the message body.
     Removing the co-authors will help you preserve the authenticity of the commit, as co-authors are unable to sign commits.`,
-			)
+			])
 		})
 	})
 
@@ -328,14 +328,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid having co-authors in the commits:
     cafebabe Update src/main.ts
     cafed00d Do some mob programming
 
     Reword each commit message to remove the 'Co-authored-by:' trailers in the message body.
     Removing the co-authors will help you preserve the authenticity of the commits, as co-authors are unable to sign commits.`,
-			)
+			])
 		})
 	})
 
@@ -350,13 +350,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid the merge commit:
     d06f00d Merge branch 'master' into feature/robot-butler
 
     Undo the merge commit and rebase your branch onto the target branch instead.
     Avoiding merge commits will help you preserve the traceability of the commit history as well as the ability to rebase interactively.`,
-			)
+			])
 		})
 	})
 
@@ -375,14 +375,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid the merge commits:
     d06f00d Keep my branch up to date
     badf00d Merge branch 'master' into feature/robot-butler
 
     Undo the merge commits and rebase your branch onto the target branch instead.
     Avoiding merge commits will help you preserve the traceability of the commit history as well as the ability to rebase interactively.`,
-			)
+			])
 		})
 	})
 
@@ -396,13 +396,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please consolidate the revert of the revert commit:
     c0ffee Revert "Revert "Repair the soft ice machine""
 
     Undo the revert of the revert commit and re-apply the original commit.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -419,14 +419,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please consolidate the reverts of the revert commits:
     d06f00d Revert "Revert "Repair the soft ice machine""
     badf00d Revert "Revert "Revert "Repair the soft ice machine"""
 
     Undo the reverts of the revert commits and re-apply the original commits.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -440,13 +440,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please consolidate the squash commit:
     0ff1ce squash! Make the formatter happy again :)
 
     Rebase interactively to combine the commit with the original one.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -467,7 +467,7 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please consolidate the squash commits:
     0ff1ce fixup! Make the program act like a clown
     d06f00d amend! Apply strawberry jam to make the code sweeter
@@ -475,7 +475,7 @@ describe("when the configuration has default settings", () => {
 
     Rebase interactively to combine the commits with the original ones.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -489,13 +489,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid trailing punctuation in the subject line:
     0ff1ce Make the program act like a clown.
 
     Reword the commit message to delete the punctuation characters at the end of the foremost line.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -512,14 +512,14 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid trailing punctuation in the subject lines:
     cafebabe Begin the implementation with more to come+
     cafed00d Wonder if this will work?
 
     Reword each commit message to delete the punctuation characters at the end of the foremost line.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -530,13 +530,13 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid unexpected whitespace:
     d06f00d Do it right this  time
 
     Reword the commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -552,7 +552,7 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid unexpected whitespace:
     0ff1ce Do it over
     badf00d Bring it on
@@ -560,7 +560,7 @@ describe("when the configuration has default settings", () => {
 
     Reword each commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -587,20 +587,20 @@ describe("when the configuration has default settings", () => {
 		])
 
 		it("contains a series of instructions on how to resolve the violated rules", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please avoid the merge commit:
     d06f00d Keep my branch up to date
 
     Undo the merge commit and rebase your branch onto the target branch instead.
-    Avoiding merge commits will help you preserve the traceability of the commit history as well as the ability to rebase interactively.
+    Avoiding merge commits will help you preserve the traceability of the commit history as well as the ability to rebase interactively.`,
 
-Please consolidate the squash commits:
+				`Please consolidate the squash commits:
     cafed00d fixup! Resolve a bug that thought it was a feature
     0ff1ce amend! Add some extra love to the code
 
     Rebase interactively to combine the commits with the original ones.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 
@@ -610,34 +610,34 @@ Please consolidate the squash commits:
 		])
 
 		it("contains a series of instructions on how to resolve the violated rules", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please capitalise the subject line:
     d15ea5e squash! formatting
 
     Reword the commit message to make the foremost line start with an uppercase letter.
-    Standardising the commit message format will help you preserve the readability of the commit history.
+    Standardising the commit message format will help you preserve the readability of the commit history.`,
 
-Please start the subject line with a verb in the imperative mood:
+				`Please start the subject line with a verb in the imperative mood:
     d15ea5e squash! formatting
 
     Reword the commit message to make the foremost line start with a verb that reads like an instruction.
     Standardising the commit message format will help you preserve the readability of the commit history.
 
     For example, instead of 'Added a feature', 'Formatting', 'It works', or 'Always validate',
-    prefer 'Add a feature', 'Format the code', 'Make it work', or 'Do the validation every time'.
+    prefer 'Add a feature', 'Format the code', 'Make it work', or 'Do the validation every time'.`,
 
-Please include at least two words in the subject line:
+				`Please include at least two words in the subject line:
     d15ea5e squash! formatting
 
     Reword the commit message to make the foremost line contain at least two words.
-    Providing more context in the commit message will help you preserve the traceability of the commit history.
+    Providing more context in the commit message will help you preserve the traceability of the commit history.`,
 
-Please consolidate the squash commit:
+				`Please consolidate the squash commit:
     d15ea5e squash! formatting
 
     Rebase interactively to combine the commit with the original one.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
-			)
+			])
 		})
 	})
 })
@@ -675,7 +675,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use an acknowledged author email address:
     0ff1ce Apply strawberry jam to make the code sweeter
 
@@ -685,7 +685,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid author email address patterns:
     \\d+\\+.+@users\\.noreply\\.github\\.com
     .+@fictivecompany\\.com`,
-			)
+			])
 		})
 	})
 
@@ -718,7 +718,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use acknowledged author email addresses:
     600d1dea Hunt down the bugs
     bad1dea Refactor the taxi module
@@ -729,7 +729,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid author email address patterns:
     \\d+\\+.+@users\\.noreply\\.github\\.com
     .+@fictivecompany\\.com`,
-			)
+			])
 		})
 	})
 
@@ -761,7 +761,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use an acknowledged author name:
     0ff1ce Apply strawberry jam to make the code sweeter
 
@@ -771,7 +771,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid author name patterns:
     .+\\s.+
     \\w{3}`,
-			)
+			])
 		})
 	})
 
@@ -804,7 +804,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use acknowledged author names:
     600d1dea Hunt down the bugs
     bad1dea Refactor the taxi module
@@ -815,7 +815,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid author name patterns:
     .+\\s.+
     \\w{3}`,
-			)
+			])
 		})
 	})
 
@@ -847,7 +847,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use an acknowledged committer email address:
     badc0de Release the robot butler
 
@@ -857,7 +857,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid committer email address patterns:
     \\d+\\+.+@users\\.noreply\\.github\\.com
     .+@fictivecompany\\.com`,
-			)
+			])
 		})
 	})
 
@@ -890,7 +890,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use acknowledged committer email addresses:
     600d1dea Hunt down the bugs
     bad1dea Refactor the taxi module
@@ -901,7 +901,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid committer email address patterns:
     \\d+\\+.+@users\\.noreply\\.github\\.com
     .+@fictivecompany\\.com`,
-			)
+			])
 		})
 	})
 
@@ -933,7 +933,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use an acknowledged committer name:
     badc0de Release the robot butler
 
@@ -943,7 +943,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid committer name patterns:
     .+\\s.+
     \\w{3}`,
-			)
+			])
 		})
 	})
 
@@ -976,7 +976,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use acknowledged committer names:
     600d1dea Hunt down the bugs
     bad1dea Refactor the taxi module
@@ -987,7 +987,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Valid committer name patterns:
     .+\\s.+
     \\w{3}`,
-			)
+			])
 		})
 	})
 })
@@ -1026,7 +1026,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		])
 
 		it("contains a series of instructions on how to resolve the violated rules", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please use acknowledged author email addresses:
     600d1dea Subscribe to the service
     bad1dea Update the dependencies
@@ -1035,9 +1035,9 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
 
     Valid author email address patterns:
-    .+@thelegendary\\.com
+    .+@thelegendary\\.com`,
 
-Please use acknowledged author names:
+				`Please use acknowledged author names:
     600d1dea Subscribe to the service
     bad1dea Update the dependencies
 
@@ -1045,9 +1045,9 @@ Please use acknowledged author names:
     Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
 
     Valid author name patterns:
-    \\w{4}
+    \\w{4}`,
 
-Please use acknowledged committer email addresses:
+				`Please use acknowledged committer email addresses:
     600d1dea Subscribe to the service
     bad1dea Update the dependencies
 
@@ -1055,9 +1055,9 @@ Please use acknowledged committer email addresses:
     Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
 
     Valid committer email address patterns:
-    .+@thelegendary\\.com
+    .+@thelegendary\\.com`,
 
-Please use acknowledged committer names:
+				`Please use acknowledged committer names:
     600d1dea Subscribe to the service
     bad1dea Update the dependencies
 
@@ -1066,7 +1066,7 @@ Please use acknowledged committer names:
 
     Valid committer name patterns:
     \\w{4}`,
-			)
+			])
 		})
 	})
 })
@@ -1086,7 +1086,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please include an issue reference at the start of the subject line:
     d06f00d Apply strawberry jam to make the code sweeter
 
@@ -1097,7 +1097,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
     \\(#[1-9][0-9]*\\)
     #[1-9][0-9]*:
     #[1-9][0-9]*`,
-			)
+			])
 		})
 	})
 
@@ -1111,7 +1111,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please include an issue reference at the start of the subject lines:
     cafebabe Update some dependencies
     cafed00d Resolve a bug that thought it was a feature
@@ -1123,7 +1123,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
     \\(#[1-9][0-9]*\\)
     #[1-9][0-9]*:
     #[1-9][0-9]*`,
-			)
+			])
 		})
 	})
 })
@@ -1145,7 +1145,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please include an issue reference at the start or the end of the subject line:
     d06f00d Apply strawberry jam to make the code sweeter
 
@@ -1155,7 +1155,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
     Valid issue reference patterns:
     \\(UNICORN-[1-9][0-9]*\\)
     UNICORN-[1-9][0-9]*`,
-			)
+			])
 		})
 	})
 
@@ -1169,7 +1169,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please include an issue reference at the start or the end of the subject lines:
     cafebabe Update some dependencies
     cafed00d Resolve a bug that thought it was a feature
@@ -1180,7 +1180,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
     Valid issue reference patterns:
     \\(UNICORN-[1-9][0-9]*\\)
     UNICORN-[1-9][0-9]*`,
-			)
+			])
 		})
 	})
 })
@@ -1207,20 +1207,20 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please wrap long lines in the message body:
     0ff1ce Investigate further
 
     Reword the commit message to keep each line in the message body within 32 characters.
-    Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.
+    Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
 
-Please keep the subject lines concise:
+				`Please keep the subject lines concise:
     0ff1ce Investigate further
     c0ffee Help fix the bug
 
     Reword each commit message to keep the foremost line within 1 character.
     Keeping the subject lines short will help you preserve the readability of the commit history in various Git clients.`,
-			)
+			])
 		})
 	})
 })
@@ -1243,20 +1243,20 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 		])
 
 		it("contains instructions on how to resolve the violated rule", () => {
-			expect(report).toBe(
+			expect(report).toStrictEqual([
 				`Please wrap long lines in the message body:
     0ff1ce Investigate further
 
     Reword the commit message to keep each line in the message body within 1 character.
     Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.`,
-			)
+			])
 		})
 	})
 })
 
 function validateInstructionsFrom(
 	configuration: Configuration,
-): (commits: ReadonlyArray<RawCommit>) => string {
+): (commits: ReadonlyArray<RawCommit>) => ReadonlyArray<string> {
 	return (commits) =>
 		validatorFrom(configuration)(commits, instructiveReporter(configuration))
 }

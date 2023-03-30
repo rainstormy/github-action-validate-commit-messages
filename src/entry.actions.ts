@@ -1,11 +1,10 @@
 import type { ActionResult } from "+github"
 import {
-	actionConfigurationMustBeValid,
-	allCommitsAreValid,
+	actionFailed,
+	actionSucceeded,
 	configurationFromInputs,
 	formatIssue,
 	getPullRequestFromApi,
-	someCommitsAreInvalid,
 } from "+github"
 import { instructiveReporter, validatorFrom } from "+validator"
 import core from "@actions/core"
@@ -13,9 +12,11 @@ import github from "@actions/github"
 
 run()
 	.then((actionResult) => {
-		// eslint-disable-next-line functional/no-conditional-statements -- This side effect is required by the GitHub Actions API.
-		if (actionResult.exitCode !== 0) {
-			core.setFailed(actionResult.errorMessage)
+		if (actionResult.exitCode === 1) {
+			for (const errorMessage of actionResult.errors) {
+				core.error(`${errorMessage}\n`)
+			}
+			core.setFailed("")
 		}
 	})
 	.catch((error) => {
@@ -28,28 +29,26 @@ async function run(): Promise<ActionResult> {
 	const pullRequestNumber = github.context.payload.pull_request?.number
 
 	if (pullRequestNumber === undefined) {
-		return actionConfigurationMustBeValid(
-			"This action must run on a pull request",
-		)
+		return actionFailed(["This action must run on a pull request"])
 	}
 
 	const configuration = configurationFromInputs()
 
 	if (!configuration.success) {
-		const formattedErrors = configuration.error.issues
-			.map((issue) => formatIssue(issue))
-			.join("\n")
+		const formattedErrors = configuration.error.issues.map((issue) =>
+			formatIssue(issue),
+		)
 
-		return actionConfigurationMustBeValid(formattedErrors)
+		return actionFailed(formattedErrors)
 	}
 
 	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
+	const reporter = instructiveReporter(configuration.data)
 	const validate = validatorFrom(configuration.data)
-	const report = validate(
-		pullRequest.rawCommits,
-		instructiveReporter(configuration.data),
-	)
+	const reportedErrors = validate(pullRequest.rawCommits, reporter)
 
-	return report === "" ? allCommitsAreValid() : someCommitsAreInvalid(report)
+	return reportedErrors.length === 0
+		? actionSucceeded()
+		: actionFailed(reportedErrors)
 }
