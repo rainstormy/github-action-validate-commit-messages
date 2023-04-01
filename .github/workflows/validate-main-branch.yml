@@ -1,0 +1,70 @@
+name: Validate the `main` branch
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  validate-types:
+    name: Type checking (TypeScript)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+      - name: Prepare Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18
+      - name: Install unplugged dependencies
+        run: yarn install
+      - name: Run the validation
+        run: yarn run validate.types
+
+  validate-lint:
+    name: Static program analysis (ESLint)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+      - name: Prepare Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18
+      - name: Install unplugged dependencies
+        run: yarn install
+      - name: Run the validation
+        run: yarn run validate.lint
+
+  validate-format:
+    name: Source code formatting (Prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+      - name: Prepare Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18
+      - name: Install unplugged dependencies
+        run: yarn install
+      - name: Run the validation
+        run: yarn run validate.format
+
+  validate-unit-tests:
+    name: Automated unit testing (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+      - name: Prepare Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18
+      - name: Install unplugged dependencies
+        run: yarn install
+      - name: Run the validation
+        run: yarn run validate.test

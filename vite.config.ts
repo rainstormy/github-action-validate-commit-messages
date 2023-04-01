@@ -11,7 +11,7 @@ const viteConfig = defineConfig(() => ({
 		lib: {
 			entry: inProjectDirectory("src/entry.actions.ts"),
 			formats: ["cjs"],
-			fileName: "index",
+			fileName: "entry.actions",
 		},
 		outDir: inProjectDirectory("release/"),
 		reportCompressedSize: false,
@@ -26,11 +26,10 @@ const viteConfig = defineConfig(() => ({
 	resolve: {
 		// The first alias takes precedence over the following ones.
 		alias: {
-			"+core/dummies": inProjectDirectory("src/core/dummies/index"),
-			"+core": inProjectDirectory("src/core/index"),
 			"+github": inProjectDirectory("src/github/index"),
 			"+rules": inProjectDirectory("src/rules/index"),
-			"+validation": inProjectDirectory("src/validation/index"),
+			"+utilities": inProjectDirectory("src/utilities/index"),
+			"+validator": inProjectDirectory("src/validator/index"),
 		},
 	},
 	test: {

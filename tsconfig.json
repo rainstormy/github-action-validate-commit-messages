@@ -17,11 +17,10 @@
 		"moduleResolution": "Node",
 		"noEmit": true,
 		"paths": {
-			"+core/dummies": ["./src/core/dummies/index"],
-			"+core": ["./src/core/index"],
 			"+github": ["./src/github/index"],
 			"+rules": ["./src/rules/index"],
-			"+validation": ["./src/validation/index"]
+			"+utilities": ["./src/utilities/index"],
+			"+validator": ["./src/validator/index"]
 		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,

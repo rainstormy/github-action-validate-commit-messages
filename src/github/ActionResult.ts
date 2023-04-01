@@ -1,34 +1,18 @@
-export type ActionResult =
-	| ActionConfigurationMustBeValid
-	| AllCommitsAreValid
-	| SomeCommitsAreInvalid
+export type ActionResult = ActionFailed | ActionSucceeded
 
-type ActionConfigurationMustBeValid = {
-	readonly exitCode: -1
-	readonly errorMessage: string
+type ActionFailed = {
+	readonly exitCode: 1
+	readonly errors: ReadonlyArray<string>
 }
 
-export function actionConfigurationMustBeValid(
-	errorMessage: string,
-): ActionConfigurationMustBeValid {
-	return { exitCode: -1, errorMessage }
-}
-
-type AllCommitsAreValid = {
+type ActionSucceeded = {
 	readonly exitCode: 0
 }
 
-export function allCommitsAreValid(): AllCommitsAreValid {
+export function actionSucceeded(): ActionSucceeded {
 	return { exitCode: 0 }
 }
 
-type SomeCommitsAreInvalid = {
-	readonly exitCode: 1
-	readonly errorMessage: string
-}
-
-export function someCommitsAreInvalid(
-	formattedReport: string,
-): SomeCommitsAreInvalid {
-	return { exitCode: 1, errorMessage: formattedReport }
+export function actionFailed(errors: ReadonlyArray<string>): ActionFailed {
+	return { exitCode: 1, errors }
 }

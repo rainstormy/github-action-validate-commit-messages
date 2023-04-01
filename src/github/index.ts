@@ -1,3 +1,3 @@
 export * from "./ActionResult"
-export * from "./FormattedReport"
+export * from "./InputParameters"
 export * from "./PullRequest"

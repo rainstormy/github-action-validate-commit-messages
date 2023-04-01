@@ -38,6 +38,12 @@
 		},
 		{
 			"type": "npm",
+			"script": "validate.format.nocache",
+			"problemMatcher": [],
+			"label": "validate.format.nocache"
+		},
+		{
+			"type": "npm",
 			"script": "validate.lint",
 			"problemMatcher": [],
 			"label": "validate.lint"
@@ -47,6 +53,12 @@
 			"script": "validate.lint.fix",
 			"problemMatcher": [],
 			"label": "validate.lint.fix"
+		},
+		{
+			"type": "npm",
+			"script": "validate.lint.nocache",
+			"problemMatcher": [],
+			"label": "validate.lint.nocache"
 		},
 		{
 			"type": "npm",

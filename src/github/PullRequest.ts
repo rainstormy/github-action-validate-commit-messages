@@ -1,46 +1,60 @@
-import type { Commit } from "+core"
-import { commitOf } from "+core"
+import type { RawCommit } from "+rules"
+import core from "@actions/core"
 import github from "@actions/github"
 import type { Endpoints } from "@octokit/types"
 
+type OctokitCommitDto =
+	Endpoints["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"]["response"]["data"][number]
+
 export type PullRequest = {
-	readonly commits: ReadonlyArray<Commit>
+	readonly rawCommits: ReadonlyArray<RawCommit>
 }
 
-type PullRequestFromApiProps = {
-	readonly githubToken: string
-	readonly pullRequestNumber: number
-}
-
-export async function pullRequestFromApi({
-	githubToken,
-	pullRequestNumber,
-}: PullRequestFromApiProps): Promise<PullRequest> {
+export async function getPullRequestFromApi(
+	pullRequestNumber: number,
+): Promise<PullRequest> {
 	const { owner, repo } = github.context.repo
-	const octokit = github.getOctokit(githubToken)
+	const octokit = getOctokit()
 
-	const commitsInPullRequest = await octokit.paginate(
+	const commitDtos = await octokit.paginate(
 		octokit.rest.pulls.listCommits,
 		{
 			owner,
 			repo,
 			pull_number: pullRequestNumber,
 		},
-		(response) => response.data.map((commit) => commitFromDto(commit)),
+		(response) => response.data,
 	)
 
-	return { commits: commitsInPullRequest }
+	return {
+		rawCommits: commitDtos.map((commit) => rawCommitFromDto(commit)),
+	}
+}
+
+function getOctokit(): ReturnType<typeof github.getOctokit> {
+	// The lexical scope of the GitHub token should be as small as possible to prevent leaks.
+	const githubToken = core.getInput("github-token", { required: true })
+	return github.getOctokit(githubToken)
 }
 
 const shaLengthToDisplay = 7
 
-function commitFromDto({ commit, parents, sha }: CommitDto): Commit {
-	return commitOf({
+function rawCommitFromDto({
+	commit,
+	parents,
+	sha,
+}: OctokitCommitDto): RawCommit {
+	return {
 		sha: sha.slice(0, shaLengthToDisplay),
-		commitMessage: commit.message,
+		author: {
+			name: commit.author?.name ?? null,
+			emailAddress: commit.author?.email ?? null,
+		},
+		committer: {
+			name: commit.committer?.name ?? null,
+			emailAddress: commit.committer?.email ?? null,
+		},
 		parents: parents.map((parent) => ({ sha: parent.sha })),
-	})
+		commitMessage: commit.message,
+	}
 }
-
-type CommitDto =
-	Endpoints["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"]["response"]["data"][number]

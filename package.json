@@ -6,12 +6,14 @@
 		"__setup.install-git-hooks__": "simple-git-hooks",
 		"validate": "concurrently \"yarn:validate.types\" \"yarn:validate.lint\" \"yarn:validate.format\" \"yarn:validate.test\" --group --names types,lint,format,test --prefix-colors #3178c6,#8080f2,#c596c7,#fcc72b",
 		"validate.fix": "yarn run validate.lint.fix && yarn run validate.format.fix",
-		"validate.format": "yarn run __validate.format.base__ --check --loglevel warn",
-		"validate.format.fix": "yarn run __validate.format.base__ --list-different --write",
-		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode --cache",
-		"validate.lint": "yarn run __validate.lint.base__",
-		"validate.lint.fix": "yarn run __validate.lint.base__ --fix",
-		"__validate.lint.base__": "eslint \"./**/*.{cjs,js,jsx,mjs,ts,tsx}\" --max-warnings 0 --cache",
+		"validate.format": "yarn run __validate.format.base__ --cache --check --loglevel warn",
+		"validate.format.fix": "yarn run __validate.format.base__ --cache --list-different --write",
+		"validate.format.nocache": "yarn run __validate.format.base__ --check --loglevel warn",
+		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode",
+		"validate.lint": "yarn run __validate.lint.base__ --cache",
+		"validate.lint.fix": "yarn run __validate.lint.base__ --cache --fix",
+		"validate.lint.nocache": "yarn run __validate.lint.base__",
+		"__validate.lint.base__": "eslint \"./**/*.{cjs,js,jsx,mjs,ts,tsx}\" --max-warnings 0",
 		"validate.types": "tsc",
 		"validate.test": "vitest run",
 		"validate.test.coverage": "vitest run --coverage",
@@ -24,12 +26,14 @@
 	"dependencies": {
 		"@actions/core": "1.10.0",
 		"@actions/github": "5.1.1",
-		"tslib": "2.5.0"
+		"tslib": "2.5.0",
+		"zod": "3.21.4"
 	},
 	"dependencies-comments": {
 		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
 		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
-		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`."
+		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.",
+		"zod": "Zod; a TypeScript-based data validation library."
 	},
 	"devDependencies": {
 		"@octokit/types": "9.0.0",

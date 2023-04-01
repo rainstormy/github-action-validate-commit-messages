@@ -3,135 +3,572 @@
 :source-highlighter: highlight.js
 :toc: preamble
 
-This repository implements a reusable GitHub Action that validates commit messages in pull requests on GitHub.
+This repository implements a reusable GitHub Action that validates commit messages in pull requests on GitHub to ensure that the commit messages meet certain standards and to remind you about squash commits that must be consolidated before you merge the pull request.
 
-CAUTION: All commands in this README document are to be executed from the project root directory (where this document resides).
+It checks the commits that are about to be delivered to the target branch.
+It does not check any commits outside the pull request such as existing commits that have already been merged to the target branch in a previous pull request.
 
-== Get Started
-This project uses the https://yarnpkg.com/features/zero-installs[zero-install feature] of the Yarn package manager.
-Upon cloning the Git repository, the `.yarn/cache` directory already contains a cache of the third-party dependencies, effectively replacing the usual `node_modules` directory.
+== Usage
+Define a GitHub Actions workflow that runs on pull requests:
 
-=== Install Node.js and Yarn
-* *macOS* and *Linux* users should install https://nodejs.org/en[Node.js] via https://github.com/nvm-sh/nvm[Node Version Manager] and opt for https://yarnpkg.com/getting-started/install[Yarn] via https://nodejs.org/api/corepack.html[Corepack]:
-+
-[source,shell]
+..github/workflows/validate-pull-requests.yml
+[source,yaml]
 ----
-$ curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-$ source ~/.bashrc
-$ nvm install --lts
-$ corepack enable yarn
-$ yarn run setup
-----
-
-* *Windows* users should install https://nodejs.org/en[Node.js] via https://github.com/microsoft/winget-cli[Windows Package Manager] and install https://yarnpkg.com/getting-started/install[Yarn] via npm (which is actually a workaround until Corepack supports Windows):
-+
-[source,shell]
-----
-$ winget install OpenJS.NodeJS.LTS
-$ npm install --global yarn
-$ yarn run setup
+name: Validate pull requests
+on: [ pull_request ]
+jobs:
+  validate-commit-messages:
+    name: Validate commit messages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate the commit messages
+        uses: rainstormy/github-action-validate-commit-messages@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          rules: 'no-merge-commits, no-squash-commits'
 ----
 
-=== Prepare Git
-. Generate an SSH key with the *Ed25519* algorithm, for example using https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent[ssh-keygen] or https://developer.1password.com/docs/ssh/manage-keys[1Password], and add it to the SSH agent on your computer.
-If you already have an SSH key on your computer, you may skip this step.
-+
-[source,shell,subs="+quotes,+replacements"]
-----
-$ ssh-keygen -t ed25519 -f "$HOME/.ssh/**_<my-ssh-key>_**"
-$ ssh-add ~/.ssh/<my-ssh-key>
-----
+Here is a more elaborate example that uses all the available rules and tweaks the configuration of some of them:
 
-* *Windows* users must instruct Git to use https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview[Microsoft OpenSSH] as the SSH agent:
-+
-[source,shell]
+[source,yaml]
 ----
-$ git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
+with:
+  github-token: ${{ secrets.GITHUB_TOKEN }}
+  rules: 'acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, issue-references-in-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace'
+  acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
+  acknowledged-author-names--patterns: '.+\s.+'
+  acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
+  acknowledged-committer-names--patterns: '.+\s.+'
+  issue-references-in-subject-lines--allowed-positions: 'as-suffix'
+  issue-references-in-subject-lines--patterns: '\(#[1-9][0-9]*\) #[1-9][0-9]*'
 ----
 
-. Grab the **_public_** key.
-It appears like `ssh-ed25519 AAAAC3(...)`.
-+
-[source,shell,subs="+quotes,+replacements"]
-----
-$ cat ~/.ssh/**_<my-ssh-key>_**.pub
-----
+== Rules
 
-. Register the public key in https://github.com/settings/keys[GitHub] as a signing key.
+=== `acknowledged-author-email-addresses`
+The author of each commit must use an email address that matches one of the regular expressions in the `+acknowledged-author-email-addresses--patterns+` input parameter.
 
-. Obtain your masked email address in https://github.com/settings/emails[GitHub].
-It appears like `**_<id+username>_**@users.noreply.github.com`.
+Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information (e.g. a private email address) inadvertently.
 
-. Declare your identity within the scope of this repository and use the public key to sign your commits:
-+
-[source,shell,subs="+quotes,+replacements"]
-----
-$ git config user.name "**_<FirstName> <LastName>_**"
-$ git config user.email "**_<id+username>_**@users.noreply.github.com"
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
 
-$ git config user.signingkey "ssh-ed25519 AAAAC3**_<PublicKey>_**"
-$ git config gpg.format "ssh"
-$ git config commit.gpgsign "true"
-$ git config tag.gpgsign "true"
-----
+m|+acknowledged-author-email-addresses--patterns+
+|A space-separated list of regular expressions of email addresses to accept.
+|`+^\b$+` _(a regular expression that never matches anything)_
+|===
 
-=== Prepare Your IDE
-* *IntelliJ IDEA* (and *WebStorm*) users should open the project directory:
-+
-[source,shell]
-----
-$ idea .
-----
+==== Examples (GitHub Noreply)
+A regular expression of `+\d+\+.+@users\.noreply\.github\.com+` makes the rule accept personal noreply email addresses on GitHub:
 
-. Install these plugins (follow the popup message, or go to menu:File[Settings > Plugins]):
-** https://plugins.jetbrains.com/plugin/7391-asciidoc[AsciiDoc]
-** https://plugins.jetbrains.com/plugin/10456-prettier[Prettier]
+|===
+|✅ Accepted |⛔ Rejected
 
-. Go to menu:File[Settings > Languages & Frameworks > Node.js].
-Select the appropriate Node.js interpreter and enable coding assistance.
+m|+19891117+littlemermaid@users.noreply.github.com+
+m|+little.mermaid@theocean.com+
 
-* *Visual Studio Code* users should open the project directory:
-+
-[source,shell]
-----
-$ code .
-----
+m|+18920129+santaclaus@users.noreply.github.com+
+m|+claus@santasworkshop.com+
 
-. Install these extensions (kbd:[Ctrl+Shift+X] and search for `@recommended`):
-+
-** https://marketplace.visualstudio.com/items?itemName=asciidoctor.asciidoctor-vscode[AsciiDoc]
-** https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint[ESLint]
-** https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode[Prettier]
-** https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs[ZipFS] (required by the Yarn SDK)
+m|+12345678+username@users.noreply.github.com+
+m|+noreply@github.com+
+|===
 
-== Tasks
-The `scripts` field in `package.json` defines a set of work tasks.
-Corresponding configurations for IntelliJ IDEA and Visual Studio Code are located in `.idea/runConfigurations` and `.vscode/tasks.json`, respectively.
+=== `acknowledged-author-names`
+The author of each commit must use a name that matches one of the regular expressions in the `+acknowledged-author-names--patterns+` input parameter.
 
-=== Validate the Software Quality
-[source,shell]
-----
-$ yarn run validate
-----
+Standardising the author format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
 
-It runs the following means of validation:
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
 
-* *Type checking* via https://www.typescriptlang.org[TypeScript] (`validate.types`).
-* *Static program analysis* (linting) via https://eslint.org[ESLint] (`validate.lint`).
-** `validate.lint.fix` fixes certain issues automatically.
-* *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
-** `validate.format.fix` reformats the files accordingly.
-* *Automated unit testing* via https://vitest.dev[Vitest] (`validate.test`).
-** `validate.test.coverage` creates a code coverage report in the `coverage` directory.
-** `validate.test.ui` launches the https://vitest.dev/guide/ui.html[Vitest user interface] in a web browser.
-** `validate.test.watch` makes the test suite run continuously.
+m|+acknowledged-author-names--patterns+
+|A space-separated list of regular expressions of names to accept.
+|`+^\b$+` _(a regular expression that never matches anything)_
+|===
 
-Run `validate.fix` to automatically fix as much as possible.
+==== Examples (Multi-Word Names)
+A regular expression of `+\p{Lu}.*\s.++` makes the rule accept names that have at least two words where the first one starts with an uppercase letter:
 
-=== Build for Production
-[source,shell]
-----
-$ yarn run build
-----
+|===
+|✅ Accepted |⛔ Rejected
 
-As defined in the `action.yml` file, the generated `release/index.cjs` becomes the https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain[entrypoint of the action] which is why it is checked into the repository along with the source code.
+m|The Little Mermaid
+m|the little mermaid
+
+m|Santa Claus
+m|Santa.claus
+
+m|Jeanne d'Arc
+m|Jeanne
+|===
+
+=== `acknowledged-committer-email-addresses`
+The committer of each commit must use an email address that matches one of the regular expressions in the `+acknowledged-committer-email-addresses--patterns+` input parameter.
+
+By disallowing `noreply@github.com` as a committer email address, you can catch commits made through the GitHub web interface such as code review suggestions.
+
+Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information (e.g. a private email address) inadvertently.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+acknowledged-committer-email-addresses--patterns+
+|A space-separated list of regular expressions of email addresses to accept.
+|`+^\b$+` _(a regular expression that never matches anything)_
+|===
+
+==== Examples (GitHub Noreply)
+A regular expression of `+\d+\+.+@users\.noreply\.github\.com+` makes the rule accept personal noreply email addresses on GitHub:
+
+|===
+|✅ Accepted |⛔ Rejected
+
+m|+19891117+littlemermaid@users.noreply.github.com+
+m|+little.mermaid@theocean.com+
+
+m|+18920129+santaclaus@users.noreply.github.com+
+m|+claus@santasworkshop.com+
+
+m|+12345678+username@users.noreply.github.com+
+m|+noreply@github.com+
+|===
+
+=== `acknowledged-committer-names`
+The committer of each commit must use a name that matches one of the regular expressions in the `+acknowledged-committer-names--patterns+` input parameter.
+
+Standardising the committer format will help you preserve the traceability of the commit history and avoid leaking personal information inadvertently.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+acknowledged-committer-names--patterns+
+|A space-separated list of regular expressions of names to accept.
+|`+^\b$+` _(a regular expression that never matches anything)_
+|===
+
+==== Examples (Multi-Word Names)
+A regular expression of `+\p{Lu}.*\s.++` makes the rule accept names that have at least two words where the first one starts with an uppercase letter:
+
+|===
+|✅ Accepted |⛔ Rejected
+
+m|The Little Mermaid
+m|the little mermaid
+
+m|Santa Claus
+m|Santa.claus
+
+m|Jeanne d'Arc
+m|Jeanne
+|===
+
+=== `capitalised-subject-lines`
+The subject line of each commit must start with an uppercase letter.
+
+Standardising the commit message format will help you preserve the readability of the commit history.
+
+==== Examples
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Add a new feature
+m|add a new feature
+
+m|Fix a bug
+m|fix a bug
+
+m|Refactor the code
+m|refactor the code
+|===
+
+=== `empty-line-after-subject-lines`
+The subject line and the message body of each commit must be separated by an empty line.
+
+Standardising the commit message format will help you preserve the readability of the commit history.
+
+==== Examples
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Add a new feature
+
+This commit adds a new feature.
+m|Add a new feature +
+This commit adds a new feature.
+
+m|Fix a bug
+
+It won't be bugging the users any more.
+m|Fix a bug +
+It won't be bugging the users any more.
+
+m|Refactor the code
+
+The main module is much more flexible now.
+m|Refactor the code +
+The main module is much more flexible now.
+|===
+
+=== `imperative-subject-lines`
+The subject line of each commit must start with a verb in the imperative mood so that it reads like an instruction.
+
+Standardising the commit message format will help you preserve the readability of the commit history.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+|`+imperative-subject-lines--whitelist+`
+|A comma-separated, case-insensitive list of additional words to accept.
+
+For example, a whitelist of `chatify, deckenize` makes the rule accept subject lines that start with one of the fictive words 'chatify' or 'deckenize', in addition to subject lines that start with one of the 4,000+ verbs which are baked into the rule.
+|_(empty)_
+|===
+
+==== Examples (Default Configuration)
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Add a new feature
+m|Added a new feature
+
+m|Format the code
+m|Formatting
+
+m|Make it work
+m|It works
+
+m|Do the validation every time
+m|Always validate
+|===
+
+=== `issue-references-in-subject-lines`
+The subject line of each commit must contain at least one reference to an issue tracking system that matches one of the regular expressions in the `+issue-references-in-subject-lines--patterns+` input parameter.
+Exceptions to this rule include merge commits and revert commits.
+
+Providing more context in the commit message (such as an issue reference) will help you preserve the traceability of the commit history.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+issue-references-in-subject-lines--allowed-positions+
+|A comma-separated list of positions in the subject line where the issue reference is allowed to appear.
+
+`as-prefix` allows issue references to appear at the start of the subject line.
+
+`as-suffix` allows issue references to appear at the end of the subject line.
+|`as-prefix, as-suffix`
+
+m|+issue-references-in-subject-lines--patterns+
+|A space-separated list of regular expressions of issue references to recognise.
+
+The declaration order matters, as it resolves the issue references in the order they are listed.
+Please take care not to shadow a specific regular expression with a more general one declared earlier in the list.
+|`+^\b$+` _(a regular expression that never matches anything)_
+|===
+
+==== Examples (GitHub/GitLab)
+When `as-suffix` is the only allowed position, a list of regular expressions of `+\(#[1-9][0-9]*\) #[1-9][0-9]*+` makes the rule recognise GitHub/GitLab-style issue references in the form of `#123` at the end of the subject line, potentially enclosed by parentheses:
+
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Introduce a cool feature #123
+m|Introduce a cool feature
+
+m|Write unit tests (#42)
+m|(#42) Write unit tests
+
+m|Fix the bug #1 #2
+m|Close #1 and #2 by fixing the bug
+|===
+
+==== Examples (Jira/YouTrack)
+When `as-prefix, as-suffix` are the allowed positions, a list of regular expressions of `+\(UNICORN-[1-9][0-9]*\) UNICORN-[1-9][0-9]*+` makes the rule recognise Jira/YouTrack-style issue references in the form of `UNICORN-123` at the start or the end of the subject line, potentially enclosed by parentheses:
+
+|===
+|✅ Accepted |⛔ Rejected
+
+m|UNICORN-123 Introduce a cool feature
+m|Introduce a cool feature #123
+
+m|Write unit tests (UNICORN-42)
+m|Write unit tests (UNICORN-042)
+
+m|fixup! UNICORN-1 UNICORN-2 Fix the bug
+m|Close UNICORN-1 and UNICORN-2 by fixing the bug
+|===
+
+=== `limit-length-of-body-lines`
+Each line of the message body of each commit must not exceed the number of characters specified in the `+limit-length-of-body-lines--max-characters+` input parameter.
+Exceptions to this rule include merge conflict lists, lines within verbatim zones enclosed by +```triple backticks```+, and lines that contain a section enclosed by +`backticks`+.
+
+Keeping the body lines short will help you preserve the readability of the commit history in various Git clients.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+limit-length-of-body-lines--max-characters+
+|The maximum number of characters allowed per line in the message body.
+It must be a positive integer.
+m|72
+|===
+
+==== Examples (Default Configuration)
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Help fix the bug
+
+It was just a matter of time before it would cause customers to grumble.
+
+m|Help fix the bug
+
+It was just a matter of time before it would cause customers to complain.
+
+m|Merge branch 'main' into feature/dance-party
+
+Conflicts: +
+{nbsp}src/some/very/nested/directory/extremely-grumpy-cat-with-surprising-features.test.ts
+m|Forget to close a backtick section
+
+This commit forgets to close the backtick section in `RapidTransportService.
+
+m|Update dependencies
+
+This commit updates some third-party dependencies:
+
++```shell+ +
+yarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0 +
++```+
+
+m|Update dependencies
+
+This commit updates some third-party dependencies by running the following command:
+
++```shell+ +
+yarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0 +
++```+
+|===
+
+=== `limit-length-of-subject-lines`
+The subject line of each commit must not exceed the number of characters specified in the `+limit-length-of-subject-lines--max-characters+` input parameter.
+Exceptions to this rule include merge commits, revert commits, and subject lines that contain a section enclosed by +`backticks`+.
+Issue references and squash commit prefixes do not count towards the limit.
+
+Keeping the subject line short will help you preserve the readability of the commit history in various Git clients.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+limit-length-of-subject-lines--max-characters+
+|The maximum number of characters allowed in the subject line.
+It must be a positive integer.
+m|50
+|===
+
+==== Examples (Default Configuration)
+|===
+|✅ Accepted |⛔ Rejected
+
+m|squash! Retrieve some data from the fast external services
+m|Retrieve some data from the quick external services
+
+m|Revert "Compare the list of items to the objects downloaded from the server"
+m|Compare the list of items to the objects downloaded from the server
+
+m|Let +`SoftIceMachineAdapter`+ produce the goods that we need
+m|Forget to close the backtick section in `RapidTransportService
+|===
+
+=== `multi-word-subject-lines`
+The subject line of each commit must contain at least two words.
+
+Providing more context in the commit message (such as a thorough description) will help you preserve the traceability of the commit history.
+
+==== Examples
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Test it
+m|Test
+
+m|Fix the bug
+m|Fix
+
+m|Prepare the implementation of the code
+m|WIP
+|===
+
+=== `no-co-authors`
+The message body must not contain `Co-authored-by:` trailers.
+
+Removing the co-authors will help you preserve the authenticity of the commit, as co-authors are unable to sign commits.
+
+By disallowing `Co-authored-by:` trailers, you can catch commits made through the GitHub web interface such as code review suggestions proposed by your peers.
+
+==== Examples
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Update src/main.ts
+m|Update src/main.ts
+
+Co-authored-by: Santa Claus <+18920129+santaclaus@users.noreply.github.com+>
+
+m|Implement the feature
+
+Reported-By: Little Mermaid <+19891117+littlemermaid@users.noreply.github.com+>
+
+m|Implement the feature
+
+Co-Authored-By: Easter Bunny <+bunny@eastercompany.com+> +
+Co-Authored-By: Santa Claus <+18920129+santaclaus@users.noreply.github.com+> +
+Reported-By: Little Mermaid <+19891117+littlemermaid@users.noreply.github.com+>
+|===
+
+=== `no-merge-commits`
+Merge commits must not be merged into the target branch of the pull request, reminding you to rebase your branch onto the target branch instead of merging the target branch into your branch.
+
+Avoiding merge commits will help you preserve the traceability of the commit history as well as the ability to rebase interactively.
+
+==== Examples
+The rule considers a commit to be a merge commit when it has more than one parent commit:
+
+|===
+|✅ Accepted |⛔ Rejected
+
+|`Merge branch 'main' into feature/dance-party` +
+_(one parent commit)_
+|`Merge branch 'main' into feature/dance-party` +
+_(two parent commits)_
+
+|`Keep the branch up-to-date` +
+_(one parent commit)_
+|`Keep the branch up-to-date` +
+_(three parent commits)_
+|===
+
+=== `no-revert-revert-commits`
+Commits that revert other revert commits must not be merged into the target branch of the pull request, reminding you to re-apply the original commits instead of reverting the revert commits.
+
+Providing more context (such as the original commit message) and avoiding unnecessary commits will help you preserve the traceability of the commit history.
+
+==== Examples
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Revert "Fix the bug"
+m|Revert "Revert "Fix the bug""
+
+m|Revert the revert commit
+m|Revert "Revert "Revert "Fix the bug"""
+|===
+
+=== `no-squash-commits`
+Squash commits must not be merged into the target branch of the pull request, reminding you to rebase interactively to consolidate the squash commits with the original commit.
+
+Avoiding unnecessary commits will help you preserve the traceability of the commit history.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+no-squash-commits--disallowed-prefixes+
+|A comma-separated, case-sensitive list of subject line prefixes to consider as squash commits.
+m|amend!, fixup!, squash!
+|===
+
+==== Examples (Default Configuration)
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Add a new feature
+m|amend! Add a new feature
+
+m|Fix a bug
+m|fixup! Fix a bug
+
+m|Refactor the code
+m|squash! Refactor the code
+|===
+
+=== `no-trailing-punctuation-in-subject-lines`
+The subject line of each commit must not end with a punctuation character.
+Exceptions to this rule include closing parentheses with matching opening parentheses, symbols associated with numbers, emoticons, emoji shortcodes, and characters specified in the `+no-trailing-punctuation-in-subject-lines--whitelist+` input parameter.
+
+Standardising the commit message format will help you preserve the readability of the commit history.
+
+==== Configuration
+|===
+|Input Parameter |Description |Default Value
+
+m|+no-trailing-punctuation-in-subject-lines--whitelist+
+|A space-separated list of punctuation characters to ignore.
+
+For example, a whitelist of `. !` makes the rule accept subject lines with a trailing period or a trailing exclamation mark.
+|_(empty)_
+|===
+
+==== Examples (Default Configuration)
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Add a new feature
+m|Add a new feature.
+
+m|Fix a bug
+m|Fix a bug!
+
+m|Refactor the code (the main module)
+m|Refactor the code (
+
+m|Update dependencies :-)
+m|Update dependencies )
+
+m|Write documentation :smile:
+m|Write documentation:
+
+m|Improve performance by 42%
+m|Improve performance by x%
+|===
+
+=== `no-unexpected-whitespace`
+The subject line of each commit must not contain any leading, trailing, or consecutive whitespace characters.
+The message body must not contain any consecutive whitespace characters except for indentation.
+
+Standardising the commit message format will help you preserve the readability of the commit history.
+
+==== Examples
+Space and newline characters are denoted by the `&middot;` and `&#9166;` characters, respectively, in the following examples:
+
+|===
+|✅ Accepted |⛔ Rejected
+
+m|Write&middot;unit&middot;tests
+m|Write&middot;unit&middot;&middot;tests
+
+m|fixup!&middot;Fix&middot;the&middot;bug
+m|&middot;Fix&middot;the&middot;bug
+
+m|Implement&middot;the&middot;feature
+m|Implement&middot;the&middot;feature&middot;
+
+m|Write&middot;documentation&#9166; +
+&#9166; +
+&middot;&middot;This&middot;commit&middot;describes&middot;the&middot;usage.
+m|Write&middot;documentation&#9166; +
+&#9166; +
+This&middot;commit&middot;describes&middot;&middot;the&middot;usage.
+|===
+
+== Contributing
+Please take a look at link:CONTRIBUTING.adoc[CONTRIBUTING.adoc] for detailed instructions on how to contribute to this project 😀

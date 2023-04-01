@@ -1,20 +1,22 @@
 import type { ActionResult } from "+github"
 import {
-	actionConfigurationMustBeValid,
-	allCommitsAreValid,
-	formattedReportFrom,
-	pullRequestFromApi,
-	someCommitsAreInvalid,
+	actionFailed,
+	actionSucceeded,
+	configurationFromInputs,
+	formatIssue,
+	getPullRequestFromApi,
 } from "+github"
-import { reportFrom, rulesetFromString } from "+validation"
+import { instructiveReporter, validatorFrom } from "+validator"
 import core from "@actions/core"
 import github from "@actions/github"
 
 run()
 	.then((actionResult) => {
-		// eslint-disable-next-line functional/no-conditional-statements -- This side effect is required by the GitHub Actions API.
-		if (actionResult.exitCode !== 0) {
-			core.setFailed(actionResult.errorMessage)
+		if (actionResult.exitCode === 1) {
+			for (const errorMessage of actionResult.errors) {
+				core.error(`${errorMessage}\n`)
+			}
+			core.setFailed("")
 		}
 	})
 	.catch((error) => {
@@ -27,32 +29,26 @@ async function run(): Promise<ActionResult> {
 	const pullRequestNumber = github.context.payload.pull_request?.number
 
 	if (pullRequestNumber === undefined) {
-		return actionConfigurationMustBeValid(
-			"This action must run on a pull request",
+		return actionFailed(["This action must run on a pull request"])
+	}
+
+	const configuration = configurationFromInputs()
+
+	if (!configuration.success) {
+		const formattedErrors = configuration.error.issues.map((issue) =>
+			formatIssue(issue),
 		)
+
+		return actionFailed(formattedErrors)
 	}
 
-	const githubToken = core.getInput("github-token", { required: true })
-	const commaSeparatedKeys = core.getInput("rules", { required: false })
+	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
-	const rulesetParseResult = rulesetFromString(commaSeparatedKeys)
+	const reporter = instructiveReporter(configuration.data)
+	const validate = validatorFrom(configuration.data)
+	const reportedErrors = validate(pullRequest.rawCommits, reporter)
 
-	if (rulesetParseResult.status === "invalid") {
-		return actionConfigurationMustBeValid(rulesetParseResult.errorMessage)
-	}
-
-	const pullRequest = await pullRequestFromApi({
-		githubToken,
-		pullRequestNumber,
-	})
-
-	const report = reportFrom({
-		ruleset: rulesetParseResult.ruleset,
-		commitsToValidate: pullRequest.commits,
-	})
-	const formattedReport = formattedReportFrom(report)
-
-	return formattedReport === null
-		? allCommitsAreValid()
-		: someCommitsAreInvalid(formattedReport)
+	return reportedErrors.length === 0
+		? actionSucceeded()
+		: actionFailed(reportedErrors)
 }
