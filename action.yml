@@ -52,4 +52,4 @@ inputs:
     required: false
 runs:
   using: node16
-  main: release/index.cjs
+  main: release/entry.actions.cjs

@@ -159,4 +159,4 @@ Run `validate.fix` to automatically fix as much as possible.
 $ yarn run build
 ----
 
-As defined in the `action.yml` file, the generated `release/index.cjs` becomes the https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain[entrypoint of the action] which is why it is checked into the repository along with the source code.
+As defined in the `action.yml` file, the generated `release/entry.actions.cjs` becomes the https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain[entrypoint of the action] which is why it is checked into the repository along with the source code.

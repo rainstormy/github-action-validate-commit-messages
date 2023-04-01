@@ -11,7 +11,7 @@ const viteConfig = defineConfig(() => ({
 		lib: {
 			entry: inProjectDirectory("src/entry.actions.ts"),
 			formats: ["cjs"],
-			fileName: "index",
+			fileName: "entry.actions",
 		},
 		outDir: inProjectDirectory("release/"),
 		reportCompressedSize: false,

@@ -41,7 +41,7 @@ node_modules/
 # Build and test artifacts.
 coverage/
 release/
-!release/index.cjs
+!release/entry.actions.cjs
 .eslintcache
 
 # Operating system artifacts.
