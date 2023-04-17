@@ -3473,6 +3473,7 @@ export const sortedImperativeVerbs: ReadonlyArray<string> = [
 	"savvy",
 	"saw",
 	"say",
+	"scaffold",
 	"scald",
 	"scale",
 	"scamper",
