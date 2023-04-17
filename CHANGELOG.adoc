@@ -1,0 +1,39 @@
+= Changelog
+:experimental:
+:source-highlighter: highlight.js
+:toc: preamble
+:toclevels: 1
+
+This file documents all notable changes to this project.
+The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
+
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.1...HEAD[Unreleased]
+
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0...v1.0.1[1.0.1] - 2023-04-17
+=== Added
+* https://choosealicense.com/licenses/mit[MIT license].
+
+=== Fixed
+* Recognise _scaffold_ as a verb in the `imperative-subject-lines` rule.
+
+== https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.0.0[1.0.0] - 2023-04-01
+
+=== Added
+* GitHub Actions entrypoint.
+* New rule: `acknowledged-author-email-addresses`.
+* New rule: `acknowledged-author-names`.
+* New rule: `acknowledged-committer-email-addresses`.
+* New rule: `acknowledged-committer-names`.
+* New rule: `capitalised-subject-lines`.
+* New rule: `empty-line-after-subject-lines`.
+* New rule: `imperative-subject-lines`.
+* New rule: `issue-references-in-subject-lines`.
+* New rule: `limit-length-of-body-lines`.
+* New rule: `limit-length-of-subject-lines`.
+* New rule: `multi-word-subject-lines`.
+* New rule: `no-co-authors`.
+* New rule: `no-merge-commits`.
+* New rule: `no-revert-revert-commits`.
+* New rule: `no-squash-commits`.
+* New rule: `no-trailing-punctuation-in-subject-lines`.
+* New rule: `no-unexpected-whitespace`.
