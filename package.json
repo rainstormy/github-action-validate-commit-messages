@@ -42,8 +42,8 @@
 		"@types/prettier": "2.7.2",
 		"@typescript-eslint/eslint-plugin": "5.52.0",
 		"@typescript-eslint/parser": "5.52.0",
-		"@vitest/coverage-c8": "0.28.5",
-		"@vitest/ui": "0.28.5",
+		"@vitest/coverage-c8": "0.30.1",
+		"@vitest/ui": "0.30.1",
 		"concurrently": "7.6.0",
 		"eslint": "8.34.0",
 		"eslint-plugin-eslint-comments": "3.2.0",
@@ -55,8 +55,8 @@
 		"prettier-plugin-organize-imports": "3.2.2",
 		"simple-git-hooks": "2.8.1",
 		"typescript": "4.9.5",
-		"vite": "4.1.1",
-		"vitest": "0.28.5"
+		"vite": "4.3.3",
+		"vitest": "0.30.1"
 	},
 	"devDependencies-comments": {
 		"@types/eslint": "A set of type definitions for ESLint configuration files.",
