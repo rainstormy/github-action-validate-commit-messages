@@ -11,11 +11,11 @@ It does not check any commits outside the pull request such as existing commits 
 == Usage
 Define a GitHub Actions workflow that runs on pull requests:
 
-..github/workflows/validate-pull-requests.yml
 [source,yaml]
 ----
+# .github/workflows/validate-pull-requests.yml
 name: Validate pull requests
-on: [ pull_request ]
+on: [pull_request]
 jobs:
   validate-commit-messages:
     name: Validate commit messages

@@ -143,6 +143,7 @@ It runs the following means of validation:
 * *Static program analysis* (linting) via https://eslint.org[ESLint] (`validate.lint`).
 ** `validate.lint.fix` fixes certain issues automatically.
 ** `validate.lint.nocache` runs `validate.lint` without caching which is encouraged after an adjustment to the linting configuration.
+** `TIMING=1 yarn run validate.lint.nocache` debugs the linting configuration to report the slowest rules.
 * *Source code formatting* via https://prettier.io[Prettier] (`validate.format`).
 ** `validate.format.fix` reformats the files accordingly.
 ** `validate.format.nocache` runs `validate.format` without caching which is encouraged after an adjustment to the formatting configuration.

@@ -30,7 +30,7 @@ const eslintConfig = [
 			".pnp.*",
 		],
 		languageOptions: {
-			parser: "typescript/parser",
+			parser: typescriptParser,
 			parserOptions: {
 				tsconfigRootDir: projectDirectory,
 				project: ["./tsconfig.json"],
@@ -41,14 +41,7 @@ const eslintConfig = [
 			"eslint-comments": eslintCommentsPlugin,
 			functional: functionalPlugin,
 			"redundant-undefined": redundantUndefinedPlugin,
-			typescript: {
-				...typescriptPlugin,
-				parsers: {
-					// This is a workaround that allows us to use caching in ESLint along with a custom parser in the new ESLint configuration format.
-					// See also: https://github.com/eslint/eslint/issues/16875
-					parser: typescriptParser,
-				},
-			},
+			typescript: typescriptPlugin,
 			unicorn: unicornPlugin,
 		},
 		/**
@@ -496,6 +489,7 @@ const eslintConfig = [
 			],
 			"typescript/no-dupe-class-members": "error",
 			"typescript/no-duplicate-enum-values": "off", // Not applicable with `no-restricted-syntax` that disallows enum declarations.
+			"typescript/no-duplicate-type-constituents": "error",
 			"typescript/no-dynamic-delete": "error",
 			"typescript/no-empty-function": "error",
 			"typescript/no-empty-interface": "off", // Not applicable with `typescript/consistent-type-definitions`.
@@ -549,6 +543,7 @@ const eslintConfig = [
 			"typescript/no-unsafe-argument": "off", // Redundant with `typescript/no-explicit-any`.
 			"typescript/no-unsafe-assignment": "off", // Redundant with `typescript/no-explicit-any`.
 			"typescript/no-unsafe-call": "off", // Redundant with `typescript/no-explicit-any`.
+			"typescript/no-unsafe-enum-comparison": "off", // Not applicable with `no-restricted-syntax` that disallows enum declarations.
 			"typescript/no-unsafe-member-access": "off", // Redundant with `typescript/no-explicit-any`.
 			"typescript/no-unsafe-return": "off", // Redundant with `typescript/no-explicit-any`.
 			"typescript/no-unused-expressions": "error",
