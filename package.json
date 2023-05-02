@@ -9,7 +9,7 @@
 		"validate.format": "yarn run __validate.format.base__ --cache --check --loglevel warn",
 		"validate.format.fix": "yarn run __validate.format.base__ --cache --list-different --write",
 		"validate.format.nocache": "yarn run __validate.format.base__ --check --loglevel warn",
-		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .vscode",
+		"__validate.format.base__": "prettier ./**/*.{cjs,css,html,js,json,jsx,mjs,ts,tsx,yaml,yml} .github .vscode",
 		"validate.lint": "yarn run __validate.lint.base__ --cache",
 		"validate.lint.fix": "yarn run __validate.lint.base__ --cache --fix",
 		"validate.lint.nocache": "yarn run __validate.lint.base__",

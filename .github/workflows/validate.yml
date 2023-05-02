@@ -2,9 +2,9 @@ name: Validate
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   validate-types:
@@ -80,7 +80,7 @@ jobs:
         uses: rainstormy/github-action-validate-commit-messages@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          rules: 'acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace'
+          rules: acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace
           acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
           acknowledged-author-names--patterns: '\p{Lu}.*\s.+'
           acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
