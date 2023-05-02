@@ -9,7 +9,6 @@
 		"exactOptionalPropertyTypes": false,
 		"forceConsistentCasingInFileNames": true,
 		"importHelpers": true,
-		"importsNotUsedAsValues": "error",
 		"incremental": true,
 		"isolatedModules": true,
 		"lib": ["DOM", "DOM.Iterable", "ES2021", "WebWorker"],
@@ -28,7 +27,8 @@
 		"strict": true,
 		"target": "ES2021",
 		"tsBuildInfoFile": "./node_modules/.cache/typescript/.tsbuildinfo",
-		"useDefineForClassFields": true
+		"useDefineForClassFields": true,
+		"verbatimModuleSyntax": true
 	},
 	"exclude": [
 		".git",
