@@ -54,15 +54,13 @@ export function issueReferencesInSubjectLines({
 
 			return commit
 		},
-		validate: ({ refinedSubjectLine, parents, issueReferences }) => {
-			const isRevertCommit = refinedSubjectLine.startsWith("Revert ")
-			const isMergeCommit = parents.length > 1
-			const isIgnorableCommit = isRevertCommit || isMergeCommit
-
-			return isIgnorableCommit || issueReferences.length > 0
-				? "valid"
-				: "invalid"
-		},
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits
+				.filter(({ parents }) => parents.length === 1)
+				.filter(
+					({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "),
+				)
+				.filter(({ issueReferences }) => issueReferences.length === 0),
 	}
 }
 

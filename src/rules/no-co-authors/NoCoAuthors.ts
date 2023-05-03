@@ -24,9 +24,7 @@ export function noCoAuthors(): Rule {
 				coAuthors: [...currentCoAuthors, ...coAuthors],
 			}
 		},
-		validate: ({ coAuthors }) => {
-			const hasCoAuthors = coAuthors.length > 0
-			return hasCoAuthors ? "invalid" : "valid"
-		},
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits.filter(({ coAuthors }) => coAuthors.length > 0),
 	}
 }

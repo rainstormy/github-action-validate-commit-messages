@@ -47,9 +47,7 @@ export function validatorFrom(configuration: Configuration): Validator {
 			Object.fromEntries(
 				rules
 					.map((rule) => {
-						const invalidCommits = refinedCommits.filter(
-							(commit) => rule.validate(commit) === "invalid",
-						)
+						const invalidCommits = rule.getInvalidCommits(refinedCommits)
 						return [rule.key, invalidCommits] as const
 					})
 					.filter(([, invalidCommits]) => invalidCommits.length > 0),

@@ -129,7 +129,7 @@ describe("when the configuration has default settings", () => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -166,9 +166,9 @@ describe("when the configuration has default settings", () => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -190,9 +190,9 @@ describe("when the configuration has default settings", () => {
 				testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body, numberOfParents }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -240,7 +240,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 			} = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({
 						subjectLine: "Craft something amazing for us",
 						author: {
@@ -252,7 +252,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 							emailAddress: committerEmailAddress,
 						},
 					}),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -282,7 +282,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -312,7 +312,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -346,7 +346,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -366,9 +366,9 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const { subjectLine, numberOfParents, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, numberOfParents }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -399,9 +399,9 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -432,9 +432,9 @@ describe("when the configuration overrides 'limit-length-of-subject-lines--max-c
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -464,7 +464,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -473,9 +473,9 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 
 function validateViolatedRulesFrom(
 	configuration: Configuration,
-): (commit: RawCommit) => ReadonlyArray<RuleKey> {
-	return (commit) =>
-		validatorFrom(configuration)([commit], violatedRulesReporter())
+): (rawCommits: ReadonlyArray<RawCommit>) => ReadonlyArray<RuleKey> {
+	return (rawCommits) =>
+		validatorFrom(configuration)(rawCommits, violatedRulesReporter())
 }
 
 function formatRuleKeys(ruleKeys: ReadonlyArray<RuleKey>): string {

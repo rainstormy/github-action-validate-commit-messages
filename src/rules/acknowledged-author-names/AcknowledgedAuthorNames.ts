@@ -1,15 +1,24 @@
-import type { AcknowledgedAuthorNamesConfiguration, Rule } from "+rules"
+import type {
+	AcknowledgedAuthorNamesConfiguration,
+	Rule,
+	UserIdentity,
+} from "+rules"
 
 export function acknowledgedAuthorNames({
 	patterns,
 }: AcknowledgedAuthorNamesConfiguration): Rule {
-	const regex = new RegExp(
+	const acknowledgedNameRegex = new RegExp(
 		patterns.map((pattern) => `^(?:${pattern})$`).join("|"),
 		"u",
 	)
 
+	function hasAcknowledgedAuthorName(author: UserIdentity): boolean {
+		return author.name !== null && acknowledgedNameRegex.test(author.name)
+	}
+
 	return {
 		key: "acknowledged-author-names",
-		validate: ({ author }) => (author.name?.match(regex) ? "valid" : "invalid"),
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits.filter(({ author }) => !hasAcknowledgedAuthorName(author)),
 	}
 }

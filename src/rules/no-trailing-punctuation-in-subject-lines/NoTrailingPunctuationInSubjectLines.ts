@@ -17,12 +17,15 @@ export function noTrailingPunctuationInSubjectLines({
 
 	return {
 		key: "no-trailing-punctuation-in-subject-lines",
-		validate: ({ refinedSubjectLine }) =>
-			refinedSubjectLine.length > 0 &&
-			hasTrailingPunctuation(refinedSubjectLine) &&
-			!hasWhitelistedSuffix(refinedSubjectLine)
-				? "invalid"
-				: "valid",
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits
+				.filter(({ refinedSubjectLine }) => refinedSubjectLine.length > 0)
+				.filter(({ refinedSubjectLine }) =>
+					hasTrailingPunctuation(refinedSubjectLine),
+				)
+				.filter(
+					({ refinedSubjectLine }) => !hasWhitelistedSuffix(refinedSubjectLine),
+				),
 	}
 }
 

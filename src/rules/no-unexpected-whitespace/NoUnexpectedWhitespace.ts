@@ -6,11 +6,12 @@ export function noUnexpectedWhitespace(): Rule {
 
 	return {
 		key: "no-unexpected-whitespace",
-		validate: ({ originalSubjectLine, bodyLines }) =>
-			leadingOrTrailingWhitespaceRegex.test(originalSubjectLine) ||
-			consecutiveWhitespaceRegex.test(originalSubjectLine) ||
-			bodyLines.some((line) => consecutiveWhitespaceRegex.test(line))
-				? "invalid"
-				: "valid",
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits.filter(
+				({ originalSubjectLine, bodyLines }) =>
+					leadingOrTrailingWhitespaceRegex.test(originalSubjectLine) ||
+					consecutiveWhitespaceRegex.test(originalSubjectLine) ||
+					bodyLines.some((line) => consecutiveWhitespaceRegex.test(line)),
+			),
 	}
 }

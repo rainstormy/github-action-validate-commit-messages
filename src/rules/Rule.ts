@@ -25,5 +25,7 @@ export type RuleKey = (typeof ruleKeys)[number]
 export type Rule = {
 	readonly key: RuleKey
 	readonly refine?: CommitRefiner
-	readonly validate: (commit: Commit) => "invalid" | "valid"
+	readonly getInvalidCommits: (
+		refinedCommits: ReadonlyArray<Commit>,
+	) => ReadonlyArray<Commit>
 }
