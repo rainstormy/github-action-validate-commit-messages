@@ -1,7 +1,6 @@
 = Validate Commit Messages in Pull Requests
 :experimental:
 :source-highlighter: highlight.js
-:toc: preamble
 
 This repository implements a reusable GitHub Action that validates commit messages in pull requests on GitHub to ensure that the commit messages meet certain standards and to remind you about squash commits that must be consolidated before you merge the pull request.
 
