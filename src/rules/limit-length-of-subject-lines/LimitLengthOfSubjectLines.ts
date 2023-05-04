@@ -18,7 +18,13 @@ export function limitLengthOfSubjectLines({
 				.filter(
 					({ refinedSubjectLine }) =>
 						refinedSubjectLine.length > maximumCharacters &&
+						!endsWithSemanticVersionNumber(refinedSubjectLine) &&
 						countOccurrences(refinedSubjectLine, "`") <= 1,
 				),
 	}
+}
+
+function endsWithSemanticVersionNumber(subjectLine: string): boolean {
+	const semanticVersionNumberRegex = /to\s\d+\.\d+\.\d+$/u
+	return semanticVersionNumberRegex.test(subjectLine)
 }
