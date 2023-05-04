@@ -564,6 +564,104 @@ describe("when the configuration has default settings", () => {
 		})
 	})
 
+	describe("a report generated from two commits with the same subject line", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "Make the program act like a clown",
+			}),
+			dummyCommit({
+				sha: "badf00d",
+				subjectLine: "Make the program act like a clown",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toStrictEqual([
+				`Please consolidate the commit that repeats the subject line of a previous commit:
+    badf00d Make the program act like a clown
+
+    Rebase interactively to combine the commit with the previous one.
+    Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
+			])
+		})
+	})
+
+	describe("a report generated from three commits with the same subject line and two other commits with the same subject line", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "Apply strawberry jam to make the code sweeter",
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Have fun",
+			}),
+			dummyCommit({
+				sha: "cafebabe",
+				subjectLine: "Have fun",
+			}),
+			dummyCommit({
+				sha: "badf00d",
+				subjectLine: "Apply strawberry jam to make the code sweeter",
+			}),
+			dummyCommit({
+				sha: "cafed00d",
+				subjectLine: "Have fun",
+			}),
+		])
+
+		it("contains instructions on how to resolve the violated rule", () => {
+			expect(report).toStrictEqual([
+				`Please consolidate the commits that repeat the subject line of a previous commit:
+    cafebabe Have fun
+    badf00d Apply strawberry jam to make the code sweeter
+    cafed00d Have fun
+
+    Rebase interactively to combine the commits with the previous one.
+    Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
+			])
+		})
+	})
+
+	describe("a report generated from two commits with the same subject line and two squash commits", () => {
+		const report = validate([
+			dummyCommit({
+				sha: "0ff1ce",
+				subjectLine: "Improve some stuff",
+			}),
+			dummyCommit({
+				sha: "d06f00d",
+				subjectLine: "Improve some stuff",
+			}),
+			dummyCommit({
+				sha: "cafebabe",
+				subjectLine: "squash! Improve some stuff",
+			}),
+			dummyCommit({
+				sha: "cafed00d",
+				subjectLine: "fixup! Improve some stuff",
+			}),
+		])
+
+		it("contains a series of instructions on how to resolve the violated rules", () => {
+			expect(report).toStrictEqual([
+				`Please consolidate the squash commits:
+    cafebabe squash! Improve some stuff
+    cafed00d fixup! Improve some stuff
+
+    Rebase interactively to combine the commits with the original ones.
+    Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
+
+				`Please consolidate the commit that repeats the subject line of a previous commit:
+    d06f00d Improve some stuff
+
+    Rebase interactively to combine the commit with the previous one.
+    Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
+			])
+		})
+	})
+
 	describe("a report generated from three valid commits, two squash commits, and a merge commit", () => {
 		const report = validate([
 			dummyCommit({ subjectLine: "Make the program act like a clown" }),

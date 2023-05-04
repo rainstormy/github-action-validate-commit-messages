@@ -18,6 +18,7 @@ export const ruleKeys = [
 	"no-squash-commits",
 	"no-trailing-punctuation-in-subject-lines",
 	"no-unexpected-whitespace",
+	"unique-subject-lines",
 ] as const
 
 export type RuleKey = (typeof ruleKeys)[number]
@@ -25,5 +26,7 @@ export type RuleKey = (typeof ruleKeys)[number]
 export type Rule = {
 	readonly key: RuleKey
 	readonly refine?: CommitRefiner
-	readonly validate: (commit: Commit) => "invalid" | "valid"
+	readonly getInvalidCommits: (
+		refinedCommits: ReadonlyArray<Commit>,
+	) => ReadonlyArray<Commit>
 }

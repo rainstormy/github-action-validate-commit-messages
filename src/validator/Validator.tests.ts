@@ -129,33 +129,35 @@ describe("when the configuration has default settings", () => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
 	)
 
 	describe.each`
-		subjectLine                             | body                                                                                                                                                                                                                                                                                                                | expectedViolatedRuleKeys
-		${" fix it"}                            | ${""}                                                                                                                                                                                                                                                                                                               | ${["capitalised-subject-lines", "no-unexpected-whitespace"]}
-		${"Do it over "}                        | ${""}                                                                                                                                                                                                                                                                                                               | ${["no-unexpected-whitespace"]}
-		${"Make  it work"}                      | ${"\n"}                                                                                                                                                                                                                                                                                                             | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
-		${"Bring it   on  "}                    | ${"\n\nThe code is prepared for anything."}                                                                                                                                                                                                                                                                         | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
-		${"Introduce a cool feature"}           | ${"It is really awesome!"}                                                                                                                                                                                                                                                                                          | ${["empty-line-after-subject-lines"]}
-		${"Help fix the bug"}                   | ${"\nIt was just a matter of time before it would cause customers to complain. "}                                                                                                                                                                                                                                   | ${["limit-length-of-body-lines"]}
-		${"Produce the goods"}                  | ${"\nThe `SoftIceMachineAdapter` is totally going to make the customers happy from now on."}                                                                                                                                                                                                                        | ${[]}
-		${"Transport the goods"}                | ${"\nThis commit moves the goods from one place to another via the `RapidTransportService`."}                                                                                                                                                                                                                       | ${[]}
-		${"Forget to close a backtick section"} | ${"\nThis commit forgets to close the backtick section in `RapidTransportService."}                                                                                                                                                                                                                                 | ${["limit-length-of-body-lines"]}
-		${"Write unit tests"}                   | ${" Finally..."}                                                                                                                                                                                                                                                                                                    | ${["empty-line-after-subject-lines"]}
-		${"Resolve the conflicts"}              | ${"\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                                                                                                                                                                              | ${[]}
-		${"Adjust the procedure"}               | ${"\nIt was totally  wrong until now."}                                                                                                                                                                                                                                                                             | ${["no-unexpected-whitespace"]}
-		${"Refactor some stuff"}                | ${" \nThe code looks much better now \nas we finally took the  time to improve it. "}                                                                                                                                                                                                                               | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
-		${"Release the robot butler"}           | ${"\n\nIt'll go on a big adventure to meet some unusually interesting characters."}                                                                                                                                                                                                                                 | ${["empty-line-after-subject-lines", "limit-length-of-body-lines"]}
-		${"Improve the code"}                   | ${"\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."}                                                                                                                                                   | ${[]}
-		${"Update dependencies"}                | ${"\nWe discovered some outdated dependencies after running this command:\n\n```shell\nyarn install\n```\n\nThis commit updates some third-party dependencies.\n\n```shell\nyarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"}                                     | ${[]}
-		${"Install necessary dependencies"}     | ${"\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"} | ${["limit-length-of-body-lines"]}
-		${"Update src/main.ts"}                 | ${"\nCo-Authored-By: Everloving Easter Bunny <everloving.easter.bunny@example.com>"}                                                                                                                                                                                                                                | ${["no-co-authors"]}
-		${"Do some pair programming"}           | ${"\nThis commit is a collab.\nCo-authored-by: Santa Claus <santa.claus@example.com>\nCo-authored-by: Gingerbread Man <gingerbread.man@example.com>\nReported-by: Little Mermaid <little.mermaid@example.com>"}                                                                                                     | ${["no-co-authors"]}
+		subjectLine                                               | body                                                                                                                                                                                                                                                                                                                                                | expectedViolatedRuleKeys
+		${" fix it"}                                              | ${""}                                                                                                                                                                                                                                                                                                                                               | ${["capitalised-subject-lines", "no-unexpected-whitespace"]}
+		${"Do it over "}                                          | ${""}                                                                                                                                                                                                                                                                                                                                               | ${["no-unexpected-whitespace"]}
+		${"Make  it work"}                                        | ${"\n"}                                                                                                                                                                                                                                                                                                                                             | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
+		${"Bring it   on  "}                                      | ${"\n\nThe code is prepared for anything."}                                                                                                                                                                                                                                                                                                         | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
+		${"Introduce a cool feature"}                             | ${"It is really awesome!"}                                                                                                                                                                                                                                                                                                                          | ${["empty-line-after-subject-lines"]}
+		${"Help fix the bug"}                                     | ${"\nIt was just a matter of time before it would cause customers to complain. "}                                                                                                                                                                                                                                                                   | ${["limit-length-of-body-lines"]}
+		${"Produce the goods"}                                    | ${"\nThe `SoftIceMachineAdapter` is totally going to make the customers happy from now on."}                                                                                                                                                                                                                                                        | ${[]}
+		${"Transport the goods"}                                  | ${"\nThis commit moves the goods from one place to another via the `RapidTransportService`."}                                                                                                                                                                                                                                                       | ${[]}
+		${"Forget to close a backtick section"}                   | ${"\nThis commit forgets to close the backtick section in `RapidTransportService."}                                                                                                                                                                                                                                                                 | ${["limit-length-of-body-lines"]}
+		${"Write unit tests"}                                     | ${" Finally..."}                                                                                                                                                                                                                                                                                                                                    | ${["empty-line-after-subject-lines"]}
+		${"Resolve the conflicts"}                                | ${"\nConflicts:\n\n src/grumpy-cat.ts\n src/summer-vacation-plans.ts"}                                                                                                                                                                                                                                                                              | ${[]}
+		${"Adjust the procedure"}                                 | ${"\nIt was totally  wrong until now."}                                                                                                                                                                                                                                                                                                             | ${["no-unexpected-whitespace"]}
+		${"Refactor some stuff"}                                  | ${" \nThe code looks much better now \nas we finally took the  time to improve it. "}                                                                                                                                                                                                                                                               | ${["empty-line-after-subject-lines", "no-unexpected-whitespace"]}
+		${"Release the robot butler"}                             | ${"\n\nIt'll go on a big adventure to meet some unusually interesting characters."}                                                                                                                                                                                                                                                                 | ${["empty-line-after-subject-lines", "limit-length-of-body-lines"]}
+		${"Improve the code"}                                     | ${"\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."}                                                                                                                                                                                   | ${[]}
+		${"Update dependencies"}                                  | ${"\nWe discovered some outdated dependencies after running this command:\n\n```shell\nyarn install\n```\n\nThis commit updates some third-party dependencies.\n\n```shell\nyarn update --exact @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"}                                                                     | ${[]}
+		${"Install necessary dependencies"}                       | ${"\nWe discovered some more dependencies after running this command:\n\n```shell\nyarn install\n```\n\nIt turns out that we do in fact need the following dependencies after all. This commit installs them.\n\n```shell\nyarn add @elements/hydrogen@1.0.0 @elements/nitrogen@2.5.0 @elements/oxygen@2.6.0\n```"}                                 | ${["limit-length-of-body-lines"]}
+		${"Bump vite from 4.1.1 to 4.3.2"}                        | ${"\nBumps [vite](https://github.com/vitejs/vite/tree/HEAD/packages/vite) from 4.1.1 to 4.3.2.\n- [Release notes](https://github.com/vitejs/vite/releases)\n- [Changelog](https://github.com/vitejs/vite/blob/main/packages/vite/CHANGELOG.md)\n- [Commits](https://github.com/vitejs/vite/commits/v4.3.2/packages/vite)"}                          | ${[]}
+		${"Bump @typescript-eslint/parser from 5.52.0 to 5.59.1"} | ${"\nBumps [@typescript-eslint/parser](https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser) from 5.52.0 to 5.59.1.\n- [Release notes](https://github.com/typescript-eslint/typescript-eslint/releases)\n- [Changelog](https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/parser/CHANGELOG.md)"} | ${[]}
+		${"Update src/main.ts"}                                   | ${"\nCo-Authored-By: Everloving Easter Bunny <everloving.easter.bunny@example.com>"}                                                                                                                                                                                                                                                                | ${["no-co-authors"]}
+		${"Do some pair programming"}                             | ${"\nThis commit is a collab.\nCo-authored-by: Santa Claus <santa.claus@example.com>\nCo-authored-by: Gingerbread Man <gingerbread.man@example.com>\nReported-by: Little Mermaid <little.mermaid@example.com>"}                                                                                                                                     | ${["no-co-authors"]}
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
@@ -166,9 +168,9 @@ describe("when the configuration has default settings", () => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -190,8 +192,38 @@ describe("when the configuration has default settings", () => {
 				testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body, numberOfParents }),
+				])
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+
+	describe.each`
+		subjectLines                                                                                                            | numberOfParents | expectedViolatedRuleKeys
+		${["Release the robot butler", "Fix this confusing plate of spaghetti", "Refactor the taxi module"]}                    | ${1}            | ${[]}
+		${["Release the robot butler", "Unsubscribe from the service", "Refactor the taxi module", "Release the robot butler"]} | ${1}            | ${["unique-subject-lines"]}
+		${["Unsubscribe from the service", "Unsubscribe from the service", "Unsubscribe from the service"]}                     | ${1}            | ${["unique-subject-lines"]}
+		${["Hunt down the bugs", "fixup! Hunt down the bugs", "fixup! Hunt down the bugs"]}                                     | ${1}            | ${["no-squash-commits"]}
+		${["amend! Release the robot butler", "Release the robot butler", "squash! Release the robot butler"]}                  | ${1}            | ${["no-squash-commits"]}
+		${['Revert "Release the robot butler"', "Release the robot butler", 'Revert "Release the robot butler"']}               | ${1}            | ${[]}
+		${["Keep my branch up to date", "Keep my branch up to date"]}                                                           | ${2}            | ${["no-merge-commits"]}
+	`(
+		"multiple commits with subject lines of $subjectLines",
+		(testRow: {
+			readonly subjectLines: ReadonlyArray<string>
+			readonly numberOfParents: number
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLines, numberOfParents, expectedViolatedRuleKeys } =
+				testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					subjectLines.map((subjectLine) =>
+						dummyCommit({ subjectLine, numberOfParents }),
+					),
 				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
@@ -240,7 +272,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 			} = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({
 						subjectLine: "Craft something amazing for us",
 						author: {
@@ -252,7 +284,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 							emailAddress: committerEmailAddress,
 						},
 					}),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -282,7 +314,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -312,7 +344,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -346,7 +378,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -366,8 +398,29 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const { subjectLine, numberOfParents, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, numberOfParents }),
+				])
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+
+	describe.each`
+		subjectLines                                                                  | expectedViolatedRuleKeys
+		${["#1 Make the formatter happy again", "#2 Make the formatter happy again"]} | ${[]}
+		${["#1 Make the formatter happy again", "#1 Make the formatter happy again"]} | ${["unique-subject-lines"]}
+	`(
+		"multiple commits with subject lines of $subjectLines",
+		(testRow: {
+			readonly subjectLines: ReadonlyArray<string>
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLines, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					subjectLines.map((subjectLine) => dummyCommit({ subjectLine })),
 				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
@@ -399,9 +452,9 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -432,9 +485,9 @@ describe("when the configuration overrides 'limit-length-of-subject-lines--max-c
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(
+				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, body }),
-				)
+				])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -464,7 +517,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate(dummyCommit({ subjectLine }))
+				const actualViolatedRuleKeys = validate([dummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -473,9 +526,9 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 
 function validateViolatedRulesFrom(
 	configuration: Configuration,
-): (commit: RawCommit) => ReadonlyArray<RuleKey> {
-	return (commit) =>
-		validatorFrom(configuration)([commit], violatedRulesReporter())
+): (rawCommits: ReadonlyArray<RawCommit>) => ReadonlyArray<RuleKey> {
+	return (rawCommits) =>
+		validatorFrom(configuration)(rawCommits, violatedRulesReporter())
 }
 
 function formatRuleKeys(ruleKeys: ReadonlyArray<RuleKey>): string {

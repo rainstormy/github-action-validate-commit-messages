@@ -6,23 +6,25 @@ export function limitLengthOfSubjectLines({
 }: LimitLengthOfSubjectLinesConfiguration): Rule {
 	return {
 		key: "limit-length-of-subject-lines",
-		validate: ({ refinedSubjectLine, parents }) => {
-			const isRevertCommit = refinedSubjectLine.startsWith("Revert ")
-			const isMergeCommitWithDefaultSubjectLine =
-				parents.length > 1 && refinedSubjectLine.startsWith("Merge ")
-
-			const isIgnorableCommit =
-				isRevertCommit || isMergeCommitWithDefaultSubjectLine
-
-			if (isIgnorableCommit) {
-				return "valid"
-			}
-
-			const hasSubjectLineWithinLimit =
-				refinedSubjectLine.length <= maximumCharacters ||
-				countOccurrences(refinedSubjectLine, "`") > 1
-
-			return hasSubjectLineWithinLimit ? "valid" : "invalid"
-		},
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits
+				.filter(
+					({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "),
+				)
+				.filter(
+					({ parents, refinedSubjectLine }) =>
+						parents.length === 1 || !refinedSubjectLine.startsWith("Merge "),
+				)
+				.filter(
+					({ refinedSubjectLine }) =>
+						refinedSubjectLine.length > maximumCharacters &&
+						!endsWithSemanticVersionNumber(refinedSubjectLine) &&
+						countOccurrences(refinedSubjectLine, "`") <= 1,
+				),
 	}
+}
+
+function endsWithSemanticVersionNumber(subjectLine: string): boolean {
+	const semanticVersionNumberRegex = /to\s\d+\.\d+\.\d+$/u
+	return semanticVersionNumberRegex.test(subjectLine)
 }

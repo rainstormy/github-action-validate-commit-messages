@@ -25,9 +25,7 @@ export function noSquashCommits({
 					.trim(),
 			}
 		},
-		validate: ({ squashPrefixes }) => {
-			const isSquashCommit = squashPrefixes.length > 0
-			return isSquashCommit ? "invalid" : "valid"
-		},
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits.filter(({ squashPrefixes }) => squashPrefixes.length > 0),
 	}
 }

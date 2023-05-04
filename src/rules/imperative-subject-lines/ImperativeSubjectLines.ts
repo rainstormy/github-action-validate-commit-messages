@@ -4336,19 +4336,26 @@ export function imperativeSubjectLines({
 		whitelist.map((word) => word.toLowerCase()),
 	)
 
-	function startsWithImperativeVerb(subjectLine: string): boolean {
-		const leadingWord = subjectLine.split(" ")[0].trim().toLowerCase()
-
-		return (
-			leadingWord === "" ||
-			customWordsToAccept.has(leadingWord) ||
-			indexOfFromBinarySearch(sortedImperativeVerbs, leadingWord) !== -1
-		)
-	}
-
 	return {
 		key: "imperative-subject-lines",
-		validate: ({ refinedSubjectLine }) =>
-			startsWithImperativeVerb(refinedSubjectLine) ? "valid" : "invalid",
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits
+				.map((commit) => {
+					const { refinedSubjectLine } = commit
+					const leadingWord = getLeadingWord(refinedSubjectLine)
+					return [commit, leadingWord] as const
+				})
+				.filter(([, leadingWord]) => leadingWord !== "")
+				.filter(([, leadingWord]) => !customWordsToAccept.has(leadingWord))
+				.filter(([, leadingWord]) => !isImperativeVerb(leadingWord))
+				.map(([commit]) => commit),
 	}
+}
+
+function getLeadingWord(refinedSubjectLine: string): string {
+	return refinedSubjectLine.split(" ")[0].trim().toLowerCase()
+}
+
+function isImperativeVerb(word: string): boolean {
+	return indexOfFromBinarySearch(sortedImperativeVerbs, word) !== -1
 }

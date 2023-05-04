@@ -3,10 +3,10 @@ import type { Rule } from "+rules"
 export function multiWordSubjectLines(): Rule {
 	return {
 		key: "multi-word-subject-lines",
-		validate: ({ refinedSubjectLine }) => {
-			const numberOfWords = countWords(refinedSubjectLine)
-			return numberOfWords <= 1 ? "invalid" : "valid"
-		},
+		getInvalidCommits: (refinedCommits) =>
+			refinedCommits.filter(
+				({ refinedSubjectLine }) => countWords(refinedSubjectLine) <= 1,
+			),
 	}
 }
 

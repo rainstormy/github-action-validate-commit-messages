@@ -19,6 +19,7 @@ import {
 	noTrailingPunctuationInSubjectLines,
 	noUnexpectedWhitespace,
 	parseCommit,
+	uniqueSubjectLines,
 } from "+rules"
 import type {
 	Configuration,
@@ -47,9 +48,7 @@ export function validatorFrom(configuration: Configuration): Validator {
 			Object.fromEntries(
 				rules
 					.map((rule) => {
-						const invalidCommits = refinedCommits.filter(
-							(commit) => rule.validate(commit) === "invalid",
-						)
+						const invalidCommits = rule.getInvalidCommits(refinedCommits)
 						return [rule.key, invalidCommits] as const
 					})
 					.filter(([, invalidCommits]) => invalidCommits.length > 0),
@@ -124,6 +123,10 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 			}
 			case "no-unexpected-whitespace": {
 				return noUnexpectedWhitespace()
+			}
+
+			case "unique-subject-lines": {
+				return uniqueSubjectLines()
 			}
 		}
 	}

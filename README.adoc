@@ -1,7 +1,6 @@
 = Validate Commit Messages in Pull Requests
 :experimental:
 :source-highlighter: highlight.js
-:toc: preamble
 
 This repository implements a reusable GitHub Action that validates commit messages in pull requests on GitHub to ensure that the commit messages meet certain standards and to remind you about squash commits that must be consolidated before you merge the pull request.
 
@@ -25,7 +24,7 @@ jobs:
         uses: rainstormy/github-action-validate-commit-messages@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          rules: 'no-merge-commits, no-squash-commits'
+          rules: no-merge-commits, no-squash-commits
 ----
 
 Here is a more elaborate example that uses all the available rules and tweaks the configuration of some of them:
@@ -34,12 +33,12 @@ Here is a more elaborate example that uses all the available rules and tweaks th
 ----
 with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
-  rules: 'acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, issue-references-in-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace'
+  rules: acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, issue-references-in-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace, unique-subject-lines
   acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
   acknowledged-author-names--patterns: '.+\s.+'
   acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
   acknowledged-committer-names--patterns: '.+\s.+'
-  issue-references-in-subject-lines--allowed-positions: 'as-suffix'
+  issue-references-in-subject-lines--allowed-positions: as-suffix
   issue-references-in-subject-lines--patterns: '\(#[1-9][0-9]*\) #[1-9][0-9]*'
 ----
 
@@ -568,6 +567,33 @@ m|Write&middot;documentation&#9166; +
 m|Write&middot;documentation&#9166; +
 &#9166; +
 This&middot;commit&middot;describes&middot;&middot;the&middot;usage.
+|===
+
+=== `unique-subject-lines`
+Commits that repeat the subject line of a previous commit in the pull request are probably meant to be squash commits that should be consolidated with the original commit.
+Exceptions to this rule include merge commits, revert commits, and proper squash commits (as configured by `+no-squash-commits--disallowed-prefixes+`).
+
+Avoiding unnecessary commits will help you preserve the traceability of the commit history.
+
+==== Examples
+|===
+|✅ Accepted |⛔ Rejected
+
+a|
+* `Write unit tests`
+* `Refactor the code`
+a|
+* `Refactor the code`
+* `Refactor the code`
+
+a|
+* `Refactor the code`
+* `squash! Refactor the code`
+* `squash! Refactor the code`
+a|
+* `Write unit tests`
+* `Implement the feature`
+* `Write unit tests`
 |===
 
 == Contributing
