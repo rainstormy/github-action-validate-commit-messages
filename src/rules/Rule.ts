@@ -18,6 +18,7 @@ export const ruleKeys = [
 	"no-squash-commits",
 	"no-trailing-punctuation-in-subject-lines",
 	"no-unexpected-whitespace",
+	"unique-subject-lines",
 ] as const
 
 export type RuleKey = (typeof ruleKeys)[number]

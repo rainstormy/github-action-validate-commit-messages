@@ -197,6 +197,36 @@ describe("when the configuration has default settings", () => {
 			})
 		},
 	)
+
+	describe.each`
+		subjectLines                                                                                                            | numberOfParents | expectedViolatedRuleKeys
+		${["Release the robot butler", "Fix this confusing plate of spaghetti", "Refactor the taxi module"]}                    | ${1}            | ${[]}
+		${["Release the robot butler", "Unsubscribe from the service", "Refactor the taxi module", "Release the robot butler"]} | ${1}            | ${["unique-subject-lines"]}
+		${["Unsubscribe from the service", "Unsubscribe from the service", "Unsubscribe from the service"]}                     | ${1}            | ${["unique-subject-lines"]}
+		${["Hunt down the bugs", "fixup! Hunt down the bugs", "fixup! Hunt down the bugs"]}                                     | ${1}            | ${["no-squash-commits"]}
+		${["amend! Release the robot butler", "Release the robot butler", "squash! Release the robot butler"]}                  | ${1}            | ${["no-squash-commits"]}
+		${['Revert "Release the robot butler"', "Release the robot butler", 'Revert "Release the robot butler"']}               | ${1}            | ${[]}
+		${["Keep my branch up to date", "Keep my branch up to date"]}                                                           | ${2}            | ${["no-merge-commits"]}
+	`(
+		"multiple commits with subject lines of $subjectLines",
+		(testRow: {
+			readonly subjectLines: ReadonlyArray<string>
+			readonly numberOfParents: number
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLines, numberOfParents, expectedViolatedRuleKeys } =
+				testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					subjectLines.map((subjectLine) =>
+						dummyCommit({ subjectLine, numberOfParents }),
+					),
+				)
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
 })
 
 describe("when the configuration overrides 'acknowledged-author-email-addresses--patterns' and 'acknowledged-committer-email-addresses--patterns' with GitHub-noreply or fictive company email addresses and 'acknowledged-author-names--patterns' and 'acknowledged-committer-names--patterns' with a two-word or three-letter requirement", () => {
@@ -369,6 +399,27 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 				const actualViolatedRuleKeys = validate([
 					dummyCommit({ subjectLine, numberOfParents }),
 				])
+				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
+			})
+		},
+	)
+
+	describe.each`
+		subjectLines                                                                  | expectedViolatedRuleKeys
+		${["#1 Make the formatter happy again", "#2 Make the formatter happy again"]} | ${[]}
+		${["#1 Make the formatter happy again", "#1 Make the formatter happy again"]} | ${["unique-subject-lines"]}
+	`(
+		"multiple commits with subject lines of $subjectLines",
+		(testRow: {
+			readonly subjectLines: ReadonlyArray<string>
+			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+		}) => {
+			const { subjectLines, expectedViolatedRuleKeys } = testRow
+
+			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
+				const actualViolatedRuleKeys = validate(
+					subjectLines.map((subjectLine) => dummyCommit({ subjectLine })),
+				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},

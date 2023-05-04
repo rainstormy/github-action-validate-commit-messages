@@ -19,6 +19,7 @@ import {
 	noTrailingPunctuationInSubjectLines,
 	noUnexpectedWhitespace,
 	parseCommit,
+	uniqueSubjectLines,
 } from "+rules"
 import type {
 	Configuration,
@@ -122,6 +123,10 @@ export function rulesFrom(configuration: Configuration): ReadonlyArray<Rule> {
 			}
 			case "no-unexpected-whitespace": {
 				return noUnexpectedWhitespace()
+			}
+
+			case "unique-subject-lines": {
+				return uniqueSubjectLines()
 			}
 		}
 	}

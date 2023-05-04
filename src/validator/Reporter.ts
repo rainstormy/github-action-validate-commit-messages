@@ -91,6 +91,7 @@ export function instructiveReporter(
 		const messageOrMessages = pluralise(commitCount, "message", "messages")
 		const nameOrNames = pluralise(commitCount, "name", "names")
 		const oneOrOnes = pluralise(commitCount, "one", "ones")
+		const repeatsOrRepeat = pluralise(commitCount, "repeats", "repeat")
 		const revertOrReverts = pluralise(commitCount, "revert", "reverts")
 		const theOrEach = pluralise(commitCount, "the", "each")
 
@@ -231,6 +232,13 @@ ${indent}Standardising the commit message format will help you preserve the read
 ${indentedListOfCommits}\n
 ${indent}Reword ${theOrEach} commit message to remove leading, trailing, and consecutive whitespace characters. Indentation is allowed in the message body.
 ${indent}Standardising the commit message format will help you preserve the readability of the commit history.`
+			}
+
+			case "unique-subject-lines": {
+				return `Please consolidate the ${commitOrCommits} that ${repeatsOrRepeat} the subject line of a previous commit:
+${indentedListOfCommits}\n
+${indent}Rebase interactively to combine the ${commitOrCommits} with the previous one.
+${indent}Avoiding unnecessary commits will help you preserve the traceability of the commit history.`
 			}
 		}
 	}

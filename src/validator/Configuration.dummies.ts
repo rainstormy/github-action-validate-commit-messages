@@ -14,6 +14,7 @@ export const dummyDefaultConfiguration: Configuration = {
 		"no-squash-commits",
 		"no-trailing-punctuation-in-subject-lines",
 		"no-unexpected-whitespace",
+		"unique-subject-lines",
 	],
 	acknowledgedAuthorEmailAddresses: {
 		patterns: ["^\\b$"], // A regular expression that never matches anything.

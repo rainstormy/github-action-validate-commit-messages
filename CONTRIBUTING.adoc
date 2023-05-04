@@ -130,6 +130,7 @@ Register the rule key in the necessary dummy configurations in `src/validator/Co
 . Write unit tests for the reporter in `src/validator/Reporter.tests.ts`.
 . Add instructions to the reporter in `src/validator/Reporter.ts` to make the unit tests pass.
 . Describe the rule in `README.adoc` and include it in the advanced example.
+. Mention the rule in `CHANGELOG.adoc` for the upcoming release.
 
 === Validate the Software Quality
 [source,shell]
