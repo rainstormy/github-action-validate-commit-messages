@@ -17,6 +17,7 @@ export function limitLengthOfBodyLines({
 					bodyLines.some(
 						(line, lineNumber) =>
 							line.length > maximumCharacters &&
+							!line.includes("https://") &&
 							countOccurrences(line, "`") <= 1 &&
 							!isInVerbatimZone(bodyLines, lineNumber),
 					),

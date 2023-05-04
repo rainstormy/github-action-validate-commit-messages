@@ -9,6 +9,9 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 === Added
 * New rule: `unique-subject-lines`.
 
+=== Fixed
+* Ignore lines that contain an `https://` URL in the `limit-length-of-body-lines` rule.
+
 == https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0...v1.0.1[1.0.1] - 2023-04-17
 === Added
 * https://choosealicense.com/licenses/mit[MIT license].
