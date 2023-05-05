@@ -5,9 +5,9 @@
 This file documents all notable changes to this project.
 The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0...HEAD[Unreleased]
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0\...HEAD[Unreleased]
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.1...v1.1.0[1.1.0] - 2023-05-04
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.1\...v1.1.0[1.1.0] - 2023-05-04
 === Added
 * New rule: `unique-subject-lines`.
 
@@ -15,7 +15,7 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 * Ignore semantic version updates (i.e. subject lines that end with `to X.Y.Z`) in the `limit-length-of-subject-lines` rule.
 * Ignore lines that contain an `https://` URL in the `limit-length-of-body-lines` rule.
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0...v1.0.1[1.0.1] - 2023-04-17
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0\...v1.0.1[1.0.1] - 2023-04-17
 === Added
 * https://choosealicense.com/licenses/mit[MIT license].
 
