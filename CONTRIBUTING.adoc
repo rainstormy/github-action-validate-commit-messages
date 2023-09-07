@@ -33,6 +33,20 @@ $ npm install --global yarn
 $ yarn run setup
 ----
 
+=== Install Act
+* *macOS* and *Linux* users should install https://github.com/nektos/act[Act] via https://brew.sh[Homebrew]:
++
+[source,shell]
+----
+$ brew install act
+----
+* *Windows* users should install https://github.com/nektos/act[Act] via https://github.com/microsoft/winget-cli[Windows Package Manager]:
++
+[source,shell]
+----
+$ winget install nektos.act
+----
+
 === Prepare Git
 . Generate an SSH key with the *Ed25519* algorithm, for example using https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent[ssh-keygen] or https://developer.1password.com/docs/ssh/manage-keys[1Password], and add it to the SSH agent on your computer.
 If you already have an SSH key on your computer, you may skip this step.
@@ -153,6 +167,34 @@ It runs the following means of validation:
 ** `validate.test.watch` makes the test suite run continuously.
 
 Run `validate.fix` to automatically fix as much as possible.
+
+=== Validate the Action Locally
+. Generate a https://github.com/settings/tokens/new[personal access token on GitHub] with the `public_repo` scope.
+. Store the token in a file named `.act.local` in the project root directory:
++
+[source,properties,subs="+quotes,+replacements"]
+----
+GITHUB_TOKEN=ghp_**_<personal-access-token>_**
+----
+. For the sake of the test, adjust the workflow temporarily in `.github/workflows/continuous-integration.yml` to use a specific commit on GitHub from which the test run of the action is done:
++
+[source,yml,subs="+quotes,+replacements"]
+----
+validate-commit-messages:
+  [...]
+  steps:
+    - name: Run the validation
+      uses: rainstormy/github-action-validate-commit-messages@**_<commit-sha>_**
+  [...]
+----
+
+. Use https://github.com/nektos/act[Act] to run the action to verify a failing scenario and a succeeding scenario:
++
+[source,shell,subs="+quotes,+replacements"]
+----
+$ act pull_request --job validate-commit-messages --secret-file .act.local --remote-name **_<origin>_** --eventpath=.github/events/pull-request-failure.json
+$ act pull_request --job validate-commit-messages --secret-file .act.local --remote-name **_<origin>_** --eventpath=.github/events/pull-request-success.json
+----
 
 === Build for Production
 [source,shell]
