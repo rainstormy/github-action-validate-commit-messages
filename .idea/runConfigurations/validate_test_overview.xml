@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="validate.test.ui" type="js.build_tools.npm" nameIsGenerated="true">
+  <configuration default="false" name="validate.test.overview" type="js.build_tools.npm" nameIsGenerated="true">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="validate.test.ui" />
+      <script value="validate.test.overview" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

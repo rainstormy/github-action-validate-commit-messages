@@ -2,10 +2,11 @@ import { builtinModules } from "node:module"
 import { join as joinPath, resolve as resolvePath } from "node:path"
 import { fileURLToPath } from "node:url"
 import { defineConfig } from "vitest/config"
+import tsconfigJson from "./tsconfig.json"
 
 const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")
 
-const viteConfig = defineConfig(() => ({
+export default defineConfig(() => ({
 	build: {
 		emptyOutDir: true,
 		lib: {
@@ -24,13 +25,7 @@ const viteConfig = defineConfig(() => ({
 	},
 	plugins: [],
 	resolve: {
-		// The first alias takes precedence over the following ones.
-		alias: {
-			"+github": inProjectDirectory("src/github/index"),
-			"+rules": inProjectDirectory("src/rules/index"),
-			"+utilities": inProjectDirectory("src/utilities/index"),
-			"+validator": inProjectDirectory("src/validator/index"),
-		},
+		alias: getAliasesFromTsconfig(),
 	},
 	test: {
 		coverage: {
@@ -42,8 +37,14 @@ const viteConfig = defineConfig(() => ({
 	},
 }))
 
+function getAliasesFromTsconfig(): Record<string, string> {
+	return Object.fromEntries(
+		Object.entries(tsconfigJson.compilerOptions.paths).map(
+			([alias, [path]]) => [alias, inProjectDirectory(path)],
+		),
+	)
+}
+
 function inProjectDirectory(relativePath: string): string {
 	return resolvePath(projectDirectory, relativePath)
 }
-
-export default viteConfig

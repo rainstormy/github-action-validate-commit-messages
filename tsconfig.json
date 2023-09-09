@@ -1,5 +1,3 @@
-// Read more:
-// https://www.typescriptlang.org/tsconfig
 {
 	"compilerOptions": {
 		"allowJs": false,
@@ -9,7 +7,6 @@
 		"exactOptionalPropertyTypes": false,
 		"forceConsistentCasingInFileNames": true,
 		"importHelpers": true,
-		"incremental": true,
 		"isolatedModules": true,
 		"lib": ["DOM", "DOM.Iterable", "ES2021", "WebWorker"],
 		"module": "ES2022",
@@ -26,24 +23,13 @@
 		"sourceMap": true,
 		"strict": true,
 		"target": "ES2021",
-		"tsBuildInfoFile": "./node_modules/.cache/typescript/.tsbuildinfo",
 		"useDefineForClassFields": true,
 		"verbatimModuleSyntax": true
 	},
-	"exclude": [
-		".git",
-		".idea",
-		".vscode",
-		".yarn",
-		"coverage",
-		"node_modules",
-		"release",
-		".pnp.*"
-	],
 	"include": [
-		"**/*.ts",
-		"**/*.tsx",
-		"**/eslint.config.js",
-		"**/prettier.config.cjs"
+		"./src/**/*.ts",
+		"./*.config.cjs",
+		"./*.config.js",
+		"./*.config.ts"
 	]
 }

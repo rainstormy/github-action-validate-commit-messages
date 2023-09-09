@@ -1,4 +1,4 @@
-name: Validate
+name: Continuous integration
 
 on:
   pull_request:
@@ -75,7 +75,7 @@ jobs:
         run: yarn run validate.test
 
   validate-commit-messages:
-    name: Validate commit messages
+    name: Commit messages
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
