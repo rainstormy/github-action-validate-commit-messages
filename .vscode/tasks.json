@@ -74,9 +74,9 @@
 		},
 		{
 			"type": "npm",
-			"script": "validate.test.ui",
+			"script": "validate.test.overview",
 			"problemMatcher": [],
-			"label": "validate.test.ui"
+			"label": "validate.test.overview"
 		},
 		{
 			"type": "npm",
@@ -89,6 +89,12 @@
 			"script": "validate.types",
 			"problemMatcher": [],
 			"label": "validate.types"
+		},
+		{
+			"type": "npm",
+			"script": "validate.types.nocache",
+			"problemMatcher": [],
+			"label": "validate.types.nocache"
 		}
 	]
 }

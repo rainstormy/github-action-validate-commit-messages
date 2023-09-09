@@ -42,7 +42,6 @@ node_modules/
 coverage/
 release/
 !release/entry.actions.cjs
-.eslintcache
 
 # Operating system artifacts.
 *~
