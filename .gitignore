@@ -10,6 +10,7 @@
 !.idea/runConfigurations/
 !.idea/*.iml
 !.idea/externalDependencies.xml
+!.idea/jsonSchemas.xml
 !.idea/modules.xml
 !.idea/prettier.xml
 !.idea/vcs.xml
