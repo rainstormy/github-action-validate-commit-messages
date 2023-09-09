@@ -5,7 +5,9 @@
 This file documents all notable changes to this project.
 The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0\...HEAD[Unreleased]
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.1\...HEAD[Unreleased]
+
+== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0\...v1.1.1[1.1.1] - 2023-09-09
 === Fixed
 * Reduce the bundle size downloaded by the GitHub Actions runner. The tarball archive exported by GitHub no longer contains Yarn PnP binaries and development-related files.
 
