@@ -51,5 +51,5 @@ inputs:
     description: A space-separated list of punctuation characters to be ignored by `no-trailing-punctuation-in-subject-lines`.
     required: false
 runs:
-  using: node16
+  using: node20
   main: release/entry.actions.cjs

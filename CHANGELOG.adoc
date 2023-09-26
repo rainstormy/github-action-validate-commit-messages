@@ -6,6 +6,10 @@ This file documents all notable changes to this project.
 The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
 == https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.1\...HEAD[Unreleased]
+=== Changed
+* Run on Node.js 20, as Node.js 16 is to https://github.blog/changelog/2023-09-22-github-actions-transitioning-from-node-16-to-node-20[become obsolete in GitHub Actions].
+This change should neither require any changes to your workflow files nor affect the visible behaviour of this action.
+Hence, it is not considered to be a breaking change.
 
 == https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0\...v1.1.1[1.1.1] - 2023-09-09
 === Fixed

@@ -12,15 +12,16 @@ on:
 jobs:
   validate-types:
     name: Type checking (TypeScript)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
       - name: Prepare Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 # https://github.com/actions/setup-node
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
       - name: Install unplugged dependencies
         run: yarn install --immutable
       - name: Run the validation
@@ -28,15 +29,16 @@ jobs:
 
   validate-lint:
     name: Static program analysis (ESLint)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
       - name: Prepare Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 # https://github.com/actions/setup-node
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
       - name: Install unplugged dependencies
         run: yarn install --immutable
       - name: Run the validation
@@ -44,15 +46,16 @@ jobs:
 
   validate-format:
     name: Source code formatting (Prettier)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
       - name: Prepare Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 # https://github.com/actions/setup-node
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
       - name: Install unplugged dependencies
         run: yarn install --immutable
       - name: Run the validation
@@ -60,15 +63,16 @@ jobs:
 
   validate-unit-tests:
     name: Automated unit testing (Vitest)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
       - name: Prepare Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 # https://github.com/actions/setup-node
         with:
           cache: yarn
-          node-version: 18
+          node-version: 20
       - name: Install unplugged dependencies
         run: yarn install --immutable
       - name: Run the validation
@@ -76,11 +80,12 @@ jobs:
 
   validate-commit-messages:
     name: Commit messages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
     if: github.event_name == 'pull_request'
     steps:
       - name: Run the validation
-        uses: rainstormy/github-action-validate-commit-messages@v1
+        uses: rainstormy/github-action-validate-commit-messages@v1 # https://github.com/rainstormy/github-action-validate-commit-messages
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rules: acknowledged-author-email-addresses, acknowledged-author-names, acknowledged-committer-email-addresses, acknowledged-committer-names, capitalised-subject-lines, empty-line-after-subject-lines, imperative-subject-lines, limit-length-of-body-lines, limit-length-of-subject-lines, multi-word-subject-lines, no-co-authors, no-merge-commits, no-revert-revert-commits, no-squash-commits, no-trailing-punctuation-in-subject-lines, no-unexpected-whitespace, unique-subject-lines
