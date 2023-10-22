@@ -79,7 +79,7 @@
 		"vitest": "Vitest; a unit testing framework that uses the Vite build configuration natively."
 	},
 	"license": "MIT",
-	"packageManager": "yarn@3.5.1",
+	"packageManager": "yarn@3.6.4",
 	"private": true,
 	"type": "module",
 	"//": {
