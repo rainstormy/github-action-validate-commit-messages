@@ -1,21 +1,32 @@
 = Changelog
 :experimental:
 :source-highlighter: highlight.js
+:url-github-repository: https://github.com/rainstormy/github-action-validate-commit-messages
 
 This file documents all notable changes to this project.
 The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.1\...HEAD[Unreleased]
+
+== {url-github-repository}/compare/v1.1.2\...HEAD[Unreleased]
+
+
+== {url-github-repository}/compare/v1.1.1\...v1.1.2[1.1.2] - 2023-10-20
+
 === Changed
 * Run on Node.js 20, as Node.js 16 is to https://github.blog/changelog/2023-09-22-github-actions-transitioning-from-node-16-to-node-20[become obsolete in GitHub Actions].
 This change should neither require any changes to your workflow files nor affect the visible behaviour of this action.
 Hence, it is not considered to be a breaking change.
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0\...v1.1.1[1.1.1] - 2023-09-09
-=== Fixed
-* Reduce the bundle size downloaded by the GitHub Actions runner. The tarball archive exported by GitHub no longer contains Yarn PnP binaries and development-related files.
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.1\...v1.1.0[1.1.0] - 2023-05-04
+== {url-github-repository}/compare/v1.1.0\...v1.1.1[1.1.1] - 2023-09-09
+
+=== Fixed
+* Reduce the bundle size downloaded by the GitHub Actions runner.
+The tarball archive exported by GitHub no longer contains Yarn PnP binaries and development-related files.
+
+
+== {url-github-repository}/compare/v1.0.1\...v1.1.0[1.1.0] - 2023-05-04
+
 === Added
 * New rule: `unique-subject-lines`.
 
@@ -23,14 +34,17 @@ Hence, it is not considered to be a breaking change.
 * Ignore semantic version updates (i.e. subject lines that end with `to X.Y.Z`) in the `limit-length-of-subject-lines` rule.
 * Ignore lines that contain an `https://` URL in the `limit-length-of-body-lines` rule.
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0\...v1.0.1[1.0.1] - 2023-04-17
+
+== {url-github-repository}/compare/v1.0.0\...v1.0.1[1.0.1] - 2023-04-17
+
 === Added
 * https://choosealicense.com/licenses/mit[MIT license].
 
 === Fixed
 * Recognise `scaffold` as a verb in the `imperative-subject-lines` rule.
 
-== https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.0.0[1.0.0] - 2023-04-01
+
+== {url-github-repository}/releases/tag/v1.0.0[1.0.0] - 2023-04-01
 
 === Added
 * GitHub Actions entrypoint.
