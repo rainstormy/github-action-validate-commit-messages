@@ -988,6 +988,7 @@ export const sortedImperativeVerbs: ReadonlyArray<string> = [
 	"decontextualise",
 	"decontextualize",
 	"decorate",
+	"decouple",
 	"decrease",
 	"decree",
 	"decry",

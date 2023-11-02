@@ -9,6 +9,9 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 
 == {url-github-repository}/compare/v1.1.2\...HEAD[Unreleased]
 
+=== Fixed
+* Recognise `decouple` as a verb in the `imperative-subject-lines` rule.
+
 
 == {url-github-repository}/compare/v1.1.1\...v1.1.2[1.1.2] - 2023-10-20
 
