@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"build": "vite build",
+		"build": "vite build --ssr src/entry.actions.ts",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.lint' 'yarn:validate.test' --group --names 'types','format','lint','test' --prefix-colors 'blue.bold','magenta.bold','cyan.bold','yellow.bold'",
 		"validate.fix": "yarn run validate.lint.fix && yarn run validate.format.fix",
