@@ -11,7 +11,7 @@ export default defineConfig(() => ({
 		emptyOutDir: true,
 		lib: {
 			entry: inProjectDirectory("src/entry.actions.ts"),
-			formats: ["cjs"],
+			formats: ["cjs" as const],
 			fileName: "entry.actions",
 		},
 		outDir: inProjectDirectory("release/"),
@@ -29,11 +29,13 @@ export default defineConfig(() => ({
 	},
 	test: {
 		coverage: {
-			include: ["src/**/*.{ts,tsx}"],
-			reporter: ["html"],
+			include: ["src/**/*.ts"],
+			exclude: ["src/**/*.tests.ts"],
+			provider: "v8" as const,
+			reportsDirectory: inProjectDirectory("node_modules/.vitest/coverage"),
 		},
 		globals: true, // Makes test cases compatible with Jest-related tooling, such as ESLint and Testing Library (for automatic cleanup).
-		include: ["src/**/*.tests.{ts,tsx}"],
+		include: ["src/**/*.tests.ts"],
 	},
 }))
 
