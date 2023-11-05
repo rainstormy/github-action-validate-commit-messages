@@ -4,7 +4,7 @@
 	"search.exclude": {
 		"**/.yarn": true,
 		"**/coverage": true,
-		"**/release": true,
+		"**/dist": true,
 		"**/.pnp.*": true,
 		"**/yarn.lock": true
 	},

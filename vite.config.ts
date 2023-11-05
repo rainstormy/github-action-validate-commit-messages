@@ -1,4 +1,3 @@
-import { builtinModules } from "node:module"
 import { join as joinPath, resolve as resolvePath } from "node:path"
 import { fileURLToPath } from "node:url"
 import { defineConfig } from "vitest/config"
@@ -9,31 +8,25 @@ const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")
 export default defineConfig(() => ({
 	build: {
 		emptyOutDir: true,
-		lib: {
-			entry: inProjectDirectory("src/entry.actions.ts"),
-			formats: ["cjs"],
-			fileName: "entry.actions",
-		},
-		outDir: inProjectDirectory("release/"),
+		minify: "esbuild" as const,
 		reportCompressedSize: false,
-		rollupOptions: {
-			external: [
-				...builtinModules,
-				...builtinModules.map((moduleName) => `node:${moduleName}`),
-			],
-		},
 	},
 	plugins: [],
 	resolve: {
 		alias: getAliasesFromTsconfig(),
 	},
+	ssr: {
+		noExternal: ["@actions/core", "@actions/github", "undici", "zod"],
+	},
 	test: {
 		coverage: {
-			include: ["src/**/*.{ts,tsx}"],
-			reporter: ["html"],
+			include: ["src/**/*.ts"],
+			exclude: ["src/**/*.tests.ts"],
+			provider: "v8" as const,
+			reportsDirectory: inProjectDirectory("node_modules/.vitest/coverage"),
 		},
 		globals: true, // Makes test cases compatible with Jest-related tooling, such as ESLint and Testing Library (for automatic cleanup).
-		include: ["src/**/*.tests.{ts,tsx}"],
+		include: ["src/**/*.tests.ts"],
 	},
 }))
 
