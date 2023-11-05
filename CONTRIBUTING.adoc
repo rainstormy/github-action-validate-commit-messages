@@ -17,20 +17,20 @@ Upon cloning the Git repository, the `.yarn/cache` directory already contains a 
 +
 [source,shell]
 ----
-$ curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-$ source ~/.bashrc
-$ nvm install --lts
-$ corepack enable yarn
-$ yarn run setup
+curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+source ~/.bashrc
+nvm install --lts
+corepack enable yarn
+yarn run setup
 ----
 
 * *Windows* users should install https://nodejs.org/en[Node.js] via https://github.com/microsoft/winget-cli[Windows Package Manager] and install https://yarnpkg.com/getting-started/install[Yarn] via npm (which is actually a workaround until Corepack supports Windows):
 +
 [source,shell]
 ----
-$ winget install OpenJS.NodeJS.LTS
-$ npm install --global yarn
-$ yarn run setup
+winget install OpenJS.NodeJS.LTS
+npm install --global yarn
+yarn run setup
 ----
 
 === Install Act
@@ -38,13 +38,13 @@ $ yarn run setup
 +
 [source,shell]
 ----
-$ brew install act
+brew install act
 ----
 * *Windows* users should install https://github.com/nektos/act[Act] via https://github.com/microsoft/winget-cli[Windows Package Manager]:
 +
 [source,shell]
 ----
-$ winget install nektos.act
+winget install nektos.act
 ----
 
 === Prepare Git
@@ -53,15 +53,15 @@ If you already have an SSH key on your computer, you may skip this step.
 +
 [source,shell,subs="+quotes,+replacements"]
 ----
-$ ssh-keygen -t ed25519 -f "$HOME/.ssh/**_<my-ssh-key>_**"
-$ ssh-add ~/.ssh/<my-ssh-key>
+ssh-keygen -t ed25519 -f "$HOME/.ssh/**_<my-ssh-key>_**"
+ssh-add ~/.ssh/<my-ssh-key>
 ----
 
 * *Windows* users must instruct Git to use https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview[Microsoft OpenSSH] as the SSH agent:
 +
 [source,shell]
 ----
-$ git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
+git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
 ----
 
 . Grab the **_public_** key.
@@ -69,7 +69,7 @@ It appears like `ssh-ed25519 AAAAC3(...)`.
 +
 [source,shell,subs="+quotes,+replacements"]
 ----
-$ cat ~/.ssh/**_<my-ssh-key>_**.pub
+cat ~/.ssh/**_<my-ssh-key>_**.pub
 ----
 
 . Register the public key in https://github.com/settings/keys[GitHub] as a signing key.
@@ -81,13 +81,12 @@ It appears like `**_<id+username>_**@users.noreply.github.com`.
 +
 [source,shell,subs="+quotes,+replacements"]
 ----
-$ git config user.name "**_<FirstName> <LastName>_**"
-$ git config user.email "**_<id+username>_**@users.noreply.github.com"
-
-$ git config user.signingkey "ssh-ed25519 AAAAC3**_<PublicKey>_**"
-$ git config gpg.format "ssh"
-$ git config commit.gpgsign "true"
-$ git config tag.gpgsign "true"
+git config user.name "**_<FirstName> <LastName>_**"
+git config user.email "**_<id+username>_**@users.noreply.github.com"
+git config user.signingkey "ssh-ed25519 AAAAC3**_<PublicKey>_**"
+git config gpg.format "ssh"
+git config commit.gpgsign "true"
+git config tag.gpgsign "true"
 ----
 
 === Prepare Your IDE
@@ -95,7 +94,7 @@ $ git config tag.gpgsign "true"
 +
 [source,shell]
 ----
-$ idea .
+idea .
 ----
 
 . Install these plugins (follow the popup message, or go to menu:File[Settings > Plugins]):
@@ -109,7 +108,7 @@ Select the appropriate Node.js interpreter and enable coding assistance.
 +
 [source,shell]
 ----
-$ code .
+code .
 ----
 
 . Install these extensions (kbd:[Ctrl+Shift+X] and search for `@recommended`):
@@ -148,7 +147,7 @@ Register the rule key in the necessary dummy configurations in `src/validator/Co
 === Validate the Software Quality
 [source,shell]
 ----
-$ yarn run validate
+yarn run validate
 ----
 
 It runs the following means of validation:
@@ -192,14 +191,14 @@ validate-commit-messages:
 +
 [source,shell,subs="+quotes,+replacements"]
 ----
-$ act pull_request --job validate-commit-messages --secret-file .act.local --remote-name **_<origin>_** --eventpath=.github/events/pull-request-failure.json
-$ act pull_request --job validate-commit-messages --secret-file .act.local --remote-name **_<origin>_** --eventpath=.github/events/pull-request-success.json
+act pull_request --job validate-commit-messages --secret-file .act.local --remote-name **_<origin>_** --eventpath=.github/events/pull-request-failure.json
+act pull_request --job validate-commit-messages --secret-file .act.local --remote-name **_<origin>_** --eventpath=.github/events/pull-request-success.json
 ----
 
 === Build for Production
 [source,shell]
 ----
-$ yarn run build
+yarn run build
 ----
 
 As defined in the `action.yml` file, the generated `release/entry.actions.cjs` becomes the https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain[entrypoint of the action] which is why it is checked into the repository along with the source code.
