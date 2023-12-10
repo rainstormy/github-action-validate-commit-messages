@@ -9,6 +9,7 @@ import {
 	validatorFrom,
 	violatedRulesReporter,
 } from "+validator"
+import { describe, expect, it } from "vitest"
 
 describe("when the configuration has default settings", () => {
 	const validate = validateViolatedRulesFrom(dummyDefaultConfiguration)

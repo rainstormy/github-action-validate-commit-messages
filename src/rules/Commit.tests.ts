@@ -8,6 +8,7 @@ import {
 	dummyJiraStyleIssueReferencesConfiguration,
 	rulesFrom,
 } from "+validator"
+import { describe, expect, it } from "vitest"
 
 describe("when the configuration has default settings", () => {
 	const rules: ReadonlyArray<Rule> = rulesFrom(dummyDefaultConfiguration)

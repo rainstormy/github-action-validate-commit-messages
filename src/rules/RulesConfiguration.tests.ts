@@ -4,6 +4,7 @@ import {
 	ruleKeysConfigurationSchema,
 } from "+rules"
 import { count } from "+utilities"
+import { describe, expect, it } from "vitest"
 
 describe.each`
 	rawRuleKeys                                                                                                                                 | expectedRuleKeys

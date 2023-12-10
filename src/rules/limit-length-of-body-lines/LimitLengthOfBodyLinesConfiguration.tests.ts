@@ -3,6 +3,7 @@ import type {
 	RawLimitLengthOfBodyLinesConfiguration,
 } from "+rules"
 import { limitLengthOfBodyLinesConfigurationSchema } from "+rules"
+import { describe, expect, it } from "vitest"
 
 describe.each`
 	rawMaximumCharacters | expectedMaximumCharacters

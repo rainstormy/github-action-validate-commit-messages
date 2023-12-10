@@ -10,6 +10,7 @@ import {
 	instructiveReporter,
 	validatorFrom,
 } from "+validator"
+import { describe, expect, it } from "vitest"
 
 describe("when the configuration has default settings", () => {
 	const validate = validateInstructionsFrom(dummyDefaultConfiguration)

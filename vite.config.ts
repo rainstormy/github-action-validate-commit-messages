@@ -25,7 +25,6 @@ export default defineConfig(() => ({
 			provider: "v8" as const,
 			reportsDirectory: inProjectDirectory("node_modules/.vitest/coverage"),
 		},
-		globals: true, // Makes test cases compatible with Jest-related tooling, such as ESLint and Testing Library (for automatic cleanup).
 		include: ["src/**/*.tests.ts"],
 	},
 }))

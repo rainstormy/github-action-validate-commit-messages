@@ -1,4 +1,5 @@
 import { sortedImperativeVerbs } from "+rules"
+import { describe, expect, it } from "vitest"
 
 describe("the list of imperative verbs", () => {
 	it("is sorted according to localeCompare", () => {

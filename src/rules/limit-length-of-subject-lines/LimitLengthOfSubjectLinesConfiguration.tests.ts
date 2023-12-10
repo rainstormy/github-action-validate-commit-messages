@@ -3,6 +3,7 @@ import type {
 	RawLimitLengthOfSubjectLinesConfiguration,
 } from "+rules"
 import { limitLengthOfSubjectLinesConfigurationSchema } from "+rules"
+import { describe, expect, it } from "vitest"
 
 describe.each`
 	rawMaximumCharacters | expectedMaximumCharacters

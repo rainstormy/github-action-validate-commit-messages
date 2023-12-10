@@ -4,6 +4,7 @@ import type {
 } from "+rules"
 import { noTrailingPunctuationInSubjectLinesConfigurationSchema } from "+rules"
 import { count } from "+utilities"
+import { describe, expect, it } from "vitest"
 
 describe.each`
 	rawSuffixes              | expectedSuffixes

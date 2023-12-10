@@ -4,6 +4,7 @@ import type {
 } from "+rules"
 import { acknowledgedCommitterEmailAddressesConfigurationSchema } from "+rules"
 import { count } from "+utilities"
+import { describe, expect, it } from "vitest"
 
 describe.each`
 	rawPatterns                                                                 | expectedPatterns
