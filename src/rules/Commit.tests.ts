@@ -1,13 +1,14 @@
-import type { Rule } from "+rules"
-import { commitRefinerFrom, parseCommit } from "+rules"
-import { count } from "+utilities"
+import { parseCommit } from "+rules/Commit"
+import { commitRefinerFrom } from "+rules/CommitRefiner"
+import { type Rule } from "+rules/Rule"
+import { count } from "+utilities/StringUtilities"
 import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	dummyGithubStyleIssueReferencesAsSuffixConfiguration,
 	dummyJiraStyleIssueReferencesConfiguration,
-	rulesFrom,
-} from "+validator"
+} from "+validator/Configuration.dummies"
+import { rulesFrom } from "+validator/Validator"
 import { describe, expect, it } from "vitest"
 
 describe("when the configuration has default settings", () => {

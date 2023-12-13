@@ -32,7 +32,10 @@ export default defineConfig(() => ({
 function getAliasesFromTsconfig(): Record<string, string> {
 	return Object.fromEntries(
 		Object.entries(tsconfigJson.compilerOptions.paths).map(
-			([alias, [path]]) => [alias, inProjectDirectory(path)],
+			([alias, [path]]) => [
+				alias.slice(0, -"/*".length),
+				inProjectDirectory(path.slice(0, -"/*".length)),
+			],
 		),
 	)
 }

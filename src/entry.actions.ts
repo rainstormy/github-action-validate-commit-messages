@@ -1,12 +1,12 @@
-import type { ActionResult } from "+github"
 import {
 	actionFailed,
 	actionSucceeded,
-	configurationFromInputs,
-	formatIssue,
-	getPullRequestFromApi,
-} from "+github"
-import { instructiveReporter, validatorFrom } from "+validator"
+	type ActionResult,
+} from "+github/ActionResult"
+import { configurationFromInputs, formatIssue } from "+github/InputParameters"
+import { getPullRequestFromApi } from "+github/PullRequest"
+import { instructiveReporter } from "+validator/Reporter"
+import { validatorFrom } from "+validator/Validator"
 import core from "@actions/core"
 import github from "@actions/github"
 

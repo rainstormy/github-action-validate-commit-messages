@@ -1,31 +1,29 @@
-import type { RawCommit, Rule, RuleKey } from "+rules"
+import { acknowledgedAuthorEmailAddresses } from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddresses"
+import { acknowledgedAuthorNames } from "+rules/AcknowledgedAuthorNames/AcknowledgedAuthorNames"
+import { acknowledgedCommitterEmailAddresses } from "+rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddresses"
+import { acknowledgedCommitterNames } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNames"
+import { capitalisedSubjectLines } from "+rules/CapitalisedSubjectLines/CapitalisedSubjectLines"
+import { parseCommit, type RawCommit } from "+rules/Commit"
+import { commitRefinerFrom } from "+rules/CommitRefiner"
+import { emptyLineAfterSubjectLines } from "+rules/EmptyLineAfterSubjectLines/EmptyLineAfterSubjectLines"
+import { imperativeSubjectLines } from "+rules/ImperativeSubjectLines/ImperativeSubjectLines"
+import { issueReferencesInSubjectLines } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLines"
+import { limitLengthOfBodyLines } from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLines"
+import { limitLengthOfSubjectLines } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLines"
+import { multiWordSubjectLines } from "+rules/MultiWordSubjectLines/MultiWordSubjectLines"
+import { noCoAuthors } from "+rules/NoCoAuthors/NoCoAuthors"
+import { noMergeCommits } from "+rules/NoMergeCommits/NoMergeCommits"
+import { noRevertRevertCommits } from "+rules/NoRevertRevertCommits/NoRevertRevertCommits"
+import { noSquashCommits } from "+rules/NoSquashCommits/NoSquashCommits"
+import { noTrailingPunctuationInSubjectLines } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLines"
+import { noUnexpectedWhitespace } from "+rules/NoUnexpectedWhitespace/NoUnexpectedWhitespace"
+import { type Rule, type RuleKey } from "+rules/Rule"
+import { uniqueSubjectLines } from "+rules/UniqueSubjectLines/UniqueSubjectLines"
+import { type Configuration } from "+validator/Configuration"
 import {
-	acknowledgedAuthorEmailAddresses,
-	acknowledgedAuthorNames,
-	acknowledgedCommitterEmailAddresses,
-	acknowledgedCommitterNames,
-	capitalisedSubjectLines,
-	commitRefinerFrom,
-	emptyLineAfterSubjectLines,
-	imperativeSubjectLines,
-	issueReferencesInSubjectLines,
-	limitLengthOfBodyLines,
-	limitLengthOfSubjectLines,
-	multiWordSubjectLines,
-	noCoAuthors,
-	noMergeCommits,
-	noRevertRevertCommits,
-	noSquashCommits,
-	noTrailingPunctuationInSubjectLines,
-	noUnexpectedWhitespace,
-	parseCommit,
-	uniqueSubjectLines,
-} from "+rules"
-import type {
-	Configuration,
-	InvalidCommitsByViolatedRuleKey,
-	Reporter,
-} from "+validator"
+	type InvalidCommitsByViolatedRuleKey,
+	type Reporter,
+} from "+validator/Reporter"
 
 export type Validator = <Result>(
 	rawCommits: ReadonlyArray<RawCommit>,

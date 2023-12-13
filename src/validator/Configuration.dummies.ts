@@ -1,4 +1,4 @@
-import type { Configuration } from "+validator"
+import { type Configuration } from "+validator/Configuration"
 
 export const dummyDefaultConfiguration: Configuration = {
 	ruleKeys: [

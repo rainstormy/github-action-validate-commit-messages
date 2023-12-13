@@ -1,14 +1,15 @@
-import type { RawCommit, RuleKey } from "+rules"
-import { dummyCommit } from "+rules"
-import { count } from "+utilities"
-import type { Configuration } from "+validator"
+import { type RawCommit } from "+rules/Commit"
+import { dummyCommit } from "+rules/Commit.dummies"
+import { type RuleKey } from "+rules/Rule"
+import { count } from "+utilities/StringUtilities"
+import { type Configuration } from "+validator/Configuration"
 import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	dummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
-	validatorFrom,
-	violatedRulesReporter,
-} from "+validator"
+} from "+validator/Configuration.dummies"
+import { violatedRulesReporter } from "+validator/Reporter"
+import { validatorFrom } from "+validator/Validator"
 import { describe, expect, it } from "vitest"
 
 describe("when the configuration has default settings", () => {
