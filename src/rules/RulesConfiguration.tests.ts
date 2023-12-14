@@ -1,9 +1,7 @@
-import type { RuleKey } from "+rules"
-import {
-	ruleKeys as allAvailableRuleKeys,
-	ruleKeysConfigurationSchema,
-} from "+rules"
-import { count } from "+utilities"
+import { ruleKeys as allAvailableRuleKeys, type RuleKey } from "+rules/Rule"
+import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
+import { count } from "+utilities/StringUtilities"
+import { describe, expect, it } from "vitest"
 
 describe.each`
 	rawRuleKeys                                                                                                                                 | expectedRuleKeys

@@ -13,10 +13,10 @@
 		"moduleResolution": "Node",
 		"noEmit": true,
 		"paths": {
-			"+github": ["./src/github/index"],
-			"+rules": ["./src/rules/index"],
-			"+utilities": ["./src/utilities/index"],
-			"+validator": ["./src/validator/index"]
+			"+github/*": ["./src/github/*"],
+			"+rules/*": ["./src/rules/*"],
+			"+utilities/*": ["./src/utilities/*"],
+			"+validator/*": ["./src/validator/*"]
 		},
 		"resolveJsonModule": true,
 		"skipLibCheck": true,

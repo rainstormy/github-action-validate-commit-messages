@@ -25,7 +25,6 @@ export default defineConfig(() => ({
 			provider: "v8" as const,
 			reportsDirectory: inProjectDirectory("node_modules/.vitest/coverage"),
 		},
-		globals: true, // Makes test cases compatible with Jest-related tooling, such as ESLint and Testing Library (for automatic cleanup).
 		include: ["src/**/*.tests.ts"],
 	},
 }))
@@ -33,7 +32,10 @@ export default defineConfig(() => ({
 function getAliasesFromTsconfig(): Record<string, string> {
 	return Object.fromEntries(
 		Object.entries(tsconfigJson.compilerOptions.paths).map(
-			([alias, [path]]) => [alias, inProjectDirectory(path)],
+			([alias, [path]]) => [
+				alias.slice(0, -"/*".length),
+				inProjectDirectory(path.slice(0, -"/*".length)),
+			],
 		),
 	)
 }

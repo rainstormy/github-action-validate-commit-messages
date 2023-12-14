@@ -1,16 +1,14 @@
-import {
-	acknowledgedAuthorEmailAddressesConfigurationSchema,
-	acknowledgedAuthorNamesConfigurationSchema,
-	acknowledgedCommitterEmailAddressesConfigurationSchema,
-	acknowledgedCommitterNamesConfigurationSchema,
-	imperativeSubjectLinesConfigurationSchema,
-	issueReferencesInSubjectLinesConfigurationSchema,
-	limitLengthOfBodyLinesConfigurationSchema,
-	limitLengthOfSubjectLinesConfigurationSchema,
-	noSquashCommitsConfigurationSchema,
-	noTrailingPunctuationInSubjectLinesConfigurationSchema,
-	ruleKeysConfigurationSchema,
-} from "+rules"
+import { acknowledgedAuthorEmailAddressesConfigurationSchema } from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
+import { acknowledgedAuthorNamesConfigurationSchema } from "+rules/AcknowledgedAuthorNames/AcknowledgedAuthorNamesConfiguration"
+import { acknowledgedCommitterEmailAddressesConfigurationSchema } from "+rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddressesConfiguration"
+import { acknowledgedCommitterNamesConfigurationSchema } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNamesConfiguration"
+import { imperativeSubjectLinesConfigurationSchema } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
+import { issueReferencesInSubjectLinesConfigurationSchema } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
+import { limitLengthOfBodyLinesConfigurationSchema } from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
+import { limitLengthOfSubjectLinesConfigurationSchema } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
+import { noSquashCommitsConfigurationSchema } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
+import { noTrailingPunctuationInSubjectLinesConfigurationSchema } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
+import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
 import { z } from "zod"
 
 const configurationSchema = z.object({
