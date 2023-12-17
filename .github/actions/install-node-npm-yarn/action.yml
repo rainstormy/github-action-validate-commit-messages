@@ -5,7 +5,11 @@ author: Steffen Diswal
 runs:
   using: composite
   steps:
-    - name: Install Node.js, npm, and Yarn
+    - name: Enable Yarn with Corepack # See https://github.com/actions/setup-node/issues/899#issuecomment-1823139737 and https://github.com/actions/setup-node/issues/531.
+      run: |
+        corepack enable yarn
+      shell: bash
+    - name: Install Node.js and npm
       uses: actions/setup-node@v4 # https://github.com/actions/setup-node
       with:
         cache: yarn
