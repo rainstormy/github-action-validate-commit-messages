@@ -1,0 +1,37 @@
+# This workflow creates a Git tag for the release commit on the default branch.
+name: Release / Create tag
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  release-tag:
+    name: Release / Create tag
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
+        with:
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }} # Allows the push tag event in this workflow to trigger the `release-to-github` workflow subsequently. See https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow.
+      - name: Extract the version from the release branch name
+        id: extract-version-from-release-branch-name
+        run: |
+          echo "RELEASE_VERSION=${RELEASE_BRANCH_NAME#release/}" >> "$GITHUB_OUTPUT"
+        env:
+          RELEASE_BRANCH_NAME: ${{ github.head_ref }}
+      - name: Use Nimbus (Bot) in Git
+        uses: rainstormy/github-action-rainstorm-release-use-bot-nimbus@v1 # https://github.com/rainstormy/github-action-rainstorm-release-use-bot-nimbus
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+      - name: Create and push a release tag
+        uses: rainstormy/github-action-release-tag@v1 # https://github.com/rainstormy/github-action-release-tag
+        with:
+          release-version: ${{ steps.extract-version-from-release-branch-name.outputs.RELEASE_VERSION }}

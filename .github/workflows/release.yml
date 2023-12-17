@@ -1,0 +1,38 @@
+# This workflow creates a release branch and a pull request towards the default branch.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The semantic version number of the new release.
+        type: string
+        required: true
+
+jobs:
+  release-pull-request:
+    name: Release / Create pull request
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
+      - name: Install Node.js, npm, and Yarn
+        uses: ./.github/actions/install-node-npm-yarn
+      - name: Generate build artifacts
+        run: yarn run build
+      - name: Prepare the release
+        run: yarn run release.prepare "$RELEASE_VERSION"
+        env:
+          RELEASE_VERSION: ${{ github.event.inputs.version }}
+      - name: Use Nimbus (Bot) in Git
+        uses: rainstormy/github-action-rainstorm-release-use-bot-nimbus@v1 # https://github.com/rainstormy/github-action-rainstorm-release-use-bot-nimbus
+        with:
+          bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
+          bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
+          ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
+      - name: Create a release branch and a pull request
+        uses: rainstormy/github-action-release-pull-request@v1 # https://github.com/rainstormy/github-action-release-pull-request
+        with:
+          gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
+          release-version: ${{ github.event.inputs.version }}

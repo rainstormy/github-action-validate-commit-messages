@@ -1,0 +1,15 @@
+name: Install Node.js, npm, and Yarn
+description: Runs `actions/setup-node` and installs unplugged dependencies with Yarn.
+author: Steffen Diswal
+
+runs:
+  using: composite
+  steps:
+    - name: Install Node.js, npm, and Yarn
+      uses: actions/setup-node@v4 # https://github.com/actions/setup-node
+      with:
+        cache: yarn
+        node-version: 20
+    - name: Install unplugged dependencies
+      run: yarn install --immutable
+      shell: bash

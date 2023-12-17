@@ -1,6 +1,7 @@
 {
 	"scripts": {
 		"build": "vite build --ssr src/entry.actions.ts",
+		"release.prepare": "updraft --files CHANGELOG.adoc --release-version",
 		"setup": "yarn install && simple-git-hooks",
 		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.lint' 'yarn:validate.test' --group --names 'types','format','lint','test' --prefix-colors 'blue.bold','magenta.bold','cyan.bold','yellow.bold'",
 		"validate.fix": "yarn run validate.lint.fix && yarn run validate.format.fix",
@@ -36,6 +37,7 @@
 	},
 	"devDependencies": {
 		"@octokit/types": "12.1.1",
+		"@rainstormy/updraft": "1.0.0",
 		"@types/eslint": "8.37.0",
 		"@types/node": "20.8.10",
 		"@types/prettier": "2.7.2",
@@ -58,9 +60,10 @@
 		"vitest": "0.34.6"
 	},
 	"devDependencies-comments": {
+		"@octokit/types": "Type definitions for the GitHub REST API via Octokit.",
+		"@rainstormy/updraft": "Updraft is a release automation tool.",
 		"@types/eslint": "Type definitions for ESLint configuration files.",
 		"@types/node": "Type definitions for Node.js modules.",
-		"@types/octokit": "Type definitions for the GitHub REST API via Octokit.",
 		"@types/prettier": "Type definitions for Prettier configuration files.",
 		"@typescript-eslint/eslint-plugin": "An ESLint plugin that uncovers issues in TypeScript code. It must always match the version of `@typescript-eslint/parser`.",
 		"@typescript-eslint/parser": "An ESLint plugin that lets it parse TypeScript sources. It must always match the version of `@typescript-eslint/eslint-plugin`.",
