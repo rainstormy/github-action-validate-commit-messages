@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - v*
+  workflow_dispatch: # Use the GitHub CLI to trigger this workflow manually on any branch: `gh workflow run continuous-integration.yml --ref <branch-name>`.
 
 jobs:
   validate-code-quality:

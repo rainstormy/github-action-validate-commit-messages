@@ -5,6 +5,7 @@ on:
   push:
     tags:
       - v*
+  workflow_dispatch: # Use the GitHub CLI to trigger this workflow manually on any release tag: `gh workflow run release-to-github.yml --ref <tag-name>`.
 
 jobs:
   release-to-github:
@@ -12,10 +13,12 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4 # https://github.com/actions/checkout
       - name: Extract the version from the release tag name
         id: extract-version-from-release-tag-name
         run: |
-          echo "RELEASE_VERSION=${RELEASE_TAG_NAME#v}" >> "$GITHUB_OUTPUT"
+          echo "RELEASE_VERSION=${RELEASE_TAG_NAME#v}" >> $GITHUB_OUTPUT
         env:
           RELEASE_TAG_NAME: ${{ github.ref_name }}
       - name: Create a draft release in GitHub
