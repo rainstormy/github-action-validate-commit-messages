@@ -22,7 +22,7 @@ jobs:
       - name: Generate build artifacts
         run: yarn run build
       - name: Prepare the release
-        run: yarn run release.prepare "$RELEASE_VERSION"
+        run: yarn run release.prepare $RELEASE_VERSION
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
       - name: Use Nimbus (Bot) in Git

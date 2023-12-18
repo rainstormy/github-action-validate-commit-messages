@@ -22,7 +22,7 @@ jobs:
       - name: Extract the version from the release branch name
         id: extract-version-from-release-branch-name
         run: |
-          echo "RELEASE_VERSION=${RELEASE_BRANCH_NAME#release/}" >> "$GITHUB_OUTPUT"
+          echo "RELEASE_VERSION=${RELEASE_BRANCH_NAME#release/}" >> $GITHUB_OUTPUT
         env:
           RELEASE_BRANCH_NAME: ${{ github.head_ref }}
       - name: Use Nimbus (Bot) in Git
