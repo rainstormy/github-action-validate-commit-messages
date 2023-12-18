@@ -7,11 +7,15 @@ This file documents all notable changes to this project.
 The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], and this project adheres to https://semver.org/spec/v2.0.0.html[Semantic Versioning].
 
 
-== {url-github-repository}/compare/v1.1.3\...HEAD[Unreleased]
+== {url-github-repository}/compare/v1.1.4\...HEAD[Unreleased]
+
+
+== {url-github-repository}/compare/v1.1.3\...v1.1.4[1.1.4] - 2023-12-18
 
 === Fixed
 * Recognise `coauthor`/`co-author`, `colocate`/`co-locate`, `collocate`, `copilot`/`co-pilot`,
 `deauthenticate`, `deauthorise`/`deauthorize`, `deorbit`, `parameterise`/`parameterize`/`parametrise`/`parametrize`, `remix`, and `unauthorise`/`unauthorize` as verbs in the `imperative-subject-lines` rule.
+
 
 == {url-github-repository}/compare/v1.1.2\...v1.1.3[1.1.3] - 2023-11-03
 
