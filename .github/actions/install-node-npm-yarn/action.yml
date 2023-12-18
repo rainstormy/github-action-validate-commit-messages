@@ -1,5 +1,5 @@
 name: Install Node.js, npm, and Yarn
-description: Runs `actions/setup-node` and installs unplugged dependencies with Yarn.
+description: Runs `actions/setup-node` and restores dependencies from the Yarn zero-install cache.
 author: Steffen Diswal
 
 runs:
@@ -12,8 +12,16 @@ runs:
     - name: Install Node.js and npm
       uses: actions/setup-node@v4 # https://github.com/actions/setup-node
       with:
-        cache: yarn
         node-version: 20
-    - name: Install unplugged dependencies
+    - name: Restore unplugged dependencies from the workflow cache
+      id: cache-yarn-unplugged
+      uses: actions/cache@v3 # https://github.com/actions/cache
+      with:
+        path: .yarn/unplugged/
+        key: cache-yarn-unplugged-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          cache-yarn-unplugged-${{ runner.os }}-
+    - name: Make dependencies executable from package scripts
+      if: steps.cache-yarn-unplugged.outputs.cache-hit != 'true'
       run: yarn install --immutable
       shell: bash
