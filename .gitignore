@@ -41,8 +41,8 @@ node_modules/
 
 # Build and test artifacts.
 coverage/
-dist/
-!dist/entry.actions.js
+dist/*
+!dist/main.mjs
 
 # Operating system artifacts.
 *~

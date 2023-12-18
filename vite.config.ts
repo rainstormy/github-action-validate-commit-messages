@@ -10,6 +10,11 @@ export default defineConfig(() => ({
 		emptyOutDir: true,
 		minify: "esbuild" as const,
 		reportCompressedSize: false,
+		rollupOptions: {
+			output: {
+				entryFileNames: "main.mjs",
+			},
+		},
 	},
 	plugins: [],
 	resolve: {
