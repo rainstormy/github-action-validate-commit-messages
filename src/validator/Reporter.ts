@@ -20,7 +20,7 @@ export function violatedRulesReporter(): Reporter<RuleKey> {
 export function instructiveReporter(
 	configuration: Configuration,
 ): Reporter<string> {
-	const indent = "    " // eslint-disable-line unicorn/string-content -- The indent of four spaces is intentional.
+	const indent = "    "
 
 	const indentedListOfAuthorEmailAddressPatterns =
 		configuration.acknowledgedAuthorEmailAddresses.patterns

@@ -6,13 +6,11 @@
 
 # IntelliJ IDEA.
 .idea/*
-!.idea/jsLinters/
 !.idea/runConfigurations/
 !.idea/*.iml
 !.idea/externalDependencies.xml
 !.idea/jsonSchemas.xml
 !.idea/modules.xml
-!.idea/prettier.xml
 !.idea/vcs.xml
 
 # Visual Studio Code.

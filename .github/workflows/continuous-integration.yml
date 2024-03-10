@@ -18,10 +18,6 @@ jobs:
         task:
           - name: Validate build (Vite)
             script: build
-          - name: Validate format (Prettier)
-            script: validate.format
-          - name: Validate clean code (ESLint)
-            script: validate.lint
           - name: Validate unit tests (Vitest)
             script: validate.test
           - name: Validate static types (TypeScript)
