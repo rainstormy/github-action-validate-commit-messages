@@ -8,9 +8,9 @@
 		},
 		{
 			"type": "npm",
-			"script": "setup",
+			"script": "ready",
 			"problemMatcher": [],
-			"label": "setup"
+			"label": "ready"
 		},
 		{
 			"type": "npm",

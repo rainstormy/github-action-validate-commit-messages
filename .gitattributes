@@ -1,34 +1,4 @@
 # Normalise line endings in the repository and in the working directory.
-#
-# Read more:
 # https://git-scm.com/docs/gitattributes
 # https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
-
 *                    text=auto eol=lf
-
-
-# Exclude non-runtime files from being included in the tarball archive downloaded by the GitHub Actions runner.
-# And exclude certain files from the language statistics in GitHub.
-#
-# Read more:
-# https://github.com/github/linguist
-
-.github              export-ignore linguist-vendored
-.idea                export-ignore linguist-vendored
-.vscode              export-ignore linguist-vendored
-.yarn/**             export-ignore linguist-vendored
-.yarn/releases/*     binary
-.yarn/plugins/**/*   binary
-src                  export-ignore
-.pnp.*               binary export-ignore linguist-generated
-*.adoc               export-ignore linguist-vendored
-*.config.cjs         export-ignore linguist-vendored
-*.config.js          export-ignore linguist-vendored
-*.config.ts          export-ignore linguist-vendored
-.gitattributes       export-ignore linguist-vendored
-.gitignore           export-ignore linguist-vendored
-.editorconfig        export-ignore linguist-vendored
-.yarnrc.yml          export-ignore linguist-vendored
-package.json         export-ignore linguist-vendored
-tsconfig.json        export-ignore linguist-vendored
-yarn.lock            binary export-ignore linguist-generated

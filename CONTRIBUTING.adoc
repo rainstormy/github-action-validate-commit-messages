@@ -9,28 +9,16 @@ CAUTION: All commands in this README document are to be executed from the projec
 
 [[get_started]]
 == Get Started
-This project uses the https://yarnpkg.com/features/zero-installs[zero-install feature] of the Yarn package manager.
-Upon cloning the Git repository, the `.yarn/cache` directory already contains a cache of the third-party dependencies, effectively replacing the usual `node_modules` directory.
-
-=== Install Node.js and Yarn
-* *macOS* and *Linux* users should install https://nodejs.org/en[Node.js] via https://github.com/nvm-sh/nvm[Node Version Manager] and opt for https://yarnpkg.com/getting-started/install[Yarn] via https://nodejs.org/api/corepack.html[Corepack]:
+=== Install Node.js and pnpm
+* *macOS* and *Linux* users should install https://nodejs.org/en[Node.js] via https://github.com/nvm-sh/nvm[Node Version Manager] and opt for https://pnpm.io/installation#using-corepack[pnpm] via Corepack:
 +
 [source,shell]
 ----
 curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 source ~/.bashrc
 nvm install --lts
-corepack enable yarn
-yarn run setup
-----
-
-* *Windows* users should install https://nodejs.org/en[Node.js] via https://github.com/microsoft/winget-cli[Windows Package Manager] and install https://yarnpkg.com/getting-started/install[Yarn] via npm (which is actually a workaround until Corepack supports Windows):
-+
-[source,shell]
-----
-winget install OpenJS.NodeJS.LTS
-npm install --global yarn
-yarn run setup
+corepack enable
+pnpm setup
 ----
 
 === Install Act
@@ -143,7 +131,7 @@ Register the rule key in the necessary dummy configurations in `src/validator/Co
 === Validate the Software Quality
 [source,shell]
 ----
-yarn run validate
+pnpm validate
 ----
 
 It runs the following means of validation:
@@ -187,7 +175,7 @@ act pull_request --job validate-commit-messages --secret-file .act.local --remot
 === Build for Production
 [source,shell]
 ----
-yarn run build
+pnpm build
 ----
 
 As defined in the `action.yml` file, the generated file `dist/main.mjs` becomes the https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain[entrypoint of the action] which is why it is checked into the repository along with the source code.

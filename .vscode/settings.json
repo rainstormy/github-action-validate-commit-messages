@@ -1,11 +1,9 @@
 {
-  "search.exclude": {
-    "**/.yarn": true,
-    "**/coverage": true,
-    "**/dist": true,
-    "**/.pnp.*": true,
-    "**/yarn.lock": true
-  },
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.tsdk": ".yarn/sdks/typescript/lib"
+	"search.exclude": {
+		"dist/": true,
+		"node_modules/": true,
+		"pnpm-lock.yaml": true
+	},
+	"typescript.enablePromptUseWorkspaceTsdk": true,
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

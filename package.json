@@ -1,9 +1,17 @@
 {
+	"$schema": "https://json.schemastore.org/package.json",
+	"license": "MIT",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
+	"engines": {
+		"node": ">=20.11.1"
+	},
 	"scripts": {
 		"build": "vite build --ssr src/entry.actions.ts",
+		"ready": "pnpm install && simple-git-hooks",
 		"release.prepare": "updraft --files CHANGELOG.adoc --release-version",
-		"setup": "yarn install && simple-git-hooks",
-		"validate": "yarn validate.types && yarn validate.test",
+		"validate": "pnpm validate.types && pnpm validate.test",
 		"validate.test": "         vitest run",
 		"validate.test.coverage": "vitest run   --coverage",
 		"validate.test.overview": "vitest watch --ui",
@@ -12,7 +20,7 @@
 		"validate.types.nocache": "tsc"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "yarn validate.types && yarn validate.test"
+		"pre-commit": "pnpm validate.types && pnpm validate.test"
 	},
 	"dependencies": {
 		"@actions/core": "1.10.1",
@@ -45,13 +53,9 @@
 		"@types/node": "Type definitions for Node.js modules.",
 		"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
 		"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
-		"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
+		"simple-git-hooks": "A tool that creates Git hooks from package.json script commands.",
 		"typescript": "A statically typed programming language that extends the JavaScript syntax.",
 		"vite": "A highly extensible build tool.",
 		"vitest": "A Vite-based unit testing framework."
-	},
-	"license": "MIT",
-	"packageManager": "yarn@4.0.2",
-	"private": true,
-	"type": "module"
+	}
 }

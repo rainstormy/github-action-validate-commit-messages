@@ -1,10 +1,12 @@
 # Normalise some basic formatting settings across IDEs.
-#
-# Read more:
 # https://editorconfig.org
 
 root = true
 
+# Indent by tabs to:
+# - Gain accessibility by making the indentation width customisable per developer.
+# - Reduce the number of required keystrokes.
+# - Reduce the file sizes.
 [*]
 charset = utf-8
 end_of_line = lf
