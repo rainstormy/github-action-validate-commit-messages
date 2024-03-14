@@ -1,7 +1,7 @@
 import {
+	type ActionResult,
 	actionFailed,
 	actionSucceeded,
-	type ActionResult,
 } from "+github/ActionResult"
 import { configurationFromInputs, formatIssue } from "+github/InputParameters"
 import { getPullRequestFromApi } from "+github/PullRequest"

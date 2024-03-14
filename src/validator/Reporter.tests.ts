@@ -1,6 +1,6 @@
-import { type RawCommit } from "+rules/Commit"
+import type { RawCommit } from "+rules/Commit"
 import { dummyCommit } from "+rules/Commit.dummies"
-import { type Configuration } from "+validator/Configuration"
+import type { Configuration } from "+validator/Configuration"
 import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,

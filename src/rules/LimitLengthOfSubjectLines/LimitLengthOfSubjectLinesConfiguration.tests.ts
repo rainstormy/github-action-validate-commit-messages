@@ -1,7 +1,7 @@
 import {
-	limitLengthOfSubjectLinesConfigurationSchema,
 	type LimitLengthOfSubjectLinesConfiguration,
 	type RawLimitLengthOfSubjectLinesConfiguration,
+	limitLengthOfSubjectLinesConfigurationSchema,
 } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
 import { describe, expect, it } from "vitest"
 
@@ -55,7 +55,7 @@ describe.each`
 			).toThrow(expectedErrorMessage)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() =>
 				parseConfiguration({ maximumCharacters: rawMaximumCharacters }),
 			).toThrow("limit-length-of-subject-lines--max-characters")

@@ -1,6 +1,6 @@
 import { parseConfiguration } from "+validator/Configuration"
 import core from "@actions/core"
-import { type ZodIssue } from "zod"
+import type { ZodIssue } from "zod"
 
 export function configurationFromInputs(): ReturnType<
 	typeof parseConfiguration

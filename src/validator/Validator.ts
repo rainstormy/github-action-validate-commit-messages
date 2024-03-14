@@ -3,7 +3,7 @@ import { acknowledgedAuthorNames } from "+rules/AcknowledgedAuthorNames/Acknowle
 import { acknowledgedCommitterEmailAddresses } from "+rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddresses"
 import { acknowledgedCommitterNames } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNames"
 import { capitalisedSubjectLines } from "+rules/CapitalisedSubjectLines/CapitalisedSubjectLines"
-import { parseCommit, type RawCommit } from "+rules/Commit"
+import { type RawCommit, parseCommit } from "+rules/Commit"
 import { commitRefinerFrom } from "+rules/CommitRefiner"
 import { emptyLineAfterSubjectLines } from "+rules/EmptyLineAfterSubjectLines/EmptyLineAfterSubjectLines"
 import { imperativeSubjectLines } from "+rules/ImperativeSubjectLines/ImperativeSubjectLines"
@@ -17,12 +17,12 @@ import { noRevertRevertCommits } from "+rules/NoRevertRevertCommits/NoRevertReve
 import { noSquashCommits } from "+rules/NoSquashCommits/NoSquashCommits"
 import { noTrailingPunctuationInSubjectLines } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLines"
 import { noUnexpectedWhitespace } from "+rules/NoUnexpectedWhitespace/NoUnexpectedWhitespace"
-import { type Rule, type RuleKey } from "+rules/Rule"
+import type { Rule, RuleKey } from "+rules/Rule"
 import { uniqueSubjectLines } from "+rules/UniqueSubjectLines/UniqueSubjectLines"
-import { type Configuration } from "+validator/Configuration"
-import {
-	type InvalidCommitsByViolatedRuleKey,
-	type Reporter,
+import type { Configuration } from "+validator/Configuration"
+import type {
+	InvalidCommitsByViolatedRuleKey,
+	Reporter,
 } from "+validator/Reporter"
 
 export type Validator = <Result>(

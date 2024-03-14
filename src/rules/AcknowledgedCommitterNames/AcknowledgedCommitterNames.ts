@@ -1,6 +1,6 @@
-import { type AcknowledgedCommitterNamesConfiguration } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNamesConfiguration"
-import { type UserIdentity } from "+rules/Commit"
-import { type Rule } from "+rules/Rule"
+import type { AcknowledgedCommitterNamesConfiguration } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNamesConfiguration"
+import type { UserIdentity } from "+rules/Commit"
+import type { Rule } from "+rules/Rule"
 
 export function acknowledgedCommitterNames({
 	patterns,

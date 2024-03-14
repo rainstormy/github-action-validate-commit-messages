@@ -1,7 +1,7 @@
 import {
-	acknowledgedAuthorNamesConfigurationSchema,
 	type AcknowledgedAuthorNamesConfiguration,
 	type RawAcknowledgedAuthorNamesConfiguration,
+	acknowledgedAuthorNamesConfigurationSchema,
 } from "+rules/AcknowledgedAuthorNames/AcknowledgedAuthorNamesConfiguration"
 import { count } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
@@ -49,7 +49,7 @@ describe.each`
 			)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() => parseConfiguration({ patterns: rawPatterns })).toThrow(
 				"acknowledged-author-names--patterns",
 			)

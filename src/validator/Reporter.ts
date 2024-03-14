@@ -1,8 +1,8 @@
-import { type Commit } from "+rules/Commit"
-import { type IssueReferencePosition } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
-import { type RuleKey } from "+rules/Rule"
+import type { Commit } from "+rules/Commit"
+import type { IssueReferencePosition } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
+import type { RuleKey } from "+rules/Rule"
 import { count, pluralise } from "+utilities/StringUtilities"
-import { type Configuration } from "+validator/Configuration"
+import type { Configuration } from "+validator/Configuration"
 
 export type Reporter<Result> = (
 	invalidCommitsByViolatedRuleKeys: InvalidCommitsByViolatedRuleKey,
