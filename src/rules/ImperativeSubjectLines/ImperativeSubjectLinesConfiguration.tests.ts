@@ -1,7 +1,7 @@
 import {
-	imperativeSubjectLinesConfigurationSchema,
 	type ImperativeSubjectLinesConfiguration,
 	type RawImperativeSubjectLinesConfiguration,
+	imperativeSubjectLinesConfigurationSchema,
 } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
 import { count } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
@@ -49,7 +49,7 @@ describe.each`
 			)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() => parseConfiguration({ whitelist: rawWords })).toThrow(
 				"imperative-subject-lines--whitelist",
 			)

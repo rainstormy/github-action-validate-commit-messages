@@ -1,7 +1,7 @@
 import {
-	issueReferencesInSubjectLinesConfigurationSchema,
 	type IssueReferencesInSubjectLinesConfiguration,
 	type RawIssueReferencesInSubjectLinesConfiguration,
+	issueReferencesInSubjectLinesConfigurationSchema,
 } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
 import { count } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
@@ -54,7 +54,7 @@ describe.each`
 			).toThrow(expectedErrorMessage)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() =>
 				parseConfiguration({
 					allowedPositions: "as-prefix,as-suffix",
@@ -116,7 +116,7 @@ describe.each`
 			).toThrow(expectedErrorMessage)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() =>
 				parseConfiguration({
 					allowedPositions: rawPositions,

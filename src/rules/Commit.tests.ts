@@ -1,6 +1,6 @@
 import { parseCommit } from "+rules/Commit"
 import { commitRefinerFrom } from "+rules/CommitRefiner"
-import { type Rule } from "+rules/Rule"
+import type { Rule } from "+rules/Rule"
 import { count } from "+utilities/StringUtilities"
 import {
 	dummyDefaultConfiguration,
@@ -95,7 +95,7 @@ describe("when the configuration has default settings", () => {
 				expect(commit.squashPrefixes).toStrictEqual(squashPrefixes)
 			})
 
-			it(`has no issue references`, () => {
+			it("has no issue references", () => {
 				expect(commit.issueReferences).toHaveLength(0)
 			})
 

@@ -1,5 +1,5 @@
-import { type NoSquashCommitsConfiguration } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
-import { type Rule } from "+rules/Rule"
+import type { NoSquashCommitsConfiguration } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
+import type { Rule } from "+rules/Rule"
 
 export function noSquashCommits({
 	disallowedPrefixes,

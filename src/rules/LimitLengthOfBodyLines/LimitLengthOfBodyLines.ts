@@ -1,5 +1,5 @@
-import { type LimitLengthOfBodyLinesConfiguration } from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
-import { type Rule } from "+rules/Rule"
+import type { LimitLengthOfBodyLinesConfiguration } from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
+import type { Rule } from "+rules/Rule"
 import { countOccurrences } from "+utilities/IterableUtilities"
 
 export function limitLengthOfBodyLines({

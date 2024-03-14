@@ -8,19 +8,16 @@
 		"node": ">=20.11.1"
 	},
 	"scripts": {
-		"build": "vite build --ssr src/entry.actions.ts",
+		"build": "vite build --ssr src/Main.ts",
+		"check": "biome ci . && tsc",
+		"fmt": "biome check --apply .",
 		"ready": "pnpm install && simple-git-hooks",
 		"release.prepare": "updraft --files CHANGELOG.adoc --release-version",
-		"validate": "pnpm validate.types && pnpm validate.test",
-		"validate.test": "         vitest run",
-		"validate.test.coverage": "vitest run   --coverage",
-		"validate.test.overview": "vitest watch --ui",
-		"validate.test.watch": "   vitest watch",
-		"validate.types": "        tsc --incremental --tsBuildInfoFile './node_modules/.cache/typescript/.tsbuildinfo'",
-		"validate.types.nocache": "tsc"
+		"test": "vitest run",
+		"vi": "vitest watch --ui"
 	},
 	"simple-git-hooks": {
-		"pre-commit": "pnpm validate.types && pnpm validate.test"
+		"pre-commit": "pnpm check && pnpm test"
 	},
 	"dependencies": {
 		"@actions/core": "1.10.1",
@@ -29,7 +26,7 @@
 		"undici": "6.0.1",
 		"zod": "3.22.4"
 	},
-	"dependencies-comments": {
+	"// dependencies": {
 		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
 		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.",
@@ -37,6 +34,7 @@
 		"zod": "Zod; a TypeScript-based data validation library."
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.6.1",
 		"@octokit/types": "12.4.0",
 		"@rainstormy/updraft": "1.0.0",
 		"@types/node": "20.10.5",
@@ -47,7 +45,8 @@
 		"vite": "5.0.10",
 		"vitest": "1.0.4"
 	},
-	"devDependencies-comments": {
+	"// devDependencies": {
+		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
 		"@octokit/types": "Type definitions for the GitHub REST API via Octokit.",
 		"@rainstormy/updraft": "Updraft is a release automation tool.",
 		"@types/node": "Type definitions for Node.js modules.",

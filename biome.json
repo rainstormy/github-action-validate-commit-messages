@@ -1,0 +1,77 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.6.1/schema.json",
+	"files": {
+		"ignore": ["dist/", "node_modules/"]
+	},
+	"javascript": {
+		"formatter": {
+			"semicolons": "asNeeded"
+		}
+	},
+	"linter": {
+		"rules": {
+			"all": true,
+			"correctness": {
+				"noUndeclaredVariables": "off"
+			},
+			"style": {
+				"noNamespace": "off",
+				"useConsistentArrayType": {
+					"level": "error",
+					"options": { "syntax": "generic" }
+				},
+				"useFilenamingConvention": {
+					"level": "error",
+					"options": {
+						"filenameCases": ["PascalCase"]
+					}
+				},
+				"useNodejsImportProtocol": "off"
+			},
+			"suspicious": {
+				"useAwait": "off"
+			},
+			"nursery": {
+				"all": true,
+				"noUndeclaredDependencies": "off",
+				"useSortedClasses": "off"
+			}
+		}
+	},
+	"overrides": [
+		{
+			"include": ["src/**/*.tests.ts"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"noExcessiveCognitiveComplexity": {
+							"level": "error",
+							"options": {
+								"maxAllowedComplexity": 2
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"include": ["*.config.ts", "*.d.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useFilenamingConvention": {
+							"level": "error",
+							"options": {
+								"filenameCases": ["kebab-case"]
+							}
+						}
+					},
+					"nursery": {
+						"noNodejsModules": "off",
+						"useImportRestrictions": "off"
+					}
+				}
+			}
+		}
+	]
+}

@@ -1,7 +1,7 @@
 import {
-	noTrailingPunctuationInSubjectLinesConfigurationSchema,
 	type NoTrailingPunctuationInSubjectLinesConfiguration,
 	type RawNoTrailingPunctuationInSubjectLinesConfiguration,
+	noTrailingPunctuationInSubjectLinesConfigurationSchema,
 } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
 import { count } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
@@ -52,7 +52,7 @@ describe.each`
 			)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(
 				"no-trailing-punctuation-in-subject-lines--whitelist",
 			)

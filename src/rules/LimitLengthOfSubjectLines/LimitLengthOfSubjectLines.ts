@@ -1,5 +1,5 @@
-import { type LimitLengthOfSubjectLinesConfiguration } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
-import { type Rule } from "+rules/Rule"
+import type { LimitLengthOfSubjectLinesConfiguration } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
+import type { Rule } from "+rules/Rule"
 import { countOccurrences } from "+utilities/IterableUtilities"
 
 export function limitLengthOfSubjectLines({

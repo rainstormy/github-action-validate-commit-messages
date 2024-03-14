@@ -1,4 +1,4 @@
-import { type Rule } from "+rules/Rule"
+import type { Rule } from "+rules/Rule"
 
 export function uniqueSubjectLines(): Rule {
 	return {

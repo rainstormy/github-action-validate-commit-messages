@@ -1,8 +1,8 @@
-import {
-	type IssueReferencePosition,
-	type IssueReferencesInSubjectLinesConfiguration,
+import type {
+	IssueReferencePosition,
+	IssueReferencesInSubjectLinesConfiguration,
 } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
-import { type Rule } from "+rules/Rule"
+import type { Rule } from "+rules/Rule"
 
 export function issueReferencesInSubjectLines({
 	patterns,

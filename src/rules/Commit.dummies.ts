@@ -1,4 +1,4 @@
-import { type RawCommit } from "+rules/Commit"
+import type { RawCommit } from "+rules/Commit"
 
 type DummyCommitProps = {
 	readonly sha?: string
@@ -29,9 +29,12 @@ export function dummyCommit({
 	body = "\nThis is a dummy commit message body.",
 	numberOfParents = 1,
 }: DummyCommitProps): RawCommit {
-	const parents = Array.from({ length: numberOfParents }, (ignored, index) => ({
-		sha: `c0ffee${index}`,
-	}))
+	const parents = Array.from(
+		{ length: numberOfParents },
+		(_ignored, index) => ({
+			sha: `c0ffee${index}`,
+		}),
+	)
 
 	return {
 		sha,

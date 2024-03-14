@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="validate.test" type="js.build_tools.npm" nameIsGenerated="true">
+  <configuration default="false" name="fmt" type="js.build_tools.npm" activateToolWindowBeforeRun="false" nameIsGenerated="true">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>
-      <script value="validate.test" />
+      <script value="fmt" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

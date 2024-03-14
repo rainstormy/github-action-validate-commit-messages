@@ -8,51 +8,33 @@
 		},
 		{
 			"type": "npm",
+			"script": "check",
+			"problemMatcher": [],
+			"label": "check"
+		},
+		{
+			"type": "npm",
+			"script": "fmt",
+			"problemMatcher": [],
+			"label": "fmt"
+		},
+		{
+			"type": "npm",
 			"script": "ready",
 			"problemMatcher": [],
 			"label": "ready"
 		},
 		{
 			"type": "npm",
-			"script": "validate",
+			"script": "test",
 			"problemMatcher": [],
-			"label": "validate"
+			"label": "test"
 		},
 		{
 			"type": "npm",
-			"script": "validate.test",
+			"script": "vi",
 			"problemMatcher": [],
-			"label": "validate.test"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.coverage",
-			"problemMatcher": [],
-			"label": "validate.test.coverage"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.overview",
-			"problemMatcher": [],
-			"label": "validate.test.overview"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.watch",
-			"problemMatcher": [],
-			"label": "validate.test.watch"
-		},
-		{
-			"type": "npm",
-			"script": "validate.types",
-			"problemMatcher": [],
-			"label": "validate.types"
-		},
-		{
-			"type": "npm",
-			"script": "validate.types.nocache",
-			"problemMatcher": [],
-			"label": "validate.types.nocache"
+			"label": "vi"
 		}
 	]
 }
