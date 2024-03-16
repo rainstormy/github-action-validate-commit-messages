@@ -20,6 +20,12 @@
 		},
 		{
 			"type": "npm",
+			"script": "no-verify",
+			"problemMatcher": [],
+			"label": "no-verify"
+		},
+		{
+			"type": "npm",
 			"script": "ready",
 			"problemMatcher": [],
 			"label": "ready"

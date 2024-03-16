@@ -11,13 +11,11 @@
 		"build": "vite build --ssr src/Main.ts",
 		"check": "biome ci . && tsc",
 		"fmt": "biome check --apply .",
-		"ready": "pnpm install && simple-git-hooks",
+		"no-verify": "pnpm lefthook uninstall",
+		"ready": "pnpm install && pnpm lefthook install",
 		"release.prepare": "updraft --files CHANGELOG.adoc --release-version",
 		"test": "vitest run",
 		"vi": "vitest watch --ui"
-	},
-	"simple-git-hooks": {
-		"pre-commit": "pnpm check && pnpm test"
 	},
 	"dependencies": {
 		"@actions/core": "1.10.1",
@@ -31,7 +29,7 @@
 		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.",
 		"undici": "An HTTP client that implements the Fetch API on Node.js. It is a peer dependency of `@actions/core` and `@actions/github`.",
-		"zod": "Zod; a TypeScript-based data validation library."
+		"zod": "Zod is a data validation library."
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.6.1",
@@ -40,7 +38,7 @@
 		"@types/node": "20.10.5",
 		"@vitest/coverage-v8": "1.0.4",
 		"@vitest/ui": "1.0.4",
-		"simple-git-hooks": "2.9.0",
+		"lefthook": "1.6.7",
 		"typescript": "5.3.3",
 		"vite": "5.0.10",
 		"vitest": "1.0.4"
@@ -49,12 +47,12 @@
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
 		"@octokit/types": "Type definitions for the GitHub REST API via Octokit.",
 		"@rainstormy/updraft": "Updraft is a release automation tool.",
-		"@types/node": "Type definitions for Node.js modules.",
-		"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
-		"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
-		"simple-git-hooks": "A tool that creates Git hooks from package.json script commands.",
-		"typescript": "A statically typed programming language that extends the JavaScript syntax.",
-		"vite": "A highly extensible build tool.",
-		"vitest": "A Vite-based unit testing framework."
+		"@types/node": "These type definitions cover Node.js modules.",
+		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
+		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
+		"lefthook": "Lefthook is a Git hooks manager.",
+		"typescript": "TypeScript is a statically typed programming language on top of JavaScript.",
+		"vite": "Vite is a development server and a bundler.",
+		"vitest": "Vitest is a unit testing framework."
 	}
 }
