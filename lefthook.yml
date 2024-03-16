@@ -1,0 +1,74 @@
+# Define Git hooks.
+# https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md
+
+pre-commit:
+  commands:
+    pnpm-fmt:
+      run: pnpm fmt
+      stage_fixed: true
+  skip:
+    - merge
+    - rebase
+
+pre-push:
+  parallel: true
+  commands:
+    pnpm-check:
+      run: pnpm check
+    pnpm-test:
+      run: pnpm test
+
+post-checkout:
+  piped: true
+  commands:
+    nvm-install-on-nvmrc-change:
+      run: |
+        # Check if any changes occurred to `.nvmrc` upon the checkout (between the HEAD@{1} and HEAD revisions).
+        NVMRC_CHANGED=$(git diff --name-only HEAD@{1} HEAD -- | grep '.nvmrc')
+        if [ ! -z "$NVMRC_CHANGED" ]; then
+        	echo "Changes detected in '.nvmrc' upon the checkout. Running 'nvm install'."
+        	nvm install
+        else
+        	echo "No changes detected in '.nvmrc' upon the checkout. Skipping 'nvm install'."
+        fi
+    pnpm-install-on-lockfile-change:
+      run: |
+        # Check if any changes occurred to `pnpm-lock.yaml` upon the checkout (between the HEAD@{1} and HEAD revisions).
+        PNPM_LOCK_CHANGED=$(git diff --name-only HEAD@{1} HEAD -- | grep 'pnpm-lock.yaml')
+        if [ ! -z "$PNPM_LOCK_CHANGED" ]; then
+        	echo "Changes detected in 'pnpm-lock.yaml' upon the checkout. Running 'pnpm install'."
+        	pnpm install
+        else
+        	echo "No changes detected in 'pnpm-lock.yaml' upon the checkout. Skipping 'pnpm install'."
+        fi
+  skip:
+    - merge
+    - rebase
+
+post-rewrite:
+  piped: true
+  commands:
+    nvm-install-on-nvmrc-change:
+      run: |
+        # Check if any changes occurred to `.nvmrc` upon the rewrite (between the ORIG_HEAD and HEAD revisions).
+        NVMRC_CHANGED=$(git diff --name-only ORIG_HEAD HEAD -- | grep '.nvmrc')
+        if [ ! -z "$NVMRC_CHANGED" ]; then
+        	echo "Changes detected in '.nvmrc' upon the rewrite. Running 'nvm install'."
+        	nvm install
+        else
+        	echo "No changes detected in '.nvmrc' upon the rewrite. Skipping 'nvm install'."
+        fi
+    pnpm-install-on-lockfile-change:
+      run: |
+        # Check if any changes occurred to `pnpm-lock.yaml` upon the rewrite (between the ORIG_HEAD and HEAD revisions).
+        PNPM_LOCK_CHANGED=$(git diff --name-only ORIG_HEAD HEAD -- | grep 'pnpm-lock.yaml')
+        if [ ! -z "$PNPM_LOCK_CHANGED" ]; then
+        	echo "Changes detected in 'pnpm-lock.yaml' upon the rewrite. Running 'pnpm install'."
+        	pnpm install
+        else
+        	echo "No changes detected in 'pnpm-lock.yaml' upon the rewrite. Skipping 'pnpm install'."
+        fi
+
+skip_output:
+  - meta
+  - summary
