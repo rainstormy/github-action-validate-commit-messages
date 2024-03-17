@@ -1,38 +1,74 @@
-# This workflow creates a release branch and a pull request towards the default branch.
+# This workflow creates a release commit and a pull request towards the `main` branch.
+#
+# It can be triggered manually on any branch via the GitHub CLI:
+#
+#   gh workflow run release.yml --field version=<major.minor.patch[-prerelease][+buildinfo]> [--ref <branch-name>]
+#   gh run watch
+#
+# It can be triggered manually on any branch via the GitHub web interface:
+#   https://github.com/rainstormy/github-action-validate-commit-messages/actions/workflows/release.yml
+
 name: Release
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: The semantic version number of the new release.
+        description: The semantic version number of the new release on the form <major.minor.patch[-prerelease][+buildinfo]>.
         type: string
         required: true
 
+run-name: ${{ inputs.version }}
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimise the permission scope of the default GitHub access token in this workflow.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+permissions:
+  contents: read # Allow all jobs to check out the repository and to call the reusable `ci.yml` workflow.
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
 jobs:
-  release-pull-request:
-    name: Release / Create pull request
+  validate-software-quality:
+    name: Validate software quality
+    uses: ./.github/workflows/ci.yml
+
+  create-pull-request:
+    name: Create pull request
+    needs: validate-software-quality
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4 # https://github.com/actions/checkout
-      - name: Install Node.js, npm, and Yarn
-        uses: ./.github/actions/install-node-npm-yarn
-      - name: Generate build artifacts
-        run: yarn run build
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # https://github.com/actions/checkout/releases/tag/v4.1.1
+        with:
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }} # Use a separate access token with permission to commit and push.
+        #
+      - name: Restore build artifacts
+        uses: ./.github/actions/build-artifacts
+        #
+      - name: Install pnpm and third-party dependencies
+        uses: ./.github/actions/pnpm
+        #
       - name: Prepare the release
-        run: yarn run release.prepare $RELEASE_VERSION
+        run: pnpm updraft --files CHANGELOG.adoc --release-version $RELEASE_VERSION
         env:
-          RELEASE_VERSION: ${{ github.event.inputs.version }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy/github-action-rainstorm-release-use-bot-nimbus@v1 # https://github.com/rainstormy/github-action-rainstorm-release-use-bot-nimbus
+        uses: rainstormy/github-action-rainstorm-release-use-bot-nimbus@12afc27c4f3dc9a48789b924b396396d5522afb8 # https://github.com/rainstormy/github-action-rainstorm-release-use-bot-nimbus
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           bot-nimbus-ssh-the-private-key: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
-      - name: Create a release branch and a pull request
-        uses: rainstormy/github-action-release-pull-request@v1 # https://github.com/rainstormy/github-action-release-pull-request
+        #
+      - name: Create a release commit and a pull request
+        uses: rainstormy/github-action-release-pull-request@602f3e88713e2db65ffba8d8d50557db4c143bfc # https://github.com/rainstormy/github-action-release-pull-request
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
-          release-version: ${{ github.event.inputs.version }}
+          release-version: ${{ inputs.version }}
