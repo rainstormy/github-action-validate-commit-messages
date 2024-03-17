@@ -13,7 +13,6 @@
 		"fmt": "biome check --apply .",
 		"no-verify": "pnpm lefthook uninstall",
 		"ready": "pnpm install && pnpm lefthook install",
-		"release.prepare": "updraft --files CHANGELOG.adoc --release-version",
 		"test": "vitest run",
 		"vi": "vitest watch --ui"
 	},
