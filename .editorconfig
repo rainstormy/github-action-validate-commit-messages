@@ -13,6 +13,16 @@ end_of_line = lf
 indent_style = tab
 insert_final_newline = true
 
+# Two trailing spaces denote a line break in Markdown.
+# Indent by spaces to:
+# - Avoid mixing tab and space indentation in nested lists.
+# - Preserve space indentation in YAML code blocks.
+# - Improve the appearance of code blocks in GitHub and npm.
+[*.md]
+indent_size = 2
+indent_style = space
+trim_trailing_whitespace = false
+
 # YAML does not support tabs for indentation.
 [*.{yaml,yml}]
 indent_size = 2
