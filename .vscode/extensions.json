@@ -1,4 +1,4 @@
 {
-	"recommendations": ["asciidoctor.asciidoctor-vscode", "biomejs.biome"],
+	"recommendations": ["biomejs.biome"],
 	"unwantedRecommendations": []
 }
