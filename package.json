@@ -8,7 +8,7 @@
 		"node": ">=20.11.1"
 	},
 	"scripts": {
-		"build": "vite build --ssr src/Main.ts",
+		"build": "vite build --ssr src/main.ts",
 		"check": "biome ci . && tsc",
 		"fmt": "biome check --apply .",
 		"no-verify": "pnpm lefthook uninstall",
@@ -20,8 +20,8 @@
 		"@actions/core": "1.10.1",
 		"@actions/github": "6.0.0",
 		"tslib": "2.6.2",
-		"undici": "6.0.1",
-		"zod": "3.22.4"
+		"undici": "6.16.1",
+		"zod": "3.23.8"
 	},
 	"// dependencies": {
 		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
@@ -31,16 +31,16 @@
 		"zod": "Zod is a data validation library."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.6.1",
-		"@octokit/types": "12.4.0",
+		"@biomejs/biome": "1.7.3",
+		"@octokit/types": "13.5.0",
 		"@rainstormy/updraft": "1.0.0",
-		"@types/node": "20.10.5",
-		"@vitest/coverage-v8": "1.0.4",
-		"@vitest/ui": "1.0.4",
-		"lefthook": "1.6.7",
-		"typescript": "5.3.3",
-		"vite": "5.0.10",
-		"vitest": "1.0.4"
+		"@types/node": "20.12.12",
+		"@vitest/coverage-v8": "1.6.0",
+		"@vitest/ui": "1.6.0",
+		"lefthook": "1.6.11",
+		"typescript": "5.4.5",
+		"vite": "5.2.11",
+		"vitest": "1.6.0"
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",

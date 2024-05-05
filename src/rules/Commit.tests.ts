@@ -403,7 +403,7 @@ function formatSquashPrefixes(prefixes: ReadonlyArray<string>): string {
 		? "no squash prefixes"
 		: `${count(prefixes, "squash prefix", "squash prefixes")}: ${prefixes.join(
 				", ",
-		  )}`
+			)}`
 }
 
 function formatIssueReferences(references: ReadonlyArray<string>): string {
@@ -413,7 +413,7 @@ function formatIssueReferences(references: ReadonlyArray<string>): string {
 				references,
 				"issue reference",
 				"issue references",
-		  )}: ${references.join(" ")}`
+			)}: ${references.join(" ")}`
 }
 
 function formatParents(parentShas: ReadonlyArray<string>): string {
