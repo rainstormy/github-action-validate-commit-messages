@@ -2,23 +2,19 @@ name: pnpm
 description: Installs pnpm and third-party dependencies.
 
 # All third-party actions are pinned to a specific commit SHA for security reasons.
-# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 runs:
   using: composite
   steps:
     - name: Install pnpm
-      uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # https://github.com/pnpm/action-setup/releases/tag/v3.0.0
-      #
-    - name: Extract the Node.js version from the `.nvmrc` file
-      id: get-node-version
-      run: echo "node-version=$(cat .nvmrc | sed 's/v//')" >> $GITHUB_OUTPUT
-      shell: bash
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # https://github.com/pnpm/action-setup/releases/tag/v4.0.0
       #
     - name: Install Node.js
       uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # https://github.com/actions/setup-node/releases/tag/v4.0.2
       with:
         cache: pnpm
-        node-version: ${{ steps.get-node-version.outputs.node-version }}
+        node-version-file: ./.nvmrc
+        registry-url: https://registry.npmjs.org
       #
     - name: Install third-party dependencies
       run: pnpm install --frozen-lockfile
