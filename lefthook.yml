@@ -22,6 +22,7 @@ post-checkout:
   piped: true
   commands:
     nvm-install-on-nvmrc-change:
+      # language=sh
       run: |
         # Check if any changes occurred to `.nvmrc` upon the checkout (between the HEAD@{1} and HEAD revisions).
         NVMRC_CHANGED=$(git diff --name-only HEAD@{1} HEAD -- | grep '.nvmrc')
@@ -32,6 +33,7 @@ post-checkout:
         	echo "No changes detected in '.nvmrc' upon the checkout. Skipping 'nvm install'."
         fi
     pnpm-install-on-lockfile-change:
+      # language=sh
       run: |
         # Check if any changes occurred to `pnpm-lock.yaml` upon the checkout (between the HEAD@{1} and HEAD revisions).
         PNPM_LOCK_CHANGED=$(git diff --name-only HEAD@{1} HEAD -- | grep 'pnpm-lock.yaml')
@@ -49,6 +51,7 @@ post-rewrite:
   piped: true
   commands:
     nvm-install-on-nvmrc-change:
+      # language=sh
       run: |
         # Check if any changes occurred to `.nvmrc` upon the rewrite (between the ORIG_HEAD and HEAD revisions).
         NVMRC_CHANGED=$(git diff --name-only ORIG_HEAD HEAD -- | grep '.nvmrc')
@@ -59,6 +62,7 @@ post-rewrite:
         	echo "No changes detected in '.nvmrc' upon the rewrite. Skipping 'nvm install'."
         fi
     pnpm-install-on-lockfile-change:
+      # language=sh
       run: |
         # Check if any changes occurred to `pnpm-lock.yaml` upon the rewrite (between the ORIG_HEAD and HEAD revisions).
         PNPM_LOCK_CHANGED=$(git diff --name-only ORIG_HEAD HEAD -- | grep 'pnpm-lock.yaml')
