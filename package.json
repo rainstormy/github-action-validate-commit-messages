@@ -9,7 +9,9 @@
 	},
 	"scripts": {
 		"build": "vite build --ssr src/main.ts",
-		"check": "biome ci . && tsc",
+		"check": "pnpm check.format && pnpm check.types",
+		"check.format": "biome check --error-on-warnings .",
+		"check.types": "tsc",
 		"fmt": "biome check --apply .",
 		"no-verify": "pnpm lefthook uninstall",
 		"ready": "pnpm install && pnpm lefthook install",

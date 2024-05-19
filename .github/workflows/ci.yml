@@ -84,9 +84,13 @@ jobs:
         if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
         uses: ./.github/actions/pnpm
         #
-      - name: Verify that the source code is type-safe and well-formatted
+      - name: Verify that the source code is type-safe
         if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm check
+        run: pnpm check.types
+        #
+      - name: Verify that the source code is well-formatted
+        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
+        run: pnpm check.format
 
   satisfies-unit-tests:
     name: Satisfies unit tests
