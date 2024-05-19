@@ -1,5 +1,5 @@
-import { type ImperativeSubjectLinesConfiguration } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
-import { type Rule } from "+rules/Rule"
+import type { ImperativeSubjectLinesConfiguration } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
+import type { Rule } from "+rules/Rule"
 import { indexOfFromBinarySearch } from "+utilities/IterableUtilities"
 
 export const sortedImperativeVerbs: ReadonlyArray<string> = [

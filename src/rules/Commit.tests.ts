@@ -1,6 +1,6 @@
 import { parseCommit } from "+rules/Commit"
 import { commitRefinerFrom } from "+rules/CommitRefiner"
-import { type Rule } from "+rules/Rule"
+import type { Rule } from "+rules/Rule"
 import { count } from "+utilities/StringUtilities"
 import {
 	dummyDefaultConfiguration,
@@ -95,7 +95,7 @@ describe("when the configuration has default settings", () => {
 				expect(commit.squashPrefixes).toStrictEqual(squashPrefixes)
 			})
 
-			it(`has no issue references`, () => {
+			it("has no issue references", () => {
 				expect(commit.issueReferences).toHaveLength(0)
 			})
 
@@ -403,7 +403,7 @@ function formatSquashPrefixes(prefixes: ReadonlyArray<string>): string {
 		? "no squash prefixes"
 		: `${count(prefixes, "squash prefix", "squash prefixes")}: ${prefixes.join(
 				", ",
-		  )}`
+			)}`
 }
 
 function formatIssueReferences(references: ReadonlyArray<string>): string {
@@ -413,7 +413,7 @@ function formatIssueReferences(references: ReadonlyArray<string>): string {
 				references,
 				"issue reference",
 				"issue references",
-		  )}: ${references.join(" ")}`
+			)}: ${references.join(" ")}`
 }
 
 function formatParents(parentShas: ReadonlyArray<string>): string {

@@ -1,6 +1,6 @@
-import { type AcknowledgedAuthorEmailAddressesConfiguration } from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
-import { type UserIdentity } from "+rules/Commit"
-import { type Rule } from "+rules/Rule"
+import type { AcknowledgedAuthorEmailAddressesConfiguration } from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
+import type { UserIdentity } from "+rules/Commit"
+import type { Rule } from "+rules/Rule"
 
 export function acknowledgedAuthorEmailAddresses({
 	patterns,

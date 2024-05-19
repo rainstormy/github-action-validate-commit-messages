@@ -1,95 +1,59 @@
 {
-	"scripts": {
-		"build": "vite build --ssr src/entry.actions.ts",
-		"release.prepare": "updraft --files CHANGELOG.adoc --release-version",
-		"setup": "yarn install && simple-git-hooks",
-		"validate": "concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.lint' 'yarn:validate.test' --group --names 'types','format','lint','test' --prefix-colors 'blue.bold','magenta.bold','cyan.bold','yellow.bold'",
-		"validate.fix": "yarn run validate.lint.fix && yarn run validate.format.fix",
-		"validate.format": "        prettier './{.github,.vscode}/**/*.{json,yml}' './src/**/*.ts' './*.config.{cjs,js,ts}' './*.{json,yml}' --loglevel warn --cache --check",
-		"validate.format.fix": "    prettier './{.github,.vscode}/**/*.{json,yml}' './src/**/*.ts' './*.config.{cjs,js,ts}' './*.{json,yml}' --loglevel warn --cache         --list-different --write",
-		"validate.format.nocache": "prettier './{.github,.vscode}/**/*.{json,yml}' './src/**/*.ts' './*.config.{cjs,js,ts}' './*.{json,yml}' --loglevel warn         --check",
-		"validate.lint": "        eslint './src/**/*.ts' './*.config.{cjs,js,ts}' --max-warnings 0 --cache --cache-location './node_modules/.cache/eslint/'",
-		"validate.lint.fix": "    eslint './src/**/*.ts' './*.config.{cjs,js,ts}' --max-warnings 0 --cache --cache-location './node_modules/.cache/eslint/' --fix",
-		"validate.lint.nocache": "eslint './src/**/*.ts' './*.config.{cjs,js,ts}' --max-warnings 0",
-		"validate.test": "         vitest run",
-		"validate.test.coverage": "vitest run   --coverage",
-		"validate.test.overview": "vitest watch --ui",
-		"validate.test.watch": "   vitest watch",
-		"validate.types": "        tsc --incremental --tsBuildInfoFile './node_modules/.cache/typescript/.tsbuildinfo'",
-		"validate.types.nocache": "tsc"
+	"$schema": "https://json.schemastore.org/package.json",
+	"license": "MIT",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
+	"engines": {
+		"node": ">=20.11.1"
 	},
-	"simple-git-hooks": {
-		"pre-commit": "yarn run concurrently 'yarn:validate.types' 'yarn:validate.format' 'yarn:validate.lint' 'yarn:validate.test' --group --names 'types','format','lint','test' --prefix-colors 'blue.bold','magenta.bold','cyan.bold','yellow.bold'"
+	"scripts": {
+		"build": "vite build --ssr src/main.ts",
+		"check": "pnpm check.format && pnpm check.types",
+		"check.format": "biome check --error-on-warnings .",
+		"check.types": "tsc",
+		"fmt": "biome check --apply .",
+		"no-verify": "pnpm lefthook uninstall",
+		"ready": "pnpm install && pnpm lefthook install",
+		"test": "vitest run",
+		"vi": "vitest watch --ui"
 	},
 	"dependencies": {
 		"@actions/core": "1.10.1",
 		"@actions/github": "6.0.0",
 		"tslib": "2.6.2",
-		"undici": "6.0.1",
-		"zod": "3.22.4"
+		"undici": "6.16.1",
+		"zod": "3.23.8"
 	},
-	"dependencies-comments": {
+	"// dependencies": {
 		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
 		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.",
 		"undici": "An HTTP client that implements the Fetch API on Node.js. It is a peer dependency of `@actions/core` and `@actions/github`.",
-		"zod": "Zod; a TypeScript-based data validation library."
+		"zod": "Zod is a data validation library."
 	},
 	"devDependencies": {
-		"@octokit/types": "12.4.0",
+		"@biomejs/biome": "1.7.3",
+		"@octokit/types": "13.5.0",
 		"@rainstormy/updraft": "1.0.0",
-		"@types/eslint": "8.37.0",
-		"@types/node": "20.10.5",
-		"@types/prettier": "2.7.2",
-		"@typescript-eslint/eslint-plugin": "5.59.2",
-		"@typescript-eslint/parser": "5.59.2",
-		"@vitest/coverage-v8": "1.0.4",
-		"@vitest/ui": "1.0.4",
-		"concurrently": "8.2.2",
-		"eslint": "8.39.0",
-		"eslint-plugin-eslint-comments": "3.2.0",
-		"eslint-plugin-functional": "5.0.8",
-		"eslint-plugin-jest": "27.2.1",
-		"eslint-plugin-redundant-undefined": "0.4.0",
-		"eslint-plugin-unicorn": "46.0.0",
-		"prettier": "2.8.8",
-		"prettier-plugin-organize-imports": "3.2.2",
-		"simple-git-hooks": "2.9.0",
-		"typescript": "5.3.3",
-		"vite": "5.0.10",
-		"vitest": "1.0.4"
+		"@types/node": "20.12.12",
+		"@vitest/coverage-v8": "1.6.0",
+		"@vitest/ui": "1.6.0",
+		"lefthook": "1.6.11",
+		"typescript": "5.4.5",
+		"vite": "5.2.11",
+		"vitest": "1.6.0"
 	},
-	"devDependencies-comments": {
+	"// devDependencies": {
+		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
 		"@octokit/types": "Type definitions for the GitHub REST API via Octokit.",
 		"@rainstormy/updraft": "Updraft is a release automation tool.",
-		"@types/eslint": "Type definitions for ESLint configuration files.",
-		"@types/node": "Type definitions for Node.js modules.",
-		"@types/prettier": "Type definitions for Prettier configuration files.",
-		"@typescript-eslint/eslint-plugin": "An ESLint plugin that uncovers issues in TypeScript code. It must always match the version of `@typescript-eslint/parser`.",
-		"@typescript-eslint/parser": "An ESLint plugin that lets it parse TypeScript sources. It must always match the version of `@typescript-eslint/eslint-plugin`.",
-		"@vitest/coverage-v8": "A Vitest plugin that reports code coverage.",
-		"@vitest/ui": "A Vitest plugin that provides a test overview in the web browser.",
-		"concurrently": "A tool that executes multiple Yarn script commands in parallel.",
-		"eslint": "ESLint; a static program analysis tool that uncovers issues in JavaScript code.",
-		"eslint-plugin-eslint-comments": "An ESLint plugin that uncovers issues in the use of ESLint comments.",
-		"eslint-plugin-functional": "An ESLint plugin that encourages principles from the functional programming paradigm.",
-		"eslint-plugin-jest": "An ESLint plugin that uncovers issues in test suites in Jest (and Vitest whose API is compatible with that of Jest).",
-		"eslint-plugin-redundant-undefined": "An ESLint plugin that uncovers inconsistencies in optional type declarations.",
-		"eslint-plugin-unicorn": "An ESLint plugin that complements the built-in set of rules.",
-		"prettier": "An opinionated code formatter.",
-		"prettier-plugin-organize-imports": "A Prettier plugin that sorts import statements and removes unused ones.",
-		"simple-git-hooks": "A tool that creates Git hooks from Yarn script commands.",
-		"typescript": "A statically typed programming language that extends the JavaScript syntax.",
-		"vite": "A highly extensible build tool.",
-		"vitest": "A Vite-based unit testing framework."
-	},
-	"license": "MIT",
-	"packageManager": "yarn@4.0.2",
-	"private": true,
-	"type": "module",
-	"//": {
-		"scripts": {
-			"validate.fix": "The formatter must run after the linter to resolve potential formatting issues introduced by the linter."
-		}
+		"@types/node": "These type definitions cover Node.js modules.",
+		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
+		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",
+		"lefthook": "Lefthook is a Git hooks manager.",
+		"typescript": "TypeScript is a statically typed programming language on top of JavaScript.",
+		"vite": "Vite is a development server and a bundler.",
+		"vitest": "Vitest is a unit testing framework."
 	}
 }

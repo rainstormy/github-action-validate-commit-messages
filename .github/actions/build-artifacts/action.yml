@@ -1,0 +1,15 @@
+name: Build artifacts
+description: Restores the build artifacts from the workflow cache.
+
+runs:
+  using: composite
+  steps:
+    - name: Restore build artifacts from the workflow cache
+      uses: actions/cache/restore@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+      with:
+        # A cache miss should never occur, as the `ci.yml` workflow should have built the project prior to this step.
+        #
+        # CAUTION: The cache key originates from the `ci.yml` workflow.
+        key: can-build-project-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '!src/**/*.testdata.*', '!src/**/*.tests.*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
+        path: dist/
+        fail-on-cache-miss: true

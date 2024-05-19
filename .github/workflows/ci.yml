@@ -1,0 +1,155 @@
+# This workflow implements the continuous integration (CI) pipeline.
+# It validates the software quality and produces build artifacts that can be deployed at a later stage.
+#
+# It is triggered automatically by pull requests opened towards the `main` branch.
+#
+# It can be triggered manually on any branch via the GitHub CLI:
+#
+#   gh workflow run ci.yml [--ref <branch-name>]
+#   gh run watch
+#
+# It can be triggered manually on any branch via the GitHub web interface:
+#   https://github.com/rainstormy/github-action-validate-commit-messages/actions/workflows/ci.yml
+
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  # For `workflow_call` events, `github.workflow` is the caller workflow instead of this workflow.
+  # The `ci-` prefix makes GitHub Actions distinguish this job from other jobs in the caller workflow.
+  # https://docs.github.com/en/actions/using-workflows/reusing-workflows
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  can-build-project:
+    name: Can build the project
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        #
+      - name: Skip if already built
+        id: skip-if-already-built
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+        with:
+          # If an exact cache hit occurs, another workflow run on this branch has already built the project in the current configuration, and we can skip the rest of the job.
+          # This is especially useful upon rebasing interactively.
+          #
+          # CAUTION: The cache key is repeated in `.github/workflows/release.yml` to restore the build artifacts.
+          key: can-build-project-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '!src/**/*.testdata.*', '!src/**/*.tests.*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          path: dist/
+        #
+      - name: Install pnpm and third-party dependencies
+        if: steps.skip-if-already-built.outputs.cache-hit != 'true'
+        uses: ./.github/actions/pnpm
+        #
+      - name: Build the project
+        if: steps.skip-if-already-built.outputs.cache-hit != 'true'
+        run: pnpm build
+
+  has-clean-code:
+    name: Has clean code
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        #
+      - name: Skip if already verified
+        id: skip-if-already-verified
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+        with:
+          # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code is clean in the current configuration, and we can skip the rest of the job.
+          # This is especially useful upon rebasing interactively.
+          key: has-clean-code-${{ runner.os }}-sha256:${{ hashFiles('.github/**/*', '.vscode/*.json', 'src/**/*', 'docs/**/*.md', '*.json', '*.ts', '.nvmrc', 'pnpm-lock.yaml') }}
+          path: node_modules/.cache/typescript/
+        #
+      - name: Install pnpm and third-party dependencies
+        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
+        uses: ./.github/actions/pnpm
+        #
+      - name: Verify that the source code is type-safe
+        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
+        run: pnpm check.types
+        #
+      - name: Verify that the source code is well-formatted
+        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
+        run: pnpm check.format
+
+  satisfies-unit-tests:
+    name: Satisfies unit tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        #
+      - name: Skip if already verified
+        id: skip-if-already-verified
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+        with:
+          # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code satisfies the unit tests in the current configuration, and we can skip the rest of the job.
+          # This is especially useful upon rebasing interactively.
+          key: satisfies-unit-tests-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          path: node_modules/.cache/vitest/
+        #
+      - name: Install pnpm and third-party dependencies
+        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
+        uses: ./.github/actions/pnpm
+        #
+      - name: Verify that the source code satisfies the unit tests
+        if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
+        run: pnpm test
+
+  has-standardised-commit-messages:
+    name: Has standardised commit messages
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 1
+    permissions:
+      pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
+    steps:
+      - name: Verify that the commit messages are standardised
+        uses: rainstormy/github-action-validate-commit-messages@158b8e35c5e89cf6a10b611efe20ac70cd51983a # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          rules: |
+            acknowledged-author-email-addresses,
+            acknowledged-author-names,
+            acknowledged-committer-email-addresses,
+            acknowledged-committer-names,
+            capitalised-subject-lines,
+            empty-line-after-subject-lines,
+            imperative-subject-lines,
+            limit-length-of-body-lines,
+            limit-length-of-subject-lines,
+            multi-word-subject-lines,
+            no-co-authors,
+            no-merge-commits,
+            no-revert-revert-commits,
+            no-squash-commits,
+            no-trailing-punctuation-in-subject-lines,
+            no-unexpected-whitespace,
+            unique-subject-lines,
+          acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com' # A personal noreply email address on GitHub.
+          acknowledged-author-names--patterns: '\p{Lu}.*\s.+' # A name of at least two words where the first word starts with a capital letter.
+          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com' # A personal noreply email address on GitHub.
+          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+' # A name of at least two words where the first word starts with a capital letter.

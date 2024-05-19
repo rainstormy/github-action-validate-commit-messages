@@ -8,93 +8,51 @@
 		},
 		{
 			"type": "npm",
-			"script": "setup",
+			"script": "check",
 			"problemMatcher": [],
-			"label": "setup"
+			"label": "check"
 		},
 		{
 			"type": "npm",
-			"script": "validate",
+			"script": "check.format",
 			"problemMatcher": [],
-			"label": "validate"
+			"label": "check.format"
 		},
 		{
 			"type": "npm",
-			"script": "validate.fix",
+			"script": "check.types",
 			"problemMatcher": [],
-			"label": "validate.fix"
+			"label": "check.types"
 		},
 		{
 			"type": "npm",
-			"script": "validate.format",
+			"script": "fmt",
 			"problemMatcher": [],
-			"label": "validate.format"
+			"label": "fmt"
 		},
 		{
 			"type": "npm",
-			"script": "validate.format.fix",
+			"script": "no-verify",
 			"problemMatcher": [],
-			"label": "validate.format.fix"
+			"label": "no-verify"
 		},
 		{
 			"type": "npm",
-			"script": "validate.format.nocache",
+			"script": "ready",
 			"problemMatcher": [],
-			"label": "validate.format.nocache"
+			"label": "ready"
 		},
 		{
 			"type": "npm",
-			"script": "validate.lint",
+			"script": "test",
 			"problemMatcher": [],
-			"label": "validate.lint"
+			"label": "test"
 		},
 		{
 			"type": "npm",
-			"script": "validate.lint.fix",
+			"script": "vi",
 			"problemMatcher": [],
-			"label": "validate.lint.fix"
-		},
-		{
-			"type": "npm",
-			"script": "validate.lint.nocache",
-			"problemMatcher": [],
-			"label": "validate.lint.nocache"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test",
-			"problemMatcher": [],
-			"label": "validate.test"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.coverage",
-			"problemMatcher": [],
-			"label": "validate.test.coverage"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.overview",
-			"problemMatcher": [],
-			"label": "validate.test.overview"
-		},
-		{
-			"type": "npm",
-			"script": "validate.test.watch",
-			"problemMatcher": [],
-			"label": "validate.test.watch"
-		},
-		{
-			"type": "npm",
-			"script": "validate.types",
-			"problemMatcher": [],
-			"label": "validate.types"
-		},
-		{
-			"type": "npm",
-			"script": "validate.types.nocache",
-			"problemMatcher": [],
-			"label": "validate.types.nocache"
+			"label": "vi"
 		}
 	]
 }

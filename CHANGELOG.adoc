@@ -35,7 +35,7 @@ Hence, it is not considered to be a breaking change.
 
 === Fixed
 * Reduce the bundle size downloaded by the GitHub Actions runner.
-The tarball archive exported by GitHub no longer contains Yarn PnP binaries and development-related files.
+The tarball archive exported by GitHub no longer contains Yarn PnP binaries.
 
 
 == {url-github-repository}/compare/v1.0.1\...v1.1.0[1.1.0] - 2023-05-04

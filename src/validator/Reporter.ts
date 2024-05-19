@@ -1,8 +1,8 @@
-import { type Commit } from "+rules/Commit"
-import { type IssueReferencePosition } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
-import { type RuleKey } from "+rules/Rule"
+import type { Commit } from "+rules/Commit"
+import type { IssueReferencePosition } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
+import type { RuleKey } from "+rules/Rule"
 import { count, pluralise } from "+utilities/StringUtilities"
-import { type Configuration } from "+validator/Configuration"
+import type { Configuration } from "+validator/Configuration"
 
 export type Reporter<Result> = (
 	invalidCommitsByViolatedRuleKeys: InvalidCommitsByViolatedRuleKey,
@@ -20,7 +20,7 @@ export function violatedRulesReporter(): Reporter<RuleKey> {
 export function instructiveReporter(
 	configuration: Configuration,
 ): Reporter<string> {
-	const indent = "    " // eslint-disable-line unicorn/string-content -- The indent of four spaces is intentional.
+	const indent = "    "
 
 	const indentedListOfAuthorEmailAddressPatterns =
 		configuration.acknowledgedAuthorEmailAddresses.patterns

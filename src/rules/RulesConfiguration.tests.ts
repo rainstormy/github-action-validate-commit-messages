@@ -1,4 +1,4 @@
-import { ruleKeys as allAvailableRuleKeys, type RuleKey } from "+rules/Rule"
+import { type RuleKey, ruleKeys as allAvailableRuleKeys } from "+rules/Rule"
 import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
 import { count } from "+utilities/StringUtilities"
 import { describe, expect, it } from "vitest"
@@ -74,7 +74,7 @@ describe.each`
 			)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() => parseConfiguration(rawRuleKeys)).toThrow("rules")
 		})
 	},

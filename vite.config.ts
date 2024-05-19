@@ -16,6 +16,7 @@ export default defineConfig(() => ({
 			},
 		},
 	},
+	cacheDir: inProjectDirectory("node_modules/.cache/"),
 	plugins: [],
 	resolve: {
 		alias: getAliasesFromTsconfig(),
@@ -28,7 +29,9 @@ export default defineConfig(() => ({
 			include: ["src/**/*.ts"],
 			exclude: ["src/**/*.tests.ts"],
 			provider: "v8" as const,
-			reportsDirectory: inProjectDirectory("node_modules/.vitest/coverage"),
+			reportsDirectory: inProjectDirectory(
+				"node_modules/.cache/vitest/coverage/",
+			),
 		},
 		include: ["src/**/*.tests.ts"],
 	},

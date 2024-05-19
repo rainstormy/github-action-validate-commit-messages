@@ -1,0 +1,21 @@
+name: pnpm
+description: Installs pnpm and third-party dependencies.
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+runs:
+  using: composite
+  steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # https://github.com/pnpm/action-setup/releases/tag/v4.0.0
+      #
+    - name: Install Node.js
+      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # https://github.com/actions/setup-node/releases/tag/v4.0.2
+      with:
+        cache: pnpm
+        node-version-file: ./.nvmrc
+        registry-url: https://registry.npmjs.org
+      #
+    - name: Install third-party dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash

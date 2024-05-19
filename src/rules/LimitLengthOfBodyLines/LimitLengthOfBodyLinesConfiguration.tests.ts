@@ -1,7 +1,7 @@
 import {
-	limitLengthOfBodyLinesConfigurationSchema,
 	type LimitLengthOfBodyLinesConfiguration,
 	type RawLimitLengthOfBodyLinesConfiguration,
+	limitLengthOfBodyLinesConfigurationSchema,
 } from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
 import { describe, expect, it } from "vitest"
 
@@ -55,7 +55,7 @@ describe.each`
 			).toThrow(expectedErrorMessage)
 		})
 
-		it(`raises an error that points out the name of the incorrect parameter`, () => {
+		it("raises an error that points out the name of the incorrect parameter", () => {
 			expect(() =>
 				parseConfiguration({ maximumCharacters: rawMaximumCharacters }),
 			).toThrow("limit-length-of-body-lines--max-characters")
