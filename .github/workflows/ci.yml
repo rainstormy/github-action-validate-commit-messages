@@ -128,7 +128,7 @@ jobs:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
     steps:
       - name: Verify that the commit messages are standardised
-        uses: rainstormy/github-action-validate-commit-messages@158b8e35c5e89cf6a10b611efe20ac70cd51983a # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.4
+        uses: rainstormy/github-action-validate-commit-messages@1f192721c973a7d33b1b1aeb9235431f904c1dcc # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rules: |
@@ -149,7 +149,9 @@ jobs:
             no-trailing-punctuation-in-subject-lines,
             no-unexpected-whitespace,
             unique-subject-lines,
-          acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com' # A personal noreply email address on GitHub.
-          acknowledged-author-names--patterns: '\p{Lu}.*\s.+' # A name of at least two words where the first word starts with a capital letter.
-          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com' # A personal noreply email address on GitHub.
-          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+' # A name of at least two words where the first word starts with a capital letter.
+          # The author and committer email address must be on the form `id+username@users.noreply.github.com` or `noreply@github.com` (only for reverting pull requests).
+          acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
+          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com noreply@github\.com'
+          # The author and committer name must consist of at least two words where the first word starts with a capital letter, or it should be 'GitHub' (only for reverting pull requests).
+          acknowledged-author-names--patterns: '\p{Lu}.*\s.+'
+          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+ GitHub'
