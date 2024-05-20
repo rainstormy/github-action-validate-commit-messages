@@ -3338,6 +3338,7 @@ export const sortedImperativeVerbs: ReadonlyArray<string> = [
 	"require",
 	"requisition",
 	"reread",
+	"reroute",
 	"reschedule",
 	"rescind",
 	"rescue",

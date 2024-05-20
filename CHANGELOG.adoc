@@ -8,7 +8,7 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 
 
 == {url-github-repository}/compare/v1.1.4\...HEAD[Unreleased]
-* Recognise `alias`, `inline`, and `proxy` as verbs in the `imperative-subject-lines` rule.
+* Recognise `alias`, `inline`, `proxy`, and `reroute` as verbs in the `imperative-subject-lines` rule.
 
 == {url-github-repository}/compare/v1.1.3\...v1.1.4[1.1.4] - 2023-12-18
 
