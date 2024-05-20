@@ -12,6 +12,7 @@ The format is based on https://keepachangelog.com/en/1.1.0[Keep a Changelog], an
 
 == {url-github-repository}/compare/v1.1.4\...v1.1.5[1.1.5] - 2024-05-20
 
+=== Fixed
 * Recognise `alias`, `inline`, `proxy`, and `reroute` as verbs in the `imperative-subject-lines` rule.
 
 

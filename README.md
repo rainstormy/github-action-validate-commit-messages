@@ -24,15 +24,14 @@ on:
 jobs:
   has-standardised-commit-messages:
     name: Has standardised commit messages
-    # Uncomment the following line if the workflow has other triggers than `pull_request` events:
-    # if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     permissions:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
     steps:
       - name: Verify that the commit messages are standardised
-        uses: rainstormy/github-action-validate-commit-messages@158b8e35c5e89cf6a10b611efe20ac70cd51983a # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.4
+        uses: rainstormy/github-action-validate-commit-messages@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rules: |
@@ -57,15 +56,14 @@ on:
 jobs:
   has-standardised-commit-messages:
     name: Has standardised commit messages
-    # Uncomment the following line if the workflow has other triggers than `pull_request` events:
-    # if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-22.04
     timeout-minutes: 1
     permissions:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
     steps:
       - name: Verify that the commit messages are standardised
-        uses: rainstormy/github-action-validate-commit-messages@158b8e35c5e89cf6a10b611efe20ac70cd51983a # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.4
+        uses: rainstormy/github-action-validate-commit-messages@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rules: |
@@ -86,10 +84,13 @@ jobs:
             no-trailing-punctuation-in-subject-lines,
             no-unexpected-whitespace,
             unique-subject-lines,
+          # The author and committer email address must be on the form `id+username@users.noreply.github.com` or `noreply@github.com` (only for reverting pull requests).
           acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
-          acknowledged-author-names--patterns: '.+\s.+'
-          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
-          acknowledged-committer-names--patterns: '.+\s.+'
+          acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com noreply@github\.com'
+          # The author and committer name must consist of at least two words where the first word starts with a capital letter, or it should be 'GitHub' (only for reverting pull requests).
+          acknowledged-author-names--patterns: '\p{Lu}.*\s.+'
+          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+ GitHub'
+          # The subject line must include a GitHub issue reference as a suffix.
           issue-references-in-subject-lines--allowed-positions: as-suffix
           issue-references-in-subject-lines--patterns: '\(#[1-9][0-9]*\) #[1-9][0-9]*'
 ```
