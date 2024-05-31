@@ -13,10 +13,10 @@
 		"check.format": "biome check --error-on-warnings .",
 		"check.types": "tsc",
 		"fmt": "biome check --apply .",
-		"no-verify": "pnpm lefthook uninstall",
-		"ready": "pnpm install && pnpm lefthook install",
+		"postinstall": "lefthook install",
 		"test": "vitest run",
-		"vi": "vitest watch --ui"
+		"vi": "vitest watch --ui",
+		"yolo": "lefthook uninstall"
 	},
 	"dependencies": {
 		"@actions/core": "1.10.1",

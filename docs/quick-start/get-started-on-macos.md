@@ -198,7 +198,7 @@ to npm.
 
 3. Install third-party dependencies and Git hooks:
    ```shell
-   pnpm ready
+   pnpm install
    ```
 
 4. Open the project in IntelliJ IDEA or Visual Studio Code, respectively:
