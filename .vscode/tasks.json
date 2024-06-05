@@ -32,15 +32,9 @@
 		},
 		{
 			"type": "npm",
-			"script": "no-verify",
+			"script": "install",
 			"problemMatcher": [],
-			"label": "no-verify"
-		},
-		{
-			"type": "npm",
-			"script": "ready",
-			"problemMatcher": [],
-			"label": "ready"
+			"label": "install"
 		},
 		{
 			"type": "npm",
@@ -53,6 +47,12 @@
 			"script": "vi",
 			"problemMatcher": [],
 			"label": "vi"
+		},
+		{
+			"type": "npm",
+			"script": "yolo",
+			"problemMatcher": [],
+			"label": "yolo"
 		}
 	]
 }

@@ -3,7 +3,7 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@8.15.5+sha256.4b4efa12490e5055d59b9b9fc9438b7d581a6b7af3b5675eb5c5f447cee1a589",
+	"packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9",
 	"engines": {
 		"node": ">=20.11.1"
 	},
@@ -13,10 +13,10 @@
 		"check.format": "biome check --error-on-warnings .",
 		"check.types": "tsc",
 		"fmt": "biome check --apply .",
-		"no-verify": "pnpm lefthook uninstall",
-		"ready": "pnpm install && pnpm lefthook install",
+		"postinstall": "lefthook install",
 		"test": "vitest run",
-		"vi": "vitest watch --ui"
+		"vi": "vitest watch --ui",
+		"yolo": "lefthook uninstall"
 	},
 	"dependencies": {
 		"@actions/core": "1.10.1",
