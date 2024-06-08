@@ -57,7 +57,7 @@ jobs:
         #
       - name: Update release artifacts
         if: ${{ !contains(inputs.version, '-') && !contains(inputs.version, '+') }}
-        run: pnpm updraft --files CHANGELOG.adoc --release-version $VERSION
+        run: pnpm updraft --files CHANGELOG.md --release-version $VERSION
         env:
           VERSION: ${{ inputs.version }}
         #

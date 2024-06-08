@@ -1,0 +1,87 @@
+# Changelog
+
+This file documents all notable changes to this project.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0),
+and this project adheres
+to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.1.5] - 2024-05-20
+### Fixed
+- Recognise `alias`, `inline`, `proxy`, and `reroute` as verbs in
+  the `imperative-subject-lines` rule.
+
+## [1.1.4] - 2023-12-18
+### Fixed
+- Recognise `coauthor`/`co-author`, `colocate`/`co-locate`, `collocate`,
+  `copilot`/`co-pilot`, `deauthenticate`, `deauthorise`/`deauthorize`,
+  `deorbit`, `parameterise`/`parameterize`/`parametrise`/`parametrize`, `remix`,
+  and `unauthorise`/`unauthorize` as verbs in the `imperative-subject-lines`
+  rule.
+
+## [1.1.3] - 2023-11-03
+### Fixed
+- Recognise `decouple` as a verb in the `imperative-subject-lines` rule.
+
+## [1.1.2] - 2023-10-20
+### Changed
+- Run on Node.js 20, as Node.js 16 is
+  to [become obsolete in GitHub Actions](https://github.blog/changelog/2023-09-22-github-actions-transitioning-from-node-16-to-node-20).
+  This change should neither require any changes to your workflow files nor
+  affect the visible behaviour of this action. Hence, it is not considered to be
+  a breaking change.
+
+## [1.1.1] - 2023-09-09
+### Fixed
+- Reduce the bundle size downloaded by the GitHub Actions runner. The tarball
+  archive exported by GitHub no longer contains Yarn PnP binaries.
+
+## [1.1.0] - 2023-05-04
+### Added
+- New rule: `unique-subject-lines`.
+
+### Fixed
+- Ignore semantic version updates (i.e. subject lines that end with `to X.Y.Z`)
+  in the `limit-length-of-subject-lines` rule.
+- Ignore lines that contain an `https://` URL in
+  the `limit-length-of-body-lines` rule.
+
+## [1.0.1] - 2023-04-17
+### Added
+- [MIT license](https://choosealicense.com/licenses/mit).
+
+### Fixed
+- Recognise `scaffold` as a verb in the `imperative-subject-lines` rule.
+
+## [1.0.0] - 2023-04-01
+### Added
+- GitHub Actions entrypoint.
+- New rule: `acknowledged-author-email-addresses`.
+- New rule: `acknowledged-author-names`.
+- New rule: `acknowledged-committer-email-addresses`.
+- New rule: `acknowledged-committer-names`.
+- New rule: `capitalised-subject-lines`.
+- New rule: `empty-line-after-subject-lines`.
+- New rule: `imperative-subject-lines`.
+- New rule: `issue-references-in-subject-lines`.
+- New rule: `limit-length-of-body-lines`.
+- New rule: `limit-length-of-subject-lines`.
+- New rule: `multi-word-subject-lines`.
+- New rule: `no-co-authors`.
+- New rule: `no-merge-commits`.
+- New rule: `no-revert-revert-commits`.
+- New rule: `no-squash-commits`.
+- New rule: `no-trailing-punctuation-in-subject-lines`.
+- New rule: `no-unexpected-whitespace`.
+
+[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.5...HEAD
+[1.1.5]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.4...v1.1.5
+[1.1.4]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.3...v1.1.4
+[1.1.3]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.2...v1.1.3
+[1.1.2]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.1...v1.1.2
+[1.1.1]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.1...v1.1.0
+[1.0.1]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.0.0
