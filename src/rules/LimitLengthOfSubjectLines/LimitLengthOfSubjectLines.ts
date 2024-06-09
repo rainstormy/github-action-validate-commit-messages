@@ -25,7 +25,8 @@ export function limitLengthOfSubjectLines({
 	}
 }
 
+const semanticVersionNumberRegex = /to\s\d+\.\d+\.\d+$/u
+
 function endsWithSemanticVersionNumber(subjectLine: string): boolean {
-	const semanticVersionNumberRegex = /to\s\d+\.\d+\.\d+$/u
 	return semanticVersionNumberRegex.test(subjectLine)
 }
