@@ -42,10 +42,10 @@ jobs:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         #
       - name: Create a draft GitHub release
-        uses: rainstormy-actions/release/github@f27c642f46a7c4c6125f6714756305420007537f # https://github.com/rainstormy-actions/release/releases/tag/v1.0.0
+        uses: rainstormy-actions/release/github@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
         with:
           gh-auth-token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
           version: ${{ github.ref_name }}
