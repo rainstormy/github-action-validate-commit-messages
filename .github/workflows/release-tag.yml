@@ -23,7 +23,7 @@ jobs:
   tag:
     name: Tag
     if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions: { }
     steps:
