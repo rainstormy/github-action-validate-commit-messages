@@ -1,8 +1,10 @@
-# This workflow creates a draft GitHub release from a Git tag.
+# This workflow creates a draft GitHub release from a full semantic version tag in Git.
 #
-# It is triggered automatically by pushing a Git tag with a `v` prefix, as done by the `release-tag.yml` workflow.
+# It is triggered automatically by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>`,
+# as done by the `release-tags.yml` workflow.
 #
 # It can be triggered manually via the GitHub CLI:
+#
 #   gh workflow run release-github.yml --ref <tag-name>
 #   gh run watch
 #
@@ -14,7 +16,7 @@ name: Release / GitHub
 on:
   push:
     tags:
-      - v*
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
   workflow_dispatch:
 
 # Cancel all previous runs of this workflow that are still in progress on the same branch.
