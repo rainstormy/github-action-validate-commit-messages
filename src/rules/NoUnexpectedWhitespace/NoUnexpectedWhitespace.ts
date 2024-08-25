@@ -1,9 +1,9 @@
 import type { Rule } from "+rules/Rule"
 
-export function noUnexpectedWhitespace(): Rule {
-	const leadingOrTrailingWhitespaceRegex = /^\s|\s$/u
-	const consecutiveWhitespaceRegex = /\S\s{2,}/u
+const leadingOrTrailingWhitespaceRegex = /^\s|\s$/u
+const consecutiveWhitespaceRegex = /\S\s{2,}/u
 
+export function noUnexpectedWhitespace(): Rule {
 	return {
 		key: "no-unexpected-whitespace",
 		getInvalidCommits: (refinedCommits) =>

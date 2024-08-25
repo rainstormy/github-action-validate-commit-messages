@@ -34,17 +34,17 @@ concurrency:
 jobs:
   can-build-project:
     name: Can build the project
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         #
       - name: Skip if already built
         id: skip-if-already-built
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           # If an exact cache hit occurs, another workflow run on this branch has already built the project in the current configuration, and we can skip the rest of the job.
           # This is especially useful upon rebasing interactively.
@@ -63,17 +63,17 @@ jobs:
 
   has-clean-code:
     name: Has clean code
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         #
       - name: Skip if already verified
         id: skip-if-already-verified
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code is clean in the current configuration, and we can skip the rest of the job.
           # This is especially useful upon rebasing interactively.
@@ -94,17 +94,17 @@ jobs:
 
   satisfies-unit-tests:
     name: Satisfies unit tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # https://github.com/actions/checkout/releases/tag/v4.1.5
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         #
       - name: Skip if already verified
         id: skip-if-already-verified
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # https://github.com/actions/cache/releases/tag/v4.0.2
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code satisfies the unit tests in the current configuration, and we can skip the rest of the job.
           # This is especially useful upon rebasing interactively.
@@ -121,14 +121,14 @@ jobs:
 
   has-standardised-commit-messages:
     name: Has standardised commit messages
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-22.04
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == false
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
     steps:
       - name: Verify that the commit messages are standardised
-        uses: rainstormy/github-action-validate-commit-messages@1f192721c973a7d33b1b1aeb9235431f904c1dcc # https://github.com/rainstormy/github-action-validate-commit-messages/releases/tag/v1.1.5
+        uses: rainstormy/github-action-validate-commit-messages@1f192721c973a7d33b1b1aeb9235431f904c1dcc # v1.1.5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           rules: |

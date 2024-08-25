@@ -25,7 +25,7 @@ jobs:
   has-standardised-commit-messages:
     name: Has standardised commit messages
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
@@ -57,7 +57,7 @@ jobs:
   has-standardised-commit-messages:
     name: Has standardised commit messages
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 1
     permissions:
       pull-requests: read # Allow `rainstormy/github-action-validate-commit-messages` to read the commit messages in the pull request.
