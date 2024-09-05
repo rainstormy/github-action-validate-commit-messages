@@ -149,9 +149,16 @@ jobs:
             no-trailing-punctuation-in-subject-lines,
             no-unexpected-whitespace,
             unique-subject-lines,
-          # The author and committer email address must be on the form `id+username@users.noreply.github.com` or `noreply@github.com` (only for reverting pull requests).
+
+          # The author and committer email address must be on one of these forms:
+          # - `id+username@users.noreply.github.com`
+          # - `noreply@github.com` (committer only, for automated version upgrades and for reverting pull requests directly from the GitHub web interface)
           acknowledged-author-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com'
           acknowledged-committer-email-addresses--patterns: '\d+\+.+@users\.noreply\.github\.com noreply@github\.com'
-          # The author and committer name must consist of at least two words where the first word starts with a capital letter, or it should be 'GitHub' (only for reverting pull requests).
-          acknowledged-author-names--patterns: '\p{Lu}.*\s.+'
-          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+ GitHub'
+
+          # The author and committer name must be on one of these forms:
+          # - at least two words where the first word starts with a capital letter
+          # - `renovate[bot]` (for automated version upgrades)
+          # - `GitHub` (committer only, for automated version upgrades and for reverting pull requests directly from the GitHub web interface)
+          acknowledged-author-names--patterns: '\p{Lu}.*\s.+ renovate\[bot\]'
+          acknowledged-committer-names--patterns: '\p{Lu}.*\s.+ renovate\[bot\] GitHub'
