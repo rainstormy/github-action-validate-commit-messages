@@ -1,6 +1,10 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["github>rainstormy/presets-renovate"],
-	"schedule": ["after 6pm and before 10pm every weekday"],
+	"schedule": [
+		"after 5pm every weekday",
+		"before 7am every weekday",
+		"every weekend"
+	],
 	"timezone": "Europe/Copenhagen"
 }
