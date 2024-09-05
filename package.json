@@ -38,7 +38,7 @@
 		"@types/node": "20.14.13",
 		"@vitest/coverage-v8": "1.6.0",
 		"@vitest/ui": "1.6.0",
-		"lefthook": "1.7.11",
+		"lefthook": "1.7.15",
 		"typescript": "5.5.4",
 		"vite": "5.3.5",
 		"vitest": "1.6.0"
