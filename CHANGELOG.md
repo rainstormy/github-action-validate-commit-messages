@@ -7,6 +7,10 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Recognise `autocreate`, `autodelete`, `autofill`, `autofire`, `autofocus`,
+  `autojoin`, `automerge`, `autorelease`, `modularise`/`modularize`, `postfix`,
+  and `prefill` as verbs in the `imperative-subject-lines` rule.
 
 ## [1.1.5] - 2024-05-20
 ### Fixed
