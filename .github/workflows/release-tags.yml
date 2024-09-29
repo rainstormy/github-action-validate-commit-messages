@@ -59,18 +59,18 @@ jobs:
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
       - name: Use Nimbus (Bot) in Git
-        uses: rainstormy-actions/rainstorm-release/bot-nimbus@9317ddb0235eac4f442e89565d0b5dec80135842
+        uses: rainstormy/rainstorm-release/bot-nimbus@5aa67a14e95403e7db0a7a43f8e18c1cdd51ba5f # v1.0.0
         with:
           bot-nimbus-ssh-public-key: ${{ secrets.BOT_NIMBUS_SSH_PUBLIC_KEY }}
           __bot-nimbus-ssh-private-key__: ${{ secrets.BOT_NIMBUS_SSH___THE___PRIVATE___KEY }}
           ssh-key-fingerprints-github: ${{ secrets.SSH_KEY_FINGERPRINTS_GITHUB }}
         #
       - name: Create a full semantic version tag in Git
-        uses: rainstormy-actions/release/tag@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
+        uses: rainstormy/release/tag@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
         with:
           version: ${{ inputs.version || github.head_ref }}
         #
       - name: Create a major-only version tag in Git
-        uses: rainstormy-actions/release/major-tag@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
+        uses: rainstormy/release/major-tag@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
         with:
           version: ${{ inputs.version || github.head_ref }}
