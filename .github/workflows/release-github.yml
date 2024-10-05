@@ -44,7 +44,7 @@ jobs:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
         #
       - name: Create a draft GitHub release
         uses: rainstormy-actions/release/github@73fe3aae49ad74af650e529107d94f45002798fd # v1.1.0
