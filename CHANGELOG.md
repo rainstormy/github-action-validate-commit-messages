@@ -7,6 +7,8 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.1.6] - 2024-10-28
 ### Fixed
 - Recognise `autocreate`, `autodelete`, `autofill`, `autofire`, `autofocus`,
   `autojoin`, `automerge`, `autorelease`, `modularise`/`modularize`, `postfix`,
@@ -80,7 +82,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New rule: `no-trailing-punctuation-in-subject-lines`.
 - New rule: `no-unexpected-whitespace`.
 
-[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.5...HEAD
+[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.6...HEAD
+[1.1.6]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.3...v1.1.4
 [1.1.3]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.2...v1.1.3
