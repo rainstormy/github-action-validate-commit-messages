@@ -36,12 +36,12 @@
 		"@biomejs/biome": "1.8.3",
 		"@octokit/types": "13.6.1",
 		"@types/node": "20.17.10",
-		"@vitest/coverage-v8": "1.6.0",
-		"@vitest/ui": "1.6.0",
+		"@vitest/coverage-v8": "2.1.8",
+		"@vitest/ui": "2.1.8",
 		"lefthook": "1.10.0",
 		"typescript": "5.7.2",
 		"vite": "5.4.11",
-		"vitest": "1.6.0"
+		"vitest": "2.1.8"
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
