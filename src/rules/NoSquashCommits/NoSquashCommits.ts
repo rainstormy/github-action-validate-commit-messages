@@ -1,3 +1,4 @@
+import type { Commit } from "+rules/Commit"
 import type { NoSquashCommitsConfiguration } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
 import type { Rule } from "+rules/Rule"
 
@@ -10,7 +11,7 @@ export function noSquashCommits({
 
 	return {
 		key: "no-squash-commits",
-		refine: (commit) => {
+		refine: (commit): Commit => {
 			const { squashPrefixes, refinedSubjectLine: currentSubjectLine } = commit
 			const matchingPrefix = findFirstMatchingPrefix(currentSubjectLine)
 
@@ -26,7 +27,7 @@ export function noSquashCommits({
 					.trim(),
 			}
 		},
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits.filter(({ squashPrefixes }) => squashPrefixes.length > 0),
 	}
 }

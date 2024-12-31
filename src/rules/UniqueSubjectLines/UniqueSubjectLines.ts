@@ -1,9 +1,10 @@
+import type { Commit } from "+rules/Commit"
 import type { Rule } from "+rules/Rule"
 
 export function uniqueSubjectLines(): Rule {
 	return {
 		key: "unique-subject-lines",
-		getInvalidCommits: (refinedCommits) => {
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> => {
 			const commitsToConsider = refinedCommits
 				.filter(
 					({ refinedSubjectLine }) =>

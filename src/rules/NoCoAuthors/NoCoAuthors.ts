@@ -1,9 +1,10 @@
+import type { Commit } from "+rules/Commit"
 import type { Rule } from "+rules/Rule"
 
 export function noCoAuthors(): Rule {
 	return {
 		key: "no-co-authors",
-		refine: (commit) => {
+		refine: (commit): Commit => {
 			const { bodyLines, coAuthors: currentCoAuthors } = commit
 
 			const coAuthors = bodyLines
@@ -24,7 +25,7 @@ export function noCoAuthors(): Rule {
 				coAuthors: [...currentCoAuthors, ...coAuthors],
 			}
 		},
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits.filter(({ coAuthors }) => coAuthors.length > 0),
 	}
 }

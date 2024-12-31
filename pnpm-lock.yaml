@@ -30,6 +30,9 @@ importers:
       '@octokit/types':
         specifier: 13.6.1
         version: 13.6.1
+      '@rainstormy/presets-biome':
+        specifier: 1.0.0-alpha.3
+        version: 1.0.0-alpha.3(@biomejs/biome@1.9.4)
       '@types/node':
         specifier: 20.17.10
         version: 20.17.10
@@ -370,6 +373,12 @@ packages:
 
   '@polka/url@1.0.0-next.25':
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
+
+  '@rainstormy/presets-biome@1.0.0-alpha.3':
+    resolution: {integrity: sha512-rHk1j7YtQ8VLK3waq7UGMx886cltCb3Z57BQ7qQqrri/t3+w9+N3XqqKO6VhnX3+qdYueE98r2Vm6TQh2UZkIQ==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      '@biomejs/biome': '>=1.9.0 <2.0.0'
 
   '@rollup/rollup-android-arm-eabi@4.21.2':
     resolution: {integrity: sha512-fSuPrt0ZO8uXeS+xP3b+yYTCBUd05MoSp2N/MFOgjhhUhMmchXlpTQrTpI8T+YAwAQuK7MafsCOxW7VrPMrJcg==}
@@ -1276,6 +1285,10 @@ snapshots:
       '@octokit/openapi-types': 22.2.0
 
   '@polka/url@1.0.0-next.25': {}
+
+  '@rainstormy/presets-biome@1.0.0-alpha.3(@biomejs/biome@1.9.4)':
+    dependencies:
+      '@biomejs/biome': 1.9.4
 
   '@rollup/rollup-android-arm-eabi@4.21.2':
     optional: true

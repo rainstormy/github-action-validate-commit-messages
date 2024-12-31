@@ -1,3 +1,4 @@
+import type { Commit } from "+rules/Commit"
 import type { NoTrailingPunctuationInSubjectLinesConfiguration } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
 import type { Rule } from "+rules/Rule"
 
@@ -15,7 +16,7 @@ export function noTrailingPunctuationInSubjectLines({
 
 	return {
 		key: "no-trailing-punctuation-in-subject-lines",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits
 				.filter(({ refinedSubjectLine }) => refinedSubjectLine.length > 0)
 				.filter(({ refinedSubjectLine }) =>
