@@ -1,3 +1,4 @@
+import type { Commit } from "+rules/Commit"
 import type {
 	IssueReferencePosition,
 	IssueReferencesInSubjectLinesConfiguration,
@@ -18,7 +19,7 @@ export function issueReferencesInSubjectLines({
 
 	return {
 		key: "issue-references-in-subject-lines",
-		refine: (commit) => {
+		refine: (commit): Commit => {
 			const { issueReferences, refinedSubjectLine: currentSubjectLine } = commit
 			const regexMatch = currentSubjectLine.match(combinedRegex)
 
@@ -54,7 +55,7 @@ export function issueReferencesInSubjectLines({
 
 			return commit
 		},
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits
 				.filter(({ parents }) => parents.length === 1)
 				.filter(

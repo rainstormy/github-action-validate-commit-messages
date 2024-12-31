@@ -1,5 +1,5 @@
 import type { AcknowledgedAuthorNamesConfiguration } from "+rules/AcknowledgedAuthorNames/AcknowledgedAuthorNamesConfiguration"
-import type { UserIdentity } from "+rules/Commit"
+import type { Commit, UserIdentity } from "+rules/Commit"
 import type { Rule } from "+rules/Rule"
 
 export function acknowledgedAuthorNames({
@@ -16,7 +16,7 @@ export function acknowledgedAuthorNames({
 
 	return {
 		key: "acknowledged-author-names",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits.filter(({ author }) => !hasAcknowledgedAuthorName(author)),
 	}
 }

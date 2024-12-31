@@ -1356,6 +1356,6 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 function validateInstructionsFrom(
 	configuration: Configuration,
 ): (commits: ReadonlyArray<RawCommit>) => ReadonlyArray<string> {
-	return (commits) =>
+	return (commits): ReadonlyArray<string> =>
 		validatorFrom(configuration)(commits, instructiveReporter(configuration))
 }

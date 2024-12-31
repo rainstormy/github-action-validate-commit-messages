@@ -1,3 +1,4 @@
+import type { Commit } from "+rules/Commit"
 import type { LimitLengthOfSubjectLinesConfiguration } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
 import type { Rule } from "+rules/Rule"
 import { countOccurrences } from "+utilities/IterableUtilities"
@@ -7,7 +8,7 @@ export function limitLengthOfSubjectLines({
 }: LimitLengthOfSubjectLinesConfiguration): Rule {
 	return {
 		key: "limit-length-of-subject-lines",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits
 				.filter(
 					({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "),

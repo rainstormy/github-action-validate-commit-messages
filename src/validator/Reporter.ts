@@ -13,7 +13,7 @@ export type InvalidCommitsByViolatedRuleKey = Readonly<
 >
 
 export function violatedRulesReporter(): Reporter<RuleKey> {
-	return (invalidCommitsByViolatedRuleKeys) =>
+	return (invalidCommitsByViolatedRuleKeys): ReadonlyArray<RuleKey> =>
 		Object.keys(invalidCommitsByViolatedRuleKeys) as ReadonlyArray<RuleKey>
 }
 
@@ -245,7 +245,7 @@ ${indent}Avoiding unnecessary commits will help you preserve the traceability of
 		}
 	}
 
-	return (invalidCommitsByViolatedRuleKeys) =>
+	return (invalidCommitsByViolatedRuleKeys): ReadonlyArray<string> =>
 		Object.entries(invalidCommitsByViolatedRuleKeys).map(
 			([violatedRuleKey, invalidCommits]) =>
 				getInstruction(violatedRuleKey as RuleKey, invalidCommits),

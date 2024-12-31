@@ -9,10 +9,10 @@
 	},
 	"scripts": {
 		"build": "vite build --ssr src/main.ts",
-		"check": "pnpm check.format && pnpm check.types",
-		"check.format": "biome check --error-on-warnings .",
+		"check": "pnpm check.fmt && pnpm check.types",
+		"check.fmt": "biome check --error-on-warnings",
 		"check.types": "tsc",
-		"fmt": "biome check --apply .",
+		"fmt": "biome check --write",
 		"postinstall": "lefthook install",
 		"test": "vitest run",
 		"vi": "vitest watch --ui",
@@ -33,8 +33,9 @@
 		"zod": "Zod is a data validation library."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.8.3",
+		"@biomejs/biome": "1.9.4",
 		"@octokit/types": "13.6.1",
+		"@rainstormy/presets-biome": "1.0.0-alpha.3",
 		"@types/node": "20.17.10",
 		"@vitest/coverage-v8": "1.6.0",
 		"@vitest/ui": "1.6.0",
@@ -45,7 +46,8 @@
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
-		"@octokit/types": "Type definitions for the GitHub REST API via Octokit.",
+		"@octokit/types": "These type definitions cover the GitHub REST API via Octokit.",
+		"@rainstormy/presets-biome": "This library provides predefined, opinionated Biome configurations.",
 		"@types/node": "These type definitions cover Node.js modules.",
 		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
 		"@vitest/ui": "This Vitest plugin provides a test overview in the web browser.",

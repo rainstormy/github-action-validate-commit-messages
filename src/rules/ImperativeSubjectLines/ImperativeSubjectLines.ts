@@ -1,3 +1,4 @@
+import type { Commit } from "+rules/Commit"
 import type { ImperativeSubjectLinesConfiguration } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
 import type { Rule } from "+rules/Rule"
 import { indexOfFromBinarySearch } from "+utilities/IterableUtilities"
@@ -4374,7 +4375,7 @@ export function imperativeSubjectLines({
 
 	return {
 		key: "imperative-subject-lines",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits
 				.map((commit) => {
 					const { refinedSubjectLine } = commit

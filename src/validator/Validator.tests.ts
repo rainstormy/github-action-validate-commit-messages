@@ -529,7 +529,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 function validateViolatedRulesFrom(
 	configuration: Configuration,
 ): (rawCommits: ReadonlyArray<RawCommit>) => ReadonlyArray<RuleKey> {
-	return (rawCommits) =>
+	return (rawCommits): ReadonlyArray<RuleKey> =>
 		validatorFrom(configuration)(rawCommits, violatedRulesReporter())
 }
 

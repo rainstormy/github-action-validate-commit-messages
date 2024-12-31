@@ -1,5 +1,5 @@
 import type { AcknowledgedAuthorEmailAddressesConfiguration } from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
-import type { UserIdentity } from "+rules/Commit"
+import type { Commit, UserIdentity } from "+rules/Commit"
 import type { Rule } from "+rules/Rule"
 
 export function acknowledgedAuthorEmailAddresses({
@@ -19,7 +19,7 @@ export function acknowledgedAuthorEmailAddresses({
 
 	return {
 		key: "acknowledged-author-email-addresses",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits.filter(
 				({ author }) => !hasAcknowledgedAuthorEmailAddress(author),
 			),

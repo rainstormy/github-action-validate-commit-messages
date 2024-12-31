@@ -1,5 +1,5 @@
 import type { AcknowledgedCommitterEmailAddressesConfiguration } from "+rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddressesConfiguration"
-import type { UserIdentity } from "+rules/Commit"
+import type { Commit, UserIdentity } from "+rules/Commit"
 import type { Rule } from "+rules/Rule"
 
 export function acknowledgedCommitterEmailAddresses({
@@ -21,7 +21,7 @@ export function acknowledgedCommitterEmailAddresses({
 
 	return {
 		key: "acknowledged-committer-email-addresses",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits.filter(
 				({ committer }) => !hasAcknowledgedCommitterEmailAddress(committer),
 			),

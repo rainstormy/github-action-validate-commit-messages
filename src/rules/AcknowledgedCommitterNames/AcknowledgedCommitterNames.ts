@@ -1,5 +1,5 @@
 import type { AcknowledgedCommitterNamesConfiguration } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNamesConfiguration"
-import type { UserIdentity } from "+rules/Commit"
+import type { Commit, UserIdentity } from "+rules/Commit"
 import type { Rule } from "+rules/Rule"
 
 export function acknowledgedCommitterNames({
@@ -16,7 +16,7 @@ export function acknowledgedCommitterNames({
 
 	return {
 		key: "acknowledged-committer-names",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits.filter(
 				({ committer }) => !hasAcknowledgedCommitterName(committer),
 			),

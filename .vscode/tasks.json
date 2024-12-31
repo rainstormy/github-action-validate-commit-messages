@@ -14,9 +14,9 @@
 		},
 		{
 			"type": "npm",
-			"script": "check.format",
+			"script": "check.fmt",
 			"problemMatcher": [],
-			"label": "check.format"
+			"label": "check.fmt"
 		},
 		{
 			"type": "npm",

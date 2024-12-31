@@ -1,3 +1,4 @@
+import type { Commit } from "+rules/Commit"
 import type { LimitLengthOfBodyLinesConfiguration } from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
 import type { Rule } from "+rules/Rule"
 import { countOccurrences } from "+utilities/IterableUtilities"
@@ -7,7 +8,7 @@ export function limitLengthOfBodyLines({
 }: LimitLengthOfBodyLinesConfiguration): Rule {
 	return {
 		key: "limit-length-of-body-lines",
-		getInvalidCommits: (refinedCommits) =>
+		getInvalidCommits: (refinedCommits): ReadonlyArray<Commit> =>
 			refinedCommits
 				.filter(
 					({ parents, bodyLines }) =>
