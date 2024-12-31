@@ -90,7 +90,7 @@ jobs:
         #
       - name: Verify that the source code is well-formatted
         if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm check.format
+        run: pnpm check.fmt
 
   satisfies-unit-tests:
     name: Satisfies unit tests

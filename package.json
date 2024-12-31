@@ -9,10 +9,10 @@
 	},
 	"scripts": {
 		"build": "vite build --ssr src/main.ts",
-		"check": "pnpm check.format && pnpm check.types",
-		"check.format": "biome check --error-on-warnings .",
+		"check": "pnpm check.fmt && pnpm check.types",
+		"check.fmt": "biome check --error-on-warnings",
 		"check.types": "tsc",
-		"fmt": "biome check --apply .",
+		"fmt": "biome check --write",
 		"postinstall": "lefthook install",
 		"test": "vitest run",
 		"vi": "vitest watch --ui",
