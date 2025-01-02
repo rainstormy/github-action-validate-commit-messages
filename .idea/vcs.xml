@@ -9,6 +9,16 @@
       </inspection_tool>
     </profile>
   </component>
+  <component name="IssueNavigationConfiguration">
+    <option name="links">
+      <list>
+        <IssueNavigationLink>
+          <option name="issueRegexp" value="^Merge pull request #(\d+)" />
+          <option name="linkRegexp" value="https://github.com/rainstormy/github-action-validate-commit-messages/pull/$1" />
+        </IssueNavigationLink>
+      </list>
+    </option>
+  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
   </component>
