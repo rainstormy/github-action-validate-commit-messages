@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@octokit/types": "13.6.1",
+		"@octokit/types": "13.6.2",
 		"@rainstormy/presets-biome": "1.0.0-alpha.3",
 		"@types/node": "20.17.10",
 		"@vitest/coverage-v8": "1.6.0",
