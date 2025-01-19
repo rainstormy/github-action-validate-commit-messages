@@ -36,7 +36,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@octokit/types": "13.7.0",
 		"@rainstormy/presets-biome": "1.0.0-alpha.3",
-		"@types/node": "20.17.12",
+		"@types/node": "20.17.14",
 		"@vitest/coverage-v8": "1.6.0",
 		"@vitest/ui": "1.6.0",
 		"lefthook": "1.10.0",
