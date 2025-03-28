@@ -10,6 +10,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Detect and ignore trailing hexadecimal hashes and semantic version numbers
   with prerelease segments in the `limit-length-of-subject-lines` rule.
+- Recognise `decommission`, `prerelease`, `professionalise`/`professionalize`,
+  `recollapse`, `recommission`, `recommit`, `redeploy`, `remerge`, `re-read`,
+  `rerelease`/`re-release`, `retrap`, `robustify`, `uncollapse`, `uncommit`,
+  `undeploy`, `unmerge`, `unrelease`, `unsquash`, and `untrap` as verbs in the
+  `imperative-subject-lines` rule.
 
 ## [1.1.6] - 2024-10-28
 ### Fixed
