@@ -20,14 +20,15 @@ export function limitLengthOfSubjectLines({
 				.filter(
 					({ refinedSubjectLine }) =>
 						refinedSubjectLine.length > maximumCharacters &&
-						!endsWithSemanticVersionNumber(refinedSubjectLine) &&
+						!endsWithVersionNumber(refinedSubjectLine) &&
 						countOccurrences(refinedSubjectLine, "`") <= 1,
 				),
 	}
 }
 
-const semanticVersionNumberRegex = /to\s\d+\.\d+\.\d+$/u
+const versionNumberRegex =
+	/(?:from|to) (?:[0-9A-Fa-f]{7,}|(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?<prerelease>-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?<build>\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)$/
 
-function endsWithSemanticVersionNumber(subjectLine: string): boolean {
-	return semanticVersionNumberRegex.test(subjectLine)
+function endsWithVersionNumber(subjectLine: string): boolean {
+	return versionNumberRegex.test(subjectLine)
 }

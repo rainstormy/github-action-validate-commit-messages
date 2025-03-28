@@ -7,6 +7,9 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Detect and ignore trailing hexadecimal hashes and semantic version numbers
+  with prerelease segments in the `limit-length-of-subject-lines` rule.
 
 ## [1.1.6] - 2024-10-28
 ### Fixed
