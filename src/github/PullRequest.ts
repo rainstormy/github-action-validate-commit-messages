@@ -1,14 +1,12 @@
 import type { RawCommit } from "+rules/Commit"
 import core from "@actions/core"
 import github from "@actions/github"
-import type { Endpoints } from "@octokit/types"
-
-type OctokitCommitDto =
-	Endpoints["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"]["response"]["data"][number]
 
 export type PullRequest = {
 	readonly rawCommits: ReadonlyArray<RawCommit>
 }
+
+const shaLengthToDisplay = 7
 
 export async function getPullRequestFromApi(
 	pullRequestNumber: number,
@@ -27,7 +25,21 @@ export async function getPullRequestFromApi(
 	)
 
 	return {
-		rawCommits: commitDtos.map((commit) => rawCommitFromDto(commit)),
+		rawCommits: commitDtos.map(({ commit, parents, sha }) => {
+			return {
+				sha: sha.slice(0, shaLengthToDisplay),
+				author: {
+					name: commit.author?.name ?? null,
+					emailAddress: commit.author?.email ?? null,
+				},
+				committer: {
+					name: commit.committer?.name ?? null,
+					emailAddress: commit.committer?.email ?? null,
+				},
+				parents: parents.map((parent) => ({ sha: parent.sha })),
+				commitMessage: commit.message,
+			}
+		}),
 	}
 }
 
@@ -35,26 +47,4 @@ function getOctokit(): ReturnType<typeof github.getOctokit> {
 	// The lexical scope of the GitHub token should be as small as possible to prevent leaks.
 	const githubToken = core.getInput("github-token", { required: true })
 	return github.getOctokit(githubToken)
-}
-
-const shaLengthToDisplay = 7
-
-function rawCommitFromDto({
-	commit,
-	parents,
-	sha,
-}: OctokitCommitDto): RawCommit {
-	return {
-		sha: sha.slice(0, shaLengthToDisplay),
-		author: {
-			name: commit.author?.name ?? null,
-			emailAddress: commit.author?.email ?? null,
-		},
-		committer: {
-			name: commit.committer?.name ?? null,
-			emailAddress: commit.committer?.email ?? null,
-		},
-		parents: parents.map((parent) => ({ sha: parent.sha })),
-		commitMessage: commit.message,
-	}
 }

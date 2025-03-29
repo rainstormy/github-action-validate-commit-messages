@@ -34,7 +34,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@octokit/types": "13.10.0",
 		"@rainstormy/presets-biome": "1.0.0",
 		"@types/node": "20.17.25",
 		"@vitest/coverage-v8": "3.0.9",
@@ -46,7 +45,6 @@
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
-		"@octokit/types": "These type definitions cover the GitHub REST API via Octokit.",
 		"@rainstormy/presets-biome": "This library provides predefined, opinionated Biome configurations.",
 		"@types/node": "These type definitions cover Node.js modules.",
 		"@vitest/coverage-v8": "This Vitest plugin reports code coverage.",
