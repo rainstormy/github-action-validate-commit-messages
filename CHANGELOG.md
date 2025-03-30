@@ -10,11 +10,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Detect and ignore trailing hexadecimal hashes and semantic version numbers
   with prerelease segments in the `limit-length-of-subject-lines` rule.
-- Recognise `decommission`, `prerelease`, `professionalise`/`professionalize`,
-  `recollapse`, `recommission`, `recommit`, `redeploy`, `remerge`, `re-read`,
-  `rerelease`/`re-release`, `retrap`, `robustify`, `uncollapse`, `uncommit`,
-  `undeploy`, `unmerge`, `unrelease`, `unsquash`, and `untrap` as verbs in the
-  `imperative-subject-lines` rule.
+- Recognise `deallocate`, `decommission`, `dequeue`, `digitalise`/`digitalize`,
+  `digitise`/`digitize`, `enqueue`, `generify`, `mislexicalise`/`mislexicalize`,
+  `misparse`, `mistokenise`/`mistokenize`, `prerelease`,
+  `professionalise`/`professionalize`, `quantise`/`quantize`, `reallocate`,
+  `reassign`, `recollapse`, `recommission`, `recommit`, `recouple`, `redeploy`,
+  `regroup`, `remerge`, `requeue`, `re-read`, `rerelease`/`re-release`,
+  `retrap`, `robustify`, `tokenise`/`tokenize`, `unassign`, `unblur`, `unbump`,
+  `uncollapse`, `uncommit`, `uncouple`, `undeploy`, `unfocus`, `ungroup`,
+  `unmerge`, `unpair`, `unrelease`, `unsquash`, `untrap`, and `unzoom` as verbs
+  in the `imperative-subject-lines` rule.
 
 ## [1.1.6] - 2024-10-28
 ### Fixed
