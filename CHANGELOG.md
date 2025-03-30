@@ -7,6 +7,8 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.1.7] - 2025-03-30
 ### Fixed
 - Detect and ignore trailing hexadecimal hashes and semantic version numbers
   with prerelease segments in the `limit-length-of-subject-lines` rule.
@@ -95,7 +97,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New rule: `no-trailing-punctuation-in-subject-lines`.
 - New rule: `no-unexpected-whitespace`.
 
-[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.6...HEAD
+[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.7...HEAD
+[1.1.7]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.6...v1.1.7
 [1.1.6]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.3...v1.1.4
