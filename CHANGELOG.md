@@ -7,6 +7,9 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Downgrade [Undici](https://github.com/nodejs/undici) to 6.21.2 to preserve
+  compatibility with Node.js 20.
 
 ## [1.1.7] - 2025-03-30
 ### Fixed
