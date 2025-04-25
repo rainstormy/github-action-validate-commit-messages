@@ -40,7 +40,7 @@
 		"@vitest/ui": "3.1.2",
 		"lefthook": "1.11.10",
 		"typescript": "5.8.3",
-		"vite": "6.3.1",
+		"vite": "6.3.2",
 		"vitest": "3.1.2"
 	},
 	"// devDependencies": {
