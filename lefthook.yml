@@ -1,6 +1,6 @@
 remotes:
   - git_url: https://github.com/rainstormy/presets-lefthook
-    ref: v1.1.1
+    ref: v1.1.2
     configs:
       - dependencies.yml
       - quality-assurance.yml
