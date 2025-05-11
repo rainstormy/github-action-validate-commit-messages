@@ -4441,7 +4441,7 @@ export function imperativeSubjectLines({
 }
 
 function getLeadingWord(refinedSubjectLine: string): string {
-	return refinedSubjectLine.split(" ")[0].trim().toLowerCase()
+	return refinedSubjectLine.split(" ")[0]?.trim().toLowerCase() ?? ""
 }
 
 function isImperativeVerb(word: string): boolean {

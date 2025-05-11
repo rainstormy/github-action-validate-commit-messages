@@ -30,7 +30,7 @@ export type UserIdentity = {
 
 export function parseCommit(rawCommit: RawCommit): Commit {
 	const { sha, author, committer, parents, commitMessage } = rawCommit
-	const [originalSubjectLine, ...bodyLines] = commitMessage.split("\n")
+	const [originalSubjectLine = "", ...bodyLines] = commitMessage.split("\n")
 
 	return {
 		sha,
