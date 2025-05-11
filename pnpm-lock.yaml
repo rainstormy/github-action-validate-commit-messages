@@ -30,6 +30,9 @@ importers:
       '@rainstormy/presets-biome':
         specifier: 1.0.0
         version: 1.0.0(@biomejs/biome@1.9.4)
+      '@rainstormy/presets-typescript':
+        specifier: 1.1.0
+        version: 1.1.0(typescript@5.8.3)
       '@types/node':
         specifier: 20.17.32
         version: 20.17.32
@@ -381,6 +384,12 @@ packages:
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@biomejs/biome': '>=1.9.0 <1.10.0'
+
+  '@rainstormy/presets-typescript@1.1.0':
+    resolution: {integrity: sha512-zoIdH83jWKt79OOI6ej9c4uM27AlVAQFlINECOUM5X7Li8Q9utkW3GFenKIUBLLDeUdn21etecZQaEIYO/QrCQ==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      typescript: '>=5.6.2 <6.0.0'
 
   '@rollup/rollup-android-arm-eabi@4.40.0':
     resolution: {integrity: sha512-+Fbls/diZ0RDerhE8kyC6hjADCXA1K4yVNlH0EYfd2XjyH0UGgzaQ8MlT0pCXAThfxv3QUAczHaL+qSv1E4/Cg==}
@@ -1269,6 +1278,10 @@ snapshots:
   '@rainstormy/presets-biome@1.0.0(@biomejs/biome@1.9.4)':
     dependencies:
       '@biomejs/biome': 1.9.4
+
+  '@rainstormy/presets-typescript@1.1.0(typescript@5.8.3)':
+    dependencies:
+      typescript: 5.8.3
 
   '@rollup/rollup-android-arm-eabi@4.40.0':
     optional: true

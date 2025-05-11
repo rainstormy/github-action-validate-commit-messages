@@ -1,41 +1,23 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": [
+		"@rainstormy/presets-typescript/base",
+		"@rainstormy/presets-typescript/es2023"
+	],
 	"compilerOptions": {
-		"allowJs": false,
 		"baseUrl": "./",
-		"checkJs": false,
-		"esModuleInterop": true,
 		"erasableSyntaxOnly": true,
 		"exactOptionalPropertyTypes": false,
-		"forceConsistentCasingInFileNames": true,
-		"importHelpers": true,
 		"incremental": true,
-		"isolatedModules": true,
-		"lib": ["ES2023"],
 		"libReplacement": false,
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
-		"noEmit": true,
-		"noImplicitAny": true,
-		"noImplicitOverride": true,
-		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
+		"noUncheckedIndexedAccess": false,
 		"paths": {
-			"+github/*": ["./src/github/*"],
-			"+rules/*": ["./src/rules/*"],
-			"+utilities/*": ["./src/utilities/*"],
-			"+validator/*": ["./src/validator/*"]
+			"+github/*": ["src/github/*"],
+			"+rules/*": ["src/rules/*"],
+			"+utilities/*": ["src/utilities/*"],
+			"+validator/*": ["src/validator/*"]
 		},
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"target": "ESNext",
-		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
-		"useDefineForClassFields": true,
-		"verbatimModuleSyntax": true
+		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo"
 	},
 	"include": ["**/*.ts"],
 	"exclude": ["dist/", "node_modules/"]
