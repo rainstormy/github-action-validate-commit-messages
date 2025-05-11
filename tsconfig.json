@@ -7,10 +7,8 @@
 	"compilerOptions": {
 		"baseUrl": "./",
 		"erasableSyntaxOnly": true,
-		"exactOptionalPropertyTypes": false,
 		"incremental": true,
 		"libReplacement": false,
-		"noUncheckedIndexedAccess": false,
 		"paths": {
 			"+github/*": ["src/github/*"],
 			"+rules/*": ["src/rules/*"],
