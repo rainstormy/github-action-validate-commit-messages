@@ -9,9 +9,15 @@ import { limitLengthOfSubjectLinesConfigurationSchema } from "+rules/LimitLength
 import { noSquashCommitsConfigurationSchema } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
 import { noTrailingPunctuationInSubjectLinesConfigurationSchema } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
 import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	type SafeParseResult,
+	object,
+	safeParse,
+} from "valibot"
 
-const configurationSchema = z.object({
+const configurationSchema = object({
 	ruleKeys: ruleKeysConfigurationSchema,
 	acknowledgedAuthorEmailAddresses:
 		acknowledgedAuthorEmailAddressesConfigurationSchema,
@@ -29,11 +35,11 @@ const configurationSchema = z.object({
 		noTrailingPunctuationInSubjectLinesConfigurationSchema,
 })
 
-export type RawConfiguration = z.input<typeof configurationSchema>
-export type Configuration = z.output<typeof configurationSchema>
+export type RawConfiguration = InferInput<typeof configurationSchema>
+export type Configuration = InferOutput<typeof configurationSchema>
 
 export function parseConfiguration(
 	rawConfiguration: RawConfiguration,
-): ReturnType<typeof configurationSchema.safeParse> {
-	return configurationSchema.safeParse(rawConfiguration)
+): SafeParseResult<typeof configurationSchema> {
+	return safeParse(configurationSchema, rawConfiguration)
 }

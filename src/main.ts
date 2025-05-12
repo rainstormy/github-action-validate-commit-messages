@@ -3,7 +3,7 @@ import {
 	actionFailed,
 	actionSucceeded,
 } from "+github/ActionResult"
-import { configurationFromInputs, formatIssue } from "+github/InputParameters"
+import { configurationFromInputs } from "+github/InputParameters"
 import { getPullRequestFromApi } from "+github/PullRequest"
 import { instructiveReporter } from "+validator/Reporter"
 import { validatorFrom } from "+validator/Validator"
@@ -35,17 +35,14 @@ async function run(): Promise<ActionResult> {
 	const configuration = configurationFromInputs()
 
 	if (!configuration.success) {
-		const formattedErrors = configuration.error.issues.map((issue) =>
-			formatIssue(issue),
-		)
-
+		const formattedErrors = configuration.issues.map((issue) => issue.message)
 		return actionFailed(formattedErrors)
 	}
 
 	const pullRequest = await getPullRequestFromApi(pullRequestNumber)
 
-	const reporter = instructiveReporter(configuration.data)
-	const validate = validatorFrom(configuration.data)
+	const reporter = instructiveReporter(configuration.output)
+	const validate = validatorFrom(configuration.output)
 	const reportedErrors = validate(pullRequest.rawCommits, reporter)
 
 	return reportedErrors.length === 0

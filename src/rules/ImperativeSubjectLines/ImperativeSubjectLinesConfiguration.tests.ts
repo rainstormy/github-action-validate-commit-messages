@@ -4,6 +4,7 @@ import {
 	imperativeSubjectLinesConfigurationSchema,
 } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -32,9 +33,9 @@ describe.each`
 
 describe.each`
 	rawWords                                           | expectedErrorMessage
-	${"chatify,chatify"}                               | ${"must not contain duplicates: chatify"}
-	${"deckenise,deckenize,chatify,chatify,deckenize"} | ${"must not contain duplicates: deckenize, chatify"}
-	${"deckenize,deckenise,deckenise,deckenize"}       | ${"must not contain duplicates: deckenize, deckenise"}
+	${"chatify,chatify"}                               | ${"Input parameter 'imperative-subject-lines--whitelist' must not contain duplicates: chatify"}
+	${"deckenise,deckenize,chatify,chatify,deckenize"} | ${"Input parameter 'imperative-subject-lines--whitelist' must not contain duplicates: deckenize, chatify"}
+	${"deckenize,deckenise,deckenise,deckenize"}       | ${"Input parameter 'imperative-subject-lines--whitelist' must not contain duplicates: deckenize, deckenise"}
 `(
 	"a whitelist of words from an invalid string of $rawWords",
 	(testRow: {
@@ -48,19 +49,13 @@ describe.each`
 				expectedErrorMessage,
 			)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() => parseConfiguration({ whitelist: rawWords })).toThrow(
-				"imperative-subject-lines--whitelist",
-			)
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawImperativeSubjectLinesConfiguration,
 ): ImperativeSubjectLinesConfiguration {
-	return imperativeSubjectLinesConfigurationSchema.parse(rawConfiguration)
+	return parse(imperativeSubjectLinesConfigurationSchema, rawConfiguration)
 }
 
 function formatWords(words: ReadonlyArray<string>): string {

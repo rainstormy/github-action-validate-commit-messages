@@ -4,6 +4,7 @@ import {
 	issueReferencesInSubjectLinesConfigurationSchema,
 } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -32,11 +33,11 @@ describe.each`
 
 describe.each`
 	rawPatterns                                                                                                          | expectedErrorMessage
-	${""}                                                                                                                | ${"must specify at least one value"}
-	${"  "}                                                                                                              | ${"must specify at least one value"}
-	${"#[1-9][0-9]* #[1-9][0-9]*"}                                                                                       | ${"must not contain duplicates: #[1-9][0-9]*"}
-	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]* ALPHA-[1-9][0-9]*"}                                       | ${"must not contain duplicates: ALPHA-[1-9][0-9]*"}
-	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]* CHARLIE-[1-9][0-9]* BRAVO-[1-9][0-9]* BRAVO-[1-9][0-9]*"} | ${"must not contain duplicates: BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"}
+	${""}                                                                                                                | ${"Input parameter 'issue-references-in-subject-lines--patterns' must specify at least one value"}
+	${"  "}                                                                                                              | ${"Input parameter 'issue-references-in-subject-lines--patterns' must specify at least one value"}
+	${"#[1-9][0-9]* #[1-9][0-9]*"}                                                                                       | ${"Input parameter 'issue-references-in-subject-lines--patterns' must not contain duplicates: #[1-9][0-9]*"}
+	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]* ALPHA-[1-9][0-9]*"}                                       | ${"Input parameter 'issue-references-in-subject-lines--patterns' must not contain duplicates: ALPHA-[1-9][0-9]*"}
+	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]* CHARLIE-[1-9][0-9]* BRAVO-[1-9][0-9]* BRAVO-[1-9][0-9]*"} | ${"Input parameter 'issue-references-in-subject-lines--patterns' must not contain duplicates: BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
 	(testRow: {
@@ -52,15 +53,6 @@ describe.each`
 					patterns: rawPatterns,
 				}),
 			).toThrow(expectedErrorMessage)
-		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() =>
-				parseConfiguration({
-					allowedPositions: "as-prefix,as-suffix",
-					patterns: rawPatterns,
-				}),
-			).toThrow("issue-references-in-subject-lines--patterns")
 		})
 	},
 )
@@ -92,13 +84,13 @@ describe.each`
 
 describe.each`
 	rawPositions                                           | expectedErrorMessage
-	${""}                                                  | ${"must specify at least one value"}
-	${"  "}                                                | ${"must specify at least one value"}
-	${" ,   ,, , ,,, "}                                    | ${"must specify at least one value"}
-	${"as-prefix, as-infix, as-postfix, as-suffix"}        | ${"must not contain unknown values: as-infix, as-postfix"}
-	${"as-prefix,as-prefix"}                               | ${"must not contain duplicates: as-prefix"}
-	${"as-prefix,as-suffix,as-suffix"}                     | ${"must not contain duplicates: as-suffix"}
-	${"as-suffix,as-prefix,as-prefix,as-prefix,as-suffix"} | ${"must not contain duplicates: as-suffix, as-prefix"}
+	${""}                                                  | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must specify at least one value"}
+	${"  "}                                                | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must specify at least one value"}
+	${" ,   ,, , ,,, "}                                    | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must specify at least one value"}
+	${"as-prefix, as-infix, as-postfix, as-suffix"}        | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must not contain unknown values: as-infix, as-postfix"}
+	${"as-prefix,as-prefix"}                               | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must not contain duplicates: as-prefix"}
+	${"as-prefix,as-suffix,as-suffix"}                     | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must not contain duplicates: as-suffix"}
+	${"as-suffix,as-prefix,as-prefix,as-prefix,as-suffix"} | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must not contain duplicates: as-suffix, as-prefix"}
 `(
 	"a list of allowed positions from an invalid string of $rawPositions",
 	(testRow: {
@@ -115,22 +107,14 @@ describe.each`
 				}),
 			).toThrow(expectedErrorMessage)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() =>
-				parseConfiguration({
-					allowedPositions: rawPositions,
-					patterns: "UNICORN-[1-9][0-9]*",
-				}),
-			).toThrow("issue-references-in-subject-lines--allowed-positions")
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawIssueReferencesInSubjectLinesConfiguration,
 ): IssueReferencesInSubjectLinesConfiguration {
-	return issueReferencesInSubjectLinesConfigurationSchema.parse(
+	return parse(
+		issueReferencesInSubjectLinesConfigurationSchema,
 		rawConfiguration,
 	)
 }

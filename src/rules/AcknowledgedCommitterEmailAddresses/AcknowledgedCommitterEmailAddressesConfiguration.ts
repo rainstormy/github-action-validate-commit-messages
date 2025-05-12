@@ -4,28 +4,38 @@ import {
 	requireNoDuplicateValues,
 } from "+utilities/IterableUtilities"
 import { splitBySpace } from "+utilities/StringUtilities"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	check,
+	object,
+	pipe,
+	string,
+	transform,
+} from "valibot"
 
-export const acknowledgedCommitterEmailAddressesConfigurationSchema = z.object({
-	patterns: z
-		.string()
-		.transform(splitBySpace)
-		.refine(requireAtLeastOneValue, {
-			message: "must specify at least one value",
-			path: ["acknowledged-committer-email-addresses--patterns"],
-		})
-		.refine(requireNoDuplicateValues, (values) => ({
-			message: `must not contain duplicates: ${getDuplicateValues(values).join(
-				" ",
-			)}`,
-			path: ["acknowledged-committer-email-addresses--patterns"],
-		})),
+export const acknowledgedCommitterEmailAddressesConfigurationSchema = object({
+	patterns: pipe(
+		string(),
+		transform(splitBySpace),
+		check(
+			requireAtLeastOneValue,
+			"Input parameter 'acknowledged-committer-email-addresses--patterns' must specify at least one value",
+		),
+		check(
+			requireNoDuplicateValues,
+			(issue) =>
+				`Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: ${getDuplicateValues(
+					issue.input,
+				).join(" ")}`,
+		),
+	),
 })
 
-export type RawAcknowledgedCommitterEmailAddressesConfiguration = z.input<
+export type RawAcknowledgedCommitterEmailAddressesConfiguration = InferInput<
 	typeof acknowledgedCommitterEmailAddressesConfigurationSchema
 >
 
-export type AcknowledgedCommitterEmailAddressesConfiguration = z.output<
+export type AcknowledgedCommitterEmailAddressesConfiguration = InferOutput<
 	typeof acknowledgedCommitterEmailAddressesConfigurationSchema
 >

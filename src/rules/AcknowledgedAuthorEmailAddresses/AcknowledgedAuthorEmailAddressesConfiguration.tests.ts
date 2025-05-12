@@ -4,6 +4,7 @@ import {
 	acknowledgedAuthorEmailAddressesConfigurationSchema,
 } from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -31,11 +32,11 @@ describe.each`
 
 describe.each`
 	rawPatterns                                                                                                                                        | expectedErrorMessage
-	${""}                                                                                                                                              | ${"must specify at least one value"}
-	${"  "}                                                                                                                                            | ${"must specify at least one value"}
-	${"\\d+\\+.+@users\\.noreply\\.github\\.com \\d+\\+.+@users\\.noreply\\.github\\.com"}                                                             | ${"must not contain duplicates: \\\\d+\\\\+.+@users\\\\.noreply\\\\.github\\\\.com"}
-	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@alpha-company\\.com"}                                                 | ${"must not contain duplicates: .+@alpha-company\\\\.com"}
-	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@charlie-company\\.com .+@bravo-company\\.com .+@bravo-company\\.com"} | ${"must not contain duplicates: .+@bravo-company\\\\.com .+@charlie-company\\\\.com"}
+	${""}                                                                                                                                              | ${"Input parameter 'acknowledged-author-email-addresses--patterns' must specify at least one value"}
+	${"  "}                                                                                                                                            | ${"Input parameter 'acknowledged-author-email-addresses--patterns' must specify at least one value"}
+	${"\\d+\\+.+@users\\.noreply\\.github\\.com \\d+\\+.+@users\\.noreply\\.github\\.com"}                                                             | ${"Input parameter 'acknowledged-author-email-addresses--patterns' must not contain duplicates: \\d+\\+.+@users\\.noreply\\.github\\.com"}
+	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@alpha-company\\.com"}                                                 | ${"Input parameter 'acknowledged-author-email-addresses--patterns' must not contain duplicates: .+@alpha-company\\.com"}
+	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@charlie-company\\.com .+@bravo-company\\.com .+@bravo-company\\.com"} | ${"Input parameter 'acknowledged-author-email-addresses--patterns' must not contain duplicates: .+@bravo-company\\.com .+@charlie-company\\.com"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
 	(testRow: {
@@ -49,19 +50,14 @@ describe.each`
 				expectedErrorMessage,
 			)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() => parseConfiguration({ patterns: rawPatterns })).toThrow(
-				"acknowledged-author-email-addresses--patterns",
-			)
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawAcknowledgedAuthorEmailAddressesConfiguration,
 ): AcknowledgedAuthorEmailAddressesConfiguration {
-	return acknowledgedAuthorEmailAddressesConfigurationSchema.parse(
+	return parse(
+		acknowledgedAuthorEmailAddressesConfigurationSchema,
 		rawConfiguration,
 	)
 }

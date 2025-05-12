@@ -3,24 +3,34 @@ import {
 	requireNoDuplicateValues,
 } from "+utilities/IterableUtilities"
 import { splitBySpace } from "+utilities/StringUtilities"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	check,
+	object,
+	pipe,
+	string,
+	transform,
+} from "valibot"
 
-export const noTrailingPunctuationInSubjectLinesConfigurationSchema = z.object({
-	whitelist: z
-		.string()
-		.transform(splitBySpace)
-		.refine(requireNoDuplicateValues, (suffixes) => ({
-			message: `must not contain duplicates: ${getDuplicateValues(
-				suffixes,
-			).join(" ")}`,
-			path: ["no-trailing-punctuation-in-subject-lines--whitelist"],
-		})),
+export const noTrailingPunctuationInSubjectLinesConfigurationSchema = object({
+	whitelist: pipe(
+		string(),
+		transform(splitBySpace),
+		check(
+			requireNoDuplicateValues,
+			(issue) =>
+				`Input parameter 'no-trailing-punctuation-in-subject-lines--whitelist' must not contain duplicates: ${getDuplicateValues(
+					issue.input,
+				).join(" ")}`,
+		),
+	),
 })
 
-export type RawNoTrailingPunctuationInSubjectLinesConfiguration = z.input<
+export type RawNoTrailingPunctuationInSubjectLinesConfiguration = InferInput<
 	typeof noTrailingPunctuationInSubjectLinesConfigurationSchema
 >
 
-export type NoTrailingPunctuationInSubjectLinesConfiguration = z.output<
+export type NoTrailingPunctuationInSubjectLinesConfiguration = InferOutput<
 	typeof noTrailingPunctuationInSubjectLinesConfigurationSchema
 >

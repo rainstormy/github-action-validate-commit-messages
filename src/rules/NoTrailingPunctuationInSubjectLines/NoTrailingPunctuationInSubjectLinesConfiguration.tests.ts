@@ -4,6 +4,7 @@ import {
 	noTrailingPunctuationInSubjectLinesConfigurationSchema,
 } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -35,9 +36,9 @@ describe.each`
 
 describe.each`
 	rawSuffixes                | expectedErrorMessage
-	${". . ,"}                 | ${"must not contain duplicates: ."}
-	${", . ! : . ,"}           | ${"must not contain duplicates: , ."}
-	${"- + ! ? : : + + . , !"} | ${"must not contain duplicates: + ! :"}
+	${". . ,"}                 | ${"Input parameter 'no-trailing-punctuation-in-subject-lines--whitelist' must not contain duplicates: ."}
+	${", . ! : . ,"}           | ${"Input parameter 'no-trailing-punctuation-in-subject-lines--whitelist' must not contain duplicates: , ."}
+	${"- + ! ? : : + + . , !"} | ${"Input parameter 'no-trailing-punctuation-in-subject-lines--whitelist' must not contain duplicates: + ! :"}
 `(
 	"a whitelist of suffixes from an invalid string of $rawSuffixes",
 	(testRow: {
@@ -51,19 +52,14 @@ describe.each`
 				expectedErrorMessage,
 			)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(
-				"no-trailing-punctuation-in-subject-lines--whitelist",
-			)
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawNoTrailingPunctuationInSubjectLinesConfiguration,
 ): NoTrailingPunctuationInSubjectLinesConfiguration {
-	return noTrailingPunctuationInSubjectLinesConfigurationSchema.parse(
+	return parse(
+		noTrailingPunctuationInSubjectLinesConfigurationSchema,
 		rawConfiguration,
 	)
 }
