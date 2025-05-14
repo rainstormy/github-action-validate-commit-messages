@@ -1,6 +1,7 @@
 import { type RuleKey, ruleKeys as allAvailableRuleKeys } from "+rules/Rule"
 import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -51,15 +52,14 @@ describe.each`
 
 describe.each`
 	rawRuleKeys                                                                                                                          | expectedErrorMessage
-	${""}                                                                                                                                | ${"must specify at least one value"}
-	${"  "}                                                                                                                              | ${"must specify at least one value"}
-	${" ,   ,, , ,,, "}                                                                                                                  | ${"must specify at least one value"}
-	${"capitalised-subject-lines, no-squash-commits, no-squash-commits"}                                                                 | ${"must not contain duplicates: no-squash-commits"}
-	${"capitalised-subject-lines, no-merge-commits, no-squash-commits, no-squash-commits, capitalised-subject-lines, no-squash-commits"} | ${"must not contain duplicates: capitalised-subject-lines, no-squash-commits"}
-	${"no-merge-commits, no-squash-commits, no-merge-commits, no-squash-commits"}                                                        | ${"must not contain duplicates: no-merge-commits, no-squash-commits"}
-	${"only-merge-commits, no-squash-commits, no-funny-commits, capitalised-subject-lines"}                                              | ${"must not contain unknown values: only-merge-commits, no-funny-commits"}
-	${"no-easter-eggs, no-squash-commits, no-easter-eggs, no-letters-in-subject-lines, no-squash-commits"}                               | ${"must not contain duplicates: no-easter-eggs, no-squash-commits"}
-	${"no-easter-eggs, no-squash-commits, no-easter-eggs, no-letters-in-subject-lines, no-squash-commits"}                               | ${"must not contain unknown values: no-easter-eggs, no-letters-in-subject-lines"}
+	${""}                                                                                                                                | ${"Input parameter 'rules' must specify at least one value"}
+	${"  "}                                                                                                                              | ${"Input parameter 'rules' must specify at least one value"}
+	${" ,   ,, , ,,, "}                                                                                                                  | ${"Input parameter 'rules' must specify at least one value"}
+	${"capitalised-subject-lines, no-squash-commits, no-squash-commits"}                                                                 | ${"Input parameter 'rules' must not contain duplicates: no-squash-commits"}
+	${"capitalised-subject-lines, no-merge-commits, no-squash-commits, no-squash-commits, capitalised-subject-lines, no-squash-commits"} | ${"Input parameter 'rules' must not contain duplicates: capitalised-subject-lines, no-squash-commits"}
+	${"no-merge-commits, no-squash-commits, no-merge-commits, no-squash-commits"}                                                        | ${"Input parameter 'rules' must not contain duplicates: no-merge-commits, no-squash-commits"}
+	${"only-merge-commits, no-squash-commits, no-funny-commits, capitalised-subject-lines"}                                              | ${"Input parameter 'rules' must not contain unknown values: only-merge-commits, no-funny-commits"}
+	${"no-easter-eggs, no-squash-commits, no-easter-eggs, no-letters-in-subject-lines, no-squash-commits"}                               | ${"Input parameter 'rules' must not contain unknown values: no-easter-eggs, no-letters-in-subject-lines"}
 `(
 	"a ruleset from an invalid string of $rawRuleKeys",
 	(testRow: {
@@ -73,15 +73,11 @@ describe.each`
 				expectedErrorMessage,
 			)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() => parseConfiguration(rawRuleKeys)).toThrow("rules")
-		})
 	},
 )
 
 function parseConfiguration(rawRuleKeys: string): ReadonlyArray<RuleKey> {
-	return ruleKeysConfigurationSchema.parse(rawRuleKeys)
+	return parse(ruleKeysConfigurationSchema, rawRuleKeys)
 }
 
 function formatRuleKeys(ruleKeys: ReadonlyArray<string>): string {

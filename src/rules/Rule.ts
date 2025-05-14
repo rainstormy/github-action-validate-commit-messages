@@ -23,6 +23,7 @@ export const ruleKeys = [
 ] as const
 
 export type RuleKey = (typeof ruleKeys)[number]
+export type RuleKeys = ReadonlyArray<RuleKey>
 
 export type Rule = {
 	readonly key: RuleKey

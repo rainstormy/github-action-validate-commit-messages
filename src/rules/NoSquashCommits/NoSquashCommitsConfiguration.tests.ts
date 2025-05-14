@@ -4,6 +4,7 @@ import {
 	noSquashCommitsConfigurationSchema,
 } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -33,12 +34,12 @@ describe.each`
 
 describe.each`
 	rawPrefixes                                     | expectedErrorMessage
-	${""}                                           | ${"must specify at least one value"}
-	${"  "}                                         | ${"must specify at least one value"}
-	${" ,   ,, , ,,, "}                             | ${"must specify at least one value"}
-	${"fixup!, squash!, fixup!"}                    | ${"must not contain duplicates: fixup!"}
-	${"squash!, squash!, amend!, fixup!, amend!"}   | ${"must not contain duplicates: squash!, amend!"}
-	${"amend!,fixup!,amend!,squash!,amend!,fixup!"} | ${"must not contain duplicates: amend!, fixup!"}
+	${""}                                           | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must specify at least one value"}
+	${"  "}                                         | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must specify at least one value"}
+	${" ,   ,, , ,,, "}                             | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must specify at least one value"}
+	${"fixup!, squash!, fixup!"}                    | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must not contain duplicates: fixup!"}
+	${"squash!, squash!, amend!, fixup!, amend!"}   | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must not contain duplicates: squash!, amend!"}
+	${"amend!,fixup!,amend!,squash!,amend!,fixup!"} | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must not contain duplicates: amend!, fixup!"}
 `(
 	"a list of disallowed prefixes from an invalid string of $rawPrefixes",
 	(testRow: {
@@ -52,19 +53,13 @@ describe.each`
 				parseConfiguration({ disallowedPrefixes: rawPrefixes }),
 			).toThrow(expectedErrorMessage)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() =>
-				parseConfiguration({ disallowedPrefixes: rawPrefixes }),
-			).toThrow("no-squash-commits--disallowed-prefixes")
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawNoSquashCommitsConfiguration,
 ): NoSquashCommitsConfiguration {
-	return noSquashCommitsConfigurationSchema.parse(rawConfiguration)
+	return parse(noSquashCommitsConfigurationSchema, rawConfiguration)
 }
 
 function formatPrefixes(prefixes: ReadonlyArray<string>): string {

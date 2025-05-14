@@ -1,20 +1,30 @@
 import { requirePositiveInteger } from "+utilities/StringUtilities"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	check,
+	object,
+	pipe,
+	string,
+	transform,
+} from "valibot"
 
-export const limitLengthOfSubjectLinesConfigurationSchema = z.object({
-	maximumCharacters: z
-		.string()
-		.refine(requirePositiveInteger, (value) => ({
-			message: `must be a positive integer: ${value}`,
-			path: ["limit-length-of-subject-lines--max-characters"],
-		}))
-		.transform((value) => Number.parseInt(value)),
+export const limitLengthOfSubjectLinesConfigurationSchema = object({
+	maximumCharacters: pipe(
+		string(),
+		check(
+			requirePositiveInteger,
+			(issue) =>
+				`Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: ${issue.input}`,
+		),
+		transform(Number.parseInt),
+	),
 })
 
-export type RawLimitLengthOfSubjectLinesConfiguration = z.input<
+export type RawLimitLengthOfSubjectLinesConfiguration = InferInput<
 	typeof limitLengthOfSubjectLinesConfigurationSchema
 >
 
-export type LimitLengthOfSubjectLinesConfiguration = z.output<
+export type LimitLengthOfSubjectLinesConfiguration = InferOutput<
 	typeof limitLengthOfSubjectLinesConfigurationSchema
 >

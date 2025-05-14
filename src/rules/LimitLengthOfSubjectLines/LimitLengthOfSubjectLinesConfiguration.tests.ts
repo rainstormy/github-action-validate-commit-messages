@@ -3,6 +3,7 @@ import {
 	type RawLimitLengthOfSubjectLinesConfiguration,
 	limitLengthOfSubjectLinesConfigurationSchema,
 } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -32,15 +33,15 @@ describe.each`
 
 describe.each`
 	rawMaximumCharacters | expectedErrorMessage
-	${""}                | ${"must be a positive integer:"}
-	${" "}               | ${"must be a positive integer:"}
-	${"."}               | ${"must be a positive integer: ."}
-	${"q"}               | ${"must be a positive integer: q"}
-	${"-1"}              | ${"must be a positive integer: -1"}
-	${"0"}               | ${"must be a positive integer: 0"}
-	${"54.5"}            | ${"must be a positive integer: 54.5"}
-	${"7abc"}            | ${"must be a positive integer: 7abc"}
-	${"1e9"}             | ${"must be a positive integer: 1e9"}
+	${""}                | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer:"}
+	${" "}               | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer:"}
+	${"."}               | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: ."}
+	${"q"}               | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: q"}
+	${"-1"}              | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: -1"}
+	${"0"}               | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: 0"}
+	${"54.5"}            | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: 54.5"}
+	${"7abc"}            | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: 7abc"}
+	${"1e9"}             | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: 1e9"}
 `(
 	"a maximum number of characters from an invalid string of $rawMaximumCharacters",
 	(testRow: {
@@ -54,17 +55,11 @@ describe.each`
 				parseConfiguration({ maximumCharacters: rawMaximumCharacters }),
 			).toThrow(expectedErrorMessage)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() =>
-				parseConfiguration({ maximumCharacters: rawMaximumCharacters }),
-			).toThrow("limit-length-of-subject-lines--max-characters")
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawLimitLengthOfSubjectLinesConfiguration,
 ): LimitLengthOfSubjectLinesConfiguration {
-	return limitLengthOfSubjectLinesConfigurationSchema.parse(rawConfiguration)
+	return parse(limitLengthOfSubjectLinesConfigurationSchema, rawConfiguration)
 }

@@ -1,4 +1,4 @@
-import { ruleKeys } from "+rules/Rule"
+import { type RuleKeys, ruleKeys } from "+rules/Rule"
 import {
 	getDuplicateValues,
 	getUnknownValues,
@@ -7,25 +7,29 @@ import {
 	requireNoUnknownValues,
 } from "+utilities/IterableUtilities"
 import { splitByComma } from "+utilities/StringUtilities"
-import { z } from "zod"
+import { check, pipe, string, transform } from "valibot"
 
-export const ruleKeysConfigurationSchema = z
-	.string()
-	.transform(splitByComma)
-	.refine(requireAtLeastOneValue, {
-		message: "must specify at least one value",
-		path: ["rules"],
-	})
-	.refine(requireNoDuplicateValues, (values) => ({
-		message: `must not contain duplicates: ${getDuplicateValues(values).join(
-			", ",
-		)}`,
-		path: ["rules"],
-	}))
-	.refine(requireNoUnknownValues(ruleKeys), (values) => ({
-		message: `must not contain unknown values: ${getUnknownValues(
-			ruleKeys,
-			values,
-		).join(", ")}`,
-		path: ["rules"],
-	}))
+export const ruleKeysConfigurationSchema = pipe(
+	string(),
+	transform(splitByComma),
+	check(
+		requireAtLeastOneValue,
+		"Input parameter 'rules' must specify at least one value",
+	),
+	check(
+		requireNoUnknownValues(ruleKeys),
+		(issue) =>
+			`Input parameter 'rules' must not contain unknown values: ${getUnknownValues(
+				ruleKeys,
+				issue.input,
+			).join(", ")}`,
+	),
+	check(
+		requireNoDuplicateValues,
+		(issue) =>
+			`Input parameter 'rules' must not contain duplicates: ${getDuplicateValues(
+				issue.input,
+			).join(", ")}`,
+	),
+	transform((input) => input as RuleKeys),
+)

@@ -23,7 +23,7 @@ export default defineConfig(() => {
 			alias: tsconfigPathAliases(),
 		},
 		ssr: {
-			noExternal: ["@actions/core", "@actions/github", "undici", "zod"],
+			noExternal: ["@actions/core", "@actions/github", "undici", "valibot"],
 		},
 		test: {
 			coverage: {

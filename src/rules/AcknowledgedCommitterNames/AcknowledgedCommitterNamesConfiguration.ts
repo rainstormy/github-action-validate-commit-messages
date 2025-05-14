@@ -4,28 +4,38 @@ import {
 	requireNoDuplicateValues,
 } from "+utilities/IterableUtilities"
 import { splitBySpace } from "+utilities/StringUtilities"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	check,
+	object,
+	pipe,
+	string,
+	transform,
+} from "valibot"
 
-export const acknowledgedCommitterNamesConfigurationSchema = z.object({
-	patterns: z
-		.string()
-		.transform(splitBySpace)
-		.refine(requireAtLeastOneValue, {
-			message: "must specify at least one value",
-			path: ["acknowledged-committer-names--patterns"],
-		})
-		.refine(requireNoDuplicateValues, (values) => ({
-			message: `must not contain duplicates: ${getDuplicateValues(values).join(
-				" ",
-			)}`,
-			path: ["acknowledged-committer-names--patterns"],
-		})),
+export const acknowledgedCommitterNamesConfigurationSchema = object({
+	patterns: pipe(
+		string(),
+		transform(splitBySpace),
+		check(
+			requireAtLeastOneValue,
+			"Input parameter 'acknowledged-committer-names--patterns' must specify at least one value",
+		),
+		check(
+			requireNoDuplicateValues,
+			(issue) =>
+				`Input parameter 'acknowledged-committer-names--patterns' must not contain duplicates: ${getDuplicateValues(
+					issue.input,
+				).join(" ")}`,
+		),
+	),
 })
 
-export type RawAcknowledgedCommitterNamesConfiguration = z.input<
+export type RawAcknowledgedCommitterNamesConfiguration = InferInput<
 	typeof acknowledgedCommitterNamesConfigurationSchema
 >
 
-export type AcknowledgedCommitterNamesConfiguration = z.output<
+export type AcknowledgedCommitterNamesConfiguration = InferOutput<
 	typeof acknowledgedCommitterNamesConfigurationSchema
 >

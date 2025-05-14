@@ -4,28 +4,38 @@ import {
 	requireNoDuplicateValues,
 } from "+utilities/IterableUtilities"
 import { splitBySpace } from "+utilities/StringUtilities"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	check,
+	object,
+	pipe,
+	string,
+	transform,
+} from "valibot"
 
-export const acknowledgedAuthorNamesConfigurationSchema = z.object({
-	patterns: z
-		.string()
-		.transform(splitBySpace)
-		.refine(requireAtLeastOneValue, {
-			message: "must specify at least one value",
-			path: ["acknowledged-author-names--patterns"],
-		})
-		.refine(requireNoDuplicateValues, (values) => ({
-			message: `must not contain duplicates: ${getDuplicateValues(values).join(
-				" ",
-			)}`,
-			path: ["acknowledged-author-names--patterns"],
-		})),
+export const acknowledgedAuthorNamesConfigurationSchema = object({
+	patterns: pipe(
+		string(),
+		transform(splitBySpace),
+		check(
+			requireAtLeastOneValue,
+			"Input parameter 'acknowledged-author-names--patterns' must specify at least one value",
+		),
+		check(
+			requireNoDuplicateValues,
+			(issue) =>
+				`Input parameter 'acknowledged-author-names--patterns' must not contain duplicates: ${getDuplicateValues(
+					issue.input,
+				).join(" ")}`,
+		),
+	),
 })
 
-export type RawAcknowledgedAuthorNamesConfiguration = z.input<
+export type RawAcknowledgedAuthorNamesConfiguration = InferInput<
 	typeof acknowledgedAuthorNamesConfigurationSchema
 >
 
-export type AcknowledgedAuthorNamesConfiguration = z.output<
+export type AcknowledgedAuthorNamesConfiguration = InferOutput<
 	typeof acknowledgedAuthorNamesConfigurationSchema
 >

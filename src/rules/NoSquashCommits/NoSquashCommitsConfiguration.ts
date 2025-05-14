@@ -4,28 +4,38 @@ import {
 	requireNoDuplicateValues,
 } from "+utilities/IterableUtilities"
 import { splitByComma } from "+utilities/StringUtilities"
-import { z } from "zod"
+import {
+	type InferInput,
+	type InferOutput,
+	check,
+	object,
+	pipe,
+	string,
+	transform,
+} from "valibot"
 
-export const noSquashCommitsConfigurationSchema = z.object({
-	disallowedPrefixes: z
-		.string()
-		.transform(splitByComma)
-		.refine(requireAtLeastOneValue, {
-			message: "must specify at least one value",
-			path: ["no-squash-commits--disallowed-prefixes"],
-		})
-		.refine(requireNoDuplicateValues, (values) => ({
-			message: `must not contain duplicates: ${getDuplicateValues(values).join(
-				", ",
-			)}`,
-			path: ["no-squash-commits--disallowed-prefixes"],
-		})),
+export const noSquashCommitsConfigurationSchema = object({
+	disallowedPrefixes: pipe(
+		string(),
+		transform(splitByComma),
+		check(
+			requireAtLeastOneValue,
+			"Input parameter 'no-squash-commits--disallowed-prefixes' must specify at least one value",
+		),
+		check(
+			requireNoDuplicateValues,
+			(issue) =>
+				`Input parameter 'no-squash-commits--disallowed-prefixes' must not contain duplicates: ${getDuplicateValues(
+					issue.input,
+				).join(", ")}`,
+		),
+	),
 })
 
-export type RawNoSquashCommitsConfiguration = z.input<
+export type RawNoSquashCommitsConfiguration = InferInput<
 	typeof noSquashCommitsConfigurationSchema
 >
 
-export type NoSquashCommitsConfiguration = z.output<
+export type NoSquashCommitsConfiguration = InferOutput<
 	typeof noSquashCommitsConfigurationSchema
 >

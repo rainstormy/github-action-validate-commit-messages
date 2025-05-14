@@ -4,6 +4,7 @@ import {
 	acknowledgedAuthorNamesConfigurationSchema,
 } from "+rules/AcknowledgedAuthorNames/AcknowledgedAuthorNamesConfiguration"
 import { count } from "+utilities/StringUtilities"
+import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 
 describe.each`
@@ -31,10 +32,10 @@ describe.each`
 
 describe.each`
 	rawPatterns                          | expectedErrorMessage
-	${""}                                | ${"must specify at least one value"}
-	${"  "}                              | ${"must specify at least one value"}
-	${".+ .+"}                           | ${"must not contain duplicates: .+"}
-	${"\\w+\\.\\w+ .+\\s.+ \\w+\\.\\w+"} | ${"must not contain duplicates: \\\\w+\\\\.\\\\w+"}
+	${""}                                | ${"Input parameter 'acknowledged-author-names--patterns' must specify at least one value"}
+	${"  "}                              | ${"Input parameter 'acknowledged-author-names--patterns' must specify at least one value"}
+	${".+ .+"}                           | ${"Input parameter 'acknowledged-author-names--patterns' must not contain duplicates: .+"}
+	${"\\w+\\.\\w+ .+\\s.+ \\w+\\.\\w+"} | ${"Input parameter 'acknowledged-author-names--patterns' must not contain duplicates: \\w+\\.\\w+"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
 	(testRow: {
@@ -48,19 +49,13 @@ describe.each`
 				expectedErrorMessage,
 			)
 		})
-
-		it("raises an error that points out the name of the incorrect parameter", () => {
-			expect(() => parseConfiguration({ patterns: rawPatterns })).toThrow(
-				"acknowledged-author-names--patterns",
-			)
-		})
 	},
 )
 
 function parseConfiguration(
 	rawConfiguration: RawAcknowledgedAuthorNamesConfiguration,
 ): AcknowledgedAuthorNamesConfiguration {
-	return acknowledgedAuthorNamesConfigurationSchema.parse(rawConfiguration)
+	return parse(acknowledgedAuthorNamesConfigurationSchema, rawConfiguration)
 }
 
 function formatPatterns(patterns: ReadonlyArray<string>): string {
