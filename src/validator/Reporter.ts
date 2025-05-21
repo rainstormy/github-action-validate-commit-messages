@@ -1,6 +1,6 @@
 import type { Commit } from "+rules/Commit"
 import type { IssueReferencePosition } from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
-import type { RuleKey } from "+rules/Rule"
+import type { RuleKey, RuleKeys } from "+rules/Rule"
 import { count, pluralise } from "+utilities/StringUtilities"
 import type { Configuration } from "+validator/Configuration"
 
@@ -13,8 +13,8 @@ export type InvalidCommitsByViolatedRuleKey = Readonly<
 >
 
 export function violatedRulesReporter(): Reporter<RuleKey> {
-	return (invalidCommitsByViolatedRuleKeys): ReadonlyArray<RuleKey> =>
-		Object.keys(invalidCommitsByViolatedRuleKeys) as ReadonlyArray<RuleKey>
+	return (invalidCommitsByViolatedRuleKeys): RuleKeys =>
+		Object.keys(invalidCommitsByViolatedRuleKeys) as RuleKeys
 }
 
 export function instructiveReporter(
@@ -97,10 +97,12 @@ export function instructiveReporter(
 		const revertOrReverts = pluralise(commitCount, "revert", "reverts")
 		const theOrEach = pluralise(commitCount, "the", "each")
 
+		const shaLengthToDisplay = 7
+
 		const indentedListOfCommits = invalidCommits
 			.map(
 				({ originalSubjectLine, sha }) =>
-					`${indent}${sha} ${originalSubjectLine.trim()}`,
+					`${indent}${sha.slice(0, shaLengthToDisplay)} ${originalSubjectLine.trim()}`,
 			)
 			.join("\n")
 

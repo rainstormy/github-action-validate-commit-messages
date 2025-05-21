@@ -19,17 +19,11 @@
 		"yolo": "lefthook uninstall"
 	},
 	"dependencies": {
-		"@actions/core": "1.11.1",
-		"@actions/github": "6.0.0",
 		"tslib": "2.8.1",
-		"undici": "6.21.2",
 		"valibot": "1.1.0"
 	},
 	"// dependencies": {
-		"@actions/core": "A runtime library for GitHub Actions that provides access to inputs such as the GitHub token.",
-		"@actions/github": "A runtime library for GitHub Actions that provides access to the GitHub REST API via Octokit.",
 		"tslib": "A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.",
-		"undici": "An HTTP client that implements the Fetch API on Node.js. It is a peer dependency of `@actions/core` and `@actions/github`.",
 		"valibot": "Valibot provides type-safe data validation."
 	},
 	"devDependencies": {

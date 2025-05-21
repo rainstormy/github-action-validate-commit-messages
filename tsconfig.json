@@ -10,7 +10,7 @@
 		"incremental": true,
 		"libReplacement": false,
 		"paths": {
-			"+github/*": ["src/github/*"],
+			"+adapters/*": ["src/adapters/*"],
 			"+rules/*": ["src/rules/*"],
 			"+utilities/*": ["src/utilities/*"],
 			"+validator/*": ["src/validator/*"]

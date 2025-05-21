@@ -9,15 +9,9 @@ import { limitLengthOfSubjectLinesConfigurationSchema } from "+rules/LimitLength
 import { noSquashCommitsConfigurationSchema } from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
 import { noTrailingPunctuationInSubjectLinesConfigurationSchema } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
 import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
-import {
-	type InferInput,
-	type InferOutput,
-	type SafeParseResult,
-	object,
-	safeParse,
-} from "valibot"
+import { type InferInput, type InferOutput, object } from "valibot"
 
-const configurationSchema = object({
+export const configurationSchema = object({
 	ruleKeys: ruleKeysConfigurationSchema,
 	acknowledgedAuthorEmailAddresses:
 		acknowledgedAuthorEmailAddressesConfigurationSchema,
@@ -37,9 +31,3 @@ const configurationSchema = object({
 
 export type RawConfiguration = InferInput<typeof configurationSchema>
 export type Configuration = InferOutput<typeof configurationSchema>
-
-export function parseConfiguration(
-	rawConfiguration: RawConfiguration,
-): SafeParseResult<typeof configurationSchema> {
-	return safeParse(configurationSchema, rawConfiguration)
-}

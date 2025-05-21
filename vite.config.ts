@@ -16,6 +16,7 @@ export default defineConfig(() => {
 					entryFileNames: "main.mjs",
 				},
 			},
+			target: "es2022",
 		},
 		cacheDir: inProjectDirectory("node_modules/.cache/"),
 		plugins: [],
@@ -23,7 +24,7 @@ export default defineConfig(() => {
 			alias: tsconfigPathAliases(),
 		},
 		ssr: {
-			noExternal: ["@actions/core", "@actions/github", "undici", "valibot"],
+			noExternal: ["valibot"],
 		},
 		test: {
 			coverage: {
