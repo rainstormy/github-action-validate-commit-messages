@@ -1,4 +1,4 @@
-import { type RuleKey, ruleKeys as allAvailableRuleKeys } from "+rules/Rule"
+import { type RuleKeys, ruleKeys as allAvailableRuleKeys } from "+rules/Rule"
 import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
 import { count } from "+utilities/StringUtilities"
 import { parse } from "valibot"
@@ -39,7 +39,7 @@ describe.each`
 	"a ruleset from a valid string of $rawRuleKeys",
 	(testRow: {
 		readonly rawRuleKeys: string
-		readonly expectedRuleKeys: ReadonlyArray<RuleKey>
+		readonly expectedRuleKeys: RuleKeys
 	}) => {
 		const { rawRuleKeys, expectedRuleKeys } = testRow
 
@@ -76,7 +76,7 @@ describe.each`
 	},
 )
 
-function parseConfiguration(rawRuleKeys: string): ReadonlyArray<RuleKey> {
+function parseConfiguration(rawRuleKeys: string): RuleKeys {
 	return parse(ruleKeysConfigurationSchema, rawRuleKeys)
 }
 

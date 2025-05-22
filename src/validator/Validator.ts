@@ -3,7 +3,7 @@ import { acknowledgedAuthorNames } from "+rules/AcknowledgedAuthorNames/Acknowle
 import { acknowledgedCommitterEmailAddresses } from "+rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddresses"
 import { acknowledgedCommitterNames } from "+rules/AcknowledgedCommitterNames/AcknowledgedCommitterNames"
 import { capitalisedSubjectLines } from "+rules/CapitalisedSubjectLines/CapitalisedSubjectLines"
-import { type RawCommit, parseCommit } from "+rules/Commit"
+import { type RawCommits, parseCommit } from "+rules/Commit"
 import { commitRefinerFrom } from "+rules/CommitRefiner"
 import { emptyLineAfterSubjectLines } from "+rules/EmptyLineAfterSubjectLines/EmptyLineAfterSubjectLines"
 import { imperativeSubjectLines } from "+rules/ImperativeSubjectLines/ImperativeSubjectLines"
@@ -26,7 +26,7 @@ import type {
 } from "+validator/Reporter"
 
 export type Validator = <Result>(
-	rawCommits: ReadonlyArray<RawCommit>,
+	rawCommits: RawCommits,
 	reporter: Reporter<Result>,
 ) => ReadonlyArray<Result>
 
@@ -35,7 +35,7 @@ export function validatorFrom(configuration: Configuration): Validator {
 	const refineCommit = commitRefinerFrom(rules)
 
 	return <Result>(
-		rawCommits: ReadonlyArray<RawCommit>,
+		rawCommits: RawCommits,
 		makeReport: Reporter<Result>,
 	): ReadonlyArray<Result> => {
 		const refinedCommits = rawCommits

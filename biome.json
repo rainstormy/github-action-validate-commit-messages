@@ -9,7 +9,17 @@
 	},
 	"overrides": [
 		{
-			"include": ["entry.cli.js", "main.ts"],
+			"include": ["src/adapters/*.ts", "src/main.ts"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noNodejsModules": "off"
+					}
+				}
+			}
+		},
+		{
+			"include": ["src/main.ts"],
 			"linter": {
 				"rules": {
 					"style": {

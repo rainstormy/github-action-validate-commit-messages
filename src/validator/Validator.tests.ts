@@ -1,6 +1,6 @@
-import type { RawCommit } from "+rules/Commit"
+import type { RawCommits } from "+rules/Commit"
 import { dummyCommit } from "+rules/Commit.dummies"
-import type { RuleKey } from "+rules/Rule"
+import type { RuleKeys } from "+rules/Rule"
 import { count } from "+utilities/StringUtilities"
 import type { Configuration } from "+validator/Configuration"
 import {
@@ -126,7 +126,7 @@ describe("when the configuration has default settings", () => {
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
 			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
@@ -168,7 +168,7 @@ describe("when the configuration has default settings", () => {
 		(testRow: {
 			readonly subjectLine: string
 			readonly body: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
@@ -191,7 +191,7 @@ describe("when the configuration has default settings", () => {
 			readonly subjectLine: string
 			readonly body: string
 			readonly numberOfParents: number
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, body, numberOfParents, expectedViolatedRuleKeys } =
 				testRow
@@ -219,7 +219,7 @@ describe("when the configuration has default settings", () => {
 		(testRow: {
 			readonly subjectLines: ReadonlyArray<string>
 			readonly numberOfParents: number
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLines, numberOfParents, expectedViolatedRuleKeys } =
 				testRow
@@ -266,7 +266,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 			readonly authorEmailAddress: string | null
 			readonly committerName: string | null
 			readonly committerEmailAddress: string | null
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const {
 				authorName,
@@ -314,7 +314,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
 			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
@@ -344,7 +344,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
 			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
@@ -378,7 +378,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
 			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
@@ -398,7 +398,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		(testRow: {
 			readonly subjectLine: string
 			readonly numberOfParents: number
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, numberOfParents, expectedViolatedRuleKeys } = testRow
 
@@ -419,7 +419,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		"multiple commits with subject lines of $subjectLines",
 		(testRow: {
 			readonly subjectLines: ReadonlyArray<string>
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLines, expectedViolatedRuleKeys } = testRow
 
@@ -452,7 +452,7 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 		(testRow: {
 			readonly subjectLine: string
 			readonly body: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
@@ -485,7 +485,7 @@ describe("when the configuration overrides 'limit-length-of-subject-lines--max-c
 		(testRow: {
 			readonly subjectLine: string
 			readonly body: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
@@ -517,7 +517,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
 			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: ReadonlyArray<RuleKey>
+			readonly expectedViolatedRuleKeys: RuleKeys
 		}) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
@@ -531,12 +531,12 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 
 function validateViolatedRulesFrom(
 	configuration: Configuration,
-): (rawCommits: ReadonlyArray<RawCommit>) => ReadonlyArray<RuleKey> {
-	return (rawCommits): ReadonlyArray<RuleKey> =>
+): (rawCommits: RawCommits) => RuleKeys {
+	return (rawCommits): RuleKeys =>
 		validatorFrom(configuration)(rawCommits, violatedRulesReporter())
 }
 
-function formatRuleKeys(ruleKeys: ReadonlyArray<RuleKey>): string {
+function formatRuleKeys(ruleKeys: RuleKeys): string {
 	return ruleKeys.length === 0
 		? "no rules"
 		: `${count(ruleKeys, "rule", "rules")}: ${ruleKeys.join(", ")}`

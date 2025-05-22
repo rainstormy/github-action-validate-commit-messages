@@ -6,6 +6,8 @@ export type RawCommit = {
 	readonly commitMessage: string
 }
 
+export type RawCommits = Array<RawCommit>
+
 export type Commit = {
 	readonly sha: string
 	readonly author: UserIdentity

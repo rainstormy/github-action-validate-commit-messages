@@ -1,4 +1,4 @@
-import type { RawCommit } from "+rules/Commit"
+import type { RawCommits } from "+rules/Commit"
 import { dummyCommit } from "+rules/Commit.dummies"
 import type { Configuration } from "+validator/Configuration"
 import {
@@ -331,8 +331,8 @@ describe("when the configuration has default settings", () => {
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please avoid having co-authors in the commits:
-    cafebabe Update src/main.ts
-    cafed00d Do some mob programming
+    cafebab Update src/main.ts
+    cafed00 Do some mob programming
 
     Reword each commit message to remove the 'Co-authored-by:' trailers in the message body.
     Removing the co-authors will help you preserve the authenticity of the commits, as co-authors are unable to sign commits.`,
@@ -515,8 +515,8 @@ describe("when the configuration has default settings", () => {
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please avoid trailing punctuation in the subject lines:
-    cafebabe Begin the implementation with more to come+
-    cafed00d Wonder if this will work?
+    cafebab Begin the implementation with more to come+
+    cafed00 Wonder if this will work?
 
     Reword each commit message to delete the punctuation characters at the end of the foremost line.
     Standardising the commit message format will help you preserve the readability of the commit history.`,
@@ -615,9 +615,9 @@ describe("when the configuration has default settings", () => {
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please consolidate the commits that repeat the subject line of a previous commit:
-    cafebabe Have fun
+    cafebab Have fun
     badf00d Apply strawberry jam to make the code sweeter
-    cafed00d Have fun
+    cafed00 Have fun
 
     Rebase interactively to combine the commits with the previous one.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
@@ -648,8 +648,8 @@ describe("when the configuration has default settings", () => {
 		it("contains a series of instructions on how to resolve the violated rules", () => {
 			expect(report).toStrictEqual([
 				`Please consolidate the squash commits:
-    cafebabe squash! Improve some stuff
-    cafed00d fixup! Improve some stuff
+    cafebab squash! Improve some stuff
+    cafed00 fixup! Improve some stuff
 
     Rebase interactively to combine the commits with the original ones.
     Avoiding unnecessary commits will help you preserve the traceability of the commit history.`,
@@ -694,7 +694,7 @@ describe("when the configuration has default settings", () => {
     Avoiding merge commits will help you preserve the traceability of the commit history as well as the ability to rebase interactively.`,
 
 				`Please consolidate the squash commits:
-    cafed00d fixup! Resolve a bug that thought it was a feature
+    cafed00 fixup! Resolve a bug that thought it was a feature
     0ff1ce amend! Add some extra love to the code
 
     Rebase interactively to combine the commits with the original ones.
@@ -819,7 +819,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please use acknowledged author email addresses:
-    600d1dea Hunt down the bugs
+    600d1de Hunt down the bugs
     bad1dea Refactor the taxi module
 
     Edit each commit to change the email address of its author.
@@ -905,7 +905,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please use acknowledged author names:
-    600d1dea Hunt down the bugs
+    600d1de Hunt down the bugs
     bad1dea Refactor the taxi module
 
     Edit each commit to change the name of its author.
@@ -991,7 +991,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please use acknowledged committer email addresses:
-    600d1dea Hunt down the bugs
+    600d1de Hunt down the bugs
     bad1dea Refactor the taxi module
 
     Edit each commit to change the email address of its committer.
@@ -1077,7 +1077,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please use acknowledged committer names:
-    600d1dea Hunt down the bugs
+    600d1de Hunt down the bugs
     bad1dea Refactor the taxi module
 
     Edit each commit to change the name of its committer.
@@ -1127,7 +1127,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 		it("contains a series of instructions on how to resolve the violated rules", () => {
 			expect(report).toStrictEqual([
 				`Please use acknowledged author email addresses:
-    600d1dea Subscribe to the service
+    600d1de Subscribe to the service
     bad1dea Update the dependencies
 
     Edit each commit to change the email address of its author.
@@ -1137,7 +1137,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     .+@thelegendary\\.com`,
 
 				`Please use acknowledged author names:
-    600d1dea Subscribe to the service
+    600d1de Subscribe to the service
     bad1dea Update the dependencies
 
     Edit each commit to change the name of its author.
@@ -1147,7 +1147,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     \\w{4}`,
 
 				`Please use acknowledged committer email addresses:
-    600d1dea Subscribe to the service
+    600d1de Subscribe to the service
     bad1dea Update the dependencies
 
     Edit each commit to change the email address of its committer.
@@ -1157,7 +1157,7 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
     .+@thelegendary\\.com`,
 
 				`Please use acknowledged committer names:
-    600d1dea Subscribe to the service
+    600d1de Subscribe to the service
     bad1dea Update the dependencies
 
     Edit each commit to change the name of its committer.
@@ -1212,8 +1212,8 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please include an issue reference at the start of the subject lines:
-    cafebabe Update some dependencies
-    cafed00d Resolve a bug that thought it was a feature
+    cafebab Update some dependencies
+    cafed00 Resolve a bug that thought it was a feature
 
     Reword each commit message to make the foremost line start with a reference to an issue tracking system.
     Providing more context in the commit messages will help you preserve the traceability of the commit history.
@@ -1270,8 +1270,8 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		it("contains instructions on how to resolve the violated rule", () => {
 			expect(report).toStrictEqual([
 				`Please include an issue reference at the start or the end of the subject lines:
-    cafebabe Update some dependencies
-    cafed00d Resolve a bug that thought it was a feature
+    cafebab Update some dependencies
+    cafed00 Resolve a bug that thought it was a feature
 
     Reword each commit message to make the foremost line start or end with a reference to an issue tracking system.
     Providing more context in the commit messages will help you preserve the traceability of the commit history.
@@ -1355,7 +1355,7 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 
 function validateInstructionsFrom(
 	configuration: Configuration,
-): (commits: ReadonlyArray<RawCommit>) => ReadonlyArray<string> {
+): (commits: RawCommits) => ReadonlyArray<string> {
 	return (commits): ReadonlyArray<string> =>
 		validatorFrom(configuration)(commits, instructiveReporter(configuration))
 }

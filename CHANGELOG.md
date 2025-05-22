@@ -7,6 +7,14 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Reduce the size of the bundle downloaded by the GitHub Actions runner:
+  - Drop [GitHub Actions Toolkit](https://github.com/actions/toolkit) as a
+    runtime dependency and interact directly with the GitHub REST API via the
+    Fetch API in Node.js.
+  - Replace [Zod](https://github.com/colinhacks/zod)
+    with [Valibot](https://github.com/fabian-hiller/valibot) as data validation
+    library.
 
 ## [1.1.8] - 2025-03-31
 ### Fixed
@@ -35,9 +43,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   and `prefill` as verbs in the `imperative-subject-lines` rule.
 
 ## [1.1.5] - 2024-05-20
+### Changed
+- Use [pnpm](https://pnpm.io) as the package manager instead
+  of [Yarn PnP](https://yarnpkg.com).
+
 ### Fixed
-- Recognise `alias`, `inline`, `proxy`, and `reroute` as verbs in
-  the `imperative-subject-lines` rule.
+- Recognise `alias`, `inline`, `proxy`, and `reroute` as verbs in the
+  `imperative-subject-lines` rule.
 
 ## [1.1.4] - 2023-12-18
 ### Fixed
@@ -61,8 +73,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.1.1] - 2023-09-09
 ### Fixed
-- Reduce the bundle size downloaded by the GitHub Actions runner. The tarball
-  archive exported by GitHub no longer contains Yarn PnP binaries.
+- Reduce the size of the bundle downloaded by the GitHub Actions runner. The
+  tarball archive exported by GitHub no longer contains Yarn PnP binaries.
 
 ## [1.1.0] - 2023-05-04
 ### Added
@@ -71,8 +83,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - Ignore semantic version updates (i.e. subject lines that end with `to X.Y.Z`)
   in the `limit-length-of-subject-lines` rule.
-- Ignore lines that contain an `https://` URL in
-  the `limit-length-of-body-lines` rule.
+- Ignore lines that contain an `https://` URL in the
+  `limit-length-of-body-lines` rule.
 
 ## [1.0.1] - 2023-04-17
 ### Added
