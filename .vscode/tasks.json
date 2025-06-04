@@ -1,58 +1,104 @@
 {
+	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "npm",
-			"script": "build",
-			"problemMatcher": [],
-			"label": "build"
+			"label": "build",
+			"command": "mise run build",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "check",
-			"problemMatcher": [],
-			"label": "check"
+			"label": "check",
+			"command": "mise run check",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "check.fmt",
-			"problemMatcher": [],
-			"label": "check.fmt"
+			"label": "check_fmt",
+			"command": "mise run check_fmt",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "check.types",
-			"problemMatcher": [],
-			"label": "check.types"
+			"label": "check_ts",
+			"command": "mise run check_ts",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "fmt",
-			"problemMatcher": [],
-			"label": "fmt"
+			"label": "fmt",
+			"command": "mise run fmt",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "install",
-			"problemMatcher": [],
-			"label": "install"
+			"label": "init",
+			"command": "mise run init",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "test",
-			"problemMatcher": [],
-			"label": "test"
+			"label": "test",
+			"command": "mise run test",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "vi",
-			"problemMatcher": [],
-			"label": "vi"
+			"label": "vitest",
+			"command": "mise run vitest",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
 		},
 		{
-			"type": "npm",
-			"script": "yolo",
-			"problemMatcher": [],
-			"label": "yolo"
+			"label": "yolo",
+			"command": "mise run yolo",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
 		}
 	]
 }

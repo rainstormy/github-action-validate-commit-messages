@@ -50,7 +50,7 @@ jobs:
           # This is especially useful upon rebasing interactively.
           #
           # CAUTION: The cache key is repeated in `.github/workflows/release.yml` to restore the build artifacts.
-          key: can-build-project-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '!src/**/*.testdata.*', '!src/**/*.tests.*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          key: can-build-project-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '!src/**/*.testdata.*', '!src/**/*.tests.*', '*.ts', '.env', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
           path: dist/
         #
       - name: Install pnpm and third-party dependencies
@@ -59,7 +59,7 @@ jobs:
         #
       - name: Build the project
         if: steps.skip-if-already-built.outputs.cache-hit != 'true'
-        run: pnpm build
+        run: mise run build
 
   has-clean-code:
     name: Has clean code
@@ -77,7 +77,7 @@ jobs:
         with:
           # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code is clean in the current configuration, and we can skip the rest of the job.
           # This is especially useful upon rebasing interactively.
-          key: has-clean-code-${{ runner.os }}-sha256:${{ hashFiles('.github/**/*', '.vscode/*.json', 'src/**/*', 'docs/**/*.md', '*.json', '*.ts', '.nvmrc', 'pnpm-lock.yaml') }}
+          key: has-clean-code-${{ runner.os }}-sha256:${{ hashFiles('.github/**/*', '.vscode/*.json', 'src/**/*', 'docs/**/*.md', '*.json', '*.ts', '.env', 'mise.toml', 'pnpm-lock.yaml') }}
           path: node_modules/.cache/typescript/
         #
       - name: Install pnpm and third-party dependencies
@@ -86,11 +86,11 @@ jobs:
         #
       - name: Verify that the source code is type-safe
         if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm check.types
+        run: mise run check_ts
         #
       - name: Verify that the source code is well-formatted
         if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm check.fmt
+        run: mise run check_fmt
 
   satisfies-unit-tests:
     name: Satisfies unit tests
@@ -108,7 +108,7 @@ jobs:
         with:
           # If an exact cache hit occurs, another workflow run on this branch has already verified that the source code satisfies the unit tests in the current configuration, and we can skip the rest of the job.
           # This is especially useful upon rebasing interactively.
-          key: satisfies-unit-tests-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '*.ts', '.nvmrc', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          key: satisfies-unit-tests-${{ runner.os }}-sha256:${{ hashFiles('src/**/*', '*.ts', '.env', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
           path: node_modules/.cache/vitest/
         #
       - name: Install pnpm and third-party dependencies
@@ -117,7 +117,7 @@ jobs:
         #
       - name: Verify that the source code satisfies the unit tests
         if: steps.skip-if-already-verified.outputs.cache-hit != 'true'
-        run: pnpm test
+        run: mise run test
 
   has-standardised-commit-messages:
     name: Has standardised commit messages

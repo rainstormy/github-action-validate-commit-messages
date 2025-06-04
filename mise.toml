@@ -1,0 +1,73 @@
+# Manage devtools and tasks with mise-en-place.
+# https://mise.jdx.dev/configuration.html
+
+min_version = "2025.7.0"
+
+[tools]
+node = "20.19.2"
+pnpm = "10.12.4"
+
+[tasks.build]
+# language=sh
+run = "vite build --ssr src/main.ts"
+description = "Generates production-grade build artefacts with Vite."
+alias = ["b"]
+
+[tasks.check]
+depends = ["check_fmt", "check_ts"]
+description = "Runs `check_fmt` and `check_ts`."
+alias = ["c"]
+
+[tasks.check_fmt]
+# language=sh
+run = "biome check --error-on-warnings"
+description = "Verifies the code style of the source code with Biome."
+
+[tasks.check_ts]
+# language=sh
+run = "tsc"
+description = "Verifies the type safety of the source code with TypeScript."
+alias = ["ts"]
+
+[tasks.fmt]
+# language=sh
+run = "biome check --write"
+description = "Reformats the source code with Biome."
+alias = ["f"]
+
+[tasks.init]
+# language=sh
+run = ["pnpm install --ignore-scripts", "lefthook install"]
+description = "Installs Node.js packages with pnpm and enables the Git hooks with Lefthook."
+alias = ["i"]
+
+[tasks.test]
+# language=sh
+run = "vitest run"
+env = { CI = 1 }
+description = "Runs the entire unit test suite once with Vitest."
+alias = ["t"]
+
+[tasks.vitest]
+# language=sh
+run = "vitest watch --ui --open $LOCALHOST_VITEST_OPENS_AUTOMATICALLY --api.port $LOCALHOST_VITEST_PORT"
+env = { CI = 1 }
+description = "Starts the Vitest UI test explorer for continuous unit testing."
+alias = ["v"]
+
+[tasks.yolo]
+# language=sh
+run = "lefthook uninstall"
+description = "Disables the Git hooks with Lefthook."
+
+[env]
+# Load environment variables from the `.env` and `.env.local` files:
+# https://mise.jdx.dev/environments/#env-file
+_.file = [".env", ".env.local"]
+
+# Make CLI programs in `node_modules` available directly in the command line:
+# https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
+_.path = ["node_modules/.bin"]
+
+[settings]
+task_output = "quiet"
