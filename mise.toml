@@ -4,6 +4,7 @@
 min_version = "2025.7.0"
 
 [tools]
+actionlint = "1.7.7"
 node = "20.19.2"
 pnpm = "10.12.4"
 

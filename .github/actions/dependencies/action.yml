@@ -1,5 +1,5 @@
-name: pnpm
-description: Installs pnpm and third-party dependencies.
+name: Dependencies
+description: Installs tools and Node.js packages.
 
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
@@ -7,11 +7,15 @@ runs:
   using: composite
   steps:
     - name: Install Node.js and pnpm with mise-en-place
-      uses: jdx/mise-action@13abe502c30c1559a5c37dff303831bab82c9402 # v2.2.3
+      uses: jdx/mise-action@eb2f5cb41b0a8175dad2f797e3daca6fe7795a19 # v2.4.2
+      with:
+        cache_key_prefix: 'mise:'
       #
     - name: Retrieve the path to the pnpm store
+      # Store the path in an environment variable, as step output is lost in nested composite actions.
+      # https://github.com/actions/runner/issues/2009
       # language=sh
-      run: echo "PNPM_STORE_PATH=$(pnpm store path)" >> "$GITHUB_ENV" # Use an environment variable, as step output is lost in nested composite actions: https://github.com/actions/runner/issues/2009
+      run: echo "PNPM_STORE_PATH="$(pnpm store path)"" >> "$GITHUB_ENV"
       shell: bash
       #
     - name: Restore the pnpm store from the workflow cache
@@ -20,7 +24,7 @@ runs:
         key: pnpm:${{ hashFiles('mise.toml', 'pnpm-lock.yaml') }}
         path: ${{ env.PNPM_STORE_PATH }}
       #
-    - name: Install Node.js packages
+    - name: Install Node.js packages with pnpm
       # language=sh
       run: pnpm install --frozen-lockfile --ignore-scripts
       shell: bash

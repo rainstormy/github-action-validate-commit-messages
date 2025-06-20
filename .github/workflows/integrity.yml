@@ -1,0 +1,106 @@
+# This reusable workflow verifies that the software quality meets certain standards.
+# It also produces build artefacts that can be published at a later stage.
+#
+# It is triggered by other workflows as needed.
+# It is also triggered by pushing commits to the `main` branch to prepare the workflow cache for future pull requests.
+# https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#restrictions-for-accessing-a-cache
+#
+# It can be triggered manually on any branch via the GitHub CLI:
+#
+#   gh workflow run integrity.yml [--ref <branch-name>]
+#   gh run watch
+#
+# It can also be triggered manually on any branch via the GitHub web interface:
+# https://github.com/rainstormy/github-action-validate-commit-messages/actions/workflows/integrity.yml
+
+name: Integrity
+
+on:
+  push:
+    branches:
+      - main
+  workflow_call:
+  workflow_dispatch:
+
+# Cancel all previous runs of this workflow that are still in progress on the same branch.
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency:
+  # For `workflow_call` events, `github.workflow` is the caller workflow instead of this workflow.
+  # The `integrity-` prefix makes GitHub Actions distinguish this job from other jobs in the caller workflow.
+  # https://docs.github.com/en/actions/using-workflows/reusing-workflows
+  group: integrity-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        #
+      - name: Build the project (Vite)
+        uses: ./.github/actions/task
+        with:
+          # CAUTION: The cache key is repeated in `.github/actions/build-artefacts/action.yml` to restore the build artefacts.
+          cache-key: build:${{ hashFiles('src/**/*', '!src/**/*.fixtures.*', '!src/**/*.mocks.*', '!src/**/*.tests.*', '*.config.*', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          cache-path: dist/
+          # language=sh
+          task: build
+
+  check:
+    name: Clean code
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        #
+      - name: Verify the code style (Biome) and the type safety (TypeScript)
+        id: verify-the-code-style
+        uses: ./.github/actions/task
+        with:
+          # Include `.github/**/*.yml` in the cache key to ensure that actionlint runs in the following step if a workflow has changed.
+          cache-key: check:${{ hashFiles('.github/**/*.yml', '**/*.json', 'src/**/*', '*.config.*', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
+          cache-path: node_modules/.cache/typescript/
+          # language=sh
+          task: check
+        #
+      - name: Verify the GitHub Actions workflows (actionlint)
+        if: (steps.verify-the-code-style.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+        # language=sh
+        run: actionlint
+        shell: bash
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    permissions:
+      contents: read # Allow the job to check out the repository.
+    env:
+      TEST_REPORT_PATH: node_modules/.cache/vitest/report.xml
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        #
+      - name: Verify the unit tests (Vitest)
+        id: verify-the-unit-tests
+        uses: ./.github/actions/task
+        with:
+          cache-key: test:${{ hashFiles('src/**/*', '*.config.*', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          cache-path: node_modules/.cache/vitest/
+          # language=sh
+          task: test --reporter=default --reporter=junit --outputFile.junit="$TEST_REPORT_PATH"
+        #
+      - name: Add a test report to the job summary
+        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2.4
+        with:
+          paths: ${{ env.TEST_REPORT_PATH }}
