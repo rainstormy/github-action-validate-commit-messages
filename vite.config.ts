@@ -27,15 +27,8 @@ export default defineConfig(() => {
 			noExternal: ["valibot"],
 		},
 		test: {
-			coverage: {
-				include: ["src/**/*.ts"],
-				exclude: ["src/**/*.tests.ts"],
-				provider: "v8" as const,
-				reportsDirectory: inProjectDirectory(
-					"node_modules/.cache/vitest/coverage/",
-				),
-			},
 			include: ["src/**/*.tests.ts"],
+			mockReset: true,
 		},
 	}
 
