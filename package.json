@@ -1,5 +1,7 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@rainstormy/github-action-validate-commit-messages",
+	"version": "1.1.8",
 	"license": "MIT",
 	"private": true,
 	"type": "module",
