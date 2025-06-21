@@ -9,12 +9,5 @@
 		"before 7am every weekday",
 		"every weekend"
 	],
-	"timezone": "Europe/Copenhagen",
-	"packageRules": [
-		{
-			"matchPackageNames": ["undici"],
-			"matchUpdateTypes": ["major"],
-			"enabled": false
-		}
-	]
+	"timezone": "Europe/Copenhagen"
 }
