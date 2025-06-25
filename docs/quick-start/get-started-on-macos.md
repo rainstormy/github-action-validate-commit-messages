@@ -3,6 +3,8 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
+Last updated: June 25, 2025.
+
 1. [Install Homebrew and essential packages](#-1-install-homebrew-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
 3. [Install Git and GitHub CLI](#-3-install-git-and-github-cli)
@@ -50,15 +52,14 @@ project.
    ```
 
 5. [Enable](https://github.com/DomT4/homebrew-autoupdate) daily package
-   upgrades:  
-   _(optional)_
+   upgrades:
    ```shell
    brew tap DomT4/homebrew-autoupdate && \
    brew autoupdate start --upgrade --cleanup --immediate
    ```
 
 > [!TIP]  
-> You can upgrade all installed packages manually:
+> You can also upgrade all installed packages manually:
 > ```shell
 > brew update && brew upgrade
 > ```
@@ -214,8 +215,7 @@ project.
    git config --global tag.gpgsign 'true'
    ```
 
-9. Enable autosquash suggestions when you rebase interactively:  
-   _(optional)_
+9. Enable autosquash suggestions when you rebase interactively:
    ```shell
    git config --global rebase.autosquash 'true'
    ```
@@ -288,8 +288,7 @@ project.
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    IntelliJ IDEA as the default editor in Git to edit commit messages and
-   conduct interactive rebases:  
-   _(optional)_
+   conduct interactive rebases:
    ```shell
    git config --global core.editor "idea --wait"
    ```
@@ -320,8 +319,7 @@ project.
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    Visual Studio Code as the default editor in Git to edit commit messages and
-   conduct interactive rebases:  
-   _(optional)_
+   conduct interactive rebases:
    ```shell
    git config --global core.editor "code --wait"
    ```

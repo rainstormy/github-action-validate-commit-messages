@@ -3,8 +3,13 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
+Last updated: June 25, 2025.
+
 1. [Install Zsh and essential packages](#-1-install-zsh-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
+3. [Install Git and GitHub CLI](#-3-install-git-and-github-cli)
+4. [Prepare your workspace](#-4-prepare-your-workspace)
+5. [Install an IDE](#-5-install-an-ide)
 
 > [!IMPORTANT]  
 > This guide assumes that you are using:
@@ -21,62 +26,121 @@ project.
 ## 🐧 1. Install [Zsh](https://zsh.sourceforge.io) and essential packages
 1. Install Zsh:
    ```shell
-   sudo apt update && \
-   sudo apt install zsh
+   sudo apt update && sudo apt install zsh
    ```
 
-2. Set Zsh as the default shell:
+2. Set Zsh as the default shell the next time you log in to Ubuntu:
    ```shell
-   chsh -s $(which zsh)
+   chsh -s "$(which zsh)"
+   ```
+
+3. Open Zsh and configure `~/.zshrc`:
+   ```shell
+   zsh
    ```
 
 > [!TIP]  
-> To upgrade Zsh:
+> You can upgrade Zsh manually by reinstalling it:
 > ```shell
 > sudo apt update && sudo apt install zsh
 > ```
 
-
-
-## 🟦 Install 1Password
-<mark>TODO:</mark>
-<!--
-1. [Download and install](https://1password.com/downloads/windows) the 1Password
-   desktop app.
+## 🐧 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
+### ⭐ Using [1Password](https://1password.com) _(recommended)_
+1. [Download](https://1password.com/downloads/linux) and install the desktop app.
 
 2. [Enable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
-   the SSH agent in 1Password: Go to **Settings** (<kbd>
-   Ctrl</kbd><kbd>,</kbd>) > **Developer** and select **Use the SSH agent**.
+   the SSH agent in 1Password:  
+   Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer**.  
+   Select **Use the SSH agent**.
 
-3. [Add a new item](https://developer.1password.com/docs/ssh/get-started#step-1-generate-an-ssh-key)
-   of the SSH key type in your personal vault in 1Password.
+3. [Configure](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
+   the SSH client to use the SSH agent in 1Password:
+   ```shell
+   mkdir -p ~/.1password && \
+   mkdir -p ~/.ssh && \
+   echo -e "Host *\n  IdentityAgent ~/.1password/agent.sock" >> ~/.ssh/config
+   ```
 
-4. Generate a public-private key pair with the _Ed25519_ algorithm.
+4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
+   the 1Password CLI:
+   ```shell
+   sudo apt update && \
+   sudo apt install curl && \
+   curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list > /dev/null && \
+   sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/ && \
+   curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol > /dev/null && \
+   sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22 && \
+   curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+   sudo apt update && \
+   sudo apt install 1password-cli
+   ```
 
-5. [Upload](https://github.com/settings/ssh/new) the public key to GitHub as an
-   authentication key and also as a signing key for your Git commits. It appears
-   like `ssh-ed25519 AAAAC3(...)`.
+5. Verify that the installation succeeded:
+   ```shell
+   op --version # -> 2.31.0 or newer
+   ```
 
-> [!NOTE]  
-> [To generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-> a public-private key pair with OpenSSH instead of 1Password:
+6. [Generate](https://developer.1password.com/docs/ssh/manage-keys/#generate-an-ssh-key)
+   two SSH keys in your 1Password vault; one to authenticate to GitHub and one
+   to sign commits:  
+   _(use names of your choice)_
+   ```shell
+   OP_AUTH_KEY_NAME='GitHub authentication key'
+   ```
+   ```shell
+   OP_SIGN_KEY_NAME='GitHub signing key'
+   ```
+   ```shell
+   JQ_GRAB_PUBLIC_KEY='.fields[] | select(.label=="public key") | .value' && \
+   GH_AUTH_KEY="$(op item create --category ssh --title "$OP_AUTH_KEY_NAME" --format json | jq --raw-output "$JQ_GRAB_PUBLIC_KEY")" && \
+   GH_SIGN_KEY="$(op item create --category ssh --title "$OP_SIGN_KEY_NAME" --format json | jq --raw-output "$JQ_GRAB_PUBLIC_KEY")"
+   ```
+
+### Using [OpenSSH](https://www.openssh.com)
+1. [Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+   an SSH key to authenticate to GitHub:  
+   _(use a name of your choice and enter a passphrase to protect the key)_
+   ```shell
+   SSH_AUTH_KEY_FILENAME='id_github_auth'
+   ```
+   ```shell
+   mkdir -p ~/.ssh && \
+   ssh-keygen -t ed25519 -f "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
+   ssh-add "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
+   echo -e "Host github.com\n  AddKeysToAgent yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
+   GH_AUTH_KEY="$(< "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME.pub")"
+   ```
+
+2. Generate an SSH key to sign commits:  
+   _(use a name of your choice and enter a passphrase to protect the key)_
+   ```shell
+   SSH_SIGN_KEY_FILENAME='id_github_sign'
+   ```
+   ```shell
+   ssh-keygen -t ed25519 -f "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME" && \
+   ssh-add "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME" && \
+   GH_SIGN_KEY="$(< "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME.pub")"
+   ```
+
+> [!IMPORTANT]  
+> You must unlock the signing key whenever you have restarted your computer:
 > ```shell
-> mkdir -p ~/.ssh && \
-> ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519" && \
-> ssh-add ~/.ssh/id_ed25519 && \
-> cat ~/.ssh/id_ed25519.pub
+> ssh-add ~/.ssh/id_github_sign
+> ```
+>
+> Otherwise, you may face this problem when attempting to commit:
+> ```
+> error: Couldn't find key in agent?
+> fatal: failed to write commit object
 > ```
 
-## 🐧 Configure WSL
-1. Allow WSL to access the file system on the Windows host machine:
-   ```shell
-   echo -e "[boot]\nsystemd=true\n\n[interop]\nappendWindowsPath=true\nenabled=true" | sudo tee /etc/wsl.conf > /dev/null
-   ```
--->
+> [!IMPORTANT]  
+> The SSH keys are stored locally in the `~/.ssh` directory and must be
+> transferred manually to other computers.
 
-## 🐧 Install Git
-<mark>TODO:</mark>
-<!--
+## 🐧 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
 1. Install Git via APT:
    ```shell
    sudo add-apt-repository ppa:git-core/ppa && \
@@ -84,64 +148,12 @@ project.
    sudo apt install git
    ```
 
-2. [Obtain](https://github.com/settings/emails) your noreply email address on
-   GitHub. It appears like `<id>+<username>@users.noreply.github.com`.
-
-3. Declare your identity (fill in the `<placeholders>` accordingly):
+2. Verify that the installation succeeded:
    ```shell
-   git config --global user.name "<FirstName> <LastName>" && \
-   git config --global user.email "<id>+<username>@users.noreply.github.com"
+   git --version # -> 2.50.0 or newer
    ```
 
-4. [Instruct](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
-   Git to sign your commits with the public SSH key from your personal vault in
-   1Password or OpenSSH (fill in the `<placeholders>` accordingly):
-   ```shell
-   git config --global user.signingkey "ssh-ed25519 AAAAC3<PublicKey>" && \
-   git config --global gpg.format "ssh" && \
-   git config --global commit.gpgsign "true" && \
-   git config --global tag.gpgsign "true"
-   git config --global core.sshCommand "ssh.exe" && \
-   echo -e 'eval "$(ssh-agent -s)" > /dev/null\nalias ssh="ssh.exe"\nalias ssh-add="ssh-add.exe"' >> ~/.zshrc
-   ```
-   GitHub will display a _Verified_ badge next to your signed commits.
-
-5. _(skip if using OpenSSH)_ Instruct Git to use 1Password as the SSH agent for
-   signing commits (fill in the `<placeholders>` accordingly):
-   ```shell
-   git config --global gpg.ssh.program "/mnt/c/Users/<username>/AppData/Local/1Password/app/8/op-ssh-sign.exe"
-   ```
-
-6. _(optional)_ Enable autosquash suggestions from Git when you rebase
-   interactively:
-   ```shell
-   git config --global rebase.autosquash true
-   ```
-
-7. _(optional)_ Conduct interactive rebases in IntelliJ IDEA or Visual Studio
-   Code, respectively:
-   ```shell
-   git config --global core.editor "idea --wait"
-   ```
-   ```shell
-   git config --global core.editor "code --wait"
-   ```
-
-> [!TIP]  
-> To upgrade Git:
-> ```shell
-> sudo apt update && sudo apt install git
-> ```
--->
-
-## 🐧 Install GitHub CLI _(optional)_
-<mark>TODO:</mark>
-<!--
-[GitHub CLI](https://cli.github.com) lets you interact with GitHub from the
-terminal if you prefer this.
-
-1. [Install](https://github.com/cli/cli/blob/trunk/docs/install_linux.md) GitHub
-   CLI via APT:
+3. Install GitHub CLI via APT:
    ```shell
    sudo mkdir -p -m 755 /etc/apt/keyrings && \
    wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
@@ -151,120 +163,192 @@ terminal if you prefer this.
    sudo apt install gh -y
    ```
 
-2. Sign in to GitHub using the web-based authentication flow:
+4. Verify that the installation succeeded:
    ```shell
-   gh auth login
+   gh --version # -> 2.74.0 or newer
    ```
+
+5. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
+   grants the GitHub CLI access to your SSH keys:  
+   _(it triggers a web-based authentication flow on github.com)_
+   ```shell
+   gh auth login --scopes admin:public_key,admin:ssh_signing_key
+   ```
+
+6. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
+   GitHub account:  
+   _(use names of your choice)_
+   ```shell
+   GH_AUTH_KEY_NAME='Rainstorm authentication key'
+   ```
+   ```shell
+   GH_SIGN_KEY_NAME='Rainstorm signing key'
+   ```
+   ```shell
+   echo "$GH_AUTH_KEY" | gh ssh-key add - --title "$GH_AUTH_KEY_NAME" && \
+   echo "$GH_SIGN_KEY" | gh ssh-key add - --title "$GH_SIGN_KEY_NAME" --type signing
+   ```
+
+7. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
+   SSH keys from the GitHub CLI:  
+   _(it triggers a web-based authentication flow on github.com)_
+   ```shell
+   gh auth refresh --remove-scopes admin:public_key,admin:ssh_signing_key
+   ```
+
+8. [Specify](https://github.com/settings/profile) your full name (first and last
+   names) in your GitHub profile.
+
+9. Declare your identity using your GitHub profile name and noreply email
+   address:
+   ```shell
+   GH_USER="$(gh api user)" && \
+   git config --global user.name "$(echo "$GH_USER" | jq --raw-output 'if (.name | test("^\\p{Lu}.*\\s")) then .name else error("Full name must contain at least two words where the first word starts with a capital letter") end')" && \
+   git config --global user.email "$(echo "$GH_USER" | jq --raw-output '"\(.id)+\(.login)@users.noreply.github.com"')"
+   ```
+
+10. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+    your commits to make GitHub display a _Verified_ badge next to your commits:
+    ```shell
+    git config --global user.signingkey "$GH_SIGN_KEY" && \
+    git config --global gpg.format 'ssh' && \
+    git config --global commit.gpgsign 'true' && \
+    git config --global tag.gpgsign 'true'
+    ```
+
+11. Enable autosquash suggestions when you rebase interactively:
+    ```shell
+    git config --global rebase.autosquash 'true'
+    ```
 
 > [!TIP]  
-> To upgrade GitHub CLI:
+> To upgrade Git and GitHub CLI:
 > ```shell
-> sudo apt update && sudo apt install gh
+> sudo apt update && sudo apt install git gh
 > ```
--->
 
-## 🐧 Install Node.js and pnpm
-<mark>TODO:</mark>
-<!--
-[Node.js](https://nodejs.org) is a JavaScript runtime.
-[pnpm](https://pnpm.io) is a fast and feature-rich package manager alternative
-to npm.
-
-1. [Install](https://github.com/nvm-sh/nvm) nvm:
+## 🐧 4. Prepare your workspace
+1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place:
    ```shell
-   curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+   curl https://mise.jdx.dev/install.sh | sh
    ```
 
-2. Start a new terminal session.
-   [Install](https://github.com/nvm-sh/nvm?tab=readme-ov-file#nvmrc) Node.js via
-   nvm, which automatically infers the version to install from `.nvmrc`:
+2. Add mise-en-place activation to your Zsh profile:
    ```shell
-   nvm install
+   echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
    ```
 
-3. [Install](https://pnpm.io/installation#using-corepack) pnpm via Corepack in
-   Node.js, which automatically infers the version to install from
-   `package.json`:
+3. Activate mise-en-place in the current shell session:
    ```shell
-   corepack enable
+   eval "$(mise activate zsh)"
    ```
--->
 
-## 🟦 Install IntelliJ IDEA _(optional)_
-<mark>TODO:</mark>
-<!--
-1. [Download and install](https://www.jetbrains.com/toolbox-app) the JetBrains
-   Toolbox App.
+4. Verify that the installation succeeded:
+   ```shell
+   mise --version # -> 2025.6.0 or newer
+   ```
 
-2. Install **IntelliJ IDEA Ultimate** (or **WebStorm**) via the JetBrains
-   Toolbox App. Open IntelliJ IDEA once the installation is complete.
+5. Clone the repository into the directory in which you keep your workspaces:  
+   _(specify the path to your workspace directory)_
+   ```shell
+   WORKSPACE_ROOT="$HOME/repositories/rainstormy/"
+   ```
+   ```shell
+   git clone git@github.com:rainstormy/github-action-validate-commit-messages.git "$WORKSPACE_ROOT" && \
+   cd "${WORKSPACE_ROOT%/}/github-action-validate-commit-messages/"
+   ```
 
-3. Configure the JVM options.
-1. On the Welcome screen, select ⚙️ (**Options**) > **Edit Custom VM Options
-   **. Alternatively, from the menu bar, select **Help** > **Edit Custom VM
-   Options**.
-2. Add or modify the `-Xmx` line to increase the maximum heap size, for example
-   to 8 GB of RAM:
+6. Let mise-en-place trust the project configuration:
+   ```shell
+   mise trust
+   ```
+
+7. Install the tools and dependencies required by the project (including Node.js
+   and pnpm):
+   ```shell
+   mise install && mise run init
+   ```
+
+8. Verify that both installations succeeded:
+   ```shell
+   node --version # -> 20.19.0 or newer
+   ```
+   ```shell
+   pnpm --version # -> 10.12.0 or newer
+   ```
+
+9. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
+   ```shell
+   pnpm config --global set save-prefix ''
+   ```
+
+## 🐧 5. Install an IDE
+### ⭐ Using [IntelliJ IDEA](https://www.jetbrains.com/idea) _(recommended)_
+1. [Download](https://www.jetbrains.com/toolbox-app), install, and launch the
+   JetBrains Toolbox App.  
+   Then install and launch **IntelliJ IDEA Ultimate**.
+
+2. In the menu bar, select **Help** › **Edit Custom VM Options**.  
+   Insert these lines to increase the maximum heap size, e.g. to 8 GB of RAM:
    ```
    -Xmx8192m
    ```
 
-4. Exit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>). Install the following
-   plugins:
-
-- [Biome](https://plugins.jetbrains.com/plugin/22761-biome).
-   ```powershell
-   idea installPlugins `
-     "com.github.biomejs.intellijbiome"
-   ```
-
-## 🐧 Install IntelliJ IDEA command-line launcher _(optional)_
-1. Add an alias to IntelliJ IDEA on the Windows host machine (fill in the
-   `<placeholders>` accordingly):
+3. Quit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>).  
+   Then install the [Biome](https://plugins.jetbrains.com/plugin/22761-biome)
+   plugin:
    ```shell
-   echo 'alias idea="/mnt/c/Users/<username>/AppData/Local/Programs/IntelliJ\ IDEA\ Ultimate/bin/idea64.exe"' >> ~/.zshrc
+   idea installPlugins 'com.github.biomejs.intellijbiome'
    ```
--->
 
-## 🟦 Install Visual Studio Code _(optional)_
-<mark>TODO:</mark>
-<!--
-1. [Download and install](https://code.visualstudio.com) Visual Studio Code.
-
-2. Start a new terminal session. Install the following plugins:
-
-- [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome).
-- [WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl).
-   ```powershell
-   code --install-extension "biomejs.biome" && `
-   code --install-extension "ms-vscode-remote.remote-wsl"
-   ```
--->
-
-## 🐧 Clone the repository
-<mark>TODO:</mark>
-<!--
-1. Clone the repository into the directory in which you keep your workspaces,
-   for example:
+4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
+   IntelliJ IDEA as the default editor in Git to edit commit messages and
+   conduct interactive rebases:
    ```shell
-   git clone git@github.com:rainstormy/github-action-validate-commit-messages.git ~/repositories/rainstormy/
+   git config --global core.editor "idea --wait"
    ```
 
-2. Go to the project root directory, for example:
+5. Open the project in IntelliJ IDEA:
+    ```shell
+    idea .
+    ```
+
+6. You're all set &mdash; let the coding begin!
+
+### Using [Visual Studio Code](https://code.visualstudio.com)
+1. [Download](https://code.visualstudio.com), install, and launch Visual Studio
+   Code.
+
+2. [Enable](https://code.visualstudio.com/docs/setup/linux#_debian-and-ubuntu-based-distributions)
+   launching Visual Studio Code from the terminal:  
+   In the menu bar, select **View** › **Command Palette** (<kbd>Ctrl</kbd><kbd>
+   Shift</kbd><kbd>P</kbd>).  
+   Locate and run **Shell Command: Install 'code' command in PATH**.  
+   _(it may request elevated privileges)_
+
+3. Quit Visual Studio Code (<kbd>Alt</kbd><kbd>F4</kbd>) and start a new
+   terminal.  
+   Then install the
+   [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
+   extension:
    ```shell
-   cd ~/repositories/rainstormy/github-action-validate-commit-messages/
+   code --install-extension 'biomejs.biome'
    ```
 
-3. Install third-party dependencies and Git hooks:
+4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
+   Visual Studio Code as the default editor in Git to edit commit messages and
+   conduct interactive rebases:
    ```shell
-   pnpm install
+   git config --global core.editor "code --wait"
    ```
 
-4. Open the project in IntelliJ IDEA or Visual Studio Code, respectively:
-   ```shell
-   idea .
-   ```
+5. Open the project in Visual Studio Code:  
+   _(it may prompt you to trust the project directory)_
    ```shell
    code .
    ```
--->
+
+6. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
+   version specified for the workspace.
+
+7. You're all set &mdash; let the coding begin!
