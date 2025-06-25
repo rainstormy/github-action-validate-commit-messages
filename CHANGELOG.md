@@ -16,6 +16,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     with [Valibot](https://github.com/fabian-hiller/valibot) as data validation
     library.
 
+### Fixed
+- Recognise `deconsolidate`, `outfigure`, `outguess`, `outthink`, `overreach`,
+  `preenact`/`pre-enact`, `prefigure`, `pre-release`, `prerender`/`pre-render`,
+  `reenact`/`re-enact`, `unconsolidate`, `unresolve`, `unset`, `unsettle`, and
+  `upsert` as verbs in the `imperative-subject-lines` rule.
+
 ## [1.1.8] - 2025-03-31
 ### Fixed
 - Downgrade [Undici](https://github.com/nodejs/undici) to 6.21.2 to preserve
