@@ -123,9 +123,9 @@ Last updated: June 25, 2025.
    ```
    ```shell
    mkdir -p ~/.ssh && \
+   echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
    ssh-keygen -t ed25519 -f "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
    ssh-add --apple-use-keychain "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
-   echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
    GH_AUTH_KEY="$(< "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME.pub")"
    ```
 
@@ -141,7 +141,8 @@ Last updated: June 25, 2025.
    ```
 
 > [!IMPORTANT]  
-> You must unlock the signing key whenever you have restarted your computer:
+> You must unlock the signing key whenever you have restarted your computer, for
+> example:
 > ```shell
 > ssh-add --apple-use-keychain ~/.ssh/id_github_sign
 > ```
@@ -152,7 +153,7 @@ Last updated: June 25, 2025.
 > fatal: failed to write commit object
 > ```
 
-> [!IMPORTANT]  
+> [!CAUTION]  
 > The SSH keys are stored locally in the `~/.ssh` directory and must be
 > transferred manually to other computers.
 
@@ -236,7 +237,7 @@ Last updated: June 25, 2025.
 
 2. Verify that the installation succeeded:
    ```shell
-   mise --version # -> 2025.6.0 or newer
+   mise --version # -> 2025.7.0 or newer
    ```
 
 3. Clone the repository into the directory in which you keep your workspaces:  

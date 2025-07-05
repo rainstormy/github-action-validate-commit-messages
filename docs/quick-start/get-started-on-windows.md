@@ -40,16 +40,16 @@ Last updated: June 25, 2025.
 
 3. Start a new PowerShell session.
 
-4. Define a function to refresh the `Path` environment variable in the current
+4. Define a function to refresh the `PATH` environment variable in the current
    shell session:
    ```shell
-   function Refresh-Path { $Env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User') }
+   function Refresh-Path { $ENV:PATH = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User') }
    ```
 
 5. Install [jq](https://jqlang.org) and [yq](https://mikefarah.gitbook.io/yq):
    ```shell
-   winget install --source winget --exact --id jqlang.jq && `
-   winget install --source winget --exact --id MikeFarah.yq && `
+   winget install --source winget --exact --id jqlang.jq
+   winget install --source winget --exact --id MikeFarah.yq
    Refresh-Path
    ```
 
@@ -73,7 +73,7 @@ Last updated: June 25, 2025.
    the OpenSSH Authentication Agent service in Windows:  
    Go to **Services** (<kbd>Win</kbd><kbd>R</kbd> › type `services.msc` › <kbd>
    Enter</kbd>) › **OpenSSH Authentication Agent**.  
-   Set the **Startup type** to be disabled.  
+   Set the **Startup type** to be _Disabled_.  
    Stop the service if it is currently running.  
    Press **OK**.
 
@@ -91,7 +91,7 @@ Last updated: June 25, 2025.
 4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
    the 1Password CLI:
    ```shell
-   winget install --source winget --exact --id AgileBits.1Password.CLI && `
+   winget install --source winget --exact --id AgileBits.1Password.CLI
    Refresh-Path
    ```
 
@@ -110,68 +110,61 @@ Last updated: June 25, 2025.
    to sign commits:  
    _(use names of your choice)_
    ```shell
-   $OpAuthKeyName = 'GitHub Authentication Key'
+   $OP_AUTH_KEY_NAME = 'GitHub Authentication Key'
    ```
    ```shell
-   $OpSignKeyName = 'GitHub Signing Key'
+   $OP_SIGN_KEY_NAME = 'GitHub Signing Key'
    ```
    ```shell
-   $GhAuthKey = "$(op item create --category ssh --title "$OpAuthKeyName" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value')" && `
-   $GhSignKey = "$(op item create --category ssh --title "$OpSignKeyName" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value')"
+   $GH_AUTH_KEY = "$(op item create --category ssh --title "$OP_AUTH_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value')"
+   $GH_SIGN_KEY = "$(op item create --category ssh --title "$OP_SIGN_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value')"
    ```
 
 ### Using [OpenSSH](https://www.openssh.com)
+1. Enable the OpenSSH Authentication Agent service in Windows:  
+   Go to **Services** (<kbd>Win</kbd><kbd>R</kbd> › type `services.msc` › <kbd>
+   Enter</kbd>) › **OpenSSH Authentication Agent**.  
+   Set the **Startup type** to be _Automatic_.  
+   Start the service if it is not running.  
+   Press **OK**.
+
 <mark>TODO: </mark>
-1. [Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+2. [Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
    an SSH key to authenticate to GitHub:  
    _(use a name of your choice and enter a passphrase to protect the key)_
    ```shell
-   $SshAuthKeyFilename = 'id_github_auth'
+   $SSH_AUTH_KEY_FILENAME = 'id_github_auth'
    ```
    ```shell
-   New-Item -Path "$Env:USERPROFILE\.ssh" -ItemType Directory -Force && `
-   ssh-keygen -t ed25519 -f "$Env:USERPROFILE\.ssh\$SshAuthKeyFilename" && `
-   Add-Content -Path "$Env:USERPROFILE\.ssh\config" -Value "Host github.com`n  AddKeysToAgent yes`n  IdentityFile ~/.ssh/$SshAuthKeyFilename" && `
-   $GhAuthKey = Get-Content "$Env:USERPROFILE\.ssh\$SshAuthKeyFilename.pub"
+   New-Item -Path ~\.ssh -ItemType Directory -Force
+   Add-Content -Path ~\.ssh\config -Value "Host github.com`n  AddKeysToAgent yes`n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME"
+   ssh-keygen -t ed25519 -f "$HOME\.ssh\$SSH_AUTH_KEY_FILENAME"
+   ssh-add "$HOME\.ssh\$SSH_AUTH_KEY_FILENAME"
+   $GH_AUTH_KEY = Get-Content "$HOME\.ssh\$SSH_AUTH_KEY_FILENAME.pub"
    ```
 
 <mark>TODO: </mark>
-2. Generate an SSH key to sign commits:  
+3. Generate an SSH key to sign commits:  
    _(use a name of your choice and enter a passphrase to protect the key)_
    ```shell
-   $SshSignKeyFilename = 'id_github_sign'
+   $SSH_SIGN_KEY_FILENAME = 'id_github_sign'
    ```
    ```shell
-   ssh-keygen -t ed25519 -f "$Env:USERPROFILE\.ssh\$SshSignKeyFilename" && `
-   $GhSignKey = Get-Content "$Env:USERPROFILE\.ssh\$SshSignKeyFilename.pub"
+   ssh-keygen -t ed25519 -f "$HOME\.ssh\$SSH_SIGN_KEY_FILENAME"
+   ssh-add "$HOME\.ssh\$SSH_SIGN_KEY_FILENAME"
+   $GH_SIGN_KEY = Get-Content "$HOME\.ssh\$SSH_SIGN_KEY_FILENAME.pub"
    ```
 
-<mark>TODO: </mark>
-> [!IMPORTANT]  
-> You must start the SSH agent and add your keys whenever you have restarted
-> your computer:
-> ```shell
-> Start-Service ssh-agent && `
-> ssh-add "$Env:USERPROFILE\.ssh\id_github_auth" && `
-> ssh-add "$Env:USERPROFILE\.ssh\id_github_sign"
-> ```
->
-> Otherwise, you may face this problem when attempting to commit:
-> ```
-> error: Couldn't find key in agent?
-> fatal: failed to write commit object
-> ```
-
-> [!IMPORTANT]  
-> The SSH keys are stored locally in the `~/.ssh` directory and must be
+> [!CAUTION]  
+> The SSH keys are stored locally in the `~\.ssh` directory and must be
 > transferred manually to other computers.
 
 ## 🟦 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
 1. Install Git and the GitHub CLI:  
    _(it may request elevated privileges)_
    ```shell
-   winget install --source winget --exact --id Git.Git && `
-   winget install --source winget --exact --id GitHub.cli && `
+   winget install --source winget --exact --id Git.Git
+   winget install --source winget --exact --id GitHub.cli
    Refresh-Path
    ```
 
@@ -184,7 +177,7 @@ Last updated: June 25, 2025.
    ```
 
 <mark>TODO: </mark>
-4. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
+3. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
    grants the GitHub CLI access to your SSH keys:  
    _(it triggers a web-based authentication flow on github.com)_
    ```shell
@@ -192,33 +185,33 @@ Last updated: June 25, 2025.
    ```
 
 <mark>TODO: </mark>
-5. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
+4. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
    GitHub account:  
    _(use names of your choice)_
    ```shell
-   $GhAuthKeyName = 'Rainstorm authentication key'
+   $GH_AUTH_KEY_NAME = 'Rainstorm authentication key'
    ```
    ```shell
-   $GhSignKeyName = 'Rainstorm signing key'
+   $GH_SIGN_KEY_NAME = 'Rainstorm signing key'
    ```
    ```shell
-   $GhAuthKey | gh ssh-key add - --title "$GhAuthKeyName" && `
-   $GhSignKey | gh ssh-key add - --title "$GhSignKeyName" --type signing
+   $GH_AUTH_KEY | gh ssh-key add - --title "$GH_AUTH_KEY_NAME"
+   $GH_SIGN_KEY | gh ssh-key add - --title "$GH_SIGN_KEY_NAME" --type signing
    ```
 
 <mark>TODO: </mark>
-6. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
+5. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
    SSH keys from the GitHub CLI:  
    _(it triggers a web-based authentication flow on github.com)_
    ```shell
    gh auth refresh --remove-scopes admin:public_key,admin:ssh_signing_key
    ```
 
-7. [Specify](https://github.com/settings/profile) your full name (first and last
+6. [Specify](https://github.com/settings/profile) your full name (first and last
    names) in your GitHub profile.
 
 <mark>TODO: </mark>
-8. Declare your identity using your GitHub profile name and noreply email
+7. Declare your identity using your GitHub profile name and noreply email
    address:
    ```shell
    $GhUser = gh api user | ConvertFrom-Json
@@ -232,18 +225,19 @@ Last updated: June 25, 2025.
    ```
 
 <mark>TODO: </mark>
-9. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
-   your commits:
+8. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+   your commits to make GitHub display
+   a <span style="border: 1px green solid; border-radius: 4rem; color: green; font-size: smaller; font-weight: bold; padding: 0.25rem 0.5rem;">
+   Verified</span> badge next to your commits:
    ```shell
-   git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe" && `
-   git config --global user.signingkey "$GhSignKey" && `
-   git config --global gpg.format ssh && `
-   git config --global commit.gpgsign true && `
+   git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
+   git config --global user.signingkey "$GH_SIGN_KEY"
+   git config --global gpg.format ssh
+   git config --global commit.gpgsign true
    git config --global tag.gpgsign true
    ```
-   GitHub will display a _Verified_ badge next to your signed commits.
 
-10. Enable autosquash suggestions when you rebase interactively:
+9. Enable autosquash suggestions when you rebase interactively:
    ```shell
    git config --global rebase.autosquash true
    ```
@@ -253,40 +247,40 @@ Last updated: June 25, 2025.
 1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place and
    activate it in the shell:
    ```shell
-   winget install --source winget --exact --id jdx.mise && `
-   Refresh-Path && `
-   Add-Content -Path $PROFILE -Value 'mise activate pwsh | Out-String | Invoke-Expression' && `
+   winget install --source winget --exact --id jdx.mise
+   Refresh-Path
+   Add-Content -Path $PROFILE -Value 'mise activate pwsh | Out-String | Invoke-Expression'
    mise activate pwsh | Out-String | Invoke-Expression
    ```
 
 2. Verify that the installation succeeded:
    ```shell
-   mise --version # -> 2025.6.0 or newer
+   mise --version # -> 2025.7.0 or newer
    ```
 
 <mark>TODO: </mark>
-4. Clone the repository into the directory in which you keep your workspaces:  
+3. Clone the repository into the directory in which you keep your workspaces:  
    _(specify the path to your workspace directory)_
    ```shell
-   $WorkspaceRoot = "$Env:USERPROFILE\repositories\rainstormy\"
+   $WORKSPACE_ROOT = "$HOME\repositories\rainstormy\"
    ```
    ```shell
-   git clone git@github.com:rainstormy/github-action-validate-commit-messages.git $WorkspaceRoot
-   Set-Location "${WorkspaceRoot}github-action-validate-commit-messages\"
+   git clone git@github.com:rainstormy/github-action-validate-commit-messages.git "$WORKSPACE_ROOT"
+   Set-Location "${WORKSPACE_ROOT.TrimEnd('\')}\github-action-validate-commit-messages\"
    ```
 
-5. Let mise-en-place trust the project configuration:
+4. Let mise-en-place trust the project configuration:
    ```shell
    mise trust
    ```
 
-6. Install the tools and dependencies required by the project (including Node.js
+5. Install the tools and dependencies required by the project (including Node.js
    and pnpm):
    ```shell
    mise install && mise run init
    ```
 
-7. Verify that both installations succeeded:
+6. Verify that both installations succeeded:
    ```shell
    node --version # -> 20.19.0 or newer
    ```
@@ -295,7 +289,7 @@ Last updated: June 25, 2025.
    ```
 
 <mark>TODO: </mark>
-8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
+7. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
    ```shell
    pnpm config --global set save-prefix ''
    ```

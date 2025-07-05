@@ -266,7 +266,7 @@ Last updated: June 25, 2025.
 
 4. Verify that the installation succeeded:
    ```shell
-   mise --version # -> 2025.6.0 or newer
+   mise --version # -> 2025.7.0 or newer
    ```
 
 <mark>TODO: </mark>
