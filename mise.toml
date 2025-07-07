@@ -6,7 +6,7 @@ min_version = "2025.7.0"
 [tools]
 actionlint = "1.7.7"
 node = "20.19.2"
-pnpm = "10.12.1"
+pnpm = "10.12.4"
 
 [tasks.build]
 # language=sh
@@ -38,7 +38,7 @@ alias = ["f"]
 
 [tasks.init]
 # language=sh
-run = ["pnpm install", "lefthook install"]
+run = ["pnpm install --ignore-scripts", "lefthook install"]
 description = "Installs Node.js packages with pnpm and enables the Git hooks with Lefthook."
 alias = ["i"]
 
