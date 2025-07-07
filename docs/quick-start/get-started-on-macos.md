@@ -305,6 +305,14 @@ Last updated: July 6, 2025.
    mise run init
    ```
 
+> [!IMPORTANT]  
+> If `pnpm --version` reports an unexpected version, e.g. `9.15.1` or older, it
+> may be installed globally via Corepack or npm. Try uninstalling it:
+>
+> ```shell
+> corepack disable && npm uninstall --global pnpm
+> ```
+
 ## 🍏 5. Install an IDE
 ### ⭐ Using [IntelliJ IDEA](https://www.jetbrains.com/idea) _(recommended)_
 1. [Download](https://www.jetbrains.com/toolbox-app), install, and launch the
