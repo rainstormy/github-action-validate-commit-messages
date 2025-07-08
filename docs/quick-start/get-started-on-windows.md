@@ -290,7 +290,7 @@ Last updated: July 8, 2025.
    Set-Location "$DESTINATION_PATH"
    ```
 
-4. Let mise-en-place trust the project configuration:
+4. Mark the project configuration as trusted:
    ```shell
    mise trust
    ```
@@ -344,7 +344,7 @@ Last updated: July 8, 2025.
 3. Quit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>).  
    Then install the recommended plugins:
    ```shell
-   yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml | ForEach-Object { idea installPlugins $_ }
+   idea installPlugins $(yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml)
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
@@ -354,8 +354,8 @@ Last updated: July 8, 2025.
    git config --global core.editor 'idea --wait'
    ```
 
-<mark>TODO: Does it prompt to trust the workspace?</mark>
-5. Open the project in IntelliJ IDEA:
+5. Open the project in IntelliJ IDEA.  
+   Mark the plugins and the workspace as trusted:
     ```shell
     idea .
     ```
@@ -378,7 +378,7 @@ Last updated: July 8, 2025.
 3. Quit Visual Studio Code (<kbd>Alt</kbd><kbd>F4</kbd>).  
    Then install the recommended extensions:
    ```shell
-   jq --raw-output '.recommendations[]' .vscode/extensions.json | ForEach-Object { code --install-extension $_ }
+   code $(jq --raw-output '.recommendations[] | "--install-extension " + .' .vscode/extensions.json)
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)

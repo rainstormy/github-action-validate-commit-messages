@@ -278,7 +278,7 @@ Last updated: July 8, 2025.
    cd "$DESTINATION_PATH"
    ```
 
-4. Let mise-en-place trust the project configuration:
+4. Mark the project configuration as trusted:
    ```shell
    mise trust
    ```
@@ -333,7 +333,7 @@ Last updated: July 8, 2025.
 3. Quit IntelliJ IDEA (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
    Then install the recommended plugins:
    ```shell
-   yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml | xargs -n 1 idea installPlugins
+   idea installPlugins $(yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml)
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
@@ -364,7 +364,7 @@ Last updated: July 8, 2025.
 3. Quit Visual Studio Code (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
    Then install the recommended extensions:
    ```shell
-   jq --raw-output '.recommendations[]' .vscode/extensions.json | xargs -n 1 code --install-extension
+   code $(jq --raw-output '.recommendations[] | "--install-extension " + .' .vscode/extensions.json)
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
