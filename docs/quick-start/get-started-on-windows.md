@@ -3,7 +3,7 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
-Last updated: July 6, 2025.
+Last updated: July 8, 2025.
 
 1. [Install the modern PowerShell and essential packages](#-1-install-the-modern-powershell-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
@@ -22,6 +22,8 @@ Last updated: July 6, 2025.
 > [!TIP]  
 > This guide may use `` ` `` line continuations in multi-line commands to let
 > you copy, paste, and run them as one.
+>
+> Recommended tools are marked with ⭐.
 
 ## 🟦 1. Install the modern [PowerShell](https://microsoft.com/PowerShell) and essential packages
 1. [Install](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows#install-powershell-using-winget-recommended)
@@ -70,7 +72,7 @@ Last updated: July 6, 2025.
 > ```
 
 ## 🟦 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
-### ⭐ Using [1Password](https://1password.com) _(recommended)_
+### Using [1Password](https://1password.com) ⭐
 1. [Disable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
    the OpenSSH Authentication Agent service in Windows:  
    Go to **Services** (<kbd>Win</kbd><kbd>R</kbd> › type `services.msc` › <kbd>
@@ -311,7 +313,7 @@ Last updated: July 6, 2025.
    pnpm config --global set save-prefix ''
    ```
 
-8. Install the Node.js packages required by the project and enable the Git
+8. Install the Node.js packages required by the project and enable its Git
    hooks:
    ```shell
    mise run init
@@ -326,25 +328,23 @@ Last updated: July 6, 2025.
 > ```
 
 ## 🟦 5. Install an IDE
-### ⭐ Using [IntelliJ IDEA](https://www.jetbrains.com/idea) _(recommended)_
+### Using [IntelliJ IDEA](https://www.jetbrains.com/idea) ⭐
 1. [Download](https://www.jetbrains.com/toolbox-app), install, and launch the
    JetBrains Toolbox App.  
    Sign in with your JetBrains account.  
    Then install and launch **IntelliJ IDEA Ultimate**.
 
 2. From the welcome screen, select ⚙️ › **Edit Custom VM Options**.  
-   Insert these lines to increase the maximum heap size, e.g. to 8 GB of RAM:
-   _(delete any existing `-Xmx` lines to avoid duplicates entries)_
+   Increase the memory limit, e.g. to 8 GB of RAM:
    ```
    -Xmx8192m
    ```
 
-<mark>TODO: </mark>
+<mark>TODO: Verify</mark>
 3. Quit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>).  
-   Then install the [Biome](https://plugins.jetbrains.com/plugin/22761-biome)
-   plugin:
+   Then install the recommended plugins:
    ```shell
-   idea installPlugins 'com.github.biomejs.intellijbiome'
+   yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml | ForEach-Object { idea installPlugins $_ }
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
@@ -354,6 +354,7 @@ Last updated: July 6, 2025.
    git config --global core.editor 'idea --wait'
    ```
 
+<mark>TODO: Does it prompt to trust the workspace?</mark>
 5. Open the project in IntelliJ IDEA:
     ```shell
     idea .
@@ -365,7 +366,7 @@ Last updated: July 6, 2025.
 1. [Download](https://code.visualstudio.com), install, and launch Visual Studio
    Code.
 
-<mark>TODO: </mark>
+<mark>TODO: Verify</mark>
 2. [Enable](https://code.visualstudio.com/docs/editor/command-line#_launching-from-command-line)
    launching Visual Studio Code from the terminal:  
    In the menu bar, select **View** › **Command Palette** (<kbd>Ctrl</kbd><kbd>
@@ -373,14 +374,11 @@ Last updated: July 6, 2025.
    Locate and run **Shell Command: Install 'code' command in PATH**.
    _(it may request elevated privileges)_
 
-<mark>TODO: </mark>
-3. Quit Visual Studio Code (<kbd>Alt</kbd><kbd>F4</kbd>) and start a new
-   terminal.  
-   Then install the
-   [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
-   extension:
+<mark>TODO: Verify</mark>
+3. Quit Visual Studio Code (<kbd>Alt</kbd><kbd>F4</kbd>).  
+   Then install the recommended extensions:
    ```shell
-   code --install-extension 'biomejs.biome'
+   jq --raw-output '.recommendations[]' .vscode/extensions.json | ForEach-Object { code --install-extension $_ }
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)

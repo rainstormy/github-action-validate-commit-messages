@@ -3,7 +3,7 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
-Last updated: July 6, 2025.
+Last updated: July 8, 2025.
 
 1. [Install Zsh and essential packages](#-1-install-zsh-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
@@ -22,6 +22,8 @@ Last updated: July 6, 2025.
 > [!TIP]  
 > This guide may use `\` line continuations in multi-line commands to let you
 > copy, paste, and run them as one.
+>
+> Recommended tools are marked with ⭐.
 
 ## 🐧 1. Install [Zsh](https://zsh.sourceforge.io) and essential packages
 1. Install Zsh:
@@ -51,7 +53,8 @@ Last updated: July 6, 2025.
 ## 🐧 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
 ### ⭐ Using [1Password](https://1password.com) _(recommended)_
 <mark>TODO: </mark>
-1. [Download](https://1password.com/downloads/linux) and install the desktop app.
+1. [Download](https://1password.com/downloads/linux) and install the desktop
+   app.
 
 <mark>TODO: </mark>
 2. [Enable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
