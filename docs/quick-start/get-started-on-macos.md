@@ -74,7 +74,7 @@ Last updated: July 8, 2025.
    the SSH agent in 1Password:  
    Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer** › **Set up
    the SSH agent** › **Use key names**.  
-   Ensure that **Use the SSH agent** is checked.
+   Select **Use the SSH agent**.
 
    ![](assets/1password-ssh-agent-macos.png)
 
@@ -101,7 +101,7 @@ Last updated: July 8, 2025.
 6. [Enable](https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration)
    the CLI integration in 1Password:  
    Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer**.  
-   Ensure that **Integrate with 1Password CLI** is checked.
+   Select **Integrate with 1Password CLI**.
 
    ![](assets/1password-cli.png)
 
@@ -331,7 +331,8 @@ Last updated: July 8, 2025.
    ```
 
 3. Quit IntelliJ IDEA (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
-   Then install the recommended plugins:
+   Wait a few seconds for it to terminate completely.  
+   Then install the recommended plugins for this project:
    ```shell
    idea installPlugins $(yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml)
    ```
@@ -343,7 +344,8 @@ Last updated: July 8, 2025.
    git config --global core.editor 'idea --wait'
    ```
 
-5. Open the project in IntelliJ IDEA:
+5. Open the project in IntelliJ IDEA.  
+   Mark the plugins and the workspace as trusted:
     ```shell
     idea .
     ```
@@ -351,18 +353,18 @@ Last updated: July 8, 2025.
 6. You're all set &mdash; let the coding begin!
 
 ### Using [Visual Studio Code](https://code.visualstudio.com)
-1. [Download](https://code.visualstudio.com), install, and launch Visual Studio
-   Code.
+1. [Download](https://code.visualstudio.com/docs/setup/mac#_install-vs-code-on-macos),
+   install, and launch Visual Studio Code.
 
 2. [Enable](https://code.visualstudio.com/docs/setup/mac#_launch-vs-code-from-the-command-line)
-   launching Visual Studio Code from the terminal:  
+   the CLI integration in Visual Studio Code:  
    In the menu bar, select **View** › **Command Palette** (<kbd>⇧
    Shift</kbd><kbd>⌘ Cmd</kbd><kbd>P</kbd>).  
    Locate and run **Shell Command: Install 'code' command in PATH**.  
    _(it may request elevated privileges)_
 
 3. Quit Visual Studio Code (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
-   Then install the recommended extensions:
+   Then install the recommended extensions for this project:
    ```shell
    code $(jq --raw-output '.recommendations[] | "--install-extension " + .' .vscode/extensions.json)
    ```

@@ -92,7 +92,7 @@ Last updated: July 8, 2025.
    the SSH agent** › **Use key names**.  
    Press **Set up the SSH agent** again and confirm that the OpenSSH
    Authentication Agent service is disabled.  
-   Ensure that **Use the SSH agent** is checked.
+   Select **Use the SSH agent**.
 
    ![](assets/1password-ssh-agent-windows.png)
 
@@ -111,7 +111,7 @@ Last updated: July 8, 2025.
 6. [Enable](https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration)
    the CLI integration in 1Password:  
    Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer**.  
-   Ensure that **Integrate with 1Password CLI** is checked.
+   Select **Integrate with 1Password CLI**.
 
    ![](assets/1password-cli.png)
 
@@ -340,9 +340,9 @@ Last updated: July 8, 2025.
    -Xmx8192m
    ```
 
-<mark>TODO: Verify</mark>
 3. Quit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>).  
-   Then install the recommended plugins:
+   Wait a few seconds for it to terminate completely.  
+   Then install the recommended plugins for this project:
    ```shell
    idea installPlugins $(yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml)
    ```
@@ -363,38 +363,32 @@ Last updated: July 8, 2025.
 6. You're all set &mdash; let the coding begin!
 
 ### Using [Visual Studio Code](https://code.visualstudio.com)
-1. [Download](https://code.visualstudio.com), install, and launch Visual Studio
-   Code.
+1. [Download](https://code.visualstudio.com/docs/setup/windows#_install-vs-code-on-windows)
+   and install Visual Studio Code.  
+   Select **Add to PATH** during the installation to enable the CLI integration
+   in Visual Studio Code.  
+   Unselect **Launch Visual Studio Code** after the installation.
 
-<mark>TODO: Verify</mark>
-2. [Enable](https://code.visualstudio.com/docs/editor/command-line#_launching-from-command-line)
-   launching Visual Studio Code from the terminal:  
-   In the menu bar, select **View** › **Command Palette** (<kbd>Ctrl</kbd><kbd>
-   Shift</kbd><kbd>P</kbd>).  
-   Locate and run **Shell Command: Install 'code' command in PATH**.
-   _(it may request elevated privileges)_
-
-<mark>TODO: Verify</mark>
-3. Quit Visual Studio Code (<kbd>Alt</kbd><kbd>F4</kbd>).  
-   Then install the recommended extensions:
+2. Install the recommended extensions for this project:
    ```shell
+   Refresh-Path && `
    code $(jq --raw-output '.recommendations[] | "--install-extension " + .' .vscode/extensions.json)
    ```
 
-4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
+3. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    Visual Studio Code as the default editor in Git to edit commit messages and
    conduct interactive rebases:
    ```shell
    git config --global core.editor 'code --wait'
    ```
 
-5. Open the project in Visual Studio Code:  
+4. Open the project in Visual Studio Code:  
    _(it may prompt you to trust the project directory)_
    ```shell
    code .
    ```
 
-6. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
+5. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
    version specified for the workspace.
 
-7. You're all set &mdash; let the coding begin!
+6. You're all set &mdash; let the coding begin!
