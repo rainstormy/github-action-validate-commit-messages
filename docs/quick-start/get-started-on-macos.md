@@ -266,7 +266,8 @@ Last updated: July 8, 2025.
    mise --version # -> 2025.7.0 or newer
    ```
 
-3. Clone the repository into the directory in which you keep your workspaces.  
+3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+   the repository into the directory in which you keep your workspaces.  
    Specify the path to your workspace directory:
    ```shell
    WORKSPACE_ROOT="$HOME/repositories/rainstormy/"
@@ -278,17 +279,24 @@ Last updated: July 8, 2025.
    cd "$DESTINATION_PATH"
    ```
 
-4. Mark the project configuration as trusted:
+4. Create a file named `.env.local` in the project root directory to define
+   environment variables in your local development environment:
+   ```shell
+   touch .env.local
+   ```
+
+5. [Mark](https://mise.jdx.dev/cli/trust.html) the project configuration as
+   trusted:
    ```shell
    mise trust
    ```
 
-5. Install the tools required by the project (including Node.js and pnpm):
+6. Install the tools required by the project (including Node.js and pnpm):
    ```shell
    mise install
    ```
 
-6. Verify that both installations succeeded:
+7. Verify that both installations succeeded:
    ```shell
    node --version # -> 20.19.0 or newer
    ```
@@ -296,12 +304,12 @@ Last updated: July 8, 2025.
    pnpm --version # -> 10.12.0 or newer
    ```
 
-7. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
+8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
    ```shell
    pnpm config --global set save-prefix ''
    ```
 
-8. Install the Node.js packages required by the project and enable its Git
+9. Install the Node.js packages required by the project and enable its Git
    hooks:
    ```shell
    mise run init
@@ -344,13 +352,17 @@ Last updated: July 8, 2025.
    git config --global core.editor 'idea --wait'
    ```
 
-5. Open the project in IntelliJ IDEA.  
-   Mark the plugins and the workspace as trusted:
+5. Open the project in IntelliJ IDEA:
     ```shell
     idea .
     ```
 
-6. You're all set &mdash; let the coding begin!
+6. [Mark](https://www.jetbrains.com/help/idea/project-security.html) the plugins
+   and the workspace as trusted.
+
+<mark>TODO: Screenshot</mark>
+
+7. You're all set &mdash; let the coding begin!
 
 ### Using [Visual Studio Code](https://code.visualstudio.com)
 1. [Download](https://code.visualstudio.com/docs/setup/mac#_install-vs-code-on-macos),
@@ -362,6 +374,8 @@ Last updated: July 8, 2025.
    Shift</kbd><kbd>⌘ Cmd</kbd><kbd>P</kbd>).  
    Locate and run **Shell Command: Install 'code' command in PATH**.  
    _(it may request elevated privileges)_
+
+   ![](assets/vscode-cli-macos.png)
 
 3. Quit Visual Studio Code (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
    Then install the recommended extensions for this project:
@@ -376,13 +390,19 @@ Last updated: July 8, 2025.
    git config --global core.editor 'code --wait'
    ```
 
-5. Open the project in Visual Studio Code:  
-   _(it may prompt you to trust the project directory)_
+5. Open the project in Visual Studio Code.
    ```shell
    code .
    ```
 
-6. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
+6. [Mark](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust)
+   the workspace as trusted.
+
+   ![](assets/vscode-trust.png)
+
+7. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
    version specified for the workspace.
 
-7. You're all set &mdash; let the coding begin!
+   ![](assets/vscode-typescript.png)
+
+8. You're all set &mdash; let the coding begin!
