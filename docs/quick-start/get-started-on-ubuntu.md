@@ -1,11 +1,11 @@
-# Get started on 🍏 macOS
+# Get started on 🐧 Ubuntu
 
 This guide describes the necessary steps for you to start coding in this
 project.
 
 Last updated: July 11, 2025.
 
-1. [Install Homebrew and essential packages](#-1-install-homebrew-and-essential-packages)
+1. [Install Zsh and essential packages](#-1-install-zsh-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
 3. [Install Git and GitHub CLI](#-3-install-git-and-github-cli)
 4. [Prepare your workspace](#-4-prepare-your-workspace)
@@ -13,12 +13,11 @@ Last updated: July 11, 2025.
 
 > [!IMPORTANT]  
 > This guide assumes that you are using:
-> - An ARM-based CPU (e.g. an M-series Apple Silicon chip).
-> - macOS 15 (Sequoia) or newer.
+> - Ubuntu 24.04 (Noble Numbat) or newer.
 >
-> You must complete the guide in [Zsh](https://zsh.sourceforge.io) (the
-> default shell on macOS) in a _single_ shell session (i.e. the same terminal
-> tab), as some steps rely on variables set in earlier steps.
+> You must complete the guide in [Zsh](https://zsh.sourceforge.io) in a _single_
+> shell session (i.e. the same terminal tab), as some steps rely on variables
+> set in earlier steps.
 
 > [!TIP]  
 > This guide may use `\` line continuations in multi-line commands to let you
@@ -26,72 +25,78 @@ Last updated: July 11, 2025.
 >
 > Recommended tools are marked with ⭐.
 
-## 🍏 1. Install [Homebrew](https://brew.sh) and essential packages
-1. Install Homebrew and activate it in the shell:  
-   _(it may request elevated privileges)_
+## 🐧 1. Install [Zsh](https://zsh.sourceforge.io) and essential packages
+1. Install [jq](https://jqlang.org), [yq](https://mikefarah.gitbook.io/yq), and
+   Zsh:
    ```shell
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && \
-   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile && \
-   eval "$(/opt/homebrew/bin/brew shellenv)"
+   sudo apt update && \
+   sudo apt install jq zsh && \
+   sudo snap install yq
    ```
 
-2. Verify that the installation succeeded:
+2. Verify that all installations succeeded:
    ```shell
-   brew --version # -> 4.5.0 or newer
-   ```
-
-3. Install [jq](https://jqlang.org) and [yq](https://mikefarah.gitbook.io/yq):
-   ```shell
-   brew install jq yq
-   ```
-
-4. Verify that both installations succeeded:
-   ```shell
-   jq --version # -> 1.8.0 or newer
+   jq --version # -> 1.7.0 or newer
    ```
    ```shell
    yq --version # -> 4.46.0 or newer
    ```
-
-5. [Enable](https://github.com/DomT4/homebrew-autoupdate) daily package
-   upgrades:
    ```shell
-   brew tap DomT4/homebrew-autoupdate && \
-   brew autoupdate start --upgrade --cleanup --immediate
+   zsh --version # -> 5.9 or newer
+   ```
+
+3. Set Zsh as the default shell the next time you log in to Ubuntu:
+   ```shell
+   chsh -s "$(which zsh)"
+   ```
+
+4. Open Zsh and configure `~/.zshrc`, e.g. by using the recommended settings:
+   ```shell
+   zsh
    ```
 
 > [!TIP]  
-> You can also upgrade all installed packages manually:
+> You can upgrade all packages manually:
 > ```shell
-> brew update && brew upgrade
+> sudo apt update && sudo apt upgrade && sudo snap refresh
 > ```
 
-## 🍏 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
+## 🐧 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
 ### Using [1Password](https://1password.com) ⭐
-1. [Download](https://1password.com/downloads/mac) and install the desktop app.
+1. [Download](https://1password.com/downloads/linux) and install the desktop
+   app.
 
 2. [Enable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
    the SSH agent in 1Password:  
-   Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer** › **Set up
+   Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer** › **Set up
    the SSH agent** › **Use key names**.  
    Select **Use the SSH agent**.
 
 <mark>TODO: Screenshot</mark>
-
-   ![](assets/1password-ssh-agent-macos.png)
 
 3. [Configure](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
    the SSH client to use the SSH agent in 1Password:
    ```shell
    mkdir -p ~/.ssh && \
    touch ~/.ssh/config && \
-   echo -e "Host *\n  IdentityAgent ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock" >> ~/.ssh/config
+   echo -e "Host *\n  IdentityAgent ~/.1password/agent.sock" >> ~/.ssh/config
    ```
 
 4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
    the 1Password CLI:
    ```shell
-   brew install 1password-cli
+   curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+   sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | \
+   sudo tee /etc/apt/sources.list.d/1password.list && \
+   sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/ && \
+   curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | \
+   sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
+   sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22 && \
+   curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+   sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+   sudo apt update && \
+   sudo apt install 1password-cli
    ```
 
 5. Verify that the installation succeeded:
@@ -105,8 +110,7 @@ Last updated: July 11, 2025.
    Select **Integrate with 1Password CLI**.
 
 <mark>TODO: Screenshot</mark>
-
-   ![](assets/1password-cli.png)
+![](assets/1password-cli.png)
 
 7. [Generate](https://developer.1password.com/docs/ssh/manage-keys/#generate-an-ssh-key)
    two SSH keys in your 1Password vault; one to authenticate to GitHub and one
@@ -131,6 +135,7 @@ Last updated: July 11, 2025.
    ```
 
 ### Using [OpenSSH](https://www.openssh.com)
+<mark>TODO: </mark>
 1. [Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
    an SSH key to authenticate to GitHub.  
    You may replace 'id_github_auth' with a name of your choice and enter a
@@ -140,12 +145,13 @@ Last updated: July 11, 2025.
    ```
    ```shell
    mkdir -p ~/.ssh && \
-   echo -e "Host github.com\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
+   echo -e "Host github.com\n  AddKeysToAgent yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
    ssh-keygen -t ed25519 -f "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
-   ssh-add --apple-use-keychain "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
+   ssh-add "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
    GH_AUTH_KEY="$(< "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME.pub")"
    ```
 
+<mark>TODO: </mark>
 2. Generate an SSH key to sign commits.  
    You may replace 'id_github_sign' with a name of your choice and enter a
    passphrase to protect the key:
@@ -154,41 +160,46 @@ Last updated: July 11, 2025.
    ```
    ```shell
    ssh-keygen -t ed25519 -f "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME" && \
-   ssh-add --apple-use-keychain "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME" && \
+   ssh-add "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME" && \
    GH_SIGN_KEY="$(< "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME.pub")"
    ```
-
-> [!IMPORTANT]  
-> You must unlock the signing key whenever you have restarted your computer, for
-> example:
-> ```shell
-> ssh-add --apple-use-keychain ~/.ssh/id_github_sign
-> ```
->
-> Otherwise, you may face this problem when attempting to commit:
-> ```
-> error: Couldn't find key in agent?
-> fatal: failed to write commit object
-> ```
 
 > [!CAUTION]  
 > The SSH keys are stored locally in the `~/.ssh` directory and must be
 > transferred manually to other computers.
 
-## 🍏 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
-1. Install Git and the GitHub CLI:
+## 🐧 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
+1. [Install](https://git-scm.com/downloads/linux) Git:
    ```shell
-   brew install git gh
+   sudo add-apt-repository ppa:git-core/ppa && \
+   sudo apt update && \
+   sudo apt install git
    ```
 
-2. Verify that both installations succeeded:
+2. Verify that the installation succeeded:
    ```shell
    git --version # -> 2.50.0 or newer
    ```
+
+3. [Install](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#official-sources)
+   the GitHub CLI:
+   ```shell
+   sudo mkdir -p -m 755 /etc/apt/keyrings && \
+   out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
+   cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
+   sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+   sudo mkdir -p -m 755 /etc/apt/sources.list.d && \
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+   sudo apt update && \
+   sudo apt install gh
+   ```
+
+4. Verify that the installation succeeded:
    ```shell
    gh --version # -> 2.75.0 or newer
    ```
 
+<mark>TODO: Verify</mark>
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
    the public SSH key of `github.com` to the list of known hosts:
    ```shell
@@ -196,6 +207,7 @@ Last updated: July 11, 2025.
    echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
    ```
 
+<mark>TODO: Verify</mark>
 4. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
    grants the GitHub CLI access to your SSH keys.  
    Choose **GitHub.com** and **SSH** as the preferred protocol and skip SSH key
@@ -206,6 +218,7 @@ Last updated: July 11, 2025.
    gh auth login --scopes admin:public_key,admin:ssh_signing_key
    ```
 
+<mark>TODO: Verify</mark>
 5. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
    GitHub account.  
    You may replace 'Rainstorm authentication key' and 'Rainstorm signing key'
@@ -221,6 +234,7 @@ Last updated: July 11, 2025.
    echo "$GH_SIGN_KEY" | gh ssh-key add - --title "$GH_SIGN_KEY_NAME" --type signing
    ```
 
+<mark>TODO: Verify</mark>
 6. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
    SSH keys from the GitHub CLI.  
    Copy the one-time code and trigger the web-based authentication flow on
@@ -232,6 +246,7 @@ Last updated: July 11, 2025.
 7. [Specify](https://github.com/settings/profile) your full name (first and last
    names) in your GitHub profile.
 
+<mark>TODO: Verify</mark>
 8. Declare your identity using your GitHub profile name and noreply email
    address:
    ```shell
@@ -240,6 +255,7 @@ Last updated: July 11, 2025.
    git config --global user.email "$(echo "$GH_USER" | jq --raw-output '"\(.id)+\(.login)@users.noreply.github.com"')"
    ```
 
+<mark>TODO: Verify</mark>
 9. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
    your commits to make GitHub display
    a <span style="border: 1px green solid; border-radius: 4rem; color: green; font-size: smaller; font-weight: bold; padding: 0.25rem 0.5rem;">
@@ -251,16 +267,24 @@ Last updated: July 11, 2025.
    git config --global tag.gpgsign true
    ```
 
+<mark>TODO: Verify</mark>
 10. Enable autosquash suggestions when you rebase interactively:
     ```shell
     git config --global rebase.autosquash true
     ```
 
-## 🍏 4. Prepare your workspace
+## 🐧 4. Prepare your workspace
+<mark>TODO: Verify</mark>
 1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place and
    activate it in the shell:
    ```shell
-   brew install mise && \
+   # curl https://mise.jdx.dev/install.sh | sh
+   
+   sudo install -dm 755 /etc/apt/keyrings && \
+   wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null && \
+   echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list && \
+   sudo apt update && \
+   sudo apt install mise && \
    echo 'eval "$(mise activate zsh)"' >> ~/.zshrc && \
    eval "$(mise activate zsh)"
    ```
@@ -270,6 +294,7 @@ Last updated: July 11, 2025.
    mise --version # -> 2025.7.0 or newer
    ```
 
+<mark>TODO: Verify</mark>
 3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
    the repository into the directory in which you keep your workspaces.  
    Specify the path to your workspace directory:
@@ -283,23 +308,27 @@ Last updated: July 11, 2025.
    cd "$DESTINATION_PATH"
    ```
 
+<mark>TODO: Verify</mark>
 4. Create a file named `.env.local` in the project root directory to define
    environment variables in your local development environment:
    ```shell
    touch .env.local
    ```
 
+<mark>TODO: Verify</mark>
 5. [Mark](https://mise.jdx.dev/cli/trust.html) the project configuration as
    trusted:
    ```shell
    mise trust
    ```
 
+<mark>TODO: Verify</mark>
 6. Install the tools required by the project (including Node.js and pnpm):
    ```shell
    mise install
    ```
 
+<mark>TODO: Verify</mark>
 7. Verify that both installations succeeded:
    ```shell
    node --version # -> 20.19.0 or newer
@@ -308,11 +337,13 @@ Last updated: July 11, 2025.
    pnpm --version # -> 10.12.0 or newer
    ```
 
+<mark>TODO: Verify</mark>
 8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
    ```shell
    pnpm config --global set save-prefix ''
    ```
 
+<mark>TODO: Verify</mark>
 9. Install the Node.js packages required by the project and enable its Git
    hooks:
    ```shell
@@ -327,33 +358,33 @@ Last updated: July 11, 2025.
 > corepack disable && npm uninstall --global pnpm
 > ```
 
-## 🍏 5. Install an IDE
+## 🐧 5. Install an IDE
 ### Using [IntelliJ IDEA](https://www.jetbrains.com/idea) ⭐
+<mark>TODO: </mark>
 1. [Download](https://www.jetbrains.com/toolbox-app), install, and launch the
    JetBrains Toolbox App.  
-   Sign in with your JetBrains account.  
    Then install and launch **IntelliJ IDEA Ultimate**.
 
+<mark>TODO: </mark>
 2. In the menu bar, select **Help** › **Edit Custom VM Options**.  
-   Increase the memory limit, e.g. to 8 GB of RAM, and disable mnemonics to
-   avoid conflicts with macOS keyboard shortcuts:
+   Insert these lines to increase the maximum heap size, e.g. to 8 GB of RAM:
    ```
    -Xmx8192m
-   -Dide.mac.alt.mnemonic.without.ctrl=false
    ```
 
-3. Quit IntelliJ IDEA (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
-   Wait a few seconds for it to terminate completely.  
-   Then install the recommended plugins for this project:
+<mark>TODO: </mark>
+3. Quit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>).  
+   Then install the [Biome](https://plugins.jetbrains.com/plugin/22761-biome)
+   plugin:
    ```shell
-   idea installPlugins $(yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml)
+   idea installPlugins 'com.github.biomejs.intellijbiome'
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    IntelliJ IDEA as the default editor in Git to edit commit messages and
    conduct interactive rebases:
    ```shell
-   git config --global core.editor 'idea --wait'
+   git config --global core.editor "idea --wait"
    ```
 
 5. Open the project in IntelliJ IDEA:
@@ -361,58 +392,45 @@ Last updated: July 11, 2025.
     idea .
     ```
 
-6. [Mark](https://www.jetbrains.com/help/idea/project-security.html) the plugins
-   and the workspace as trusted.
-
-<mark>TODO: Screenshot</mark>
-
-7. You're all set &mdash; let the coding begin!
+6. You're all set &mdash; let the coding begin!
 
 ### Using [Visual Studio Code](https://code.visualstudio.com)
-1. [Download](https://code.visualstudio.com/docs/setup/mac#_install-vs-code-on-macos),
-   install, and launch Visual Studio Code.
+<mark>TODO: </mark>
+1. [Download](https://code.visualstudio.com), install, and launch Visual Studio
+   Code.
 
-2. [Enable](https://code.visualstudio.com/docs/setup/mac#_launch-vs-code-from-the-command-line)
-   the CLI integration in Visual Studio Code:  
-   In the menu bar, select **View** › **Command Palette** (<kbd>⇧
-   Shift</kbd><kbd>⌘ Cmd</kbd><kbd>P</kbd>).  
+<mark>TODO: </mark>
+2. [Enable](https://code.visualstudio.com/docs/setup/linux#_debian-and-ubuntu-based-distributions)
+   launching Visual Studio Code from the terminal:  
+   In the menu bar, select **View** › **Command Palette** (<kbd>Ctrl</kbd><kbd>
+   Shift</kbd><kbd>P</kbd>).  
    Locate and run **Shell Command: Install 'code' command in PATH**.  
    _(it may request elevated privileges)_
 
-<mark>TODO: Screenshot</mark>
-
-   ![](assets/vscode-cli-macos.png)
-
-3. Quit Visual Studio Code (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
-   Then install the recommended extensions for this project:
+<mark>TODO: </mark>
+3. Quit Visual Studio Code (<kbd>Alt</kbd><kbd>F4</kbd>) and start a new
+   terminal.  
+   Then install the
+   [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
+   extension:
    ```shell
-   code $(jq --raw-output '.recommendations[] | "--install-extension " + .' .vscode/extensions.json)
+   code --install-extension 'biomejs.biome'
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    Visual Studio Code as the default editor in Git to edit commit messages and
    conduct interactive rebases:
    ```shell
-   git config --global core.editor 'code --wait'
+   git config --global core.editor "code --wait"
    ```
 
-5. Open the project in Visual Studio Code.
+5. Open the project in Visual Studio Code:  
+   _(it may prompt you to trust the project directory)_
    ```shell
    code .
    ```
 
-6. [Mark](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust)
-   the workspace as trusted.
-
-<mark>TODO: Screenshot</mark>
-
-   ![](assets/vscode-trust.png)
-
-7. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
+6. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
    version specified for the workspace.
 
-<mark>TODO: Screenshot</mark>
-
-   ![](assets/vscode-typescript.png)
-
-8. You're all set &mdash; let the coding begin!
+7. You're all set &mdash; let the coding begin!
