@@ -3,7 +3,7 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
-Last updated: July 8, 2025.
+Last updated: July 11, 2025.
 
 1. [Install Zsh and essential packages](#-1-install-zsh-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
@@ -26,43 +26,56 @@ Last updated: July 8, 2025.
 > Recommended tools are marked with ⭐.
 
 ## 🐧 1. Install [Zsh](https://zsh.sourceforge.io) and essential packages
-1. Install Zsh:
+1. Install [jq](https://jqlang.org), [yq](https://mikefarah.gitbook.io/yq), and
+   Zsh:
    ```shell
-   sudo apt update && sudo apt install zsh
+   sudo apt update && \
+   sudo apt install jq zsh && \
+   sudo snap install yq
    ```
 
-2. Set Zsh as the default shell the next time you log in to Ubuntu:
+2. Verify that all installations succeeded:
+   ```shell
+   jq --version # -> 1.7.0 or newer
+   ```
+   ```shell
+   yq --version # -> 4.46.0 or newer
+   ```
+   ```shell
+   zsh --version # -> 5.9 or newer
+   ```
+
+3. Set Zsh as the default shell the next time you log in to Ubuntu:
    ```shell
    chsh -s "$(which zsh)"
    ```
 
-<mark>TODO: </mark>
-3. Open Zsh and configure `~/.zshrc`:
+4. Open Zsh and configure `~/.zshrc`, e.g. by using the recommended settings:
    ```shell
    zsh
    ```
 
-<mark>TODO: Install jq and yq</mark>
-
 > [!TIP]  
-> You can upgrade Zsh manually by reinstalling it:
+> You can upgrade all packages manually:
 > ```shell
-> sudo apt update && sudo apt install zsh
+> sudo apt update && sudo apt upgrade && sudo snap refresh
 > ```
 
 ## 🐧 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
-### ⭐ Using [1Password](https://1password.com) _(recommended)_
-<mark>TODO: </mark>
+### Using [1Password](https://1password.com) ⭐
+<mark>TODO: Verify</mark>
 1. [Download](https://1password.com/downloads/linux) and install the desktop
    app.
 
-<mark>TODO: </mark>
+<mark>TODO: Verify</mark>
 2. [Enable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
    the SSH agent in 1Password:  
    Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer**.  
    Select **Use the SSH agent**.
 
-<mark>TODO: </mark>
+<mark>TODO: Screenshot</mark>
+
+<mark>TODO: Verify</mark>
 3. [Configure](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
    the SSH client to use the SSH agent in 1Password:
    ```shell
@@ -71,18 +84,20 @@ Last updated: July 8, 2025.
    echo -e "Host *\n  IdentityAgent ~/.1password/agent.sock" >> ~/.ssh/config
    ```
 
-<mark>TODO: </mark>
+<mark>TODO: Verify</mark>
 4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
    the 1Password CLI:
    ```shell
-   sudo apt update && \
-   sudo apt install curl && \
-   curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
-   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | sudo tee /etc/apt/sources.list.d/1password.list > /dev/null && \
+   curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+   sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | \
+   sudo tee /etc/apt/sources.list.d/1password.list && \
    sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/ && \
-   curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol > /dev/null && \
+   curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | \
+   sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
    sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22 && \
-   curl -sS https://downloads.1password.com/linux/keys/1password.asc | sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
+   curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
+   sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
    sudo apt update && \
    sudo apt install 1password-cli
    ```
@@ -92,11 +107,21 @@ Last updated: July 8, 2025.
    op --version # -> 2.31.0 or newer
    ```
 
-<mark>TODO: </mark>
-6. [Generate](https://developer.1password.com/docs/ssh/manage-keys/#generate-an-ssh-key)
+<mark>TODO: Verify</mark>
+6. [Enable](https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration)
+   the CLI integration in 1Password:  
+   Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer**.  
+   Select **Integrate with 1Password CLI**.
+
+<mark>TODO: Screenshot</mark>
+![](assets/1password-cli.png)
+
+<mark>TODO: Verify</mark>
+7. [Generate](https://developer.1password.com/docs/ssh/manage-keys/#generate-an-ssh-key)
    two SSH keys in your 1Password vault; one to authenticate to GitHub and one
-   to sign commits:  
-   _(use names of your choice)_
+   to sign commits.  
+   You may replace 'GitHub authentication key' and 'GitHub signing key' with
+   names of your choice:
    ```shell
    OP_AUTH_KEY_NAME='GitHub authentication key'
    ```
@@ -104,29 +129,37 @@ Last updated: July 8, 2025.
    OP_SIGN_KEY_NAME='GitHub signing key'
    ```
    ```shell
-   GH_AUTH_KEY="$(op item create --category ssh --title "$OP_AUTH_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value')" && \
-   GH_SIGN_KEY="$(op item create --category ssh --title "$OP_SIGN_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value')"
+   GH_AUTH_KEY="$( \
+     op item get "$OP_AUTH_KEY_NAME" --fields label='public key' 2>/dev/null || \
+     op item create --category ssh --title "$OP_AUTH_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value' \
+   )" && \
+   GH_SIGN_KEY="$( \
+     op item get "$OP_SIGN_KEY_NAME" --fields label='public key' 2>/dev/null || \
+     op item create --category ssh --title "$OP_SIGN_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value' \
+   )"
    ```
 
 ### Using [OpenSSH](https://www.openssh.com)
 <mark>TODO: </mark>
 1. [Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-   an SSH key to authenticate to GitHub:  
-   _(use a name of your choice and enter a passphrase to protect the key)_
+   an SSH key to authenticate to GitHub.  
+   You may replace 'id_github_auth' with a name of your choice and enter a
+   passphrase to protect the key:
    ```shell
    SSH_AUTH_KEY_FILENAME='id_github_auth'
    ```
    ```shell
    mkdir -p ~/.ssh && \
+   echo -e "Host github.com\n  AddKeysToAgent yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
    ssh-keygen -t ed25519 -f "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
    ssh-add "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME" && \
-   echo -e "Host github.com\n  AddKeysToAgent yes\n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" >> ~/.ssh/config && \
    GH_AUTH_KEY="$(< "$HOME/.ssh/$SSH_AUTH_KEY_FILENAME.pub")"
    ```
 
 <mark>TODO: </mark>
-2. Generate an SSH key to sign commits:  
-   _(use a name of your choice and enter a passphrase to protect the key)_
+2. Generate an SSH key to sign commits.  
+   You may replace 'id_github_sign' with a name of your choice and enter a
+   passphrase to protect the key:
    ```shell
    SSH_SIGN_KEY_FILENAME='id_github_sign'
    ```
@@ -136,26 +169,13 @@ Last updated: July 8, 2025.
    GH_SIGN_KEY="$(< "$HOME/.ssh/$SSH_SIGN_KEY_FILENAME.pub")"
    ```
 
-<mark>TODO: </mark>
-> [!IMPORTANT]  
-> You must unlock the signing key whenever you have restarted your computer:
-> ```shell
-> ssh-add ~/.ssh/id_github_sign
-> ```
->
-> Otherwise, you may face this problem when attempting to commit:
-> ```
-> error: Couldn't find key in agent?
-> fatal: failed to write commit object
-> ```
-
-> [!IMPORTANT]  
+> [!CAUTION]  
 > The SSH keys are stored locally in the `~/.ssh` directory and must be
 > transferred manually to other computers.
 
 ## 🐧 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
-1. <mark>TODO: </mark>
-2. Install Git via APT:
+<mark>TODO: </mark>
+1. [Install](https://git-scm.com/downloads/linux) Git:
    ```shell
    sudo add-apt-repository ppa:git-core/ppa && \
    sudo apt update && \
@@ -168,33 +188,47 @@ Last updated: July 8, 2025.
    ```
 
 <mark>TODO: </mark>
-3. Install GitHub CLI via APT:
+3. [Install](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#official-sources)
+   the GitHub CLI:
    ```shell
    sudo mkdir -p -m 755 /etc/apt/keyrings && \
-   wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
+   out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg && \
+   cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null && \
    sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg && \
+   sudo mkdir -p -m 755 /etc/apt/sources.list.d && \
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
    sudo apt update && \
-   sudo apt install gh -y
+   sudo apt install gh
    ```
 
 4. Verify that the installation succeeded:
    ```shell
-   gh --version # -> 2.74.0 or newer
+   gh --version # -> 2.75.0 or newer
    ```
 
-<mark>TODO: </mark>
-5. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
-   grants the GitHub CLI access to your SSH keys:  
-   _(it triggers a web-based authentication flow on github.com)_
+<mark>TODO: Verify</mark>
+3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
+   the public SSH key of `github.com` to the list of known hosts:
+   ```shell
+   echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
+   ```
+
+<mark>TODO: Verify</mark>
+4. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
+   grants the GitHub CLI access to your SSH keys.  
+   Choose **GitHub.com** and **SSH** as the preferred protocol and skip SSH key
+   generation.  
+   Then copy the one-time code and trigger the web-based authentication flow on
+   github.com:
    ```shell
    gh auth login --scopes admin:public_key,admin:ssh_signing_key
    ```
 
-<mark>TODO: </mark>
-6. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
-   GitHub account:  
-   _(use names of your choice)_
+<mark>TODO: Verify</mark>
+5. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
+   GitHub account.  
+   You may replace 'Rainstorm authentication key' and 'Rainstorm signing key'
+   with names of your choice:
    ```shell
    GH_AUTH_KEY_NAME='Rainstorm authentication key'
    ```
@@ -206,19 +240,20 @@ Last updated: July 8, 2025.
    echo "$GH_SIGN_KEY" | gh ssh-key add - --title "$GH_SIGN_KEY_NAME" --type signing
    ```
 
-<mark>TODO: </mark>
-7. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
-   SSH keys from the GitHub CLI:  
-   _(it triggers a web-based authentication flow on github.com)_
+<mark>TODO: Verify</mark>
+6. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
+   SSH keys from the GitHub CLI.  
+   Copy the one-time code and trigger the web-based authentication flow on
+   github.com:
    ```shell
    gh auth refresh --remove-scopes admin:public_key,admin:ssh_signing_key
    ```
 
-8. [Specify](https://github.com/settings/profile) your full name (first and last
+7. [Specify](https://github.com/settings/profile) your full name (first and last
    names) in your GitHub profile.
 
-<mark>TODO: </mark>
-9. Declare your identity using your GitHub profile name and noreply email
+<mark>TODO: Verify</mark>
+8. Declare your identity using your GitHub profile name and noreply email
    address:
    ```shell
    GH_USER="$(gh api user)" && \
@@ -226,75 +261,81 @@ Last updated: July 8, 2025.
    git config --global user.email "$(echo "$GH_USER" | jq --raw-output '"\(.id)+\(.login)@users.noreply.github.com"')"
    ```
 
-<mark>TODO: </mark>
-10. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
-    your commits to make GitHub display a _Verified_ badge next to your commits:
-    ```shell
-    git config --global user.signingkey "$GH_SIGN_KEY" && \
-    git config --global gpg.format 'ssh' && \
-    git config --global commit.gpgsign 'true' && \
-    git config --global tag.gpgsign 'true'
-    ```
+<mark>TODO: Verify</mark>
+9. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+   your commits to make GitHub display
+   a <span style="border: 1px green solid; border-radius: 4rem; color: green; font-size: smaller; font-weight: bold; padding: 0.25rem 0.5rem;">
+   Verified</span> badge next to your commits:
+   ```shell
+   git config --global user.signingkey "$GH_SIGN_KEY" && \
+   git config --global gpg.format ssh && \
+   git config --global commit.gpgsign true && \
+   git config --global tag.gpgsign true
+   ```
 
-11. Enable autosquash suggestions when you rebase interactively:
+<mark>TODO: Verify</mark>
+10. Enable autosquash suggestions when you rebase interactively:
     ```shell
-    git config --global rebase.autosquash 'true'
+    git config --global rebase.autosquash true
     ```
-
-<mark>TODO: </mark>
-> [!TIP]  
-> To upgrade Git and GitHub CLI:
-> ```shell
-> sudo apt update && sudo apt install git gh
-> ```
 
 ## 🐧 4. Prepare your workspace
-<mark>TODO: </mark>
-1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place:
+<mark>TODO: Verify</mark>
+1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place and
+   activate it in the shell:
    ```shell
-   curl https://mise.jdx.dev/install.sh | sh
-   ```
-
-<mark>TODO: </mark>
-2. Add mise-en-place activation to your Zsh profile:
-   ```shell
-   echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
-   ```
-
-<mark>TODO: </mark>
-3. Activate mise-en-place in the current shell session:
-   ```shell
+   # curl https://mise.jdx.dev/install.sh | sh
+   
+   sudo install -dm 755 /etc/apt/keyrings && \
+   wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null && \
+   echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list && \
+   sudo apt update && \
+   sudo apt install mise && \
+   echo 'eval "$(mise activate zsh)"' >> ~/.zshrc && \
    eval "$(mise activate zsh)"
    ```
 
-4. Verify that the installation succeeded:
+2. Verify that the installation succeeded:
    ```shell
    mise --version # -> 2025.7.0 or newer
    ```
 
-<mark>TODO: </mark>
-5. Clone the repository into the directory in which you keep your workspaces:  
-   _(specify the path to your workspace directory)_
+<mark>TODO: Verify</mark>
+3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+   the repository into the directory in which you keep your workspaces.  
+   Specify the path to your workspace directory:
    ```shell
    WORKSPACE_ROOT="$HOME/repositories/rainstormy/"
    ```
    ```shell
-   git clone git@github.com:rainstormy/github-action-validate-commit-messages.git "$WORKSPACE_ROOT" && \
-   cd "${WORKSPACE_ROOT%/}/github-action-validate-commit-messages/"
+   REPOSITORY_URL='git@github.com:rainstormy/github-action-validate-commit-messages.git' && \
+   DESTINATION_PATH="${WORKSPACE_ROOT%/}/$(basename "$REPOSITORY_URL" .git)/" && \
+   git clone "$REPOSITORY_URL" "$DESTINATION_PATH" && \
+   cd "$DESTINATION_PATH"
    ```
 
-6. Let mise-en-place trust the project configuration:
+<mark>TODO: Verify</mark>
+4. Create a file named `.env.local` in the project root directory to define
+   environment variables in your local development environment:
+   ```shell
+   touch .env.local
+   ```
+
+<mark>TODO: Verify</mark>
+5. [Mark](https://mise.jdx.dev/cli/trust.html) the project configuration as
+   trusted:
    ```shell
    mise trust
    ```
 
-7. Install the tools and dependencies required by the project (including Node.js
-   and pnpm):
+<mark>TODO: Verify</mark>
+6. Install the tools required by the project (including Node.js and pnpm):
    ```shell
-   mise install && mise run init
+   mise install
    ```
 
-8. Verify that both installations succeeded:
+<mark>TODO: Verify</mark>
+7. Verify that both installations succeeded:
    ```shell
    node --version # -> 20.19.0 or newer
    ```
@@ -302,14 +343,29 @@ Last updated: July 8, 2025.
    pnpm --version # -> 10.12.0 or newer
    ```
 
-<mark>TODO: </mark>
-9. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
+<mark>TODO: Verify</mark>
+8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
    ```shell
    pnpm config --global set save-prefix ''
    ```
 
+<mark>TODO: Verify</mark>
+9. Install the Node.js packages required by the project and enable its Git
+   hooks:
+   ```shell
+   mise run init
+   ```
+
+> [!IMPORTANT]  
+> If `pnpm --version` reports an unexpected version, e.g. `9.15.1` or older, it
+> may be installed globally via Corepack or npm. Try uninstalling it:
+>
+> ```shell
+> corepack disable && npm uninstall --global pnpm
+> ```
+
 ## 🐧 5. Install an IDE
-### ⭐ Using [IntelliJ IDEA](https://www.jetbrains.com/idea) _(recommended)_
+### Using [IntelliJ IDEA](https://www.jetbrains.com/idea) ⭐
 <mark>TODO: </mark>
 1. [Download](https://www.jetbrains.com/toolbox-app), install, and launch the
    JetBrains Toolbox App.  

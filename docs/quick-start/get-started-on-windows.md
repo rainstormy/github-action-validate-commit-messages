@@ -3,7 +3,7 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
-Last updated: July 8, 2025.
+Last updated: July 11, 2025.
 
 1. [Install the modern PowerShell and essential packages](#-1-install-the-modern-powershell-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
@@ -28,7 +28,7 @@ Last updated: July 8, 2025.
 ## 🟦 1. Install the modern [PowerShell](https://microsoft.com/PowerShell) and essential packages
 1. [Install](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows#install-powershell-using-winget-recommended)
    PowerShell:
-   ```shell
+   ```powershell
    winget install --source winget --exact --id Microsoft.PowerShell
    ```
 
@@ -46,28 +46,28 @@ Last updated: July 8, 2025.
 
 4. Define a function to refresh the `PATH` environment variable in the current
    shell session:
-   ```shell
+   ```powershell
    function Refresh-Path { $ENV:PATH = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User') }
    ```
 
 5. Install [jq](https://jqlang.org) and [yq](https://mikefarah.gitbook.io/yq):
-   ```shell
+   ```powershell
    winget install --source winget --exact --id jqlang.jq && `
    winget install --source winget --exact --id MikeFarah.yq && `
    Refresh-Path
    ```
 
 6. Verify that both installations succeeded:
-   ```shell
+   ```powershell
    jq --version # -> 1.8.0 or newer
    ```
-   ```shell
+   ```powershell
    yq --version # -> 4.45.0 or newer
    ```
 
 > [!TIP]  
 > You can upgrade all installed packages manually:
-> ```shell
+> ```powershell
 > winget upgrade --all
 > ```
 
@@ -98,13 +98,13 @@ Last updated: July 8, 2025.
 
 4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
    the 1Password CLI:
-   ```shell
+   ```powershell
    winget install --source winget --exact --id AgileBits.1Password.CLI && `
    Refresh-Path
    ```
 
 5. Verify that the installation succeeded:
-   ```shell
+   ```powershell
    op --version # -> 2.31.0 or newer
    ```
 
@@ -120,13 +120,13 @@ Last updated: July 8, 2025.
    to sign commits.  
    You may replace 'GitHub authentication key' and 'GitHub signing key' with
    names of your choice:
-   ```shell
+   ```powershell
    $OP_AUTH_KEY_NAME = 'GitHub authentication key'
    ```
-   ```shell
+   ```powershell
    $OP_SIGN_KEY_NAME = 'GitHub signing key'
    ```
-   ```shell
+   ```powershell
    Set-Variable -name GH_AUTH_KEY -value "$( `
      op item get "$OP_AUTH_KEY_NAME" --fields label='public key' 2>$null || `
      op item create --category ssh --title "$OP_AUTH_KEY_NAME" --format json | jq --raw-output '.fields[] | select(.label=="public key") | .value' `
@@ -151,10 +151,10 @@ Last updated: July 8, 2025.
    an SSH key to authenticate to GitHub.  
    You may replace 'id_github_auth' with a name of your choice and enter a
    passphrase to protect the key:
-   ```shell
+   ```powershell
    $SSH_AUTH_KEY_FILENAME = 'id_github_auth'
    ```
-   ```shell
+   ```powershell
    New-Item -Path ~\.ssh -ItemType Directory -Force && `
    Add-Content -Path ~\.ssh\config -Value "Host github.com`n  AddKeysToAgent yes`n  IdentityFile ~/.ssh/$SSH_AUTH_KEY_FILENAME" && `
    ssh-keygen -t ed25519 -f "$HOME\.ssh\$SSH_AUTH_KEY_FILENAME" && `
@@ -165,10 +165,10 @@ Last updated: July 8, 2025.
 3. Generate an SSH key to sign commits.  
    You may replace 'id_github_sign' with a name of your choice and enter a
    passphrase to protect the key:
-   ```shell
+   ```powershell
    $SSH_SIGN_KEY_FILENAME = 'id_github_sign'
    ```
-   ```shell
+   ```powershell
    ssh-keygen -t ed25519 -f "$HOME\.ssh\$SSH_SIGN_KEY_FILENAME" && `
    ssh-add "$HOME\.ssh\$SSH_SIGN_KEY_FILENAME" && `
    Set-Variable -name GH_SIGN_KEY -value "$(Get-Content "$HOME\.ssh\$SSH_SIGN_KEY_FILENAME.pub")"
@@ -181,23 +181,23 @@ Last updated: July 8, 2025.
 ## 🟦 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
 1. Install Git and the GitHub CLI:  
    _(it may request elevated privileges)_
-   ```shell
+   ```powershell
    winget install --source winget --exact --id Git.Git && `
    winget install --source winget --exact --id GitHub.cli && `
    Refresh-Path
    ```
 
 2. Verify that both installations succeeded:
-   ```shell
+   ```powershell
    git --version # -> 2.50.0 or newer
    ```
-   ```shell
-   gh --version # -> 2.74.0 or newer
+   ```powershell
+   gh --version # -> 2.75.0 or newer
    ```
 
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
    the public SSH key of `github.com` to the list of known hosts:
-   ```shell
+   ```powershell
    Add-Content -Path ~\.ssh\known_hosts -Value 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl'
    ```
 
@@ -207,7 +207,7 @@ Last updated: July 8, 2025.
    generation.  
    Then copy the one-time code and trigger the web-based authentication flow on
    github.com:
-   ```shell
+   ```powershell
    gh auth login --scopes admin:public_key,admin:ssh_signing_key
    ```
 
@@ -215,13 +215,13 @@ Last updated: July 8, 2025.
    GitHub account.  
    You may replace 'Rainstorm authentication key' and 'Rainstorm signing key'
    with names of your choice:
-   ```shell
+   ```powershell
    $GH_AUTH_KEY_NAME = 'Rainstorm authentication key'
    ```
-   ```shell
+   ```powershell
    $GH_SIGN_KEY_NAME = 'Rainstorm signing key'
    ```
-   ```shell
+   ```powershell
    $GH_AUTH_KEY | gh ssh-key add - --title "$GH_AUTH_KEY_NAME" && `
    $GH_SIGN_KEY | gh ssh-key add - --title "$GH_SIGN_KEY_NAME" --type signing
    ```
@@ -230,7 +230,7 @@ Last updated: July 8, 2025.
    SSH keys from the GitHub CLI.  
    Copy the one-time code and trigger the web-based authentication flow on
    github.com:
-   ```shell
+   ```powershell
    gh auth refresh --remove-scopes admin:public_key,admin:ssh_signing_key
    ```
 
@@ -239,7 +239,7 @@ Last updated: July 8, 2025.
 
 8. Declare your identity using your GitHub profile name and noreply email
    address:
-   ```shell
+   ```powershell
    $GH_USER = "$(gh api user)" && `
    git config --global user.name "$($GH_USER | jq --raw-output 'if (.name | test("^\\p{Lu}.*\\s")) then .name else error("Full name must contain at least two words where the first word starts with a capital letter") end')" && `
    git config --global user.email "$($GH_USER | jq --raw-output '"\(.id)+\(.login)@users.noreply.github.com"')"
@@ -249,7 +249,7 @@ Last updated: July 8, 2025.
    your commits to make GitHub display
    a <span style="border: 1px green solid; border-radius: 4rem; color: green; font-size: smaller; font-weight: bold; padding: 0.25rem 0.5rem;">
    Verified</span> badge next to your commits:
-   ```shell
+   ```powershell
    git config --global core.sshCommand 'C:/Windows/System32/OpenSSH/ssh.exe' && `
    git config --global user.signingkey "$GH_SIGN_KEY" && `
    git config --global gpg.format ssh && `
@@ -258,14 +258,14 @@ Last updated: July 8, 2025.
    ```
 
 10. Enable autosquash suggestions when you rebase interactively:
-    ```shell
+    ```powershell
     git config --global rebase.autosquash true
     ```
 
 ## 🟦 4. Prepare your workspace
 1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place and
    activate it in the shell:
-   ```shell
+   ```powershell
    winget install --source winget --exact --id jdx.mise && `
    Refresh-Path && `
    New-Item -Path (Split-Path -Parent "$PROFILE") -ItemType Directory -Force && `
@@ -274,17 +274,17 @@ Last updated: July 8, 2025.
    ```
 
 2. Verify that the installation succeeded:
-   ```shell
+   ```powershell
    mise --version # -> 2025.7.0 or newer
    ```
 
 3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
    the repository into the directory in which you keep your workspaces.  
    Specify the path to your workspace directory:
-   ```shell
+   ```powershell
    $WORKSPACE_ROOT = "$HOME\repositories\rainstormy\"
    ```
-   ```shell
+   ```powershell
    Set-Variable -name REPOSITORY_URL -value 'git@github.com:rainstormy/github-action-validate-commit-messages.git' && `
    Set-Variable -name DESTINATION_PATH -value "$(Join-Path "$WORKSPACE_ROOT" "$((Split-Path "$REPOSITORY_URL" -Leaf) -Replace '\.git$','')")" && `
    git clone "$REPOSITORY_URL" "$DESTINATION_PATH" && `
@@ -293,37 +293,37 @@ Last updated: July 8, 2025.
 
 4. Create a file named `.env.local` in the project root directory to define
    environment variables in your local development environment:
-   ```shell
+   ```powershell
    touch .env.local
    ```
 
 5. [Mark](https://mise.jdx.dev/cli/trust.html) the project configuration as
    trusted:
-   ```shell
+   ```powershell
    mise trust
    ```
 
 6. Install the tools required by the project (including Node.js and pnpm):
-   ```shell
+   ```powershell
    mise install
    ```
 
 7. Verify that both installations succeeded:
-   ```shell
+   ```powershell
    node --version # -> 20.19.0 or newer
    ```
-   ```shell
+   ```powershell
    pnpm --version # -> 10.12.0 or newer
    ```
 
 8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
-   ```shell
+   ```powershell
    pnpm config --global set save-prefix ''
    ```
 
 9. Install the Node.js packages required by the project and enable its Git
    hooks:
-   ```shell
+   ```powershell
    mise run init
    ```
 
@@ -331,7 +331,7 @@ Last updated: July 8, 2025.
 > If `pnpm --version` reports an unexpected version, e.g. `9.15.1` or older, it
 > may be installed globally via Corepack or npm. Try uninstalling it:
 >
-> ```shell
+> ```powershell
 > corepack disable && npm uninstall --global pnpm
 > ```
 
@@ -351,19 +351,19 @@ Last updated: July 8, 2025.
 3. Quit IntelliJ IDEA (<kbd>Alt</kbd><kbd>F4</kbd>).  
    Wait a few seconds for it to terminate completely.  
    Then install the recommended plugins for this project:
-   ```shell
+   ```powershell
    idea installPlugins $(yq --output-format=csv '.project.component.plugin[]."+@id"' .idea/externalDependencies.xml)
    ```
 
 4. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    IntelliJ IDEA as the default editor in Git to edit commit messages and
    conduct interactive rebases:
-   ```shell
+   ```powershell
    git config --global core.editor 'idea --wait'
    ```
 
 5. Open the project in IntelliJ IDEA:
-    ```shell
+    ```powershell
     idea .
     ```
 
@@ -385,7 +385,7 @@ Last updated: July 8, 2025.
    ![](assets/vscode-postinstall-windows.png)
 
 2. Install the recommended extensions for this project:
-   ```shell
+   ```powershell
    Refresh-Path && `
    code $(jq --raw-output '.recommendations[] | "--install-extension " + .' .vscode/extensions.json)
    ```
@@ -393,12 +393,12 @@ Last updated: July 8, 2025.
 3. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
    Visual Studio Code as the default editor in Git to edit commit messages and
    conduct interactive rebases:
-   ```shell
+   ```powershell
    git config --global core.editor 'code --wait'
    ```
 
 4. Open the project in Visual Studio Code.
-   ```shell
+   ```powershell
    code .
    ```
 

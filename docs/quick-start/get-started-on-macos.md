@@ -3,7 +3,7 @@
 This guide describes the necessary steps for you to start coding in this
 project.
 
-Last updated: July 8, 2025.
+Last updated: July 11, 2025.
 
 1. [Install Homebrew and essential packages](#-1-install-homebrew-and-essential-packages)
 2. [Generate SSH keys](#-2-generate-ssh-keys)
@@ -50,7 +50,7 @@ Last updated: July 8, 2025.
    jq --version # -> 1.8.0 or newer
    ```
    ```shell
-   yq --version # -> 4.45.0 or newer
+   yq --version # -> 4.46.0 or newer
    ```
 
 5. [Enable](https://github.com/DomT4/homebrew-autoupdate) daily package
@@ -183,7 +183,7 @@ Last updated: July 8, 2025.
    git --version # -> 2.50.0 or newer
    ```
    ```shell
-   gh --version # -> 2.74.0 or newer
+   gh --version # -> 2.75.0 or newer
    ```
 
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
