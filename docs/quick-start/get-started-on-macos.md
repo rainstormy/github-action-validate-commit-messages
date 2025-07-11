@@ -76,15 +76,16 @@ Last updated: July 11, 2025.
    the SSH agent** › **Use key names**.  
    Select **Use the SSH agent**.
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/1password-ssh-agent-macos.png)
 
 3. [Configure](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
    the SSH client to use the SSH agent in 1Password:
    ```shell
-   mkdir -p ~/.1password && \
-   ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock && \
    mkdir -p ~/.ssh && \
-   echo -e "Host *\n  IdentityAgent ~/.1password/agent.sock" >> ~/.ssh/config
+   touch ~/.ssh/config && \
+   echo -e "Host *\n  IdentityAgent ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock" >> ~/.ssh/config
    ```
 
 4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
@@ -102,6 +103,8 @@ Last updated: July 11, 2025.
    the CLI integration in 1Password:  
    Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer**.  
    Select **Integrate with 1Password CLI**.
+
+<mark>TODO: Screenshot</mark>
 
    ![](assets/1password-cli.png)
 
@@ -189,6 +192,7 @@ Last updated: July 11, 2025.
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
    the public SSH key of `github.com` to the list of known hosts:
    ```shell
+   touch ~/.ssh/known_hosts && \
    echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
    ```
 
@@ -375,6 +379,8 @@ Last updated: July 11, 2025.
    Locate and run **Shell Command: Install 'code' command in PATH**.  
    _(it may request elevated privileges)_
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/vscode-cli-macos.png)
 
 3. Quit Visual Studio Code (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).  
@@ -398,10 +404,14 @@ Last updated: July 11, 2025.
 6. [Mark](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust)
    the workspace as trusted.
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/vscode-trust.png)
 
 7. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
    version specified for the workspace.
+
+<mark>TODO: Screenshot</mark>
 
    ![](assets/vscode-typescript.png)
 

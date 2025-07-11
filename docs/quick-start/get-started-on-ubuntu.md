@@ -63,28 +63,25 @@ Last updated: July 11, 2025.
 
 ## 🐧 2. Generate [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh)
 ### Using [1Password](https://1password.com) ⭐
-<mark>TODO: Verify</mark>
 1. [Download](https://1password.com/downloads/linux) and install the desktop
    app.
 
-<mark>TODO: Verify</mark>
 2. [Enable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
    the SSH agent in 1Password:  
-   Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer**.  
+   Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer** › **Set up
+   the SSH agent** › **Use key names**.  
    Select **Use the SSH agent**.
 
 <mark>TODO: Screenshot</mark>
 
-<mark>TODO: Verify</mark>
 3. [Configure](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
    the SSH client to use the SSH agent in 1Password:
    ```shell
-   mkdir -p ~/.1password && \
    mkdir -p ~/.ssh && \
+   touch ~/.ssh/config && \
    echo -e "Host *\n  IdentityAgent ~/.1password/agent.sock" >> ~/.ssh/config
    ```
 
-<mark>TODO: Verify</mark>
 4. [Install](https://developer.1password.com/docs/cli/get-started/#step-1-install-1password-cli)
    the 1Password CLI:
    ```shell
@@ -107,7 +104,6 @@ Last updated: July 11, 2025.
    op --version # -> 2.31.0 or newer
    ```
 
-<mark>TODO: Verify</mark>
 6. [Enable](https://developer.1password.com/docs/cli/get-started/#step-2-turn-on-the-1password-desktop-app-integration)
    the CLI integration in 1Password:  
    Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer**.  
@@ -116,7 +112,6 @@ Last updated: July 11, 2025.
 <mark>TODO: Screenshot</mark>
 ![](assets/1password-cli.png)
 
-<mark>TODO: Verify</mark>
 7. [Generate](https://developer.1password.com/docs/ssh/manage-keys/#generate-an-ssh-key)
    two SSH keys in your 1Password vault; one to authenticate to GitHub and one
    to sign commits.  
@@ -174,7 +169,6 @@ Last updated: July 11, 2025.
 > transferred manually to other computers.
 
 ## 🐧 3. Install [Git](https://git-scm.com) and [GitHub CLI](https://cli.github.com)
-<mark>TODO: </mark>
 1. [Install](https://git-scm.com/downloads/linux) Git:
    ```shell
    sudo add-apt-repository ppa:git-core/ppa && \
@@ -187,7 +181,6 @@ Last updated: July 11, 2025.
    git --version # -> 2.50.0 or newer
    ```
 
-<mark>TODO: </mark>
 3. [Install](https://github.com/cli/cli/blob/trunk/docs/install_linux.md#official-sources)
    the GitHub CLI:
    ```shell
@@ -210,6 +203,7 @@ Last updated: July 11, 2025.
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
    the public SSH key of `github.com` to the list of known hosts:
    ```shell
+   touch ~/.ssh/known_hosts && \
    echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
    ```
 

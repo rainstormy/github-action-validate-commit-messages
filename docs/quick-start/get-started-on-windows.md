@@ -40,6 +40,8 @@ Last updated: July 11, 2025.
    Set **Default profile** to be _PowerShell_.  
    Press **Save**.
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/powershell-windows.png)
 
 3. Start a new PowerShell session.
@@ -81,6 +83,8 @@ Last updated: July 11, 2025.
    Stop the service if it is currently running.  
    Press **OK**.
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/openssh-disabled-windows.png)
 
 2. [Download](https://1password.com/downloads/windows) and install the desktop
@@ -93,6 +97,8 @@ Last updated: July 11, 2025.
    Press **Set up the SSH agent** again and confirm that the OpenSSH
    Authentication Agent service is disabled.  
    Select **Use the SSH agent**.
+
+<mark>TODO: Screenshot</mark>
 
    ![](assets/1password-ssh-agent-windows.png)
 
@@ -112,6 +118,8 @@ Last updated: July 11, 2025.
    the CLI integration in 1Password:  
    Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer**.  
    Select **Integrate with 1Password CLI**.
+
+<mark>TODO: Screenshot</mark>
 
    ![](assets/1password-cli.png)
 
@@ -144,6 +152,8 @@ Last updated: July 11, 2025.
    Set the **Startup type** to be _Automatic_.  
    Start the service if it is not running.  
    Press **OK**.
+
+<mark>TODO: Screenshot</mark>
 
    ![](assets/openssh-enabled-windows.png)
 
@@ -381,6 +391,8 @@ Last updated: July 11, 2025.
    in Visual Studio Code.  
    Unselect **Launch Visual Studio Code** after the installation.
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/vscode-cli-windows.png)
    ![](assets/vscode-postinstall-windows.png)
 
@@ -405,10 +417,14 @@ Last updated: July 11, 2025.
 5. [Mark](https://code.visualstudio.com/docs/editing/workspaces/workspace-trust)
    the workspace as trusted.
 
+<mark>TODO: Screenshot</mark>
+
    ![](assets/vscode-trust.png)
 
 6. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
    version specified for the workspace.
+
+<mark>TODO: Screenshot</mark>
 
    ![](assets/vscode-typescript.png)
 
