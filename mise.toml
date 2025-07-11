@@ -51,7 +51,7 @@ alias = ["t"]
 
 [tasks.vitest]
 # language=sh
-run = "vitest watch --ui --open $MY_VITEST_OPENS_AUTOMATICALLY --api.port $MY_VITEST_PORT"
+run = "vitest watch --ui --open $LOCALHOST_VITEST_OPENS_AUTOMATICALLY --api.port $LOCALHOST_VITEST_PORT"
 env = { CI = 1 }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
