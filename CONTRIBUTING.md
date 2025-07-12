@@ -2,7 +2,8 @@
 
 ## Quick Start
 - [Get started on 🍏 macOS](docs/quick-start/get-started-on-macos.md)
-- [Get started on 🟦 Windows + 🐧 WSL](docs/quick-start/get-started-on-wsl.md)
+- [Get started on 🐧 Ubuntu](docs/quick-start/get-started-on-ubuntu.md)
+- [Get started on 🟦 Windows](docs/quick-start/get-started-on-windows.md)
 
 ## Tasks
 | Name        | Description                                                                                                             |
