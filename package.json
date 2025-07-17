@@ -27,7 +27,7 @@
 		"valibot": "Valibot provides type-safe data validation."
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
+		"@biomejs/biome": "2.1.2",
 		"@rainstormy/presets-biome": "1.0.0",
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "20.19.6",
