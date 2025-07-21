@@ -36,7 +36,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.
@@ -55,7 +55,7 @@ jobs:
 
   check:
     name: Clean code
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.
@@ -81,7 +81,7 @@ jobs:
 
   test:
     name: Unit tests
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.

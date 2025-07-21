@@ -28,7 +28,7 @@ jobs:
   commit-messages:
     name: Commit messages
     needs: integrity
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
       pull-requests: read # Allow the job to read the commit messages in the pull request.
