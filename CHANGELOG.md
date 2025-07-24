@@ -17,10 +17,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     library.
 
 ### Fixed
-- Recognise `deconsolidate`, `outfigure`, `outguess`, `outthink`, `overreach`,
-  `preenact`/`pre-enact`, `prefigure`, `pre-release`, `prerender`/`pre-render`,
-  `reenact`/`re-enact`, `unconsolidate`, `unresolve`, `unset`, `unsettle`, and
-  `upsert` as verbs in the `imperative-subject-lines` rule.
+- Recognise `cross-check`, `deconsolidate`, `outfigure`, `outguess`, `outthink`,
+  `overreach`, `preenact`/`pre-enact`, `prefigure`, `pre-release`, `prerender`/
+  `pre-render`, `recheck`/`re-check`, `reenable`/`re-enable`, `reenact`/
+  `re-enact`, `uncheck`, `unconsolidate`, `unresolve`, `unset`, `unsettle`,
+  `untick`, and `upsert` as verbs in the `imperative-subject-lines` rule.
 
 ## [1.1.8] - 2025-03-31
 ### Fixed
