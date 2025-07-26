@@ -1,0 +1,55 @@
+name: Task
+description: Runs a task unless another workflow run has already run it in the same context.
+
+inputs:
+  cache-key:
+    description: A string that identifies a cache entry. If the cache entry already exists, it skips the entire task.
+    required: true
+  #
+  cache-path:
+    description: The path within the project directory to store in the workflow cache.
+    required: true
+  #
+  task:
+    description: The name of the task to run with mise-en-place, as defined in `mise.toml`.
+    required: true
+
+outputs:
+  cache-hit:
+    description: A boolean string that indicates whether an exact cache hit occurred which caused the task to be skipped.
+    value: ${{ steps.skip-if-already-done.outputs.cache-hit }}
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+runs:
+  using: composite
+  steps:
+    - name: Skip if already done
+      id: skip-if-already-done
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        # If an exact cache hit occurs, another workflow run has already run the task in the same context, and we can skip the remaining steps.
+        # This is especially useful upon squashing commits where the source code itself does not change.
+        # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows
+        key: ${{ inputs.cache-key }}
+        path: ${{ inputs.cache-path }}
+      #
+    - name: Install dependencies
+      if: (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+      uses: ./.github/actions/dependencies
+      #
+    - name: Run the task with mise-en-place
+      if: (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+      # language=sh
+      run: mise run ${{ inputs.task }}
+      shell: bash
+      #
+    - name: Ensure that the cache path exists and has content
+      if: (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+      # language=sh
+      run: |
+        if [ ! -d ${{ inputs.cache-path }} ]; then
+            mkdir --parents ${{ inputs.cache-path }}
+            touch ${{ inputs.cache-path }}/.github-actions-cache
+        fi
+      shell: bash

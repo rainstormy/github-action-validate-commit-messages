@@ -1,44 +1,45 @@
-# This workflow creates a draft GitHub release from a full semantic version tag in Git.
+# This workflow implements one of the final stages of the release pipeline.
+# It creates a draft GitHub release from a full semantic version tag in Git.
 #
-# It is triggered automatically by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>`,
-# as done by the `release-tags.yml` workflow.
+# It is triggered by pushing a Git tag on the form `v<major.minor.patch[-prerelease][+buildinfo]>` as done by `.github/workflows/publish-tags.yml`.
 #
 # It can be triggered manually via the GitHub CLI:
 #
-#   gh workflow run release-github.yml --ref <tag-name>
+#   gh workflow run publish-github.yml --ref <tag-name>
 #   gh run watch
 #
-# It can be triggered manually via the GitHub web interface:
-#   https://github.com/rainstormy/github-action-validate-commit-messages/actions/workflows/release-github.yml
+# It can also be triggered manually via the GitHub web interface:
+# https://github.com/rainstormy/github-action-validate-commit-messages/actions/workflows/release-github.yml
 
-name: Release / GitHub
+name: Publish / GitHub
 
 on:
   push:
     tags:
+      # Single quotes make YAML interpret strings with special characters correctly.
+      # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
       - 'v[0-9]+.[0-9]+.[0-9]+*'
   workflow_dispatch:
 
 # Cancel all previous runs of this workflow that are still in progress on the same branch.
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
 concurrency:
-  group: release-github-${{ github.workflow }}-${{ github.ref }}
+  group: publish-github-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
-  quality-assurance:
-    name: Quality assurance
+  integrity:
+    name: Integrity
     permissions:
-      contents: read # Allow the job to call the reusable `ci.yml` workflow.
-      pull-requests: read # `ci.yml` requires `pull-requests` read permissions.
-    uses: ./.github/workflows/ci.yml
+      contents: read # Allow the job to call `.github/workflows/integrity.yml`.
+    uses: ./.github/workflows/integrity.yml
 
   github-release:
     name: GitHub release
-    needs: quality-assurance
-    runs-on: ubuntu-24.04
+    needs: integrity
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
       contents: read # Allow the job to check out the repository.

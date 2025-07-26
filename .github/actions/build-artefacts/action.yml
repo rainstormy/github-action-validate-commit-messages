@@ -1,0 +1,17 @@
+name: Build artefacts
+description: Restores the build artefacts from the workflow cache.
+
+# All third-party actions are pinned to a specific commit SHA for security reasons.
+# https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+runs:
+  using: composite
+  steps:
+    - name: Restore build artefacts from the workflow cache
+      uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      with:
+        # CAUTION: The cache key originates from `.github/workflows/integrity.yml`.
+        key: build:${{ hashFiles('src/**/*', '!src/**/*.fixtures.*', '!src/**/*.mocks.*', '!src/**/*.tests.*', '*.config.*', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
+        path: dist/
+        # The caller workflow must build the project prior to this step to avoid a cache miss.
+        # NOTE: GitHub may sometimes evict the cache entry prematurely when approaching the cache storage limit.
+        fail-on-cache-miss: true
