@@ -1,10 +1,10 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type LimitLengthOfBodyLinesConfiguration,
 	type RawLimitLengthOfBodyLinesConfiguration,
 	limitLengthOfBodyLinesConfigurationSchema,
-} from "+rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/LimitLengthOfBodyLines/LimitLengthOfBodyLinesConfiguration"
 
 describe.each`
 	rawMaximumCharacters | expectedMaximumCharacters

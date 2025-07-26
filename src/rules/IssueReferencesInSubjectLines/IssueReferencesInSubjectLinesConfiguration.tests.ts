@@ -1,11 +1,11 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type IssueReferencesInSubjectLinesConfiguration,
 	type RawIssueReferencesInSubjectLinesConfiguration,
 	issueReferencesInSubjectLinesConfigurationSchema,
-} from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
-import { count } from "+utilities/StringUtilities"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
+import { count } from "#utilities/StringUtilities"
 
 describe.each`
 	rawPatterns                                                  | expectedPatterns

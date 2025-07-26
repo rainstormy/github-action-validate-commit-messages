@@ -1,12 +1,4 @@
 import {
-	getDuplicateValues,
-	getUnknownValues,
-	requireAtLeastOneValue,
-	requireNoDuplicateValues,
-	requireNoUnknownValues,
-} from "+utilities/IterableUtilities"
-import { splitByComma, splitBySpace } from "+utilities/StringUtilities"
-import {
 	type InferInput,
 	type InferOutput,
 	check,
@@ -15,6 +7,14 @@ import {
 	string,
 	transform,
 } from "valibot"
+import {
+	getDuplicateValues,
+	getUnknownValues,
+	requireAtLeastOneValue,
+	requireNoDuplicateValues,
+	requireNoUnknownValues,
+} from "#utilities/IterableUtilities"
+import { splitByComma, splitBySpace } from "#utilities/StringUtilities"
 
 const issueReferencePositions = ["as-prefix", "as-suffix"] as const
 

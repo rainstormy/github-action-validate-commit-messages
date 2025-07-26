@@ -1,9 +1,9 @@
-import { githubActionsStringInput } from "+adapters/gha/GithubActionsEnv"
+import { parse } from "valibot"
+import { githubActionsStringInput } from "#adapters/gha/GithubActionsEnv"
 import {
 	type Configuration,
 	configurationSchema,
-} from "+validator/Configuration"
-import { parse } from "valibot"
+} from "#validator/Configuration"
 
 export function getGithubActionsConfiguration(): Configuration {
 	return parse(configurationSchema, {

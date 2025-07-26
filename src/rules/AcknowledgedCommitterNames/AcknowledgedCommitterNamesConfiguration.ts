@@ -1,10 +1,4 @@
 import {
-	getDuplicateValues,
-	requireAtLeastOneValue,
-	requireNoDuplicateValues,
-} from "+utilities/IterableUtilities"
-import { splitBySpace } from "+utilities/StringUtilities"
-import {
 	type InferInput,
 	type InferOutput,
 	check,
@@ -13,6 +7,12 @@ import {
 	string,
 	transform,
 } from "valibot"
+import {
+	getDuplicateValues,
+	requireAtLeastOneValue,
+	requireNoDuplicateValues,
+} from "#utilities/IterableUtilities"
+import { splitBySpace } from "#utilities/StringUtilities"
 
 export const acknowledgedCommitterNamesConfigurationSchema = object({
 	patterns: pipe(

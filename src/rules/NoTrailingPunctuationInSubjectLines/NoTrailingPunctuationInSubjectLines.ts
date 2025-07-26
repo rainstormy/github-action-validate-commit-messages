@@ -1,6 +1,6 @@
-import type { Commit } from "+rules/Commit"
-import type { NoTrailingPunctuationInSubjectLinesConfiguration } from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
-import type { Rule } from "+rules/Rule"
+import type { Commit } from "#rules/Commit"
+import type { NoTrailingPunctuationInSubjectLinesConfiguration } from "#rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
+import type { Rule } from "#rules/Rule"
 
 export function noTrailingPunctuationInSubjectLines({
 	whitelist: customWhitelist,

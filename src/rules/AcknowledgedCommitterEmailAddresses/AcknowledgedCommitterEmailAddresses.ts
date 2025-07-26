@@ -1,6 +1,6 @@
-import type { AcknowledgedCommitterEmailAddressesConfiguration } from "+rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddressesConfiguration"
-import type { Commit, UserIdentity } from "+rules/Commit"
-import type { Rule } from "+rules/Rule"
+import type { AcknowledgedCommitterEmailAddressesConfiguration } from "#rules/AcknowledgedCommitterEmailAddresses/AcknowledgedCommitterEmailAddressesConfiguration"
+import type { Commit, UserIdentity } from "#rules/Commit"
+import type { Rule } from "#rules/Rule"
 
 export function acknowledgedCommitterEmailAddresses({
 	patterns,

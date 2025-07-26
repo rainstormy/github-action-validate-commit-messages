@@ -1,4 +1,3 @@
-import { requirePositiveInteger } from "+utilities/StringUtilities"
 import {
 	type InferInput,
 	type InferOutput,
@@ -8,6 +7,7 @@ import {
 	string,
 	transform,
 } from "valibot"
+import { requirePositiveInteger } from "#utilities/StringUtilities"
 
 export const limitLengthOfBodyLinesConfigurationSchema = object({
 	maximumCharacters: pipe(

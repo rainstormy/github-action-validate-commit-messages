@@ -1,8 +1,8 @@
-import { type RuleKeys, ruleKeys as allAvailableRuleKeys } from "+rules/Rule"
-import { ruleKeysConfigurationSchema } from "+rules/RulesConfiguration"
-import { count } from "+utilities/StringUtilities"
 import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
+import { type RuleKeys, ruleKeys as allAvailableRuleKeys } from "#rules/Rule"
+import { ruleKeysConfigurationSchema } from "#rules/RulesConfiguration"
+import { count } from "#utilities/StringUtilities"
 
 describe.each`
 	rawRuleKeys                                                                                                                                 | expectedRuleKeys

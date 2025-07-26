@@ -1,7 +1,7 @@
-import type { Commit } from "+rules/Commit"
-import type { ImperativeSubjectLinesConfiguration } from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
-import type { Rule } from "+rules/Rule"
-import { indexOfFromBinarySearch } from "+utilities/IterableUtilities"
+import type { Commit } from "#rules/Commit"
+import type { ImperativeSubjectLinesConfiguration } from "#rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
+import type { Rule } from "#rules/Rule"
+import { indexOfFromBinarySearch } from "#utilities/IterableUtilities"
 
 export const sortedImperativeVerbs: ReadonlyArray<string> = [
 	"abandon",

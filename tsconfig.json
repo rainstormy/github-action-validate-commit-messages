@@ -10,10 +10,10 @@
 		"incremental": true,
 		"libReplacement": false,
 		"paths": {
-			"+adapters/*": ["src/adapters/*"],
-			"+rules/*": ["src/rules/*"],
-			"+utilities/*": ["src/utilities/*"],
-			"+validator/*": ["src/validator/*"]
+			"#adapters/*": ["src/adapters/*"],
+			"#rules/*": ["src/rules/*"],
+			"#utilities/*": ["src/utilities/*"],
+			"#validator/*": ["src/validator/*"]
 		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo"
 	},

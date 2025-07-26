@@ -1,11 +1,11 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type NoSquashCommitsConfiguration,
 	type RawNoSquashCommitsConfiguration,
 	noSquashCommitsConfigurationSchema,
-} from "+rules/NoSquashCommits/NoSquashCommitsConfiguration"
-import { count } from "+utilities/StringUtilities"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/NoSquashCommits/NoSquashCommitsConfiguration"
+import { count } from "#utilities/StringUtilities"
 
 describe.each`
 	rawPrefixes                       | expectedPrefixes

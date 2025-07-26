@@ -1,5 +1,5 @@
-import type { Commit } from "+rules/Commit"
-import type { Rule } from "+rules/Rule"
+import type { Commit } from "#rules/Commit"
+import type { Rule } from "#rules/Rule"
 
 const leadingOrTrailingWhitespaceRegex = /^\s|\s$/u
 const consecutiveWhitespaceRegex = /\S\s{2,}/u

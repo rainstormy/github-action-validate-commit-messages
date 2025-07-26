@@ -1,15 +1,15 @@
-import { parseCommit } from "+rules/Commit"
-import { commitRefinerFrom } from "+rules/CommitRefiner"
-import type { Rule } from "+rules/Rule"
-import { count } from "+utilities/StringUtilities"
+import { describe, expect, it } from "vitest"
+import { parseCommit } from "#rules/Commit"
+import { commitRefinerFrom } from "#rules/CommitRefiner"
+import type { Rule } from "#rules/Rule"
+import { count } from "#utilities/StringUtilities"
 import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	dummyGithubStyleIssueReferencesAsSuffixConfiguration,
 	dummyJiraStyleIssueReferencesConfiguration,
-} from "+validator/Configuration.dummies"
-import { rulesFrom } from "+validator/Validator"
-import { describe, expect, it } from "vitest"
+} from "#validator/Configuration.dummies"
+import { rulesFrom } from "#validator/Validator"
 
 describe("when the configuration has default settings", () => {
 	const rules: ReadonlyArray<Rule> = rulesFrom(dummyDefaultConfiguration)

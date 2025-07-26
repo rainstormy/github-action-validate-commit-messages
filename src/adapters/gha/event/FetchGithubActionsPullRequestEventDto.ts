@@ -1,10 +1,10 @@
 import { readFile } from "node:fs/promises"
-import { githubActionsEventPath } from "+adapters/gha/GithubActionsEnv"
+import { parse } from "valibot"
+import { githubActionsEventPath } from "#adapters/gha/GithubActionsEnv"
 import {
 	type GithubActionsPullRequestEventDto,
 	githubActionsPullRequestEventDtoSchema,
-} from "+adapters/gha/event/dtos/GithubActionsPullRequestEventDto"
-import { parse } from "valibot"
+} from "#adapters/gha/event/dtos/GithubActionsPullRequestEventDto"
 
 /**
  * @see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables

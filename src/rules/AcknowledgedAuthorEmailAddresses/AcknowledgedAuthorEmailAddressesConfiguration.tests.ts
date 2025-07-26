@@ -1,11 +1,11 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type AcknowledgedAuthorEmailAddressesConfiguration,
 	type RawAcknowledgedAuthorEmailAddressesConfiguration,
 	acknowledgedAuthorEmailAddressesConfigurationSchema,
-} from "+rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
-import { count } from "+utilities/StringUtilities"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/AcknowledgedAuthorEmailAddresses/AcknowledgedAuthorEmailAddressesConfiguration"
+import { count } from "#utilities/StringUtilities"
 
 describe.each`
 	rawPatterns                                                                 | expectedPatterns

@@ -1,5 +1,5 @@
-import { sortedImperativeVerbs } from "+rules/ImperativeSubjectLines/ImperativeSubjectLines"
 import { describe, expect, it } from "vitest"
+import { sortedImperativeVerbs } from "#rules/ImperativeSubjectLines/ImperativeSubjectLines"
 
 describe("the list of imperative verbs", () => {
 	it("is sorted according to localeCompare", () => {

@@ -1,11 +1,11 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type NoTrailingPunctuationInSubjectLinesConfiguration,
 	type RawNoTrailingPunctuationInSubjectLinesConfiguration,
 	noTrailingPunctuationInSubjectLinesConfigurationSchema,
-} from "+rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
-import { count } from "+utilities/StringUtilities"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/NoTrailingPunctuationInSubjectLines/NoTrailingPunctuationInSubjectLinesConfiguration"
+import { count } from "#utilities/StringUtilities"
 
 describe.each`
 	rawSuffixes              | expectedSuffixes

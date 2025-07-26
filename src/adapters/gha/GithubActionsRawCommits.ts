@@ -1,9 +1,9 @@
-import { fetchGithubPullRequestCommitsDto } from "+adapters/gha/api/FetchGithubPullRequestCommitsDto"
-import type { GitUserDto } from "+adapters/gha/api/dtos/GitUserDto"
-import type { GithubCommitDto } from "+adapters/gha/api/dtos/GithubCommitDto"
-import { fetchGithubActionsPullRequestEventDto } from "+adapters/gha/event/FetchGithubActionsPullRequestEventDto"
-import type { RawCommit, RawCommits, UserIdentity } from "+rules/Commit"
 import { ValiError } from "valibot"
+import { fetchGithubPullRequestCommitsDto } from "#adapters/gha/api/FetchGithubPullRequestCommitsDto"
+import type { GitUserDto } from "#adapters/gha/api/dtos/GitUserDto"
+import type { GithubCommitDto } from "#adapters/gha/api/dtos/GithubCommitDto"
+import { fetchGithubActionsPullRequestEventDto } from "#adapters/gha/event/FetchGithubActionsPullRequestEventDto"
+import type { RawCommit, RawCommits, UserIdentity } from "#rules/Commit"
 
 export async function getGithubActionsRawCommits(): Promise<RawCommits> {
 	const pullRequestNumber = await getPullRequestNumber()

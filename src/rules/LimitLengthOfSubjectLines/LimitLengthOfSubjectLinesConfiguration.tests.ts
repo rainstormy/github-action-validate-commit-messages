@@ -1,10 +1,10 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type LimitLengthOfSubjectLinesConfiguration,
 	type RawLimitLengthOfSubjectLinesConfiguration,
 	limitLengthOfSubjectLinesConfigurationSchema,
-} from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
 
 describe.each`
 	rawMaximumCharacters | expectedMaximumCharacters

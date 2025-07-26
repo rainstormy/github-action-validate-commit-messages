@@ -1,16 +1,16 @@
-import type { RawCommits } from "+rules/Commit"
-import { dummyCommit } from "+rules/Commit.dummies"
-import type { Configuration } from "+validator/Configuration"
+import { describe, expect, it } from "vitest"
+import type { RawCommits } from "#rules/Commit"
+import { dummyCommit } from "#rules/Commit.dummies"
+import type { Configuration } from "#validator/Configuration"
 import {
 	dummyDefaultConfiguration,
 	dummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	dummyJiraStyleIssueReferencesConfiguration,
 	dummyLegendaryCompanyEmailAddressesAndFourLetterNamesConfiguration,
 	dummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
-} from "+validator/Configuration.dummies"
-import { instructiveReporter } from "+validator/Reporter"
-import { validatorFrom } from "+validator/Validator"
-import { describe, expect, it } from "vitest"
+} from "#validator/Configuration.dummies"
+import { instructiveReporter } from "#validator/Reporter"
+import { validatorFrom } from "#validator/Validator"
 
 describe("when the configuration has default settings", () => {
 	const validate = validateInstructionsFrom(dummyDefaultConfiguration)
