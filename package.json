@@ -18,11 +18,11 @@
 		"@rainstormy/presets-biome": "1.0.0",
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "20.19.8",
-		"@vitest/ui": "3.2.1",
+		"@vitest/ui": "3.2.4",
 		"lefthook": "1.12.1",
 		"typescript": "5.8.3",
 		"vite": "6.3.5",
-		"vitest": "3.2.1"
+		"vitest": "3.2.4"
 	},
 	"// devDependencies": {
 		"@biomejs/biome": "Biome is an opinionated linter and code formatter.",
