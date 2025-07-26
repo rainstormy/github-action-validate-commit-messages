@@ -1,7 +1,7 @@
-import type { Commit } from "+rules/Commit"
-import type { LimitLengthOfSubjectLinesConfiguration } from "+rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
-import type { Rule } from "+rules/Rule"
-import { countOccurrences } from "+utilities/IterableUtilities"
+import type { Commit } from "#rules/Commit"
+import type { LimitLengthOfSubjectLinesConfiguration } from "#rules/LimitLengthOfSubjectLines/LimitLengthOfSubjectLinesConfiguration"
+import type { Rule } from "#rules/Rule"
+import { countOccurrences } from "#utilities/IterableUtilities"
 
 export function limitLengthOfSubjectLines({
 	maximumCharacters,

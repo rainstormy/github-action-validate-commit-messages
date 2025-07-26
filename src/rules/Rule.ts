@@ -1,5 +1,5 @@
-import type { Commit } from "+rules/Commit"
-import type { CommitRefiner } from "+rules/CommitRefiner"
+import type { Commit } from "#rules/Commit"
+import type { CommitRefiner } from "#rules/CommitRefiner"
 
 export const ruleKeys = [
 	"acknowledged-author-email-addresses",

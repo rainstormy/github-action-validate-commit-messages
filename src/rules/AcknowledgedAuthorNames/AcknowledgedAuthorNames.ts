@@ -1,6 +1,6 @@
-import type { AcknowledgedAuthorNamesConfiguration } from "+rules/AcknowledgedAuthorNames/AcknowledgedAuthorNamesConfiguration"
-import type { Commit, UserIdentity } from "+rules/Commit"
-import type { Rule } from "+rules/Rule"
+import type { AcknowledgedAuthorNamesConfiguration } from "#rules/AcknowledgedAuthorNames/AcknowledgedAuthorNamesConfiguration"
+import type { Commit, UserIdentity } from "#rules/Commit"
+import type { Rule } from "#rules/Rule"
 
 export function acknowledgedAuthorNames({
 	patterns,

@@ -1,13 +1,13 @@
-import { type RuleKeys, ruleKeys } from "+rules/Rule"
+import { check, pipe, string, transform } from "valibot"
+import { type RuleKeys, ruleKeys } from "#rules/Rule"
 import {
 	getDuplicateValues,
 	getUnknownValues,
 	requireAtLeastOneValue,
 	requireNoDuplicateValues,
 	requireNoUnknownValues,
-} from "+utilities/IterableUtilities"
-import { splitByComma } from "+utilities/StringUtilities"
-import { check, pipe, string, transform } from "valibot"
+} from "#utilities/IterableUtilities"
+import { splitByComma } from "#utilities/StringUtilities"
 
 export const ruleKeysConfigurationSchema = pipe(
 	string(),

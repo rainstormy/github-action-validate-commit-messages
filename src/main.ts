@@ -1,9 +1,9 @@
 import process from "node:process"
-import { getGithubActionsConfiguration } from "+adapters/gha/GithubActionsConfiguration"
-import { printGithubActionsError } from "+adapters/gha/GithubActionsLogger"
-import { getGithubActionsRawCommits } from "+adapters/gha/GithubActionsRawCommits"
-import { instructiveReporter } from "+validator/Reporter"
-import { validatorFrom } from "+validator/Validator"
+import { getGithubActionsConfiguration } from "#adapters/gha/GithubActionsConfiguration"
+import { printGithubActionsError } from "#adapters/gha/GithubActionsLogger"
+import { getGithubActionsRawCommits } from "#adapters/gha/GithubActionsRawCommits"
+import { instructiveReporter } from "#validator/Reporter"
+import { validatorFrom } from "#validator/Validator"
 
 try {
 	const configuration = getGithubActionsConfiguration()

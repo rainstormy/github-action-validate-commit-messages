@@ -1,4 +1,4 @@
-import type { RawCommit } from "+rules/Commit"
+import type { RawCommit } from "#rules/Commit"
 
 type DummyCommitProps = {
 	readonly sha?: string

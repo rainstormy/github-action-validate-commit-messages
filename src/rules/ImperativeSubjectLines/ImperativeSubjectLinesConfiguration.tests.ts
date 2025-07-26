@@ -1,11 +1,11 @@
+import { parse } from "valibot"
+import { describe, expect, it } from "vitest"
 import {
 	type ImperativeSubjectLinesConfiguration,
 	type RawImperativeSubjectLinesConfiguration,
 	imperativeSubjectLinesConfigurationSchema,
-} from "+rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
-import { count } from "+utilities/StringUtilities"
-import { parse } from "valibot"
-import { describe, expect, it } from "vitest"
+} from "#rules/ImperativeSubjectLines/ImperativeSubjectLinesConfiguration"
+import { count } from "#utilities/StringUtilities"
 
 describe.each`
 	rawWords                 | expectedWords

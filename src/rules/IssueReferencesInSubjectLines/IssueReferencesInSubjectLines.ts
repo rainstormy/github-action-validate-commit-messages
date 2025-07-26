@@ -1,9 +1,9 @@
-import type { Commit } from "+rules/Commit"
+import type { Commit } from "#rules/Commit"
 import type {
 	IssueReferencePosition,
 	IssueReferencesInSubjectLinesConfiguration,
-} from "+rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
-import type { Rule } from "+rules/Rule"
+} from "#rules/IssueReferencesInSubjectLines/IssueReferencesInSubjectLinesConfiguration"
+import type { Rule } from "#rules/Rule"
 
 export function issueReferencesInSubjectLines({
 	patterns,

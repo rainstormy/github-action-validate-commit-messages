@@ -1,5 +1,5 @@
-import { gitUserDtoSchema } from "+adapters/gha/api/dtos/GitUserDto"
 import { type InferOutput, array, nullable, object, string } from "valibot"
+import { gitUserDtoSchema } from "#adapters/gha/api/dtos/GitUserDto"
 
 /**
  * @see https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-commits-on-a-pull-request
