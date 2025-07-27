@@ -7,6 +7,8 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.1.9] - 2025-07-27
 ### Changed
 - Reduce the size of the bundle downloaded by the GitHub Actions runner:
   - Drop [GitHub Actions Toolkit](https://github.com/actions/toolkit) as a
@@ -121,7 +123,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New rule: `no-trailing-punctuation-in-subject-lines`.
 - New rule: `no-unexpected-whitespace`.
 
-[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.8...HEAD
+[unreleased]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.9...HEAD
+[1.1.9]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.8...v1.1.9
 [1.1.8]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.7...v1.1.8
 [1.1.7]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.6...v1.1.7
 [1.1.6]: https://github.com/rainstormy/github-action-validate-commit-messages/compare/v1.1.5...v1.1.6
