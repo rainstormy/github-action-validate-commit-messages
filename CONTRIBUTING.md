@@ -17,6 +17,3 @@
 | `test`      | Runs the entire unit test suite once with [Vitest](https://vitest.dev).                                                 |
 | `vitest`    | Starts the [Vitest UI](https://vitest.dev/guide/ui.html#vitest-ui) test explorer for continuous unit testing.           |
 | `yolo`      | Disables the Git hooks with [Lefthook](https://lefthook.dev).                                                           |
-
-## Developer Guides
-- [Manage third-party dependencies](docs/guides/manage-third-party-dependencies.md)
