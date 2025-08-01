@@ -62,11 +62,11 @@ run = "lefthook uninstall"
 description = "Disables the Git hooks with Lefthook."
 
 [env]
-# Load environment variables from the `.env` and `.env.local` files:
+# Load environment variables from the `.env` and `.env.local` files.
 # https://mise.jdx.dev/environments/#env-file
 _.file = [".env", ".env.local"]
 
-# Make CLI programs in `node_modules` available directly in the command line:
+# Make CLI programs in `node_modules` available directly in the command line.
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
 

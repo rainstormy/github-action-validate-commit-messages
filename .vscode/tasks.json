@@ -63,7 +63,7 @@
 			"presentation": {
 				"clear": true,
 				"panel": "shared",
-				"reveal": "silent"
+				"reveal": "always"
 			},
 			"problemMatcher": []
 		},
@@ -96,7 +96,7 @@
 			"presentation": {
 				"clear": true,
 				"panel": "shared",
-				"reveal": "silent"
+				"reveal": "always"
 			},
 			"problemMatcher": []
 		}
