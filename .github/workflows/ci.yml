@@ -9,6 +9,11 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - ready_for_review
+      - reopened
+      - synchronize
 
 # Cancel all previous runs of this workflow that are still in progress on the same branch.
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
@@ -21,12 +26,14 @@ concurrency:
 jobs:
   integrity:
     name: Integrity
+    if: github.event.pull_request.draft == false
     permissions:
       contents: read # Allow the job to call `.github/workflows/integrity.yml`.
     uses: ./.github/workflows/integrity.yml
 
   commit-messages:
     name: Commit messages
+    if: github.event.pull_request.draft == false
     needs: integrity
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
