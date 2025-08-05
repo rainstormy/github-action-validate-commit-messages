@@ -35,17 +35,17 @@ runs:
         path: ${{ inputs.cache-path }}
       #
     - name: Install dependencies
-      if: (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+      if: success() && (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1)
       uses: ./.github/actions/dependencies
       #
     - name: Run the task with mise-en-place
-      if: (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+      if: success() && (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1)
       # language=sh
       run: mise run ${{ inputs.task }}
       shell: bash
       #
     - name: Ensure that the cache path exists and has content
-      if: (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
+      if: success() && (steps.skip-if-already-done.outputs.cache-hit != 'true' || github.run_attempt > 1)
       # language=sh
       run: |
         if [ ! -d ${{ inputs.cache-path }} ]; then
