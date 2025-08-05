@@ -35,6 +35,17 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "check_gha",
+			"command": "mise run check_gha",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "check_ts",
 			"command": "mise run check_ts",
 			"type": "shell",
@@ -63,7 +74,7 @@
 			"presentation": {
 				"clear": true,
 				"panel": "shared",
-				"reveal": "silent"
+				"reveal": "always"
 			},
 			"problemMatcher": []
 		},
@@ -96,7 +107,7 @@
 			"presentation": {
 				"clear": true,
 				"panel": "shared",
-				"reveal": "silent"
+				"reveal": "always"
 			},
 			"problemMatcher": []
 		}

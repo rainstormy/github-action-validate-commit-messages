@@ -15,20 +15,27 @@ description = "Generates production-grade build artefacts with Vite."
 alias = ["b"]
 
 [tasks.check]
-depends = ["check_fmt", "check_ts"]
-description = "Runs `check_fmt` and `check_ts`."
+depends = ["check_fmt", "check_gha", "check_ts"]
+description = "Runs `check_fmt`, `check_gha`, and `check_ts`."
 alias = ["c"]
 
 [tasks.check_fmt]
 # language=sh
 run = "biome check --error-on-warnings"
 description = "Verifies the code style of the source code with Biome."
+alias = ["cf"]
+
+[tasks.check_gha]
+# language=sh
+run = "actionlint"
+description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
+alias = ["cg", "gha"]
 
 [tasks.check_ts]
 # language=sh
 run = "tsc"
 description = "Verifies the type safety of the source code with TypeScript."
-alias = ["ts"]
+alias = ["ct", "ts"]
 
 [tasks.fmt]
 # language=sh
@@ -62,11 +69,11 @@ run = "lefthook uninstall"
 description = "Disables the Git hooks with Lefthook."
 
 [env]
-# Load environment variables from the `.env` and `.env.local` files:
+# Load environment variables from the `.env` and `.env.local` files.
 # https://mise.jdx.dev/environments/#env-file
 _.file = [".env", ".env.local"]
 
-# Make CLI programs in `node_modules` available directly in the command line:
+# Make CLI programs in `node_modules` available directly in the command line.
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
 
