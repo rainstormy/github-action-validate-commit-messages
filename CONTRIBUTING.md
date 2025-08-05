@@ -9,8 +9,9 @@
 | Name        | Description                                                                                                             |
 |-------------|-------------------------------------------------------------------------------------------------------------------------|
 | `build`     | Generates production-grade build artefacts with [Vite](https://vite.dev).                                               |
-| `check`     | Runs `check_fmt` and `check_ts`.                                                                                        |
+| `check`     | Runs `check_fmt`, `check_gha`, and `check_ts`.                                                                          |
 | `check_fmt` | Verifies the code style of the source code with [Biome](https://biomejs.dev).                                           |
+| `check_gha` | Verifies the syntax of the GitHub Actions workflows with [actionlint](https://github.com/rhysd/actionlint).             |
 | `check_ts`  | Verifies the type safety of the source code with [TypeScript](https://www.typescriptlang.org).                          |
 | `fmt`       | Reformats the source code with [Biome](https://biomejs.dev).                                                            |
 | `init`      | Installs Node.js packages with [pnpm](https://pnpm.io) and enables the Git hooks with [Lefthook](https://lefthook.dev). |

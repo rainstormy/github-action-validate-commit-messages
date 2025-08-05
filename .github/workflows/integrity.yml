@@ -63,21 +63,13 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         #
-      - name: Verify the code style (Biome) and the type safety (TypeScript)
-        id: verify-the-code-style
+      - name: Verify the code style (Biome), the workflow syntax (actionlint), and the type safety (TypeScript)
         uses: ./.github/actions/task
         with:
-          # Include `.github/**/*.yml` in the cache key to ensure that actionlint runs in the following step if a workflow has changed.
           cache-key: check:${{ hashFiles('.github/**/*.yml', '**/*.json', 'src/**/*', '*.config.*', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
           cache-path: node_modules/.cache/typescript/
           # language=sh
           task: check
-        #
-      - name: Verify the GitHub Actions workflows (actionlint)
-        if: (steps.verify-the-code-style.outputs.cache-hit != 'true' || github.run_attempt > 1) && !cancelled()
-        # language=sh
-        run: actionlint
-        shell: bash
 
   test:
     name: Unit tests
