@@ -6,6 +6,13 @@ description: Installs tools and Node.js packages.
 runs:
   using: composite
   steps:
+    - name: Enable verbose output in mise-en-place
+      if: github.run_attempt > 1
+      # https://mise.jdx.dev/configuration/settings.html#verbose
+      # language=sh
+      run: echo "MISE_VERBOSE=1" >> "$GITHUB_ENV"
+      shell: bash
+      #
     - name: Install Node.js and pnpm with mise-en-place
       uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
       with:
