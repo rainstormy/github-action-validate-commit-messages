@@ -9,7 +9,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["src/adapters/*.ts", "src/main.ts"],
+			"include": ["src/adapters/*.ts", "src/main.ts", "src/main-*.ts"],
 			"linter": {
 				"rules": {
 					"correctness": {
@@ -19,7 +19,7 @@
 			}
 		},
 		{
-			"include": ["src/main.ts"],
+			"include": ["src/main.ts", "src/main-*.ts"],
 			"linter": {
 				"rules": {
 					"style": {

@@ -13,6 +13,39 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "build_cli",
+			"command": "mise run build_cli",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "build_gha",
+			"command": "mise run build_gha",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "build_legacy_v1",
+			"command": "mise run build_legacy_v1",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "check",
 			"command": "mise run check",
 			"type": "shell",
