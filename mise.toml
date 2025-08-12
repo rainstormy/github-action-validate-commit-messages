@@ -9,10 +9,28 @@ node = "20.19.2"
 pnpm = "10.12.4"
 
 [tasks.build]
-# language=sh
-run = "vite build --ssr src/main.ts"
-description = "Generates production-grade build artefacts with Vite."
+depends = ["build_cli", "build_gha", "build_legacy_v1"]
+description = "Runs `build_cli`, `build_gha`, and `build_legacy_v1`."
 alias = ["b"]
+
+[tasks.build_cli]
+# language=sh
+run = "vite build --ssr src/main-cli.ts --outDir dist/cli/"
+env = { VITE_TARGET_PLATFORM = "cli" }
+description = "Generates production-grade build artefacts of the v2 command-line entrypoint with Vite."
+alias = ["bc"]
+
+[tasks.build_gha]
+# language=sh
+run = "vite build --ssr src/main-gha.ts --outDir dist/gha/"
+env = { VITE_TARGET_PLATFORM = "gha" }
+description = "Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with Vite."
+alias = ["bg"]
+
+[tasks.build_legacy_v1]
+# language=sh
+run = "vite build --ssr src/main.ts --outDir dist/"
+description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]
 depends = ["check_fmt", "check_gha", "check_ts"]
@@ -29,13 +47,13 @@ alias = ["cf"]
 # language=sh
 run = "actionlint"
 description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
-alias = ["cg", "gha"]
+alias = ["cg"]
 
 [tasks.check_ts]
 # language=sh
 run = "tsc"
 description = "Verifies the type safety of the source code with TypeScript."
-alias = ["ct", "ts"]
+alias = ["ct"]
 
 [tasks.fmt]
 # language=sh

@@ -11,7 +11,10 @@
 		"libReplacement": false,
 		"paths": {
 			"#adapters/*": ["src/adapters/*"],
+			"#commits/*": ["src/commits/*"],
+			"#programs/*": ["src/programs/*"],
 			"#rules/*": ["src/rules/*"],
+			"#types/*": ["src/types/*"],
 			"#utilities/*": ["src/utilities/*"],
 			"#validator/*": ["src/validator/*"]
 		},

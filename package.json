@@ -1,8 +1,9 @@
 {
 	"$schema": "https://json.schemastore.org/package.json",
-	"name": "@rainstormy/github-action-validate-commit-messages",
-	"version": "1.1.9",
+	"name": "@rainstormy/comet",
+	"version": "2.0.0-alpha.0",
 	"license": "MIT",
+	"author": "Steffen Diswal",
 	"private": true,
 	"type": "module",
 	"devDependencies": {
