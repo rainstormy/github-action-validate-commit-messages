@@ -42,7 +42,7 @@ jobs:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         #
       - name: Build the project (Vite)
         uses: ./.github/actions/task
@@ -61,7 +61,7 @@ jobs:
       contents: read # Allow the job to check out the repository.
     steps:
       - name: Check out the repository
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         #
       - name: Verify the code style (Biome), the workflow syntax (actionlint), and the type safety (TypeScript)
         uses: ./.github/actions/task
@@ -81,7 +81,7 @@ jobs:
       TEST_REPORT_PATH: node_modules/.cache/vitest/report.xml
     steps:
       - name: Check out the repository
-        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         #
       - name: Verify the unit tests (Vitest)
         id: verify-the-unit-tests
