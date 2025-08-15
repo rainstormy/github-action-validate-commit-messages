@@ -1,16 +1,16 @@
 import process from "node:process"
-import { getGithubActionsConfiguration } from "#legacy-v1/adapters/gha/GithubActionsConfiguration"
 import { printGithubActionsError } from "#legacy-v1/adapters/gha/GithubActionsLogger"
-import { getGithubActionsRawCommits } from "#legacy-v1/adapters/gha/GithubActionsRawCommits"
-import { instructiveReporter } from "#legacy-v1/validator/Reporter"
-import { validatorFrom } from "#legacy-v1/validator/Validator"
+import { legacyV1GetGithubActionsConfiguration } from "#legacy-v1/adapters/gha/LegacyV1GithubActionsConfiguration"
+import { legacyV1GetGithubActionsRawCommits } from "#legacy-v1/adapters/gha/LegacyV1GithubActionsRawCommits"
+import { legacyV1InstructiveReporter } from "#legacy-v1/validator/LegacyV1Reporter"
+import { legacyV1ValidatorFrom } from "#legacy-v1/validator/LegacyV1Validator"
 
 try {
-	const configuration = getGithubActionsConfiguration()
-	const reporter = instructiveReporter(configuration)
-	const validate = validatorFrom(configuration)
+	const configuration = legacyV1GetGithubActionsConfiguration()
+	const reporter = legacyV1InstructiveReporter(configuration)
+	const validate = legacyV1ValidatorFrom(configuration)
 
-	const rawCommits = await getGithubActionsRawCommits()
+	const rawCommits = await legacyV1GetGithubActionsRawCommits()
 	const reportedErrors = validate(rawCommits, reporter)
 
 	if (reportedErrors.length > 0) {

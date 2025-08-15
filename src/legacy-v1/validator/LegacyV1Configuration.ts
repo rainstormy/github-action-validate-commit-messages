@@ -1,0 +1,39 @@
+import { type InferInput, type InferOutput, object } from "valibot"
+import { legacyV1AcknowledgedAuthorEmailAddressesConfigurationSchema } from "#legacy-v1/rules/AcknowledgedAuthorEmailAddresses/LegacyV1AcknowledgedAuthorEmailAddressesConfiguration"
+import { legacyV1AcknowledgedAuthorNamesConfigurationSchema } from "#legacy-v1/rules/AcknowledgedAuthorNames/LegacyV1AcknowledgedAuthorNamesConfiguration"
+import { legacyV1AcknowledgedCommitterEmailAddressesConfigurationSchema } from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddressesConfiguration"
+import { legacyV1AcknowledgedCommitterNamesConfigurationSchema } from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNamesConfiguration"
+import { legacyV1ImperativeSubjectLinesConfigurationSchema } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLinesConfiguration"
+import { legacyV1IssueReferencesInSubjectLinesConfigurationSchema } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration"
+import { legacyV1RuleKeysConfigurationSchema } from "#legacy-v1/rules/LegacyV1RulesConfiguration"
+import { legacyV1LimitLengthOfBodyLinesConfigurationSchema } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLinesConfiguration"
+import { legacyV1LimitLengthOfSubjectLinesConfigurationSchema } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLinesConfiguration"
+import { legacyV1NoSquashCommitsConfigurationSchema } from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommitsConfiguration"
+import { legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema } from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration"
+
+export const legacyV1ConfigurationSchema = object({
+	ruleKeys: legacyV1RuleKeysConfigurationSchema,
+	acknowledgedAuthorEmailAddresses:
+		legacyV1AcknowledgedAuthorEmailAddressesConfigurationSchema,
+	acknowledgedAuthorNames: legacyV1AcknowledgedAuthorNamesConfigurationSchema,
+	acknowledgedCommitterEmailAddresses:
+		legacyV1AcknowledgedCommitterEmailAddressesConfigurationSchema,
+	acknowledgedCommitterNames:
+		legacyV1AcknowledgedCommitterNamesConfigurationSchema,
+	imperativeSubjectLines: legacyV1ImperativeSubjectLinesConfigurationSchema,
+	issueReferencesInSubjectLines:
+		legacyV1IssueReferencesInSubjectLinesConfigurationSchema,
+	limitLengthOfBodyLines: legacyV1LimitLengthOfBodyLinesConfigurationSchema,
+	limitLengthOfSubjectLines:
+		legacyV1LimitLengthOfSubjectLinesConfigurationSchema,
+	noSquashCommits: legacyV1NoSquashCommitsConfigurationSchema,
+	noTrailingPunctuationInSubjectLines:
+		legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema,
+})
+
+export type LegacyV1RawConfiguration = InferInput<
+	typeof legacyV1ConfigurationSchema
+>
+export type LegacyV1Configuration = InferOutput<
+	typeof legacyV1ConfigurationSchema
+>
