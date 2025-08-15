@@ -10,13 +10,11 @@
 		"incremental": true,
 		"libReplacement": false,
 		"paths": {
-			"#adapters/*": ["src/adapters/*"],
 			"#commits/*": ["src/commits/*"],
+			"#legacy-v1/*": ["src/legacy-v1/*"],
 			"#programs/*": ["src/programs/*"],
-			"#rules/*": ["src/rules/*"],
 			"#types/*": ["src/types/*"],
-			"#utilities/*": ["src/utilities/*"],
-			"#validator/*": ["src/validator/*"]
+			"#utilities/*": ["src/utilities/*"]
 		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo"
 	},
