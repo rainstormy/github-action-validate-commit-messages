@@ -29,7 +29,7 @@ alias = ["bg"]
 
 [tasks.build_legacy_v1]
 # language=sh
-run = "vite build --ssr src/main.ts --outDir dist/"
+run = "vite build --ssr src/legacy-v1-main.ts --outDir dist/"
 description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]

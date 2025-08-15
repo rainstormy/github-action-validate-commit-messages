@@ -1,0 +1,31 @@
+import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
+
+export function legacyV1NoCoAuthors(): LegacyV1Rule {
+	return {
+		key: "no-co-authors",
+		refine: (commit): LegacyV1Commit => {
+			const { bodyLines, coAuthors: currentCoAuthors } = commit
+
+			const coAuthors = bodyLines
+				.filter((line) => line.toLowerCase().startsWith("co-authored-by:"))
+				.map((line) => line.slice("co-authored-by:".length).trim())
+
+			if (coAuthors.length === 0) {
+				return commit
+			}
+
+			const refinedBodyLines = bodyLines.filter(
+				(line) => !line.toLowerCase().startsWith("co-authored-by:"),
+			)
+
+			return {
+				...commit,
+				bodyLines: refinedBodyLines,
+				coAuthors: [...currentCoAuthors, ...coAuthors],
+			}
+		},
+		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+			refinedCommits.filter(({ coAuthors }) => coAuthors.length > 0),
+	}
+}
