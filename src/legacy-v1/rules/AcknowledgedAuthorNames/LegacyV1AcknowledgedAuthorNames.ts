@@ -1,6 +1,6 @@
 import type { LegacyV1AcknowledgedAuthorNamesConfiguration } from "#legacy-v1/rules/AcknowledgedAuthorNames/LegacyV1AcknowledgedAuthorNamesConfiguration"
 import type {
-	LegacyV1Commit,
+	LegacyV1Commits,
 	LegacyV1UserIdentity,
 } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
@@ -19,7 +19,7 @@ export function legacyV1AcknowledgedAuthorNames({
 
 	return {
 		key: "acknowledged-author-names",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits.filter(({ author }) => !hasAcknowledgedAuthorName(author)),
 	}
 }

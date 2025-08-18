@@ -1,6 +1,6 @@
 import type { LegacyV1AcknowledgedCommitterNamesConfiguration } from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNamesConfiguration"
 import type {
-	LegacyV1Commit,
+	LegacyV1Commits,
 	LegacyV1UserIdentity,
 } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
@@ -21,7 +21,7 @@ export function legacyV1AcknowledgedCommitterNames({
 
 	return {
 		key: "acknowledged-committer-names",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits.filter(
 				({ committer }) => !hasAcknowledgedCommitterName(committer),
 			),

@@ -2,6 +2,7 @@ import { join as joinPath, resolve as resolvePath } from "node:path"
 import { env } from "node:process"
 import { fileURLToPath } from "node:url"
 import type { ViteUserConfig as ViteConfig } from "vitest/config"
+import packageJson from "./package.json" with { type: "json" }
 
 export default {
 	build: {
@@ -21,7 +22,7 @@ export default {
 		alias: [{ find: /^#(.+)/, replacement: path("src/$1") }],
 	},
 	ssr: {
-		noExternal: ["valibot"],
+		noExternal: Object.keys(packageJson.dependencies), // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
 	},
 	test: {
 		include: ["src/**/*.tests.ts"],

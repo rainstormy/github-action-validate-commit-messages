@@ -21,6 +21,8 @@ export type LegacyV1Commit = {
 	readonly coAuthors: ReadonlyArray<string>
 }
 
+export type LegacyV1Commits = ReadonlyArray<LegacyV1Commit>
+
 export type LegacyV1ParentCommit = {
 	readonly sha: string
 }

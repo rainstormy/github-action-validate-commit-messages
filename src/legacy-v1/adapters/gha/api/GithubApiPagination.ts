@@ -19,6 +19,7 @@ export async function paginatedGithubFetch(
 	let nextResource: string | null = resource
 
 	while (nextResource !== null) {
+		// biome-ignore lint/performance/noAwaitInLoops: The paginated API makes each loop iteration depend on the result of the previous iteration.
 		const response: Response = await fetch(nextResource, {
 			headers: {
 				Accept: "application/vnd.github+json",

@@ -1,4 +1,4 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1CommitRefiner } from "#legacy-v1/rules/LegacyV1CommitRefiner"
 
 export const legacyV1RuleKeys = [
@@ -29,6 +29,6 @@ export type LegacyV1Rule = {
 	readonly key: LegacyV1RuleKey
 	readonly refine?: LegacyV1CommitRefiner
 	readonly getInvalidCommits: (
-		refinedCommits: ReadonlyArray<LegacyV1Commit>,
-	) => ReadonlyArray<LegacyV1Commit>
+		refinedCommits: LegacyV1Commits,
+	) => LegacyV1Commits
 }

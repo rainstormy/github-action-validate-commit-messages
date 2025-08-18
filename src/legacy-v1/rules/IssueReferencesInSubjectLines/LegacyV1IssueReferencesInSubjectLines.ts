@@ -2,7 +2,10 @@ import type {
 	LegacyV1IssueReferencePosition,
 	LegacyV1IssueReferencesInSubjectLinesConfiguration,
 } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration"
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type {
+	LegacyV1Commit,
+	LegacyV1Commits,
+} from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 
 export function legacyV1IssueReferencesInSubjectLines({
@@ -19,7 +22,7 @@ export function legacyV1IssueReferencesInSubjectLines({
 
 	return {
 		key: "issue-references-in-subject-lines",
-		refine: (commit): LegacyV1Commit => {
+		refine: (commit: LegacyV1Commit): LegacyV1Commit => {
 			const { issueReferences, refinedSubjectLine: currentSubjectLine } = commit
 			const regexMatch = currentSubjectLine.match(combinedRegex)
 
@@ -55,7 +58,7 @@ export function legacyV1IssueReferencesInSubjectLines({
 
 			return commit
 		},
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.filter(({ parents }) => parents.length === 1)
 				.filter(

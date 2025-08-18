@@ -1,16 +1,26 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
 	"extends": [
-		"@rainstormy/presets-biome/base",
-		"@rainstormy/presets-biome/vitest"
+		"@rainstormy/presets-biome/2.2",
+		"@rainstormy/presets-biome/2.2/vitest"
 	],
 	"files": {
-		"ignore": ["dist/", "node_modules/"]
+		"includes": [".github/**", ".vscode/**", "src/**", "*.{json,jsonc,ts}"]
 	},
 	"overrides": [
 		{
-			"include": [
-				"src/legacy-v1/adapters/*.ts",
+			"includes": ["**/*Dto.ts", "**/*Configuration.ts"],
+			"linter": {
+				"rules": {
+					"nursery": {
+						"useExplicitType": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": [
+				"src/legacy-v1/adapters/**/*.ts",
 				"src/legacy-v1-main.ts",
 				"src/main-*.ts"
 			],
@@ -23,7 +33,7 @@
 			}
 		},
 		{
-			"include": ["src/legacy-v1-main.ts", "src/main-*.ts"],
+			"includes": ["src/legacy-v1-main.ts", "src/main-*.ts"],
 			"linter": {
 				"rules": {
 					"style": {

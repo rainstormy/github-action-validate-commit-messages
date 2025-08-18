@@ -1,4 +1,7 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type {
+	LegacyV1Commit,
+	LegacyV1Commits,
+} from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 import type { LegacyV1NoSquashCommitsConfiguration } from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommitsConfiguration"
 
@@ -11,7 +14,7 @@ export function legacyV1NoSquashCommits({
 
 	return {
 		key: "no-squash-commits",
-		refine: (commit): LegacyV1Commit => {
+		refine: (commit: LegacyV1Commit): LegacyV1Commit => {
 			const { squashPrefixes, refinedSubjectLine: currentSubjectLine } = commit
 			const matchingPrefix = findFirstMatchingPrefix(currentSubjectLine)
 
@@ -27,7 +30,7 @@ export function legacyV1NoSquashCommits({
 					.trim(),
 			}
 		},
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits.filter(({ squashPrefixes }) => squashPrefixes.length > 0),
 	}
 }

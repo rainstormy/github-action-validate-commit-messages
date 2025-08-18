@@ -1,4 +1,4 @@
-import { type InferOutput, array } from "valibot"
+import { array, type InferOutput } from "valibot"
 import { githubCommitDtoSchema } from "#legacy-v1/adapters/gha/api/dtos/GithubCommitDto"
 
 /**

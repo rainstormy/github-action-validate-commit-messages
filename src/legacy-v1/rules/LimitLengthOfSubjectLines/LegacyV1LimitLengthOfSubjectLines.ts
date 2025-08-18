@@ -1,4 +1,4 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 import type { LegacyV1LimitLengthOfSubjectLinesConfiguration } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLinesConfiguration"
 import { countOccurrences } from "#legacy-v1/utilities/IterableUtilities"
@@ -8,7 +8,7 @@ export function legacyV1LimitLengthOfSubjectLines({
 }: LegacyV1LimitLengthOfSubjectLinesConfiguration): LegacyV1Rule {
 	return {
 		key: "limit-length-of-subject-lines",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.filter(
 					({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "),

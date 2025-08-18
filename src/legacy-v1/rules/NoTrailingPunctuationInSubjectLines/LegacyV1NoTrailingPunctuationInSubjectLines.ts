@@ -1,4 +1,4 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 import type { LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration } from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration"
 
@@ -16,7 +16,7 @@ export function legacyV1NoTrailingPunctuationInSubjectLines({
 
 	return {
 		key: "no-trailing-punctuation-in-subject-lines",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.filter(({ refinedSubjectLine }) => refinedSubjectLine.length > 0)
 				.filter(({ refinedSubjectLine }) =>

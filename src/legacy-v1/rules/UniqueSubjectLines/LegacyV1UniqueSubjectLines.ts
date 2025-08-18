@@ -1,10 +1,10 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 
 export function legacyV1UniqueSubjectLines(): LegacyV1Rule {
 	return {
 		key: "unique-subject-lines",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> => {
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits => {
 			const commitsToConsider = refinedCommits
 				.filter(
 					({ refinedSubjectLine }) =>

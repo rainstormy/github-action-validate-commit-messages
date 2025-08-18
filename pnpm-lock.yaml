@@ -7,13 +7,17 @@ settings:
 importers:
 
   .:
+    dependencies:
+      valibot:
+        specifier: 1.1.0
+        version: 1.1.0(typescript@5.8.3)
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.0
         version: 2.2.0
       '@rainstormy/presets-biome':
-        specifier: 1.0.0
-        version: 1.0.0(@biomejs/biome@2.2.0)
+        specifier: 2.0.0
+        version: 2.0.0(@biomejs/biome@2.2.0)
       '@rainstormy/presets-typescript':
         specifier: 1.1.0
         version: 1.1.0(typescript@5.8.3)
@@ -32,9 +36,6 @@ importers:
       typescript:
         specifier: 5.8.3
         version: 5.8.3
-      valibot:
-        specifier: 1.1.0
-        version: 1.1.0(typescript@5.8.3)
       vite:
         specifier: 6.3.5
         version: 6.3.5(@types/node@20.19.10)
@@ -253,11 +254,10 @@ packages:
   '@polka/url@1.0.0-next.25':
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
 
-  '@rainstormy/presets-biome@1.0.0':
-    resolution: {integrity: sha512-LbOMEIgB9fYNgbORYu+EmPp7vt4irCxqSFV4PR7jTbDDx+n0DS2SzDhatK/JOVnVKxL9kqgXi5bW3qrcERQoaA==}
-    engines: {node: '>=20.0.0'}
+  '@rainstormy/presets-biome@2.0.0':
+    resolution: {integrity: sha512-FDKuf7e+p8Gr+1GDNUKLGvPj4+/EqwXqIMoySXJDvutvFhIvDUGVaFLRNUSd6FkHh5drLPqY1dtaltVcsQ0rww==}
     peerDependencies:
-      '@biomejs/biome': '>=1.9.0 <1.10.0'
+      '@biomejs/biome': '>=2.2.0 <2.3.0'
 
   '@rainstormy/presets-typescript@1.1.0':
     resolution: {integrity: sha512-zoIdH83jWKt79OOI6ej9c4uM27AlVAQFlINECOUM5X7Li8Q9utkW3GFenKIUBLLDeUdn21etecZQaEIYO/QrCQ==}
@@ -832,7 +832,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.25': {}
 
-  '@rainstormy/presets-biome@1.0.0(@biomejs/biome@2.2.0)':
+  '@rainstormy/presets-biome@2.0.0(@biomejs/biome@2.2.0)':
     dependencies:
       '@biomejs/biome': 2.2.0
 
