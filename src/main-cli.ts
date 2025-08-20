@@ -2,6 +2,7 @@
 
 import process, { argv } from "node:process"
 import { commandLineProgram } from "#programs/CommandLineProgram"
+import type { ExitCode } from "#types/ExitCode"
 
-const exitCode = await commandLineProgram(argv.slice(2))
+const exitCode: ExitCode = await commandLineProgram(argv.slice(2))
 process.exit(exitCode)

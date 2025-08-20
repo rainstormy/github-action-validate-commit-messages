@@ -1,5 +1,5 @@
 import type { LegacyV1IssueReferencePosition } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration"
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type {
 	LegacyV1RuleKey,
 	LegacyV1RuleKeys,
@@ -12,11 +12,13 @@ export type LegacyV1Reporter<Result> = (
 ) => ReadonlyArray<Result>
 
 export type LegacyV1InvalidCommitsByViolatedRuleKey = Readonly<
-	Partial<Record<LegacyV1RuleKey, ReadonlyArray<LegacyV1Commit>>>
+	Partial<Record<LegacyV1RuleKey, LegacyV1Commits>>
 >
 
 export function legacyV1ViolatedRulesReporter(): LegacyV1Reporter<LegacyV1RuleKey> {
-	return (invalidCommitsByViolatedRuleKeys): LegacyV1RuleKeys =>
+	return (
+		invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,
+	): LegacyV1RuleKeys =>
 		Object.keys(invalidCommitsByViolatedRuleKeys) as LegacyV1RuleKeys
 }
 
@@ -84,7 +86,7 @@ export function legacyV1InstructiveReporter(
 
 	function getInstruction(
 		ruleKey: LegacyV1RuleKey,
-		invalidCommits: ReadonlyArray<LegacyV1Commit>,
+		invalidCommits: LegacyV1Commits,
 	): string {
 		const commitCount = invalidCommits.length
 
@@ -250,7 +252,9 @@ ${indent}Avoiding unnecessary commits will help you preserve the traceability of
 		}
 	}
 
-	return (invalidCommitsByViolatedRuleKeys): ReadonlyArray<string> =>
+	return (
+		invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,
+	): ReadonlyArray<string> =>
 		Object.entries(invalidCommitsByViolatedRuleKeys).map(
 			([violatedRuleKey, invalidCommits]) =>
 				getInstruction(violatedRuleKey as LegacyV1RuleKey, invalidCommits),

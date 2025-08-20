@@ -1,4 +1,4 @@
-import { type InferOutput, array, nullable, object, string } from "valibot"
+import { array, type InferOutput, nullable, object, string } from "valibot"
 import { gitUserDtoSchema } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto"
 
 /**

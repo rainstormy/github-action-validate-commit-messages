@@ -1,4 +1,4 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 import type { LegacyV1LimitLengthOfBodyLinesConfiguration } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLinesConfiguration"
 import { countOccurrences } from "#legacy-v1/utilities/IterableUtilities"
@@ -8,7 +8,7 @@ export function legacyV1LimitLengthOfBodyLines({
 }: LegacyV1LimitLengthOfBodyLinesConfiguration): LegacyV1Rule {
 	return {
 		key: "limit-length-of-body-lines",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.filter(
 					({ parents, bodyLines }) =>

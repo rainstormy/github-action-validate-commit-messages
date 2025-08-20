@@ -1,7 +1,7 @@
 import {
+	check,
 	type InferInput,
 	type InferOutput,
-	check,
 	object,
 	pipe,
 	string,

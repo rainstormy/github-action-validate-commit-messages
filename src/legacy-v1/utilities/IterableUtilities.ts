@@ -58,7 +58,7 @@ export function getDuplicateValues(
 export function requireNoUnknownValues<Value extends string>(
 	knownValues: ReadonlyArray<Value>,
 ): (values: ReadonlyArray<string>) => values is ReadonlyArray<Value> {
-	return (values): values is ReadonlyArray<Value> =>
+	return (values: ReadonlyArray<string>): values is ReadonlyArray<Value> =>
 		values.every((value) => isKnownValue(value, knownValues))
 }
 

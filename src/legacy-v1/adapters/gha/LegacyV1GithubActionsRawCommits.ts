@@ -1,7 +1,7 @@
 import { ValiError } from "valibot"
-import { fetchGithubPullRequestCommitsDto } from "#legacy-v1/adapters/gha/api/FetchGithubPullRequestCommitsDto"
-import type { GitUserDto } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto"
 import type { GithubCommitDto } from "#legacy-v1/adapters/gha/api/dtos/GithubCommitDto"
+import type { GitUserDto } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto"
+import { fetchGithubPullRequestCommitsDto } from "#legacy-v1/adapters/gha/api/FetchGithubPullRequestCommitsDto"
 import { fetchGithubActionsPullRequestEventDto } from "#legacy-v1/adapters/gha/event/FetchGithubActionsPullRequestEventDto"
 import type {
 	LegacyV1RawCommit,

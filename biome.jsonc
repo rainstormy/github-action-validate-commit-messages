@@ -1,0 +1,51 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+	"extends": [
+		"@rainstormy/presets-biome/2.2",
+		"@rainstormy/presets-biome/2.2/vitest"
+	],
+	"files": {
+		"includes": [".github/**", ".vscode/**", "src/**", "*.{json,jsonc,ts}"]
+	},
+	"overrides": [
+		{
+			"includes": ["**/*Dto.ts", "**/*Configuration.ts"],
+			"linter": {
+				"rules": {
+					"nursery": {
+						"useExplicitType": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": [
+				"src/legacy-v1/adapters/**/*.ts",
+				"src/legacy-v1-main.ts",
+				"src/main-*.ts"
+			],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noNodejsModules": "off"
+					}
+				}
+			}
+		},
+		{
+			"includes": ["src/legacy-v1-main.ts", "src/main-*.ts"],
+			"linter": {
+				"rules": {
+					"style": {
+						"useFilenamingConvention": {
+							"level": "error",
+							"options": {
+								"filenameCases": ["kebab-case"]
+							}
+						}
+					}
+				}
+			}
+		}
+	]
+}

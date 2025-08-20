@@ -1,6 +1,6 @@
 import type { LegacyV1AcknowledgedAuthorEmailAddressesConfiguration } from "#legacy-v1/rules/AcknowledgedAuthorEmailAddresses/LegacyV1AcknowledgedAuthorEmailAddressesConfiguration"
 import type {
-	LegacyV1Commit,
+	LegacyV1Commits,
 	LegacyV1UserIdentity,
 } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
@@ -24,7 +24,7 @@ export function legacyV1AcknowledgedAuthorEmailAddresses({
 
 	return {
 		key: "acknowledged-author-email-addresses",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits.filter(
 				({ author }) => !hasAcknowledgedAuthorEmailAddress(author),
 			),

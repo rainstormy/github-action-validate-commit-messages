@@ -1,5 +1,5 @@
 import type { LegacyV1ImperativeSubjectLinesConfiguration } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLinesConfiguration"
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
 import { indexOfFromBinarySearch } from "#legacy-v1/utilities/IterableUtilities"
 
@@ -4451,7 +4451,7 @@ export function legacyV1ImperativeSubjectLines({
 
 	return {
 		key: "imperative-subject-lines",
-		getInvalidCommits: (refinedCommits): ReadonlyArray<LegacyV1Commit> =>
+		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.map((commit) => {
 					const { refinedSubjectLine } = commit

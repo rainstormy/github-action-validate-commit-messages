@@ -544,7 +544,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 function validateViolatedRulesFrom(
 	configuration: LegacyV1Configuration,
 ): (rawCommits: LegacyV1RawCommits) => LegacyV1RuleKeys {
-	return (rawCommits): LegacyV1RuleKeys =>
+	return (rawCommits: LegacyV1RawCommits): LegacyV1RuleKeys =>
 		legacyV1ValidatorFrom(configuration)(
 			rawCommits,
 			legacyV1ViolatedRulesReporter(),

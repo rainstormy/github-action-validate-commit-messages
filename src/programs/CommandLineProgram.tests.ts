@@ -1,9 +1,7 @@
 import { injectLoggerMock } from "#utilities/logging/Logger.mocks"
 import { injectPackageJsonVersionMock } from "#utilities/packagejson/PackageJsonVersion.mocks"
-
 import { beforeEach, describe, expect, it } from "vitest"
-import { commandLineProgram } from "#programs/CommandLineProgram"
-import { getHelpText } from "#programs/CommandLineProgram"
+import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode"
 import type { SemanticVersionString } from "#types/SemanticVersionString"
 
@@ -19,9 +17,7 @@ describe.each`
 	${["-h", "-v"]}
 `(
 	"when the args of $args contain the '--help'/'-h' flag",
-	(props: {
-		args: Array<string>
-	}) => {
+	(props: { args: Array<string> }) => {
 		let exitCode: ExitCode
 
 		beforeEach(async () => {
@@ -60,10 +56,7 @@ describe.each`
 	${["--config", "configs/comet.jsonc", "--version"]} | ${"3.2.0-beta.1"}
 `(
 	"when the args of $args contain the '--version'/'-v' flag and the tool version in the 'package.json' file is $version",
-	(props: {
-		args: Array<string>
-		version: SemanticVersionString
-	}) => {
+	(props: { args: Array<string>; version: SemanticVersionString }) => {
 		let exitCode: ExitCode
 
 		beforeEach(async () => {
