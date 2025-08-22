@@ -28,7 +28,8 @@ jobs:
     name: Integrity
     if: github.event.pull_request.draft == false
     permissions:
-      contents: read # Allow the job to call `.github/workflows/integrity.yml`.
+      # To call reusable workflows.
+      contents: read
     uses: ./.github/workflows/integrity.yml
 
   commit-messages:
@@ -38,7 +39,8 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
     permissions:
-      pull-requests: read # Allow the job to read the commit messages in the pull request.
+      # To review the commit messages in the pull request.
+      pull-requests: read
     steps:
       - name: Check out the repository
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
