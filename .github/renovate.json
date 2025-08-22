@@ -9,5 +9,11 @@
 		"before 7am every weekday",
 		"every weekend"
 	],
-	"timezone": "Europe/Copenhagen"
+	"timezone": "Europe/Copenhagen",
+	"packageRules": [
+		{
+			"matchPackageNames": ["@typescript/native-preview"],
+			"enabled": false
+		}
+	]
 }
