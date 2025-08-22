@@ -34,7 +34,8 @@ jobs:
   integrity:
     name: Integrity
     permissions:
-      contents: read # Allow the job to call `.github/workflows/integrity.yml`.
+      # To call reusable workflows.
+      contents: read
     uses: ./.github/workflows/integrity.yml
 
   release-branch:
