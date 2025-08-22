@@ -10,6 +10,7 @@
 		"libReplacement": false,
 		"paths": {
 			"#commits/*": ["./src/commits/*"],
+			"#configurations/*": ["./src/configurations/*"],
 			"#legacy-v1/*": ["./src/legacy-v1/*"],
 			"#programs/*": ["./src/programs/*"],
 			"#types/*": ["./src/types/*"],
