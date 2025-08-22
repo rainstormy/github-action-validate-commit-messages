@@ -5,16 +5,16 @@
 		"@rainstormy/presets-typescript/es2023"
 	],
 	"compilerOptions": {
-		"baseUrl": "./",
 		"erasableSyntaxOnly": true,
 		"incremental": true,
 		"libReplacement": false,
 		"paths": {
-			"#commits/*": ["src/commits/*"],
-			"#legacy-v1/*": ["src/legacy-v1/*"],
-			"#programs/*": ["src/programs/*"],
-			"#types/*": ["src/types/*"],
-			"#utilities/*": ["src/utilities/*"]
+			"#commits/*": ["./src/commits/*"],
+			"#configurations/*": ["./src/configurations/*"],
+			"#legacy-v1/*": ["./src/legacy-v1/*"],
+			"#programs/*": ["./src/programs/*"],
+			"#types/*": ["./src/types/*"],
+			"#utilities/*": ["./src/utilities/*"]
 		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo"
 	},
