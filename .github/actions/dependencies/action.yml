@@ -16,7 +16,7 @@ runs:
     - name: Install Node.js and pnpm with mise-en-place
       uses: jdx/mise-action@ca0c5fc9c8a8386dae8ba5d37608a083a307991c # v3.1.0
       with:
-        cache_key_prefix: 'mise:'
+        cache_key: 'mise:{{file_hash}}'
       #
     - name: Retrieve the path to the pnpm store
       # Store the path in an environment variable, as step output is lost in nested composite actions.
