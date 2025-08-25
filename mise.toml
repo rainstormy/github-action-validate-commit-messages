@@ -33,21 +33,21 @@ run = "vite build --ssr src/legacy-v1-main.ts --outDir dist/"
 description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]
-depends = ["check_fmt", "check_gha", "check_ts"]
-description = "Runs `check_fmt`, `check_gha`, and `check_ts`."
+depends = ["check_actions", "check_fmt", "check_ts"]
+description = "Runs `check_actions`, `check_fmt`, and `check_ts`."
 alias = ["c"]
+
+[tasks.check_actions]
+# language=sh
+run = "actionlint"
+description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
+alias = ["ca"]
 
 [tasks.check_fmt]
 # language=sh
 run = "biome check --error-on-warnings"
 description = "Verifies the code style of the source code with Biome."
 alias = ["cf"]
-
-[tasks.check_gha]
-# language=sh
-run = "actionlint"
-description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
-alias = ["cg"]
 
 [tasks.check_ts]
 # language=sh
