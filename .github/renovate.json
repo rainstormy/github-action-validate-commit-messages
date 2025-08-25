@@ -4,11 +4,7 @@
 		"github>rainstormy/presets-renovate",
 		"github>rainstormy/presets-renovate:skip-nodejs-major"
 	],
-	"schedule": [
-		"after 5pm every weekday",
-		"before 7am every weekday",
-		"every weekend"
-	],
+	"schedule": ["* 0-6,17-23 * * mon-fri", "* * * * sat,sun"],
 	"timezone": "Europe/Copenhagen",
 	"packageRules": [
 		{
