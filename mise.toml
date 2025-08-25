@@ -33,8 +33,8 @@ run = "vite build --ssr src/legacy-v1-main.ts --outDir dist/"
 description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]
-depends = ["check_actions", "check_fmt", "check_ts"]
-description = "Runs `check_actions`, `check_fmt`, and `check_ts`."
+depends = ["check_actions", "check_fmt", "check_renovate", "check_ts"]
+description = "Runs `check_actions`, `check_fmt`, `check_renovate`, and `check_ts`."
 alias = ["c"]
 
 [tasks.check_actions]
@@ -48,6 +48,14 @@ alias = ["ca"]
 run = "biome check --error-on-warnings"
 description = "Verifies the code style of the source code with Biome."
 alias = ["cf"]
+
+[tasks.check_renovate]
+# language=sh
+run = "pnpm dlx --package renovate renovate-config-validator"
+description = "Verifies the syntax of the Renovate configuration."
+sources = [".github/renovate.json"] # Only run this task if `renovate.json` has changed since the last run.
+outputs = { auto = true }
+alias = ["cr"]
 
 [tasks.check_ts]
 # language=sh

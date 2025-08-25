@@ -79,6 +79,17 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "check_renovate",
+			"command": "mise run check_renovate",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "check_ts",
 			"command": "mise run check_ts",
 			"type": "shell",
