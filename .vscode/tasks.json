@@ -57,6 +57,17 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "check_actions",
+			"command": "mise run check_actions",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "check_fmt",
 			"command": "mise run check_fmt",
 			"type": "shell",
@@ -68,8 +79,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check_gha",
-			"command": "mise run check_gha",
+			"label": "check_renovate",
+			"command": "mise run check_renovate",
 			"type": "shell",
 			"presentation": {
 				"clear": true,

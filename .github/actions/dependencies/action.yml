@@ -6,32 +6,52 @@ description: Installs tools and Node.js packages.
 runs:
   using: composite
   steps:
+    - name: Skip if already installed
+      id: skip-if-already-installed
+      # language=sh
+      run: echo "installed=$([ -f node_modules/.cache/.github-actions-dependencies ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      shell: bash
+      #
     - name: Enable verbose output in mise-en-place
-      if: github.run_attempt > 1
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true' && github.run_attempt > 1
       # https://mise.jdx.dev/configuration/settings.html#verbose
       # language=sh
       run: echo "MISE_VERBOSE=1" >> "$GITHUB_ENV"
       shell: bash
       #
     - name: Install Node.js and pnpm with mise-en-place
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
       uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
       with:
         cache_key: 'mise:{{file_hash}}'
       #
     - name: Retrieve the path to the pnpm store
-      # Store the path in an environment variable, as step output is lost in nested composite actions.
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
+      # Retain the path in an environment variable, as step output is lost in post-steps of nested composite actions.
+      # The post-step of `actions/cache` needs to know the path to be cached.
       # https://github.com/actions/runner/issues/2009
       # language=sh
       run: echo "PNPM_STORE_PATH="$(pnpm store path)"" >> "$GITHUB_ENV"
       shell: bash
       #
     - name: Restore the pnpm store from the workflow cache
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
       uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
       with:
         key: pnpm:${{ hashFiles('mise.toml', 'pnpm-lock.yaml') }}
+        restore-keys: 'pnpm:'
         path: ${{ env.PNPM_STORE_PATH }}
       #
     - name: Install Node.js packages with pnpm
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
       # language=sh
       run: pnpm install --frozen-lockfile --ignore-scripts
+      shell: bash
+      #
+    - name: Mark dependencies as installed on the current runner
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
+      # language=sh
+      run: |
+        mkdir --parents node_modules/.cache/
+        touch node_modules/.cache/.github-actions-dependencies
       shell: bash

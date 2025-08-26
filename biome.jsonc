@@ -5,7 +5,12 @@
 		"@rainstormy/presets-biome/2.2/vitest"
 	],
 	"files": {
-		"includes": [".github/**", ".vscode/**", "src/**", "*.{json,jsonc,ts}"]
+		"includes": [
+			".github/**/*",
+			".vscode/**/*",
+			"src/**/*",
+			"*.{json,jsonc,ts}"
+		]
 	},
 	"overrides": [
 		{
