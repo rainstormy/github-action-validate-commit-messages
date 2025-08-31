@@ -9,10 +9,10 @@
 		"incremental": true,
 		"libReplacement": false,
 		"paths": {
-			"#commits/*": ["./src/commits/*"],
-			"#configurations/*": ["./src/configurations/*"],
+			"#commits/*": ["./src/domains/commits/*"],
+			"#configurations/*": ["./src/domains/configurations/*"],
 			"#legacy-v1/*": ["./src/legacy-v1/*"],
-			"#programs/*": ["./src/programs/*"],
+			"#programs/*": ["./src/domains/programs/*"],
 			"#types/*": ["./src/types/*"],
 			"#utilities/*": ["./src/utilities/*"]
 		},

@@ -19,7 +19,13 @@ export default {
 	cacheDir: path("node_modules/.cache/"),
 	plugins: [],
 	resolve: {
-		alias: [{ find: /^#(.+)/, replacement: path("src/$1") }],
+		alias: [
+			{
+				find: /^#(legacy-v1|types|utilities)\/(.+)/,
+				replacement: path("src/$1/$2"),
+			},
+			{ find: /^#(.+)/, replacement: path("src/domains/$1") },
+		],
 	},
 	ssr: {
 		noExternal: Object.keys(packageJson.dependencies), // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
