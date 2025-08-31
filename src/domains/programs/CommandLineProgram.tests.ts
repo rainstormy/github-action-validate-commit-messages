@@ -1,12 +1,11 @@
 import { injectLoggerMock } from "#utilities/logging/Logger.mocks"
-import { injectPackageJsonVersionMock } from "#utilities/packagejson/PackageJsonVersion.mocks"
 import { beforeEach, describe, expect, it } from "vitest"
 import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode"
 import type { SemanticVersionString } from "#types/SemanticVersionString"
+import { injectCometVersion } from "#utilities/version/CometVersion.fixtures"
 
 const { printMessage } = injectLoggerMock()
-const { getPackageJsonVersion } = injectPackageJsonVersionMock()
 
 describe.each`
 	args
@@ -60,7 +59,7 @@ describe.each`
 		let exitCode: ExitCode
 
 		beforeEach(async () => {
-			getPackageJsonVersion.mockReturnValue(props.version)
+			injectCometVersion(props.version)
 			exitCode = await commandLineProgram(props.args)
 		})
 

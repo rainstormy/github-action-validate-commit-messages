@@ -1,7 +1,10 @@
 import type { Configuration } from "#configurations/Configuration"
+import type { CometPlatform } from "#utilities/platform/CometPlatform"
 
 export function getDefaultConfiguration(): Configuration {
-	switch (import.meta.env.VITE_TARGET_PLATFORM) {
+	const platform: CometPlatform = import.meta.env.COMET_PLATFORM
+
+	switch (platform) {
 		case "cli": {
 			return getDefaultCliConfiguration()
 		}

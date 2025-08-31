@@ -1,7 +1,7 @@
 import { program } from "#programs/Program"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode"
 import { printMessage } from "#utilities/logging/Logger"
-import { getPackageJsonVersion } from "#utilities/packagejson/PackageJsonVersion"
+import type { CometVersion } from "#utilities/version/CometVersion"
 
 export async function commandLineProgram(
 	args: Array<string>,
@@ -25,6 +25,8 @@ export function getHelpText(): string {
 }
 
 async function versionProgram(): Promise<ExitCode> {
-	printMessage(getPackageJsonVersion())
+	const version: CometVersion = import.meta.env.COMET_VERSION
+
+	printMessage(version)
 	return EXIT_CODE_SUCCESS
 }

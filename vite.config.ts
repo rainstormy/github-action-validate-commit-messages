@@ -6,17 +6,18 @@ import packageJson from "./package.json" with { type: "json" }
 
 export default {
 	build: {
-		emptyOutDir: Boolean(env.VITE_TARGET_PLATFORM), // Prevent the `build_legacy_v1` task from deleting the `dist/cli` and `dist/gha` directories.
+		emptyOutDir: Boolean(env.COMET_PLATFORM), // Prevent the `build_legacy_v1` task from deleting the `dist/cli` and `dist/gha` directories.
 		minify: "esbuild" as const,
 		reportCompressedSize: false,
 		rollupOptions: {
 			output: {
-				entryFileNames: env.VITE_TARGET_PLATFORM ? "index.js" : "main.mjs",
+				entryFileNames: env.COMET_PLATFORM ? "index.js" : "main.mjs",
 			},
 		},
 		target: "es2022",
 	},
 	cacheDir: path("node_modules/.cache/"),
+	envPrefix: "COMET_",
 	plugins: [],
 	resolve: {
 		alias: [
@@ -33,6 +34,8 @@ export default {
 	test: {
 		include: ["src/**/*.tests.ts"],
 		mockReset: true,
+		unstubEnvs: true,
+		unstubGlobals: true,
 	},
 } satisfies ViteConfig
 
