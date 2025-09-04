@@ -6,7 +6,7 @@ min_version = "2025.7.0"
 [tools]
 actionlint = "1.7.7"
 node = "20.19.4"
-pnpm = "10.14.0"
+pnpm = "10.15.1"
 
 [tasks.build]
 depends = ["build_cli", "build_gha", "build_legacy_v1"]
