@@ -16,14 +16,14 @@ alias = ["b"]
 [tasks.build_cli]
 # language=sh
 run = "vite build --ssr src/main-cli.ts --outDir dist/cli/"
-env = { VITE_TARGET_PLATFORM = "cli" }
+env = { COMET_PLATFORM = "cli" }
 description = "Generates production-grade build artefacts of the v2 command-line entrypoint with Vite."
 alias = ["bc"]
 
 [tasks.build_gha]
 # language=sh
 run = "vite build --ssr src/main-gha.ts --outDir dist/gha/"
-env = { VITE_TARGET_PLATFORM = "gha" }
+env = { COMET_PLATFORM = "gha" }
 description = "Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with Vite."
 alias = ["bg"]
 
@@ -65,7 +65,7 @@ alias = ["ct"]
 
 [tasks.fmt]
 # language=sh
-run = "biome check --write"
+run = "biome check --skip-parse-errors --write"
 description = "Reformats the source code with Biome."
 alias = ["f"]
 
@@ -102,6 +102,9 @@ _.file = [".env", ".env.local"]
 # Make CLI programs in `node_modules` available directly in the command line.
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
+
+# Grab the current Comet version from the `version` field in `package.json`.
+COMET_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }
 
 [settings]
 task_output = "quiet"

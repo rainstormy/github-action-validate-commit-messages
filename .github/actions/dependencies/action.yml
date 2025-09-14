@@ -31,7 +31,7 @@ runs:
       # The post-step of `actions/cache` needs to know the path to be cached.
       # https://github.com/actions/runner/issues/2009
       # language=sh
-      run: echo "PNPM_STORE_PATH="$(pnpm store path)"" >> "$GITHUB_ENV"
+      run: echo "PNPM_STORE_PATH=$(pnpm store path)" >> "$GITHUB_ENV"
       shell: bash
       #
     - name: Restore the pnpm store from the workflow cache

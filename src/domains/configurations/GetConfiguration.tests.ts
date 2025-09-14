@@ -1,14 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import type { Configuration } from "#configurations/Configuration"
 import { getConfiguration } from "#configurations/GetConfiguration"
-import { injectTargetPlatform } from "#utilities/targetplatform/TargetPlatform.fixtures"
+import { injectCometPlatform } from "#utilities/platform/CometPlatform.fixtures"
 
 describe("the default configuration in the command-line", () => {
-	injectTargetPlatform("cli")
-
 	let configuration: Configuration
 
 	beforeEach(async () => {
+		injectCometPlatform("cli")
 		configuration = await getConfiguration()
 	})
 
@@ -55,11 +54,10 @@ describe("the default configuration in the command-line", () => {
 })
 
 describe("the default configuration in GitHub Actions", () => {
-	injectTargetPlatform("gha")
-
 	let configuration: Configuration
 
 	beforeEach(async () => {
+		injectCometPlatform("gha")
 		configuration = await getConfiguration()
 	})
 

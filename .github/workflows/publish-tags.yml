@@ -10,6 +10,7 @@ on:
     branches:
       - main
     paths:
+      # Limit the workflow to pull requests that modify `package.json` to reduce clutter in the 'Workflow runs' overview in GitHub Actions.
       - package.json
     types:
       - closed

@@ -1,9 +1,13 @@
+/// <reference path="utilities/platform/CometPlatform" />
+/// <reference path="utilities/version/CometVersion" />
+
 interface ViteTypeOptions {
 	strictImportMetaEnv: unknown
 }
 
 interface ImportMetaEnv {
-	VITE_TARGET_PLATFORM: "cli" | "gha"
+	COMET_PLATFORM: CometPlatform
+	COMET_VERSION: CometVersion
 }
 
 interface ImportMeta {
