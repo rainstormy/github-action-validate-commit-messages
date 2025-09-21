@@ -1,4 +1,4 @@
-import { injectLoggerMock } from "#utilities/logging/Logger.mocks.ts"
+import { injectLogger } from "#utilities/logging/Logger.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import {
 	commandLineProgram,
@@ -8,7 +8,7 @@ import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { injectCometVersion } from "#utilities/version/CometVersion.fixtures.ts"
 
-const { printMessage } = injectLoggerMock()
+const { printMessage } = injectLogger()
 
 describe.each`
 	args

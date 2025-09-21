@@ -14,7 +14,7 @@
 	},
 	"overrides": [
 		{
-			"includes": ["**/*Dto.ts", "**/*Configuration.ts"],
+			"includes": ["**/*Dto.ts", "!**/Fetch*Dto.ts", "**/*Configuration.ts"],
 			"linter": {
 				"rules": {
 					"nursery": {

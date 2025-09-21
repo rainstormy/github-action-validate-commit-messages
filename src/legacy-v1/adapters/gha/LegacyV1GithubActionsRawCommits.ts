@@ -1,33 +1,22 @@
-import { ValiError } from "valibot"
 import type { GithubCommitDto } from "#legacy-v1/adapters/gha/api/dtos/GithubCommitDto.ts"
 import type { GitUserDto } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto.ts"
 import { fetchGithubPullRequestCommitsDto } from "#legacy-v1/adapters/gha/api/FetchGithubPullRequestCommitsDto.ts"
-import { fetchGithubActionsPullRequestEventDto } from "#legacy-v1/adapters/gha/event/FetchGithubActionsPullRequestEventDto.ts"
 import type {
 	LegacyV1RawCommit,
 	LegacyV1RawCommits,
 	LegacyV1UserIdentity,
 } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import { getGithubPullRequestNumber } from "#utilities/github/event/GetGithubPullRequestNumber.ts"
 
 export async function legacyV1GetGithubActionsRawCommits(): Promise<LegacyV1RawCommits> {
-	const pullRequestNumber = await getPullRequestNumber()
-	const dto = await fetchGithubPullRequestCommitsDto(pullRequestNumber)
+	const pullRequestNumber = await getGithubPullRequestNumber()
 
-	return dto.map(mapCommitDtoToRawCommit)
-}
-
-async function getPullRequestNumber(): Promise<number> {
-	try {
-		const dto = await fetchGithubActionsPullRequestEventDto()
-		return dto.pull_request.number
-	} catch (error) {
-		if (error instanceof ValiError) {
-			throw new Error("This action must run on a pull request", {
-				cause: error,
-			})
-		}
-		throw error
+	if (pullRequestNumber === null) {
+		throw new Error("This action must run on a pull request")
 	}
+
+	const dto = await fetchGithubPullRequestCommitsDto(pullRequestNumber)
+	return dto.map(mapCommitDtoToRawCommit)
 }
 
 function mapCommitDtoToRawCommit(dto: GithubCommitDto): LegacyV1RawCommit {
