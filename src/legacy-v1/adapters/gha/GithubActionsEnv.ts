@@ -37,18 +37,3 @@ export function githubActionsRepository(): string {
 
 	return repository
 }
-
-/**
- * @see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables
- */
-export function githubActionsEventPath(): string {
-	const path = process.env.GITHUB_EVENT_PATH
-
-	if (!path) {
-		throw new Error(
-			"Expected the environment variable 'GITHUB_EVENT_PATH' to be defined by the GitHub Actions runner",
-		)
-	}
-
-	return path
-}
