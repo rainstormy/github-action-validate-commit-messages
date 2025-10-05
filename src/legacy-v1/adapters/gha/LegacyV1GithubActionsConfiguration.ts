@@ -1,5 +1,5 @@
+import process from "node:process"
 import { parse } from "valibot"
-import { githubActionsStringInput } from "#legacy-v1/adapters/gha/GithubActionsEnv.ts"
 import {
 	type LegacyV1Configuration,
 	legacyV1ConfigurationSchema,
@@ -60,4 +60,8 @@ export function legacyV1GetGithubActionsConfiguration(): LegacyV1Configuration {
 			),
 		},
 	})
+}
+
+function githubActionsStringInput(key: string): string {
+	return process.env[`INPUT_${key.toUpperCase()}`] ?? ""
 }

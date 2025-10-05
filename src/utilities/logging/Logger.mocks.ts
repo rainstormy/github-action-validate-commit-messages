@@ -4,6 +4,7 @@ import type { ModuleMock } from "#types/ModuleMock.ts"
 const mock: LoggerMock = vi.hoisted(
 	(): LoggerMock => ({
 		printMessage: vi.fn(),
+		printError: vi.fn(),
 	}),
 )
 

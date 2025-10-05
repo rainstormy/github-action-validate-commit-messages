@@ -1,15 +1,9 @@
-import { injectJsonFile } from "#utilities/files/Files.mocks.ts"
+import {
+	injectEmptyGithubEventDto,
+	injectGithubPullRequestEventDto,
+} from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import type { JsonValue } from "#types/JsonValue.ts"
-import { injectGithubEnv } from "#utilities/github/env/GithubEnv.fixtures.ts"
-import type { GithubPullRequestEventDto } from "#utilities/github/event/dtos/GithubPullRequestEventDto.ts"
 import { getGithubPullRequestNumber } from "#utilities/github/event/GetGithubPullRequestNumber.ts"
-
-const eventPath = "/github/workflow/event.json"
-
-beforeEach(() => {
-	injectGithubEnv({ eventPath })
-})
 
 describe.each`
 	pullRequestNumber
@@ -18,34 +12,39 @@ describe.each`
 `(
 	"when the GitHub event payload is pull request #$pullRequestNumber",
 	async (props: { pullRequestNumber: number }) => {
-		let actualPullRequestNumber: number | null
+		const reference = `rainstormy/comet#${props.pullRequestNumber}` as const
 
-		beforeEach(async () => {
-			const eventPayload: GithubPullRequestEventDto = {
-				pull_request: { number: props.pullRequestNumber },
-			}
-
-			injectJsonFile(eventPath, eventPayload)
-			actualPullRequestNumber = await getGithubPullRequestNumber()
+		beforeEach(() => {
+			injectGithubPullRequestEventDto(reference)
 		})
 
 		it(`has a pull request number of ${props.pullRequestNumber}`, async () => {
+			const actualPullRequestNumber = await getGithubPullRequestNumber()
 			expect(actualPullRequestNumber).toBe(props.pullRequestNumber)
 		})
 	},
 )
 
-describe("when the GitHub event payload is not a pull request", async () => {
-	let actualPullRequestNumber: number | null
+describe("when the GitHub event payload is an illegal pull request #0", async () => {
+	const reference = "rainstormy/comet#0"
 
-	beforeEach(async () => {
-		const eventPayload: JsonValue = {}
-
-		injectJsonFile(eventPath, eventPayload)
-		actualPullRequestNumber = await getGithubPullRequestNumber()
+	beforeEach(() => {
+		injectGithubPullRequestEventDto(reference)
 	})
 
 	it("does not have a pull request number", async () => {
+		const actualPullRequestNumber = await getGithubPullRequestNumber()
+		expect(actualPullRequestNumber).toBeNull()
+	})
+})
+
+describe("when the GitHub event payload is not a pull request", async () => {
+	beforeEach(() => {
+		injectEmptyGithubEventDto()
+	})
+
+	it("does not have a pull request number", async () => {
+		const actualPullRequestNumber = await getGithubPullRequestNumber()
 		expect(actualPullRequestNumber).toBeNull()
 	})
 })

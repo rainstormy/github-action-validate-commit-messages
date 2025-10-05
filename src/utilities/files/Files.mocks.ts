@@ -33,3 +33,7 @@ beforeEach(() => {
 export function injectJsonFile(path: string, content: JsonValue): void {
 	contentsByPath.set(path, content)
 }
+
+export function injectNonexistingFile(path: string): void {
+	contentsByPath.delete(path)
+}

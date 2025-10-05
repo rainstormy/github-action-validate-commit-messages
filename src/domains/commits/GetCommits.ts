@@ -1,4 +1,5 @@
 import type { Commits } from "#commits/Commit.ts"
+import { getGithubPullRequestCommits } from "#commits/github/GetGithubPullRequestCommits.ts"
 import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 
 export async function getCommits(): Promise<Commits> {
@@ -6,10 +7,10 @@ export async function getCommits(): Promise<Commits> {
 
 	switch (platform) {
 		case "cli": {
-			return ["cli"]
+			return []
 		}
 		case "gha": {
-			return ["gha"]
+			return getGithubPullRequestCommits()
 		}
 	}
 }
