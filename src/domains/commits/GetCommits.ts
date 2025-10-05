@@ -1,4 +1,6 @@
 import type { Commits } from "#commits/Commit"
+import { getGithubPullRequestCommits } from "#commits/github/GetGithubPullRequestCommits"
+import { getGithubPullRequestNumber } from "#utilities/github/event/GetGithubPullRequestNumber"
 import type { CometPlatform } from "#utilities/platform/CometPlatform"
 
 export async function getCommits(): Promise<Commits> {
@@ -6,10 +8,16 @@ export async function getCommits(): Promise<Commits> {
 
 	switch (platform) {
 		case "cli": {
-			return ["cli"]
+			return []
 		}
 		case "gha": {
-			return ["gha"]
+			const pullRequestNumber = await getGithubPullRequestNumber()
+
+			if (pullRequestNumber === null) {
+				throw new Error("This action must run on a pull request")
+			}
+
+			return getGithubPullRequestCommits(pullRequestNumber)
 		}
 	}
 }

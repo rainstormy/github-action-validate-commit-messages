@@ -1,11 +1,9 @@
-import type { GithubCommitDto } from "#legacy-v1/adapters/gha/api/dtos/GithubCommitDto"
-import type { GitUserDto } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto"
-import { fetchGithubPullRequestCommitsDto } from "#legacy-v1/adapters/gha/api/FetchGithubPullRequestCommitsDto"
 import type {
 	LegacyV1RawCommit,
 	LegacyV1RawCommits,
-	LegacyV1UserIdentity,
 } from "#legacy-v1/rules/LegacyV1Commit"
+import type { GithubCommitDto } from "#utilities/github/api/dtos/GithubCommitDto"
+import { fetchGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos"
 import { getGithubPullRequestNumber } from "#utilities/github/event/GetGithubPullRequestNumber"
 
 export async function legacyV1GetGithubActionsRawCommits(): Promise<LegacyV1RawCommits> {
@@ -15,25 +13,22 @@ export async function legacyV1GetGithubActionsRawCommits(): Promise<LegacyV1RawC
 		throw new Error("This action must run on a pull request")
 	}
 
-	const dto = await fetchGithubPullRequestCommitsDto(pullRequestNumber)
+	const dto = await fetchGithubPullRequestCommitDtos(pullRequestNumber)
 	return dto.map(mapCommitDtoToRawCommit)
 }
 
 function mapCommitDtoToRawCommit(dto: GithubCommitDto): LegacyV1RawCommit {
 	return {
 		sha: dto.sha,
-		author: mapUserDtoToUserIdentity(dto.commit.author),
-		committer: mapUserDtoToUserIdentity(dto.commit.committer),
+		author: {
+			name: dto.commit.author?.name ?? null,
+			emailAddress: dto.commit.author?.email ?? null,
+		},
+		committer: {
+			name: dto.commit.committer?.name ?? null,
+			emailAddress: dto.commit.committer?.email ?? null,
+		},
 		parents: dto.parents.map((parent) => ({ sha: parent.sha })),
 		commitMessage: dto.commit.message,
-	}
-}
-
-function mapUserDtoToUserIdentity(
-	dto: GitUserDto | null,
-): LegacyV1UserIdentity {
-	return {
-		name: dto?.name ?? null,
-		emailAddress: dto?.email ?? null,
 	}
 }

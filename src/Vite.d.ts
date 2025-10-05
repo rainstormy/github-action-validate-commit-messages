@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 /// <reference path="utilities/platform/CometPlatform" />
 /// <reference path="utilities/version/CometVersion" />
 
