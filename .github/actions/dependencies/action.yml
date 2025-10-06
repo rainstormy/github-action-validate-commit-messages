@@ -21,7 +21,7 @@ runs:
       #
     - name: Install Node.js and pnpm with mise-en-place
       if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
-      uses: jdx/mise-action@5ac50f778e26fac95da98d50503682459e86d566 # v3.2.0
+      uses: jdx/mise-action@e3d7b8d67a7958d1207f6ed871e83b1ea780e7b0 # v3.3.1
       with:
         cache_key: 'mise:{{file_hash}}'
       #
