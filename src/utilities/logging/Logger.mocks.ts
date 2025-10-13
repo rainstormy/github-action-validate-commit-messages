@@ -1,5 +1,5 @@
 import { vi } from "vitest"
-import type { ModuleMock } from "#types/ModuleMock"
+import type { ModuleMock } from "#types/ModuleMock.ts"
 
 export type LoggerMock = ModuleMock<
 	typeof import("#utilities/logging/Logger") // CAUTION: `vi.mock()` below must always refer to the same path as here.

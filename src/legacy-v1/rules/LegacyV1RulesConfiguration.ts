@@ -2,15 +2,15 @@ import { check, pipe, string, transform } from "valibot"
 import {
 	type LegacyV1RuleKeys,
 	legacyV1RuleKeys,
-} from "#legacy-v1/rules/LegacyV1Rule"
+} from "#legacy-v1/rules/LegacyV1Rule.ts"
 import {
 	getDuplicateValues,
 	getUnknownValues,
 	requireAtLeastOneValue,
 	requireNoDuplicateValues,
 	requireNoUnknownValues,
-} from "#legacy-v1/utilities/IterableUtilities"
-import { splitByComma } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/utilities/IterableUtilities.ts"
+import { splitByComma } from "#legacy-v1/utilities/StringUtilities.ts"
 
 export const legacyV1RuleKeysConfigurationSchema = pipe(
 	string(),

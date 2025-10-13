@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { legacyV1SortedImperativeVerbs } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLines"
+import { legacyV1SortedImperativeVerbs } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLines.ts"
 
 describe("the list of imperative verbs", () => {
 	it("is sorted according to localeCompare", () => {

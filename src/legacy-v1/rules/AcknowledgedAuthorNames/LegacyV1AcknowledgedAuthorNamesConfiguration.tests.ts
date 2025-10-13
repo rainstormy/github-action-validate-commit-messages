@@ -4,8 +4,8 @@ import {
 	type LegacyV1AcknowledgedAuthorNamesConfiguration,
 	type LegacyV1RawAcknowledgedAuthorNamesConfiguration,
 	legacyV1AcknowledgedAuthorNamesConfigurationSchema,
-} from "#legacy-v1/rules/AcknowledgedAuthorNames/LegacyV1AcknowledgedAuthorNamesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/AcknowledgedAuthorNames/LegacyV1AcknowledgedAuthorNamesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawPatterns              | expectedPatterns

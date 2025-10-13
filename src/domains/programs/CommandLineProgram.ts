@@ -1,7 +1,7 @@
-import { program } from "#programs/Program"
-import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode"
-import { printMessage } from "#utilities/logging/Logger"
-import type { CometVersion } from "#utilities/version/CometVersion"
+import { program } from "#programs/Program.ts"
+import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
+import { printMessage } from "#utilities/logging/Logger.ts"
+import type { CometVersion } from "#utilities/version/CometVersion.ts"
 
 export async function commandLineProgram(
 	args: Array<string>,

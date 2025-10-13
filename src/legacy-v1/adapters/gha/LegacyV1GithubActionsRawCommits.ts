@@ -1,13 +1,13 @@
 import { ValiError } from "valibot"
-import type { GithubCommitDto } from "#legacy-v1/adapters/gha/api/dtos/GithubCommitDto"
-import type { GitUserDto } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto"
-import { fetchGithubPullRequestCommitsDto } from "#legacy-v1/adapters/gha/api/FetchGithubPullRequestCommitsDto"
-import { fetchGithubActionsPullRequestEventDto } from "#legacy-v1/adapters/gha/event/FetchGithubActionsPullRequestEventDto"
+import type { GithubCommitDto } from "#legacy-v1/adapters/gha/api/dtos/GithubCommitDto.ts"
+import type { GitUserDto } from "#legacy-v1/adapters/gha/api/dtos/GitUserDto.ts"
+import { fetchGithubPullRequestCommitsDto } from "#legacy-v1/adapters/gha/api/FetchGithubPullRequestCommitsDto.ts"
+import { fetchGithubActionsPullRequestEventDto } from "#legacy-v1/adapters/gha/event/FetchGithubActionsPullRequestEventDto.ts"
 import type {
 	LegacyV1RawCommit,
 	LegacyV1RawCommits,
 	LegacyV1UserIdentity,
-} from "#legacy-v1/rules/LegacyV1Commit"
+} from "#legacy-v1/rules/LegacyV1Commit.ts"
 
 export async function legacyV1GetGithubActionsRawCommits(): Promise<LegacyV1RawCommits> {
 	const pullRequestNumber = await getPullRequestNumber()

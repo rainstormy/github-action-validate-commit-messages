@@ -1,7 +1,7 @@
-import type { LegacyV1ImperativeSubjectLinesConfiguration } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLinesConfiguration"
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
-import { indexOfFromBinarySearch } from "#legacy-v1/utilities/IterableUtilities"
+import type { LegacyV1ImperativeSubjectLinesConfiguration } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLinesConfiguration.ts"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
+import { indexOfFromBinarySearch } from "#legacy-v1/utilities/IterableUtilities.ts"
 
 export const legacyV1SortedImperativeVerbs: ReadonlyArray<string> = [
 	"abandon",

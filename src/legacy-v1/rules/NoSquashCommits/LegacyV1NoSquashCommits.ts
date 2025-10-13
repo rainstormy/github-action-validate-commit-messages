@@ -1,9 +1,9 @@
 import type {
 	LegacyV1Commit,
 	LegacyV1Commits,
-} from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
-import type { LegacyV1NoSquashCommitsConfiguration } from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommitsConfiguration"
+} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
+import type { LegacyV1NoSquashCommitsConfiguration } from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommitsConfiguration.ts"
 
 export function legacyV1NoSquashCommits({
 	disallowedPrefixes,

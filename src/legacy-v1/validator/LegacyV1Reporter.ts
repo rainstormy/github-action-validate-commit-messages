@@ -1,11 +1,11 @@
-import type { LegacyV1IssueReferencePosition } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration"
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1IssueReferencePosition } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration.ts"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
 import type {
 	LegacyV1RuleKey,
 	LegacyV1RuleKeys,
-} from "#legacy-v1/rules/LegacyV1Rule"
-import { count, pluralise } from "#legacy-v1/utilities/StringUtilities"
-import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration"
+} from "#legacy-v1/rules/LegacyV1Rule.ts"
+import { count, pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
+import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration.ts"
 
 export type LegacyV1Reporter<Result> = (
 	invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,

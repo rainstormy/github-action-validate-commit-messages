@@ -1,5 +1,5 @@
-import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
+import type { LegacyV1Commit } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export type LegacyV1CommitRefiner = (commit: LegacyV1Commit) => LegacyV1Commit
 

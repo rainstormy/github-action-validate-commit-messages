@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest"
-import type { LegacyV1RawCommits } from "#legacy-v1/rules/LegacyV1Commit"
-import { legacyV1DummyCommit } from "#legacy-v1/rules/LegacyV1Commit.dummies"
-import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration"
+import { legacyV1DummyCommit } from "#legacy-v1/rules/LegacyV1Commit.dummies.ts"
+import type { LegacyV1RawCommits } from "#legacy-v1/rules/LegacyV1Commit.ts"
 import {
 	legacyV1DummyDefaultConfiguration,
 	legacyV1DummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	legacyV1DummyJiraStyleIssueReferencesConfiguration,
 	legacyV1DummyLegendaryCompanyEmailAddressesAndFourLetterNamesConfiguration,
 	legacyV1DummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration,
-} from "#legacy-v1/validator/LegacyV1Configuration.dummies"
-import { legacyV1InstructiveReporter } from "#legacy-v1/validator/LegacyV1Reporter"
-import { legacyV1ValidatorFrom } from "#legacy-v1/validator/LegacyV1Validator"
+} from "#legacy-v1/validator/LegacyV1Configuration.dummies.ts"
+import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration.ts"
+import { legacyV1InstructiveReporter } from "#legacy-v1/validator/LegacyV1Reporter.ts"
+import { legacyV1ValidatorFrom } from "#legacy-v1/validator/LegacyV1Validator.ts"
 
 describe("when the configuration has default settings", () => {
 	const validate = validateInstructionsFrom(legacyV1DummyDefaultConfiguration)

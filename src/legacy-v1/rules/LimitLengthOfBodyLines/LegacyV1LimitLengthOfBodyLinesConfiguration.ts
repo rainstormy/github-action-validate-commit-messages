@@ -7,7 +7,7 @@ import {
 	string,
 	transform,
 } from "valibot"
-import { requirePositiveInteger } from "#legacy-v1/utilities/StringUtilities"
+import { requirePositiveInteger } from "#legacy-v1/utilities/StringUtilities.ts"
 
 export const legacyV1LimitLengthOfBodyLinesConfigurationSchema = object({
 	maximumCharacters: pipe(

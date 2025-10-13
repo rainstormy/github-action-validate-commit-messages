@@ -1,9 +1,9 @@
 import process from "node:process"
-import { printGithubActionsError } from "#legacy-v1/adapters/gha/GithubActionsLogger"
-import { legacyV1GetGithubActionsConfiguration } from "#legacy-v1/adapters/gha/LegacyV1GithubActionsConfiguration"
-import { legacyV1GetGithubActionsRawCommits } from "#legacy-v1/adapters/gha/LegacyV1GithubActionsRawCommits"
-import { legacyV1InstructiveReporter } from "#legacy-v1/validator/LegacyV1Reporter"
-import { legacyV1ValidatorFrom } from "#legacy-v1/validator/LegacyV1Validator"
+import { printGithubActionsError } from "#legacy-v1/adapters/gha/GithubActionsLogger.ts"
+import { legacyV1GetGithubActionsConfiguration } from "#legacy-v1/adapters/gha/LegacyV1GithubActionsConfiguration.ts"
+import { legacyV1GetGithubActionsRawCommits } from "#legacy-v1/adapters/gha/LegacyV1GithubActionsRawCommits.ts"
+import { legacyV1InstructiveReporter } from "#legacy-v1/validator/LegacyV1Reporter.ts"
+import { legacyV1ValidatorFrom } from "#legacy-v1/validator/LegacyV1Validator.ts"
 
 try {
 	const configuration = legacyV1GetGithubActionsConfiguration()

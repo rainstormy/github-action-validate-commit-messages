@@ -3,8 +3,8 @@ import { parse } from "valibot"
 import {
 	type GithubActionsPullRequestEventDto,
 	githubActionsPullRequestEventDtoSchema,
-} from "#legacy-v1/adapters/gha/event/dtos/GithubActionsPullRequestEventDto"
-import { githubActionsEventPath } from "#legacy-v1/adapters/gha/GithubActionsEnv"
+} from "#legacy-v1/adapters/gha/event/dtos/GithubActionsPullRequestEventDto.ts"
+import { githubActionsEventPath } from "#legacy-v1/adapters/gha/GithubActionsEnv.ts"
 
 /**
  * @see https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables

@@ -4,7 +4,7 @@ import {
 	type LegacyV1LimitLengthOfSubjectLinesConfiguration,
 	type LegacyV1RawLimitLengthOfSubjectLinesConfiguration,
 	legacyV1LimitLengthOfSubjectLinesConfigurationSchema,
-} from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLinesConfiguration"
+} from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLinesConfiguration.ts"
 
 describe.each`
 	rawMaximumCharacters | expectedMaximumCharacters

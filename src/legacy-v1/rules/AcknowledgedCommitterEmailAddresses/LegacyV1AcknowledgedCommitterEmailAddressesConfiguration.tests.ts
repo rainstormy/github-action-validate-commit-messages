@@ -4,8 +4,8 @@ import {
 	type LegacyV1AcknowledgedCommitterEmailAddressesConfiguration,
 	type LegacyV1RawAcknowledgedCommitterEmailAddressesConfiguration,
 	legacyV1AcknowledgedCommitterEmailAddressesConfigurationSchema,
-} from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddressesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddressesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawPatterns                                                                 | expectedPatterns

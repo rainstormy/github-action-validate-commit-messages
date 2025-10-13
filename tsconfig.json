@@ -5,6 +5,7 @@
 		"@rainstormy/presets-typescript/es2023"
 	],
 	"compilerOptions": {
+		"allowImportingTsExtensions": true,
 		"erasableSyntaxOnly": true,
 		"incremental": true,
 		"libReplacement": false,

@@ -11,8 +11,8 @@ import {
 	getDuplicateValues,
 	requireAtLeastOneValue,
 	requireNoDuplicateValues,
-} from "#legacy-v1/utilities/IterableUtilities"
-import { splitByComma } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/utilities/IterableUtilities.ts"
+import { splitByComma } from "#legacy-v1/utilities/StringUtilities.ts"
 
 export const legacyV1NoSquashCommitsConfigurationSchema = object({
 	disallowedPrefixes: pipe(

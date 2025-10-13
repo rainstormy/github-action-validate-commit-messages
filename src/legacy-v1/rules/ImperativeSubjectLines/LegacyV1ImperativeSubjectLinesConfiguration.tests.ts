@@ -4,8 +4,8 @@ import {
 	type LegacyV1ImperativeSubjectLinesConfiguration,
 	type LegacyV1RawImperativeSubjectLinesConfiguration,
 	legacyV1ImperativeSubjectLinesConfigurationSchema,
-} from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLinesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLinesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawWords                 | expectedWords
