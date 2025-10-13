@@ -1,7 +1,7 @@
 # This workflow implements the second stage of the release pipeline.
 # It creates version tags in Git on the merge commit from the release branch.
 #
-# It is triggered by merging the pull request from `.github/workflows/release.yml`.
+# It is triggered automatically by merging the pull request from `.github/workflows/release.yml`.
 
 name: Publish / Tags
 
