@@ -1,35 +1,35 @@
-import { legacyV1AcknowledgedAuthorEmailAddresses } from "#legacy-v1/rules/AcknowledgedAuthorEmailAddresses/LegacyV1AcknowledgedAuthorEmailAddresses"
-import { legacyV1AcknowledgedAuthorNames } from "#legacy-v1/rules/AcknowledgedAuthorNames/LegacyV1AcknowledgedAuthorNames"
-import { legacyV1AcknowledgedCommitterEmailAddresses } from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddresses"
-import { legacyV1AcknowledgedCommitterNames } from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNames"
-import { legacyV1CapitalisedSubjectLines } from "#legacy-v1/rules/CapitalisedSubjectLines/LegacyV1CapitalisedSubjectLines"
-import { legacyV1EmptyLineAfterSubjectLines } from "#legacy-v1/rules/EmptyLineAfterSubjectLines/LegacyV1EmptyLineAfterSubjectLines"
-import { legacyV1ImperativeSubjectLines } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLines"
-import { legacyV1IssueReferencesInSubjectLines } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLines"
+import { legacyV1AcknowledgedAuthorEmailAddresses } from "#legacy-v1/rules/AcknowledgedAuthorEmailAddresses/LegacyV1AcknowledgedAuthorEmailAddresses.ts"
+import { legacyV1AcknowledgedAuthorNames } from "#legacy-v1/rules/AcknowledgedAuthorNames/LegacyV1AcknowledgedAuthorNames.ts"
+import { legacyV1AcknowledgedCommitterEmailAddresses } from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddresses.ts"
+import { legacyV1AcknowledgedCommitterNames } from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNames.ts"
+import { legacyV1CapitalisedSubjectLines } from "#legacy-v1/rules/CapitalisedSubjectLines/LegacyV1CapitalisedSubjectLines.ts"
+import { legacyV1EmptyLineAfterSubjectLines } from "#legacy-v1/rules/EmptyLineAfterSubjectLines/LegacyV1EmptyLineAfterSubjectLines.ts"
+import { legacyV1ImperativeSubjectLines } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLines.ts"
+import { legacyV1IssueReferencesInSubjectLines } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLines.ts"
 import {
 	type LegacyV1RawCommits,
 	legacyV1ParseCommit,
-} from "#legacy-v1/rules/LegacyV1Commit"
-import { legacyV1CommitRefinerFrom } from "#legacy-v1/rules/LegacyV1CommitRefiner"
+} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import { legacyV1CommitRefinerFrom } from "#legacy-v1/rules/LegacyV1CommitRefiner.ts"
 import type {
 	LegacyV1Rule,
 	LegacyV1RuleKey,
-} from "#legacy-v1/rules/LegacyV1Rule"
-import { legacyV1LimitLengthOfBodyLines } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLines"
-import { legacyV1LimitLengthOfSubjectLines } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLines"
-import { legacyV1MultiWordSubjectLines } from "#legacy-v1/rules/MultiWordSubjectLines/LegacyV1MultiWordSubjectLines"
-import { legacyV1NoCoAuthors } from "#legacy-v1/rules/NoCoAuthors/LegacyV1NoCoAuthors"
-import { legacyV1NoMergeCommits } from "#legacy-v1/rules/NoMergeCommits/LegacyV1NoMergeCommits"
-import { legacyV1NoRevertRevertCommits } from "#legacy-v1/rules/NoRevertRevertCommits/LegacyV1NoRevertRevertCommits"
-import { legacyV1NoSquashCommits } from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommits"
-import { legacyV1NoTrailingPunctuationInSubjectLines } from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLines"
-import { legacyV1NoUnexpectedWhitespace } from "#legacy-v1/rules/NoUnexpectedWhitespace/LegacyV1NoUnexpectedWhitespace"
-import { legacyV1UniqueSubjectLines } from "#legacy-v1/rules/UniqueSubjectLines/LegacyV1UniqueSubjectLines"
-import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration"
+} from "#legacy-v1/rules/LegacyV1Rule.ts"
+import { legacyV1LimitLengthOfBodyLines } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLines.ts"
+import { legacyV1LimitLengthOfSubjectLines } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLines.ts"
+import { legacyV1MultiWordSubjectLines } from "#legacy-v1/rules/MultiWordSubjectLines/LegacyV1MultiWordSubjectLines.ts"
+import { legacyV1NoCoAuthors } from "#legacy-v1/rules/NoCoAuthors/LegacyV1NoCoAuthors.ts"
+import { legacyV1NoMergeCommits } from "#legacy-v1/rules/NoMergeCommits/LegacyV1NoMergeCommits.ts"
+import { legacyV1NoRevertRevertCommits } from "#legacy-v1/rules/NoRevertRevertCommits/LegacyV1NoRevertRevertCommits.ts"
+import { legacyV1NoSquashCommits } from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommits.ts"
+import { legacyV1NoTrailingPunctuationInSubjectLines } from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLines.ts"
+import { legacyV1NoUnexpectedWhitespace } from "#legacy-v1/rules/NoUnexpectedWhitespace/LegacyV1NoUnexpectedWhitespace.ts"
+import { legacyV1UniqueSubjectLines } from "#legacy-v1/rules/UniqueSubjectLines/LegacyV1UniqueSubjectLines.ts"
+import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration.ts"
 import type {
 	LegacyV1InvalidCommitsByViolatedRuleKey,
 	LegacyV1Reporter,
-} from "#legacy-v1/validator/LegacyV1Reporter"
+} from "#legacy-v1/validator/LegacyV1Reporter.ts"
 
 export type LegacyV1Validator = <Result>(
 	rawCommits: LegacyV1RawCommits,

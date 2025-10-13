@@ -1,7 +1,7 @@
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
-import type { LegacyV1LimitLengthOfBodyLinesConfiguration } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLinesConfiguration"
-import { countOccurrences } from "#legacy-v1/utilities/IterableUtilities"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
+import type { LegacyV1LimitLengthOfBodyLinesConfiguration } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLinesConfiguration.ts"
+import { countOccurrences } from "#legacy-v1/utilities/IterableUtilities.ts"
 
 export function legacyV1LimitLengthOfBodyLines({
 	maximumCharacters,

@@ -4,8 +4,8 @@ import {
 	type LegacyV1IssueReferencesInSubjectLinesConfiguration,
 	type LegacyV1RawIssueReferencesInSubjectLinesConfiguration,
 	legacyV1IssueReferencesInSubjectLinesConfigurationSchema,
-} from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawPatterns                                                  | expectedPatterns

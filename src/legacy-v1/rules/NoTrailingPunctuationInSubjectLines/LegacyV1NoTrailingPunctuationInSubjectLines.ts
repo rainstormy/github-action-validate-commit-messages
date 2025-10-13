@@ -1,6 +1,6 @@
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
-import type { LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration } from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
+import type { LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration } from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration.ts"
 
 export function legacyV1NoTrailingPunctuationInSubjectLines({
 	whitelist: customWhitelist,

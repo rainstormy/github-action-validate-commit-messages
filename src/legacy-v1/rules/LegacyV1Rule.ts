@@ -1,5 +1,5 @@
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1CommitRefiner } from "#legacy-v1/rules/LegacyV1CommitRefiner"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1CommitRefiner } from "#legacy-v1/rules/LegacyV1CommitRefiner.ts"
 
 export const legacyV1RuleKeys = [
 	"acknowledged-author-email-addresses",

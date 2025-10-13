@@ -1,7 +1,7 @@
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
-import type { LegacyV1LimitLengthOfSubjectLinesConfiguration } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLinesConfiguration"
-import { countOccurrences } from "#legacy-v1/utilities/IterableUtilities"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
+import type { LegacyV1LimitLengthOfSubjectLinesConfiguration } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLinesConfiguration.ts"
+import { countOccurrences } from "#legacy-v1/utilities/IterableUtilities.ts"
 
 export function legacyV1LimitLengthOfSubjectLines({
 	maximumCharacters,

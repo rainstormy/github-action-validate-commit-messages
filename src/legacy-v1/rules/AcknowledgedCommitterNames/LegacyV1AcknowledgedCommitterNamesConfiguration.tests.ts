@@ -4,8 +4,8 @@ import {
 	type LegacyV1AcknowledgedCommitterNamesConfiguration,
 	type LegacyV1RawAcknowledgedCommitterNamesConfiguration,
 	legacyV1AcknowledgedCommitterNamesConfigurationSchema,
-} from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNamesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNamesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawPatterns              | expectedPatterns

@@ -1,9 +1,12 @@
-import { injectLoggerMock } from "#utilities/logging/Logger.mocks"
+import { injectLoggerMock } from "#utilities/logging/Logger.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram"
-import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode"
-import type { SemanticVersionString } from "#types/SemanticVersionString"
-import { injectCometVersion } from "#utilities/version/CometVersion.fixtures"
+import {
+	commandLineProgram,
+	getHelpText,
+} from "#programs/CommandLineProgram.ts"
+import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
+import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
+import { injectCometVersion } from "#utilities/version/CometVersion.fixtures.ts"
 
 const { printMessage } = injectLoggerMock()
 

@@ -1,4 +1,4 @@
-import type { LegacyV1RawCommit } from "#legacy-v1/rules/LegacyV1Commit"
+import type { LegacyV1RawCommit } from "#legacy-v1/rules/LegacyV1Commit.ts"
 
 type DummyCommitProps = {
 	readonly sha?: string

@@ -4,8 +4,8 @@ import {
 	type LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration,
 	type LegacyV1RawNoTrailingPunctuationInSubjectLinesConfiguration,
 	legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema,
-} from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/NoTrailingPunctuationInSubjectLines/LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawSuffixes              | expectedSuffixes

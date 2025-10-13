@@ -1,5 +1,5 @@
-import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
+import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export function legacyV1UniqueSubjectLines(): LegacyV1Rule {
 	return {

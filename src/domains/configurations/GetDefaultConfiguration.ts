@@ -1,5 +1,5 @@
-import type { Configuration } from "#configurations/Configuration"
-import type { CometPlatform } from "#utilities/platform/CometPlatform"
+import type { Configuration } from "#configurations/Configuration.ts"
+import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 
 export function getDefaultConfiguration(): Configuration {
 	const platform: CometPlatform = import.meta.env.COMET_PLATFORM

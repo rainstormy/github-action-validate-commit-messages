@@ -4,7 +4,7 @@ import {
 	type LegacyV1LimitLengthOfBodyLinesConfiguration,
 	type LegacyV1RawLimitLengthOfBodyLinesConfiguration,
 	legacyV1LimitLengthOfBodyLinesConfigurationSchema,
-} from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLinesConfiguration"
+} from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLinesConfiguration.ts"
 
 describe.each`
 	rawMaximumCharacters | expectedMaximumCharacters

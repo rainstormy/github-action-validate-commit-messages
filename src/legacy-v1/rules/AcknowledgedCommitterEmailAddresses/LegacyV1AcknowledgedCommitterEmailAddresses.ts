@@ -1,9 +1,9 @@
-import type { LegacyV1AcknowledgedCommitterEmailAddressesConfiguration } from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddressesConfiguration"
+import type { LegacyV1AcknowledgedCommitterEmailAddressesConfiguration } from "#legacy-v1/rules/AcknowledgedCommitterEmailAddresses/LegacyV1AcknowledgedCommitterEmailAddressesConfiguration.ts"
 import type {
 	LegacyV1Commits,
 	LegacyV1UserIdentity,
-} from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
+} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export function legacyV1AcknowledgedCommitterEmailAddresses({
 	patterns,

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest"
-import type { Configuration } from "#configurations/Configuration"
-import { getConfiguration } from "#configurations/GetConfiguration"
-import { injectCometPlatform } from "#utilities/platform/CometPlatform.fixtures"
+import type { Configuration } from "#configurations/Configuration.ts"
+import { getConfiguration } from "#configurations/GetConfiguration.ts"
+import { injectCometPlatform } from "#utilities/platform/CometPlatform.fixtures.ts"
 
 describe("the default configuration in the command-line", () => {
 	let configuration: Configuration

@@ -1,9 +1,9 @@
 import { parse } from "valibot"
-import { githubActionsStringInput } from "#legacy-v1/adapters/gha/GithubActionsEnv"
+import { githubActionsStringInput } from "#legacy-v1/adapters/gha/GithubActionsEnv.ts"
 import {
 	type LegacyV1Configuration,
 	legacyV1ConfigurationSchema,
-} from "#legacy-v1/validator/LegacyV1Configuration"
+} from "#legacy-v1/validator/LegacyV1Configuration.ts"
 
 export function legacyV1GetGithubActionsConfiguration(): LegacyV1Configuration {
 	return parse(legacyV1ConfigurationSchema, {

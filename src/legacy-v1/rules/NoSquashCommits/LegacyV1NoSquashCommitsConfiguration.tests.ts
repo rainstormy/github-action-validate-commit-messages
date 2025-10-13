@@ -4,8 +4,8 @@ import {
 	type LegacyV1NoSquashCommitsConfiguration,
 	type LegacyV1RawNoSquashCommitsConfiguration,
 	legacyV1NoSquashCommitsConfigurationSchema,
-} from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommitsConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/NoSquashCommits/LegacyV1NoSquashCommitsConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawPrefixes                       | expectedPrefixes

@@ -1,12 +1,12 @@
 import type {
 	LegacyV1IssueReferencePosition,
 	LegacyV1IssueReferencesInSubjectLinesConfiguration,
-} from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration"
+} from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration.ts"
 import type {
 	LegacyV1Commit,
 	LegacyV1Commits,
-} from "#legacy-v1/rules/LegacyV1Commit"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
+} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export function legacyV1IssueReferencesInSubjectLines({
 	patterns,

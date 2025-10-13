@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest"
-import { legacyV1ParseCommit } from "#legacy-v1/rules/LegacyV1Commit"
-import { legacyV1CommitRefinerFrom } from "#legacy-v1/rules/LegacyV1CommitRefiner"
-import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+import { legacyV1ParseCommit } from "#legacy-v1/rules/LegacyV1Commit.ts"
+import { legacyV1CommitRefinerFrom } from "#legacy-v1/rules/LegacyV1CommitRefiner.ts"
+import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 import {
 	legacyV1DummyDefaultConfiguration,
 	legacyV1DummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	legacyV1DummyGithubStyleIssueReferencesAsSuffixConfiguration,
 	legacyV1DummyJiraStyleIssueReferencesConfiguration,
-} from "#legacy-v1/validator/LegacyV1Configuration.dummies"
-import { legacyV1RulesFrom } from "#legacy-v1/validator/LegacyV1Validator"
+} from "#legacy-v1/validator/LegacyV1Configuration.dummies.ts"
+import { legacyV1RulesFrom } from "#legacy-v1/validator/LegacyV1Validator.ts"
 
 describe("when the configuration has default settings", () => {
 	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(

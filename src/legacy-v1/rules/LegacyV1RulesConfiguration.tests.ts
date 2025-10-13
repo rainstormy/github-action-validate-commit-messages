@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest"
 import {
 	legacyV1RuleKeys as allAvailableRuleKeys,
 	type LegacyV1RuleKeys,
-} from "#legacy-v1/rules/LegacyV1Rule"
-import { legacyV1RuleKeysConfigurationSchema } from "#legacy-v1/rules/LegacyV1RulesConfiguration"
-import { count } from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/rules/LegacyV1Rule.ts"
+import { legacyV1RuleKeysConfigurationSchema } from "#legacy-v1/rules/LegacyV1RulesConfiguration.ts"
+import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
 	rawRuleKeys                                                                                                                                 | expectedRuleKeys

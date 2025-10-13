@@ -13,11 +13,11 @@ import {
 	requireAtLeastOneValue,
 	requireNoDuplicateValues,
 	requireNoUnknownValues,
-} from "#legacy-v1/utilities/IterableUtilities"
+} from "#legacy-v1/utilities/IterableUtilities.ts"
 import {
 	splitByComma,
 	splitBySpace,
-} from "#legacy-v1/utilities/StringUtilities"
+} from "#legacy-v1/utilities/StringUtilities.ts"
 
 const issueReferencePositions = ["as-prefix", "as-suffix"] as const
 

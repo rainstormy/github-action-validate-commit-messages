@@ -1,4 +1,4 @@
-import { githubActionsStringInput } from "#legacy-v1/adapters/gha/GithubActionsEnv"
+import { githubActionsStringInput } from "#legacy-v1/adapters/gha/GithubActionsEnv.ts"
 
 const nextPageRegex = /<(?<resource>\S*)>; rel="next"/i
 

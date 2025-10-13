@@ -1,4 +1,4 @@
-import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration"
+import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration.ts"
 
 export const legacyV1DummyDefaultConfiguration: LegacyV1Configuration = {
 	ruleKeys: [
