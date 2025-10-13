@@ -2,7 +2,8 @@
 # It also produces build artefacts that can be published at a later stage.
 #
 # It is triggered by other workflows as needed.
-# It is also triggered by pushing commits to the `main` branch to prepare the workflow cache for future pull requests.
+#
+# It is triggered automatically by pushing commits to the `main` branch to prepare the workflow cache for future pull requests.
 # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#restrictions-for-accessing-a-cache
 #
 # It can be triggered manually on any branch via the GitHub CLI:
@@ -40,6 +41,7 @@ jobs:
     timeout-minutes: 2
     permissions:
       # To check out the repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
       contents: read
     steps:
       - name: Check out the repository
@@ -60,6 +62,7 @@ jobs:
     timeout-minutes: 2
     permissions:
       # To check out the repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
       contents: read
     steps:
       - name: Check out the repository
@@ -103,6 +106,7 @@ jobs:
     timeout-minutes: 2
     permissions:
       # To check out the repository.
+      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
       contents: read
     env:
       TEST_REPORT_PATH: node_modules/.cache/vitest/report.xml
