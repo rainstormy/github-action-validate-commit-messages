@@ -34,6 +34,7 @@ export default {
 	test: {
 		include: ["src/**/*.tests.ts"],
 		mockReset: true,
+		pool: "vmThreads",
 		unstubEnvs: true,
 		unstubGlobals: true,
 	},
