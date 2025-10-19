@@ -1,4 +1,6 @@
-import { injectLoggerMock } from "#utilities/logging/Logger.mocks.ts"
+import { injectLogger } from "#utilities/logging/Logger.mocks.ts"
+import { injectCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
+import { injectCometVersion } from "#utilities/version/CometVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import {
 	commandLineProgram,
@@ -6,9 +8,12 @@ import {
 } from "#programs/CommandLineProgram.ts"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
-import { injectCometVersion } from "#utilities/version/CometVersion.fixtures.ts"
 
-const { printMessage } = injectLoggerMock()
+beforeEach(() => {
+	injectCometPlatform("cli")
+})
+
+const { printMessage } = injectLogger()
 
 describe.each`
 	args
