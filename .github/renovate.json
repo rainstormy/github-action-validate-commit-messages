@@ -5,11 +5,5 @@
 		"github>rainstormy/presets-renovate:skip-nodejs-major"
 	],
 	"schedule": ["* 0-6,17-23 * * mon-fri", "* * * * sat,sun"],
-	"timezone": "Europe/Copenhagen",
-	"packageRules": [
-		{
-			"matchPackageNames": ["@typescript/native-preview"],
-			"enabled": false
-		}
-	]
+	"timezone": "Europe/Copenhagen"
 }
