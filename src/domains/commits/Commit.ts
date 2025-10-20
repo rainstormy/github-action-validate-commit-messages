@@ -3,15 +3,12 @@ import type { CommitSha } from "#types/CommitSha.ts"
 export type Commit = {
 	sha: CommitSha
 	parents: Array<CommitSha>
-	author: CommitUser
-	committer: CommitUser
+	authorName: string | null
+	authorEmail: string | null
+	committerName: string | null
+	committerEmail: string | null
 	subjectLine: string
 	bodyLines: Array<string>
 }
 
 export type Commits = Array<Commit>
-
-export type CommitUser = {
-	name: string | null
-	email: string | null
-}

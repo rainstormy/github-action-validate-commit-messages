@@ -242,12 +242,12 @@ describe.each`
 
 		it("preserves the author's name", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.name).toBe(props.authorName)
+			expect(commit?.authorName).toBe(props.authorName)
 		})
 
 		it("preserves the author's email address", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.email).toBe(props.authorEmail)
+			expect(commit?.authorEmail).toBe(props.authorEmail)
 		})
 	},
 )
@@ -270,7 +270,7 @@ describe.each`
 
 		it("preserves the author's name as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.name).toBe(props.authorName)
+			expect(commit?.authorName).toBe(props.authorName)
 		})
 	},
 )
@@ -293,7 +293,7 @@ describe.each`
 
 		it("preserves the author's name as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.name).toBe(props.authorName)
+			expect(commit?.authorName).toBe(props.authorName)
 		})
 	},
 )
@@ -309,12 +309,12 @@ describe("when the author's name is absent", () => {
 
 	it("omits the author's name", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.name).toBeNull()
+		expect(commit?.authorName).toBeNull()
 	})
 
 	it("preserves the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.email).toBe(author.email)
+		expect(commit?.authorEmail).toBe(author.email)
 	})
 })
 
@@ -336,7 +336,7 @@ describe.each`
 
 		it("preserves the author's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.email).toBe(props.authorEmail)
+			expect(commit?.authorEmail).toBe(props.authorEmail)
 		})
 	},
 )
@@ -359,7 +359,7 @@ describe.each`
 
 		it("preserves the author's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.email).toBe(props.authorEmail)
+			expect(commit?.authorEmail).toBe(props.authorEmail)
 		})
 	},
 )
@@ -375,12 +375,12 @@ describe("when the author's email address is absent", () => {
 
 	it("preserves the author's name", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.name).toBe(author.name)
+		expect(commit?.authorName).toBe(author.name)
 	})
 
 	it("omits the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.email).toBeNull()
+		expect(commit?.authorEmail).toBeNull()
 	})
 })
 
@@ -391,12 +391,12 @@ describe("when the author is absent", () => {
 
 	it("omits the author's name", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.name).toBeNull()
+		expect(commit?.authorName).toBeNull()
 	})
 
 	it("omits the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.email).toBeNull()
+		expect(commit?.authorEmail).toBeNull()
 	})
 })
 
@@ -419,12 +419,12 @@ describe.each`
 
 		it("preserves the committer's name", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.name).toBe(props.committerName)
+			expect(commit?.committerName).toBe(props.committerName)
 		})
 
 		it("preserves the committer's email address", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.email).toBe(props.committerEmail)
+			expect(commit?.committerEmail).toBe(props.committerEmail)
 		})
 	},
 )
@@ -440,12 +440,12 @@ describe("when the committer's name is absent", () => {
 
 	it("omits the committer's name", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.name).toBeNull()
+		expect(commit?.committerName).toBeNull()
 	})
 
 	it("preserves the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.email).toBe(committer.email)
+		expect(commit?.committerEmail).toBe(committer.email)
 	})
 })
 
@@ -467,7 +467,7 @@ describe.each`
 
 		it("preserves the committer's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.email).toBe(props.committerEmail)
+			expect(commit?.committerEmail).toBe(props.committerEmail)
 		})
 	},
 )
@@ -490,7 +490,7 @@ describe.each`
 
 		it("preserves the committer's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.email).toBe(props.committerEmail)
+			expect(commit?.committerEmail).toBe(props.committerEmail)
 		})
 	},
 )
@@ -506,12 +506,12 @@ describe("when the committer's email address is absent", () => {
 
 	it("preserves the committer's name", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.name).toBe(committer.name)
+		expect(commit?.committerName).toBe(committer.name)
 	})
 
 	it("omits the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.email).toBeNull()
+		expect(commit?.committerEmail).toBeNull()
 	})
 })
 
@@ -522,12 +522,12 @@ describe("when the committer is absent", () => {
 
 	it("omits the committer's name", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.name).toBeNull()
+		expect(commit?.committerName).toBeNull()
 	})
 
 	it("omits the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.email).toBeNull()
+		expect(commit?.committerEmail).toBeNull()
 	})
 })
 
