@@ -224,16 +224,16 @@ describe.each`
 })
 
 describe.each`
-	authorName         | authorEmailAddress
+	authorName         | authorEmail
 	${"tmnt"}          | ${"tmnt@fastforward.com"}
 	${"renovate[bot]"} | ${"29139614+renovate[bot]@users.noreply.github.com"}
 	${"Nimbus (Bot)"}  | ${"146315497+rainstormybot-nimbus@users.noreply.github.com"}
 `(
-	"when the author's name is $authorName and the author's email address is $authorEmailAddress",
-	(props: { authorName: string; authorEmailAddress: string }) => {
+	"when the author's name is $authorName and the author's email address is $authorEmail",
+	(props: { authorName: string; authorEmail: string }) => {
 		const author: GithubCommitUserDto = {
 			name: props.authorName,
-			email: props.authorEmailAddress,
+			email: props.authorEmail,
 		}
 
 		beforeEach(() => {
@@ -247,7 +247,7 @@ describe.each`
 
 		it("preserves the author's email address", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.emailAddress).toBe(props.authorEmailAddress)
+			expect(commit?.author.email).toBe(props.authorEmail)
 		})
 	},
 )
@@ -314,20 +314,20 @@ describe("when the author's name is absent", () => {
 
 	it("preserves the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.emailAddress).toBe(author.email)
+		expect(commit?.author.email).toBe(author.email)
 	})
 })
 
 describe.each`
-	authorEmailAddress
+	authorEmail
 	${"  tmnt@fastforward.com "}
 	${" 25199993+noname@users.noreply.github.com  "}
 `(
-	"when the author's email address of $authorEmailAddress has leading and trailing whitespace",
-	(props: { authorEmailAddress: string }) => {
+	"when the author's email address of $authorEmail has leading and trailing whitespace",
+	(props: { authorEmail: string }) => {
 		const author: GithubCommitUserDto = {
 			name: "Unnamed 1",
-			email: props.authorEmailAddress,
+			email: props.authorEmail,
 		}
 
 		beforeEach(() => {
@@ -336,21 +336,21 @@ describe.each`
 
 		it("preserves the author's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.emailAddress).toBe(props.authorEmailAddress)
+			expect(commit?.author.email).toBe(props.authorEmail)
 		})
 	},
 )
 
 describe.each`
-	authorEmailAddress
+	authorEmail
 	${""}
 	${"   "}
 `(
-	"when the author's email address of $authorEmailAddress is blank",
-	(props: { authorEmailAddress: string }) => {
+	"when the author's email address of $authorEmail is blank",
+	(props: { authorEmail: string }) => {
 		const author: GithubCommitUserDto = {
 			name: "Unnamed 1",
-			email: props.authorEmailAddress,
+			email: props.authorEmail,
 		}
 
 		beforeEach(() => {
@@ -359,7 +359,7 @@ describe.each`
 
 		it("preserves the author's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.author.emailAddress).toBe(props.authorEmailAddress)
+			expect(commit?.author.email).toBe(props.authorEmail)
 		})
 	},
 )
@@ -380,7 +380,7 @@ describe("when the author's email address is absent", () => {
 
 	it("omits the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.emailAddress).toBeNull()
+		expect(commit?.author.email).toBeNull()
 	})
 })
 
@@ -396,21 +396,21 @@ describe("when the author is absent", () => {
 
 	it("omits the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.author.emailAddress).toBeNull()
+		expect(commit?.author.email).toBeNull()
 	})
 })
 
 describe.each`
-	committerName                                   | committerEmailAddress
+	committerName                                   | committerEmail
 	${"baxter.stockman"}                            | ${"baxter.stockman@fastforward.com"}
 	${"GitHub"}                                     | ${"noreply@github.com"}
 	${"Michelangelo di Lodovico Buonarroti Simoni"} | ${"28317649+cowabunga@users.noreply.github.com"}
 `(
-	"when the committer name is $committerName and the committer email address is $committerEmailAddress",
-	(props: { committerName: string; committerEmailAddress: string }) => {
+	"when the committer name is $committerName and the committer email address is $committerEmail",
+	(props: { committerName: string; committerEmail: string }) => {
 		const committer: GithubCommitUserDto = {
 			name: props.committerName,
-			email: props.committerEmailAddress,
+			email: props.committerEmail,
 		}
 
 		beforeEach(() => {
@@ -424,7 +424,7 @@ describe.each`
 
 		it("preserves the committer's email address", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.emailAddress).toBe(props.committerEmailAddress)
+			expect(commit?.committer.email).toBe(props.committerEmail)
 		})
 	},
 )
@@ -445,20 +445,20 @@ describe("when the committer's name is absent", () => {
 
 	it("preserves the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.emailAddress).toBe(committer.email)
+		expect(commit?.committer.email).toBe(committer.email)
 	})
 })
 
 describe.each`
-	committerEmailAddress
+	committerEmail
 	${"  baxter.stockman@fastforward.com "}
 	${" 25199993+noname@users.noreply.github.com  "}
 `(
-	"when the committer's email address of $committerEmailAddress has leading and trailing whitespace",
-	(props: { committerEmailAddress: string }) => {
+	"when the committer's email address of $committerEmail has leading and trailing whitespace",
+	(props: { committerEmail: string }) => {
 		const committer: GithubCommitUserDto = {
 			name: "Unnamed 2",
-			email: props.committerEmailAddress,
+			email: props.committerEmail,
 		}
 
 		beforeEach(() => {
@@ -467,21 +467,21 @@ describe.each`
 
 		it("preserves the committer's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.emailAddress).toBe(props.committerEmailAddress)
+			expect(commit?.committer.email).toBe(props.committerEmail)
 		})
 	},
 )
 
 describe.each`
-	committerEmailAddress
+	committerEmail
 	${""}
 	${"   "}
 `(
-	"when the committer's email address of $committerEmailAddress is blank",
-	(props: { committerEmailAddress: string }) => {
+	"when the committer's email address of $committerEmail is blank",
+	(props: { committerEmail: string }) => {
 		const committer: GithubCommitUserDto = {
 			name: "Unnamed 2",
-			email: props.committerEmailAddress,
+			email: props.committerEmail,
 		}
 
 		beforeEach(() => {
@@ -490,7 +490,7 @@ describe.each`
 
 		it("preserves the committer's email address as is", async () => {
 			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.committer.emailAddress).toBe(props.committerEmailAddress)
+			expect(commit?.committer.email).toBe(props.committerEmail)
 		})
 	},
 )
@@ -511,7 +511,7 @@ describe("when the committer's email address is absent", () => {
 
 	it("omits the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.emailAddress).toBeNull()
+		expect(commit?.committer.email).toBeNull()
 	})
 })
 
@@ -527,7 +527,7 @@ describe("when the committer is absent", () => {
 
 	it("omits the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.committer.emailAddress).toBeNull()
+		expect(commit?.committer.email).toBeNull()
 	})
 })
 

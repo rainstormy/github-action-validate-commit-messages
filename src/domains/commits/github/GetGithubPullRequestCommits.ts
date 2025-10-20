@@ -33,6 +33,6 @@ function mapDtoToCommit(dto: GithubCommitDto): Commit {
 function mapDtoToCommitUser(userDto: GithubCommitUserDto | null): CommitUser {
 	return {
 		name: userDto?.name ?? null,
-		emailAddress: userDto?.email ?? null,
+		email: userDto?.email ?? null,
 	}
 }

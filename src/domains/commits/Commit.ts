@@ -13,5 +13,5 @@ export type Commits = Array<Commit>
 
 export type CommitUser = {
 	name: string | null
-	emailAddress: string | null
+	email: string | null
 }
