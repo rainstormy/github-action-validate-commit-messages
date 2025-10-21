@@ -1,6 +1,6 @@
 import { injectCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import type { Configuration } from "#configurations/Configuration.ts"
+import type { Configuration, RuleKey } from "#configurations/Configuration.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
 
 describe("the default configuration in the command-line", () => {
@@ -25,11 +25,8 @@ describe("the default configuration in the command-line", () => {
 		${"useLineWrapping"}             | ${{}}
 	`(
 		"enables $enabledRuleKey",
-		(props: {
-			enabledRuleKey: keyof Configuration
-			expectedRuleOptions: object
-		}) => {
-			const ruleOptions = configuration[props.enabledRuleKey]
+		(props: { enabledRuleKey: RuleKey; expectedRuleOptions: object }) => {
+			const ruleOptions = configuration.rules[props.enabledRuleKey]
 			expect(ruleOptions).toEqual(props.expectedRuleOptions)
 		},
 	)
@@ -46,8 +43,8 @@ describe("the default configuration in the command-line", () => {
 		${"useIssueReferences"}
 	`(
 		"does not enable $disabledRuleKey'",
-		(props: { disabledRuleKey: keyof Configuration }) => {
-			const ruleOptions = configuration[props.disabledRuleKey]
+		(props: { disabledRuleKey: RuleKey }) => {
+			const ruleOptions = configuration.rules[props.disabledRuleKey]
 			expect(ruleOptions).toBeNull()
 		},
 	)
@@ -78,11 +75,8 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useLineWrapping"}             | ${{}}
 	`(
 		"enables $enabledRuleKey",
-		(props: {
-			enabledRuleKey: keyof Configuration
-			expectedRuleOptions: object
-		}) => {
-			const ruleOptions = configuration[props.enabledRuleKey]
+		(props: { enabledRuleKey: RuleKey; expectedRuleOptions: object }) => {
+			const ruleOptions = configuration.rules[props.enabledRuleKey]
 			expect(ruleOptions).toEqual(props.expectedRuleOptions)
 		},
 	)
@@ -96,8 +90,8 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useIssueReferences"}
 	`(
 		"does not enable $disabledRuleKey'",
-		(props: { disabledRuleKey: keyof Configuration }) => {
-			const ruleOptions = configuration[props.disabledRuleKey]
+		(props: { disabledRuleKey: RuleKey }) => {
+			const ruleOptions = configuration.rules[props.disabledRuleKey]
 			expect(ruleOptions).toBeNull()
 		},
 	)
