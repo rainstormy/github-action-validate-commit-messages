@@ -1,6 +1,5 @@
-import type { Commit, Commits, CommitUser } from "#commits/Commit.ts"
+import type { Commit, Commits } from "#commits/Commit.ts"
 import type { GithubCommitDto } from "#utilities/github/api/dtos/GithubCommitDto.ts"
-import type { GithubCommitUserDto } from "#utilities/github/api/dtos/GithubCommitUserDto.ts"
 import { fetchGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.ts"
 import { getGithubPullRequestNumber } from "#utilities/github/event/GetGithubPullRequestNumber.ts"
 
@@ -22,17 +21,12 @@ function mapDtoToCommit(dto: GithubCommitDto): Commit {
 
 	return {
 		sha: dto.sha,
-		author: mapDtoToCommitUser(dto.commit.author),
-		committer: mapDtoToCommitUser(dto.commit.committer),
+		authorName: dto.commit.author?.name ?? null,
+		authorEmail: dto.commit.author?.email ?? null,
+		committerName: dto.commit.committer?.name ?? null,
+		committerEmail: dto.commit.committer?.email ?? null,
 		parents: dto.parents.map((parentDto) => parentDto.sha),
 		subjectLine,
 		bodyLines,
-	}
-}
-
-function mapDtoToCommitUser(userDto: GithubCommitUserDto | null): CommitUser {
-	return {
-		name: userDto?.name ?? null,
-		emailAddress: userDto?.email ?? null,
 	}
 }
