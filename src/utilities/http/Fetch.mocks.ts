@@ -18,19 +18,21 @@ const responsesByUrl: Map<
 	}>
 > = new Map()
 
+export function mockFetch(): void {
+	beforeEach(() => {
+		responsesByUrl.clear()
+		vi.stubGlobal(
+			"fetch",
+			async (url: string, options?: RequestOptions): ReturnType<typeof fetch> =>
+				getResponseByUrl(url, options),
+		)
+	})
+}
+
 type RequestOptions = {
 	headers?: Record<string, string>
 	method?: HttpMethod
 }
-
-beforeEach(() => {
-	responsesByUrl.clear()
-	vi.stubGlobal(
-		"fetch",
-		async (url: string, options?: RequestOptions): ReturnType<typeof fetch> =>
-			getResponseByUrl(url, options),
-	)
-})
 
 const indent = "  "
 

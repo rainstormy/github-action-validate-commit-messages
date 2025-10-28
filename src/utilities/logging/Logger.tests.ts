@@ -2,6 +2,9 @@ import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it, type MockInstance, vi } from "vitest"
 import { printError } from "#utilities/logging/Logger.ts"
 
+// Undo the automatic use of `mockLogger` in `VitestSetup.mocks.ts`.
+vi.unmock("#utilities/logging/Logger.ts")
+
 describe.each`
 	errorMessage                                                                                  | expectedErrorMessage
 	${"Cannot find the configuration file 'configs/comet.jsonc'."}                                | ${"::error::Cannot find the configuration file 'configs/comet.jsonc'."}

@@ -21,14 +21,17 @@ const mock: FilesMock = vi.hoisted(
 )
 
 export type FilesMock = ModuleMock<
-	typeof import("#utilities/files/Files") // CAUTION: `vi.mock()` below must always refer to the same path as here.
+	typeof import("#utilities/files/Files.ts") // CAUTION: `vi.mock()` below must always refer to the same path as here.
 >
 
-vi.mock("#utilities/files/Files", () => mock)
+vi.mock("#utilities/files/Files.ts", () => mock)
 
-beforeEach(() => {
-	contentsByPath.clear()
-})
+export function mockFiles(): FilesMock {
+	beforeEach(() => {
+		contentsByPath.clear()
+	})
+	return mock
+}
 
 export function mockJsonFile(path: string, content: JsonValue): void {
 	contentsByPath.set(path, content)
