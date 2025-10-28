@@ -1,5 +1,5 @@
 import { mockGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.mocks.ts"
-import { mockNonexistingGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.mocks.ts"
+import { mockNonexistingGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.mocks.ts"
 import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"

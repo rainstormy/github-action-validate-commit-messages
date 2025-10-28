@@ -1,4 +1,4 @@
-import { mockPaginatedGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.mocks.ts"
+import { mockGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.mocks.ts"
 import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import {
 	fakeGithubCommitDto,
@@ -11,7 +11,7 @@ export function mockGithubPullRequestCommitDtos(
 	options: { pageSize?: number } = {},
 ): void {
 	const resourceUrl = mockGithubPullRequestEventDto()
-	mockPaginatedGithubResourceDto<GithubCommitDto>(
+	mockGithubResourceDto<GithubCommitDto>(
 		resourceUrl,
 		dtos.map(fakeGithubCommitDto),
 		options,
