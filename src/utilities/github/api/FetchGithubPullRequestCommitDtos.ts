@@ -2,7 +2,7 @@ import {
 	GITHUB_COMMIT_DTO_SCHEMA,
 	type GithubCommitDto,
 } from "#utilities/github/api/dtos/GithubCommitDto.ts"
-import { fetchPaginatedGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.ts"
+import { fetchGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
 /**
@@ -13,7 +13,7 @@ export async function fetchGithubPullRequestCommitDtos(
 ): Promise<Array<GithubCommitDto>> {
 	const env = githubEnv()
 
-	return await fetchPaginatedGithubResourceDto(
+	return await fetchGithubResourceDto(
 		`${env.apiBaseUrl}/pulls/${pullRequestNumber}/commits`,
 		GITHUB_COMMIT_DTO_SCHEMA,
 	)

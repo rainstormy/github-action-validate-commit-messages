@@ -1,28 +1,28 @@
-import { injectGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.mocks.ts"
-import { injectNonexistingGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.mocks.ts"
-import { injectGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
+import { mockGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.mocks.ts"
+import { mockNonexistingGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.mocks.ts"
+import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import type { Commit } from "#commits/Commit.ts"
-import { getGithubPullRequestCommits } from "#commits/github/GetGithubPullRequestCommits.ts"
+import type { CrudeCommit } from "#commits/CrudeCommit.ts"
+import { getGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.ts"
 import type { GithubPullRequestReference } from "#commits/github/GithubPullRequestReference.fixtures.ts"
-import { nextDummyCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
-import { dummyGithubCommitDtoVector } from "#utilities/github/api/dtos/GithubCommitDto.fixtures.ts"
+import { fakeGithubCommitDtos } from "#utilities/github/api/dtos/GithubCommitDto.fixtures.ts"
 import type { GithubCommitUserDto } from "#utilities/github/api/dtos/GithubCommitUserDto.ts"
 import type { GithubParentCommitDto } from "#utilities/github/api/dtos/GithubParentCommitDto.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 
 describe.each`
 	sha
-	${nextDummyCommitSha()}
-	${nextDummyCommitSha()}
+	${fakeCommitSha()}
+	${fakeCommitSha()}
 `("when the commit SHA is $sha", (props: { sha: CommitSha }) => {
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ sha: props.sha }])
+		mockGithubPullRequestCommitDtos([{ sha: props.sha }])
 	})
 
 	it("preserves the commit SHA", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.sha).toBe(props.sha)
 	})
 })
@@ -31,19 +31,19 @@ describe("when the commit does not have a parent", () => {
 	const parents = [] as const satisfies Array<GithubParentCommitDto>
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ parents }])
+		mockGithubPullRequestCommitDtos([{ parents }])
 	})
 
 	it("has no parent SHAs", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.parents).toEqual([])
 	})
 })
 
 describe.each`
 	parentSha
-	${nextDummyCommitSha()}
-	${nextDummyCommitSha()}
+	${fakeCommitSha()}
+	${fakeCommitSha()}
 `(
 	"when the commit has 1 parent with a SHA of $parentSha",
 	(props: { parentSha: CommitSha }) => {
@@ -52,11 +52,11 @@ describe.each`
 		] as const satisfies Array<GithubParentCommitDto>
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ parents }])
+			mockGithubPullRequestCommitDtos([{ parents }])
 		})
 
 		it("preserves the parent SHA", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.parents).toEqual([props.parentSha])
 		})
 	},
@@ -64,33 +64,33 @@ describe.each`
 
 describe("when the commit has 2 parents", () => {
 	const parents = [
-		{ sha: nextDummyCommitSha() },
-		{ sha: nextDummyCommitSha() },
+		{ sha: fakeCommitSha() },
+		{ sha: fakeCommitSha() },
 	] as const satisfies Array<GithubParentCommitDto>
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ parents }])
+		mockGithubPullRequestCommitDtos([{ parents }])
 	})
 
 	it("preserves both parent SHAs", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.parents).toEqual([parents[0].sha, parents[1].sha])
 	})
 })
 
 describe("when the commit has 3 parents", () => {
 	const parents = [
-		{ sha: nextDummyCommitSha() },
-		{ sha: nextDummyCommitSha() },
-		{ sha: nextDummyCommitSha() },
+		{ sha: fakeCommitSha() },
+		{ sha: fakeCommitSha() },
+		{ sha: fakeCommitSha() },
 	] as const satisfies Array<GithubParentCommitDto>
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ parents }])
+		mockGithubPullRequestCommitDtos([{ parents }])
 	})
 
 	it("preserves all parent SHAs", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.parents).toEqual([
 			parents[0].sha,
 			parents[1].sha,
@@ -100,128 +100,124 @@ describe("when the commit has 3 parents", () => {
 })
 
 describe.each`
-	subjectLine
+	message
 	${"Release the robot butler"}
 	${"some refactoring"}
 `(
-	"when the subject line is $subjectLine and there are no body lines",
-	(props: { subjectLine: string }) => {
-		const message = props.subjectLine
+	"when the commit message of $message has a single line",
+	(props: { message: string }) => {
+		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
-		it("preserves the subject line", async () => {
-			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.subjectLine).toBe(props.subjectLine)
+		it("preserves the commit message as is", async () => {
+			const [commit] = await getGithubPullRequestCrudeCommits()
+			expect(commit?.message).toBe(props.message)
 		})
 	},
 )
 
 describe.each`
-	subjectLine
+	message
 	${"  Make more spaghetti to feed the ever-growing code monster "}
 	${" bugfixes  "}
 `(
-	"when the subject line of $subjectLine has leading and trailing whitespace",
-	(props: { subjectLine: string }) => {
-		const message = props.subjectLine
+	"when the commit message of $message has a single line with leading and trailing whitespace",
+	(props: { message: string }) => {
+		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
-		it("preserves the subject line as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.subjectLine).toBe(props.subjectLine)
+		it("preserves the commit message as is", async () => {
+			const [commit] = await getGithubPullRequestCrudeCommits()
+			expect(commit?.message).toBe(props.message)
 		})
 	},
 )
 
 describe.each`
-	subjectLine
+	message
 	${""}
 	${"   "}
 `(
-	"when the subject line of $subjectLine is blank",
-	(props: { subjectLine: string }) => {
-		const message = props.subjectLine
+	"when the commit message of $message is blank",
+	(props: { message: string }) => {
+		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
-		it("preserves the subject line as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.subjectLine).toBe(props.subjectLine)
+		it("preserves the commit message as is", async () => {
+			const [commit] = await getGithubPullRequestCrudeCommits()
+			expect(commit?.message).toBe(props.message)
 		})
 	},
 )
 
 describe.each`
-	subjectLine                                        | bodyLines
-	${"Apply strawberry jam to make the code sweeter"} | ${["Sweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic."]}
-	${"fixup!  added some extra love to the code"}     | ${["", "Some improvements that we made:", "  - The code is more readable now.", "  - The function is much faster now.", "  - The architecture is much more flexible now."]}
+	message
+	${"Apply strawberry jam to make the code sweeter\nSweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic."}
+	${"fixup!  added some extra love to the code\n\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."}
 `(
-	"when the subject line is $subjectLine and the body lines are $bodyLines",
-	(props: { subjectLine: string; bodyLines: Array<string> }) => {
-		const message = [props.subjectLine, ...props.bodyLines].join("\n")
+	"when the commit message of $message has multiple lines",
+	(props: { message: string }) => {
+		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
-		it("preserves the subject line", async () => {
-			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.subjectLine).toBe(props.subjectLine)
-		})
-
-		it("preserves all body lines", async () => {
-			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.bodyLines).toEqual(props.bodyLines)
+		it("preserves the commit message as is", async () => {
+			const [commit] = await getGithubPullRequestCrudeCommits()
+			expect(commit?.message).toBe(props.message)
 		})
 	},
 )
 
 describe.each`
-	bodyLine
-	${"  I'm a survivor! I'm not gon' give up! "}
-	${" the customer has asked for these bugfixes and we deliver  "}
+	message
+	${"Fix typo: survice -> service\n  I'm a survivor! \n  I'm not gon' give up! "}
+	${"more bugfixes\n the customer has asked for these bugfixes and we deliver  \nanother line"}
 `(
-	"when a body line of $bodyLine has leading and trailing whitespace",
-	(props: { bodyLine: string }) => {
-		const subjectLine = "more bugfixes"
-		const message = [subjectLine, props.bodyLine, "another line"].join("\n")
+	"when the commit message of $message has a body line with leading and trailing whitespace",
+	(props: { message: string }) => {
+		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
-		it("preserves the body line as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
-			expect(commit?.bodyLines[0]).toBe(props.bodyLine)
+		it("preserves the commit message as is", async () => {
+			const [commit] = await getGithubPullRequestCrudeCommits()
+			expect(commit?.message).toBe(props.message)
 		})
 	},
 )
 
 describe.each`
-	bodyLine
-	${""}
-	${"   "}
-`("when a body line of $bodyLine is blank", (props: { bodyLine: string }) => {
-	const subjectLine = "Test"
-	const message = [subjectLine, props.bodyLine, "It works now."].join("\n")
+	message
+	${"Test\n\nIt works now."}
+	${"Test\n    \nIt works now."}
+`(
+	"when the commit message of $message has a blank body line",
+	(props: { message: string }) => {
+		const message = props.message
 
-	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { message } }])
-	})
+		beforeEach(() => {
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
+		})
 
-	it("preserves the body line as is", async () => {
-		const [commit] = await getGithubPullRequestCommits()
-		expect(commit?.bodyLines[0]).toBe(props.bodyLine)
-	})
-})
+		it("preserves the commit message as is", async () => {
+			const [commit] = await getGithubPullRequestCrudeCommits()
+			expect(commit?.message).toBe(props.message)
+		})
+	},
+)
 
 describe.each`
 	authorName         | authorEmail
@@ -237,16 +233,16 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's name", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.authorName).toBe(props.authorName)
 		})
 
 		it("preserves the author's email address", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.authorEmail).toBe(props.authorEmail)
 		})
 	},
@@ -265,11 +261,11 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's name as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.authorName).toBe(props.authorName)
 		})
 	},
@@ -288,11 +284,11 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's name as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.authorName).toBe(props.authorName)
 		})
 	},
@@ -304,16 +300,16 @@ describe("when the author's name is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { author } }])
+		mockGithubPullRequestCommitDtos([{ commit: { author } }])
 	})
 
 	it("omits the author's name", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.authorName).toBeNull()
 	})
 
 	it("preserves the author's email address", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.authorEmail).toBe(author.email)
 	})
 })
@@ -331,11 +327,11 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's email address as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.authorEmail).toBe(props.authorEmail)
 		})
 	},
@@ -354,11 +350,11 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's email address as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.authorEmail).toBe(props.authorEmail)
 		})
 	},
@@ -370,32 +366,32 @@ describe("when the author's email address is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { author } }])
+		mockGithubPullRequestCommitDtos([{ commit: { author } }])
 	})
 
 	it("preserves the author's name", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.authorName).toBe(author.name)
 	})
 
 	it("omits the author's email address", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.authorEmail).toBeNull()
 	})
 })
 
 describe("when the author is absent", () => {
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { author: null } }])
+		mockGithubPullRequestCommitDtos([{ commit: { author: null } }])
 	})
 
 	it("omits the author's name", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.authorName).toBeNull()
 	})
 
 	it("omits the author's email address", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.authorEmail).toBeNull()
 	})
 })
@@ -414,16 +410,16 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+			mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 		})
 
 		it("preserves the committer's name", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.committerName).toBe(props.committerName)
 		})
 
 		it("preserves the committer's email address", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.committerEmail).toBe(props.committerEmail)
 		})
 	},
@@ -435,16 +431,16 @@ describe("when the committer's name is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+		mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 	})
 
 	it("omits the committer's name", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.committerName).toBeNull()
 	})
 
 	it("preserves the committer's email address", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.committerEmail).toBe(committer.email)
 	})
 })
@@ -462,11 +458,11 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+			mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 		})
 
 		it("preserves the committer's email address as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.committerEmail).toBe(props.committerEmail)
 		})
 	},
@@ -485,11 +481,11 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+			mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 		})
 
 		it("preserves the committer's email address as is", async () => {
-			const [commit] = await getGithubPullRequestCommits()
+			const [commit] = await getGithubPullRequestCrudeCommits()
 			expect(commit?.committerEmail).toBe(props.committerEmail)
 		})
 	},
@@ -501,61 +497,61 @@ describe("when the committer's email address is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+		mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 	})
 
 	it("preserves the committer's name", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.committerName).toBe(committer.name)
 	})
 
 	it("omits the committer's email address", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.committerEmail).toBeNull()
 	})
 })
 
 describe("when the committer is absent", () => {
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { committer: null } }])
+		mockGithubPullRequestCommitDtos([{ commit: { committer: null } }])
 	})
 
 	it("omits the committer's name", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.committerName).toBeNull()
 	})
 
 	it("omits the committer's email address", async () => {
-		const [commit] = await getGithubPullRequestCommits()
+		const [commit] = await getGithubPullRequestCrudeCommits()
 		expect(commit?.committerEmail).toBeNull()
 	})
 })
 
 describe("when the pull request does not have any commits", () => {
-	const commitDtos = dummyGithubCommitDtoVector(0)
+	const commitDtos = fakeGithubCommitDtos(0)
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
+		mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
 	})
 
 	it("returns an empty array of commits", async () => {
-		const commits = await getGithubPullRequestCommits()
+		const commits = await getGithubPullRequestCrudeCommits()
 		expect(commits).toEqual([])
 	})
 })
 
 describe("when the pull request has 1 commit", () => {
-	const commitDtos = dummyGithubCommitDtoVector(1)
+	const commitDtos = fakeGithubCommitDtos(1)
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
+		mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
 	})
 
 	it("returns an array of 1 commit", async () => {
-		const commits = await getGithubPullRequestCommits()
+		const commits = await getGithubPullRequestCrudeCommits()
 		expect(commits).toHaveLength(1)
-		expect(commits).toMatchObject<[Partial<Commit>]>([
-			{ sha: commitDtos[0].sha, subjectLine: "Commit 1" },
+		expect(commits).toMatchObject<[Partial<CrudeCommit>]>([
+			{ sha: commitDtos[0].sha, message: "Commit 1\n\nMore lines of text." },
 		])
 	})
 })
@@ -580,20 +576,22 @@ describe.each`
 `(
 	"when the pull request has $count commits with an API page size of 5",
 	(props: { count: number }) => {
-		const commitDtos = dummyGithubCommitDtoVector(props.count)
+		const commitDtos = fakeGithubCommitDtos(props.count)
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
+			mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
 		})
 
 		it(`returns an array of ${props.count} commits`, async () => {
-			const commits = await getGithubPullRequestCommits()
+			const commits = await getGithubPullRequestCrudeCommits()
 			expect(commits).toHaveLength(props.count)
 			expect(commits).toMatchObject(
-				commitDtos.map<Partial<Commit>>((dto, index) => ({
-					sha: dto.sha,
-					subjectLine: `Commit ${index + 1}`,
-				})),
+				commitDtos.map(
+					(dto, index): Partial<CrudeCommit> => ({
+						sha: dto.sha,
+						message: `Commit ${index + 1}\n\nMore lines of text.`,
+					}),
+				),
 			)
 		})
 	},
@@ -609,20 +607,22 @@ describe.each`
 `(
 	"when the pull request has $count commits with an API page size of 30",
 	(props: { count: number }) => {
-		const commitDtos = dummyGithubCommitDtoVector(props.count)
+		const commitDtos = fakeGithubCommitDtos(props.count)
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 30 })
+			mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 30 })
 		})
 
 		it(`returns an array of ${props.count} commits`, async () => {
-			const commits = await getGithubPullRequestCommits()
+			const commits = await getGithubPullRequestCrudeCommits()
 			expect(commits).toHaveLength(props.count)
 			expect(commits).toMatchObject(
-				commitDtos.map<Partial<Commit>>((dto, index) => ({
-					sha: dto.sha,
-					subjectLine: `Commit ${index + 1}`,
-				})),
+				commitDtos.map(
+					(dto, index): Partial<CrudeCommit> => ({
+						sha: dto.sha,
+						message: `Commit ${index + 1}\n\nMore lines of text.`,
+					}),
+				),
 			)
 		})
 	},
@@ -638,15 +638,15 @@ describe.each`
 		let resourceUrl: `${GithubUrlString}/${string}`
 
 		beforeEach(() => {
-			resourceUrl = injectGithubPullRequestEventDto(props.reference)
-			injectNonexistingGithubResourceDto(resourceUrl, {
+			resourceUrl = mockGithubPullRequestEventDto(props.reference)
+			mockNonexistingGithubResourceDto(resourceUrl, {
 				documentationUrl:
 					"https://docs.github.com/rest/pulls/pulls#list-commits-on-a-pull-request",
 			})
 		})
 
 		it("throws an error", async () => {
-			await expect(getGithubPullRequestCommits()).rejects.toThrow(
+			await expect(getGithubPullRequestCrudeCommits()).rejects.toThrow(
 				`Failed to fetch '${resourceUrl}': 404 Not Found`,
 			)
 		})

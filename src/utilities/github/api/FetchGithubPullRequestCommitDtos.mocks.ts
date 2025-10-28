@@ -1,19 +1,19 @@
-import { injectPaginatedGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.mocks.ts"
-import { injectGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
+import { mockGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.mocks.ts"
+import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import {
-	dummyGithubCommitDto,
+	fakeGithubCommitDto,
 	type GithubCommitDtoTemplate,
 } from "#utilities/github/api/dtos/GithubCommitDto.fixtures.ts"
 import type { GithubCommitDto } from "#utilities/github/api/dtos/GithubCommitDto.ts"
 
-export function injectGithubPullRequestCommitDtos(
+export function mockGithubPullRequestCommitDtos(
 	dtos: Array<GithubCommitDtoTemplate>,
 	options: { pageSize?: number } = {},
 ): void {
-	const resourceUrl = injectGithubPullRequestEventDto()
-	injectPaginatedGithubResourceDto<GithubCommitDto>(
+	const resourceUrl = mockGithubPullRequestEventDto()
+	mockGithubResourceDto<GithubCommitDto>(
 		resourceUrl,
-		dtos.map(dummyGithubCommitDto),
+		dtos.map(fakeGithubCommitDto),
 		options,
 	)
 }

@@ -1,26 +1,26 @@
 import {
-	injectJsonFile,
-	injectNonexistingFile,
+	mockJsonFile,
+	mockNonexistingFile,
 } from "#utilities/files/Files.mocks.ts"
-import { injectGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
-import { injectEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
-import { injectLogger } from "#utilities/logging/Logger.mocks.ts"
-import { injectCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
+import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
+import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
+import { mockLogger } from "#utilities/logging/Logger.mocks.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { githubActionsProgram } from "#programs/GithubActionsProgram.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
 
 beforeEach(() => {
-	injectCometPlatform("gha")
+	mockCometPlatform("gha")
 })
 
-const { printError } = injectLogger()
+const { printError } = mockLogger()
 
 describe("when the event payload is not a pull request", () => {
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		injectEmptyGithubEventDto()
+		mockEmptyGithubEventDto()
 		exitCode = await githubActionsProgram()
 	})
 
@@ -41,8 +41,8 @@ describe("when the event payload is missing in the file system", () => {
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		injectGithubEnv({ eventPath })
-		injectNonexistingFile(eventPath)
+		mockGithubEnv({ eventPath })
+		mockNonexistingFile(eventPath)
 		exitCode = await githubActionsProgram()
 	})
 
@@ -63,8 +63,8 @@ describe("when the 'github-token' input parameter is missing", () => {
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		injectGithubEnv({ eventPath, __secretToken__: "" })
-		injectJsonFile(eventPath, { pull_request: { number: 1 } })
+		mockGithubEnv({ eventPath, __secretToken__: "" })
+		mockJsonFile(eventPath, { pull_request: { number: 1 } })
 		exitCode = await githubActionsProgram()
 	})
 

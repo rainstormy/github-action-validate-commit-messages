@@ -5,11 +5,11 @@ import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 const nextPageRegex = /<(?<nextResourceUrl>\S*)>; rel="next"/i
 
 /**
+ * Retrieves a paginated resource from the GitHub API and returns a flattened array.
+ *
  * @see https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28#example-creating-a-pagination-method
  */
-export async function fetchPaginatedGithubResourceDto<
-	Schema extends GenericSchema,
->(
+export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 	resourceUrl: `${GithubUrlString}/${string}`,
 	schema: Schema,
 ): Promise<Array<InferOutput<Schema>>> {

@@ -33,8 +33,9 @@ export default {
 	},
 	test: {
 		include: ["src/**/*.tests.ts"],
-		mockReset: true,
 		pool: "vmThreads",
+		setupFiles: ["src/utilities/vitest/VitestSetup.mocks.ts"],
+		mockReset: true,
 		unstubEnvs: true,
 		unstubGlobals: true,
 	},

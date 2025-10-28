@@ -1,7 +1,7 @@
 import type { CommitSha } from "#types/CommitSha.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 
-const dummyCommitShas: Array<CommitSha> = [
+const fakeCommitShas: Array<CommitSha> = [
 	"024e4f8b044549ac8f833356f20b63af491e46b5",
 	"b112c3fd15544eb7a92e200315592089a3a5c486",
 	"8fc8b9fc951b4659aaa59776801f2306322b53c8",
@@ -24,13 +24,11 @@ const dummyCommitShas: Array<CommitSha> = [
 	"07a247d1003c4785a2def9c9f298e052e4ede4f5",
 ]
 
-let counter = -1
+let counter = 0
 
-export function nextDummyCommitSha(): CommitSha {
+export function fakeCommitSha(): CommitSha {
+	const index = counter % fakeCommitShas.length
 	counter++
-	return currentDummyCommitSha()
-}
 
-export function currentDummyCommitSha(): CommitSha {
-	return requireNotNullish(dummyCommitShas[counter % dummyCommitShas.length])
+	return requireNotNullish(fakeCommitShas[index])
 }

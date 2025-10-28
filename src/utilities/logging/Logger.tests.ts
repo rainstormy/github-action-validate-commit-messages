@@ -1,6 +1,9 @@
-import { injectCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it, type MockInstance, vi } from "vitest"
 import { printError } from "#utilities/logging/Logger.ts"
+
+// Undo the automatic use of `mockLogger` in `VitestSetup.mocks.ts`.
+vi.unmock("#utilities/logging/Logger.ts")
 
 describe.each`
 	errorMessage                                                                                  | expectedErrorMessage
@@ -11,19 +14,25 @@ describe.each`
 `(
 	"when logging an error message of $errorMessage in GitHub Actions",
 	(props: { errorMessage: string; expectedErrorMessage: string }) => {
-		let consoleSpy: MockInstance
+		let consoleLog: ConsoleLogMock
 
 		beforeEach(() => {
-			injectCometPlatform("gha")
+			mockCometPlatform("gha")
 
-			consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {
-				// Do nothing.
-			})
+			consoleLog = mockConsoleLog()
 			printError(props.errorMessage)
 		})
 
 		it("logs a message with escaped characters and an '::error::' prefix", () => {
-			expect(consoleSpy).toHaveBeenCalledWith(props.expectedErrorMessage)
+			expect(consoleLog).toHaveBeenCalledWith(props.expectedErrorMessage)
 		})
 	},
 )
+
+type ConsoleLogMock = MockInstance<typeof console.log>
+
+function mockConsoleLog(): ConsoleLogMock {
+	return vi.spyOn(console, "log").mockImplementation(() => {
+		// Do nothing.
+	})
+}

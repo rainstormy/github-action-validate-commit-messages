@@ -2,7 +2,7 @@ import { requireNotNullish } from "#utilities/Assertions.ts"
 
 export type GithubPullRequestReference = `${string}/${string}#${number}`
 
-const dummyReferences: Array<GithubPullRequestReference> = [
+const fakeReferences: Array<GithubPullRequestReference> = [
 	"rainstormy/comet#127",
 	"rainstormy/updraft#24",
 	"spdiswal/vitus#76",
@@ -16,13 +16,11 @@ const dummyReferences: Array<GithubPullRequestReference> = [
 	"rainstormy/presets-lefthook#38",
 ]
 
-let counter = -1
+let counter = 0
 
-export function nextDummyGithubPullRequestReference(): GithubPullRequestReference {
+export function fakeGithubPullRequestReference(): GithubPullRequestReference {
+	const index = counter % fakeReferences.length
 	counter++
-	return currentDummyGithubPullRequestReference()
-}
 
-export function currentDummyGithubPullRequestReference(): GithubPullRequestReference {
-	return requireNotNullish(dummyReferences[counter % dummyReferences.length])
+	return requireNotNullish(fakeReferences[index])
 }
