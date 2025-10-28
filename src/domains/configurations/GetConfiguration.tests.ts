@@ -1,4 +1,4 @@
-import { injectCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { Configuration, RuleKey } from "#configurations/Configuration.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
@@ -7,7 +7,7 @@ describe("the default configuration in the command-line", () => {
 	let configuration: Configuration
 
 	beforeEach(async () => {
-		injectCometPlatform("cli")
+		mockCometPlatform("cli")
 		configuration = await getConfiguration()
 	})
 
@@ -54,7 +54,7 @@ describe("the default configuration in GitHub Actions", () => {
 	let configuration: Configuration
 
 	beforeEach(async () => {
-		injectCometPlatform("gha")
+		mockCometPlatform("gha")
 		configuration = await getConfiguration()
 	})
 

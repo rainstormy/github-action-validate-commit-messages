@@ -1,24 +1,24 @@
-import { injectGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.mocks.ts"
-import { injectNonexistingGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.mocks.ts"
-import { injectGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
+import { mockGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.mocks.ts"
+import { mockNonexistingGithubResourceDto } from "#utilities/github/api/FetchPaginatedGithubResourceDto.mocks.ts"
+import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { getGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.ts"
 import type { GithubPullRequestReference } from "#commits/github/GithubPullRequestReference.fixtures.ts"
-import { nextDummyCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
-import { dummyGithubCommitDtoVector } from "#utilities/github/api/dtos/GithubCommitDto.fixtures.ts"
+import { fakeGithubCommitDtos } from "#utilities/github/api/dtos/GithubCommitDto.fixtures.ts"
 import type { GithubCommitUserDto } from "#utilities/github/api/dtos/GithubCommitUserDto.ts"
 import type { GithubParentCommitDto } from "#utilities/github/api/dtos/GithubParentCommitDto.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 
 describe.each`
 	sha
-	${nextDummyCommitSha()}
-	${nextDummyCommitSha()}
+	${fakeCommitSha()}
+	${fakeCommitSha()}
 `("when the commit SHA is $sha", (props: { sha: CommitSha }) => {
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ sha: props.sha }])
+		mockGithubPullRequestCommitDtos([{ sha: props.sha }])
 	})
 
 	it("preserves the commit SHA", async () => {
@@ -31,7 +31,7 @@ describe("when the commit does not have a parent", () => {
 	const parents = [] as const satisfies Array<GithubParentCommitDto>
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ parents }])
+		mockGithubPullRequestCommitDtos([{ parents }])
 	})
 
 	it("has no parent SHAs", async () => {
@@ -42,8 +42,8 @@ describe("when the commit does not have a parent", () => {
 
 describe.each`
 	parentSha
-	${nextDummyCommitSha()}
-	${nextDummyCommitSha()}
+	${fakeCommitSha()}
+	${fakeCommitSha()}
 `(
 	"when the commit has 1 parent with a SHA of $parentSha",
 	(props: { parentSha: CommitSha }) => {
@@ -52,7 +52,7 @@ describe.each`
 		] as const satisfies Array<GithubParentCommitDto>
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ parents }])
+			mockGithubPullRequestCommitDtos([{ parents }])
 		})
 
 		it("preserves the parent SHA", async () => {
@@ -64,12 +64,12 @@ describe.each`
 
 describe("when the commit has 2 parents", () => {
 	const parents = [
-		{ sha: nextDummyCommitSha() },
-		{ sha: nextDummyCommitSha() },
+		{ sha: fakeCommitSha() },
+		{ sha: fakeCommitSha() },
 	] as const satisfies Array<GithubParentCommitDto>
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ parents }])
+		mockGithubPullRequestCommitDtos([{ parents }])
 	})
 
 	it("preserves both parent SHAs", async () => {
@@ -80,13 +80,13 @@ describe("when the commit has 2 parents", () => {
 
 describe("when the commit has 3 parents", () => {
 	const parents = [
-		{ sha: nextDummyCommitSha() },
-		{ sha: nextDummyCommitSha() },
-		{ sha: nextDummyCommitSha() },
+		{ sha: fakeCommitSha() },
+		{ sha: fakeCommitSha() },
+		{ sha: fakeCommitSha() },
 	] as const satisfies Array<GithubParentCommitDto>
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ parents }])
+		mockGithubPullRequestCommitDtos([{ parents }])
 	})
 
 	it("preserves all parent SHAs", async () => {
@@ -109,7 +109,7 @@ describe.each`
 		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
 		it("preserves the commit message as is", async () => {
@@ -129,7 +129,7 @@ describe.each`
 		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
 		it("preserves the commit message as is", async () => {
@@ -149,7 +149,7 @@ describe.each`
 		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
 		it("preserves the commit message as is", async () => {
@@ -169,7 +169,7 @@ describe.each`
 		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
 		it("preserves the commit message as is", async () => {
@@ -189,7 +189,7 @@ describe.each`
 		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
 		it("preserves the commit message as is", async () => {
@@ -209,7 +209,7 @@ describe.each`
 		const message = props.message
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { message } }])
+			mockGithubPullRequestCommitDtos([{ commit: { message } }])
 		})
 
 		it("preserves the commit message as is", async () => {
@@ -233,7 +233,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's name", async () => {
@@ -261,7 +261,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's name as is", async () => {
@@ -284,7 +284,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's name as is", async () => {
@@ -300,7 +300,7 @@ describe("when the author's name is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { author } }])
+		mockGithubPullRequestCommitDtos([{ commit: { author } }])
 	})
 
 	it("omits the author's name", async () => {
@@ -327,7 +327,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's email address as is", async () => {
@@ -350,7 +350,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { author } }])
+			mockGithubPullRequestCommitDtos([{ commit: { author } }])
 		})
 
 		it("preserves the author's email address as is", async () => {
@@ -366,7 +366,7 @@ describe("when the author's email address is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { author } }])
+		mockGithubPullRequestCommitDtos([{ commit: { author } }])
 	})
 
 	it("preserves the author's name", async () => {
@@ -382,7 +382,7 @@ describe("when the author's email address is absent", () => {
 
 describe("when the author is absent", () => {
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { author: null } }])
+		mockGithubPullRequestCommitDtos([{ commit: { author: null } }])
 	})
 
 	it("omits the author's name", async () => {
@@ -410,7 +410,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+			mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 		})
 
 		it("preserves the committer's name", async () => {
@@ -431,7 +431,7 @@ describe("when the committer's name is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+		mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 	})
 
 	it("omits the committer's name", async () => {
@@ -458,7 +458,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+			mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 		})
 
 		it("preserves the committer's email address as is", async () => {
@@ -481,7 +481,7 @@ describe.each`
 		}
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+			mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 		})
 
 		it("preserves the committer's email address as is", async () => {
@@ -497,7 +497,7 @@ describe("when the committer's email address is absent", () => {
 	}
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { committer } }])
+		mockGithubPullRequestCommitDtos([{ commit: { committer } }])
 	})
 
 	it("preserves the committer's name", async () => {
@@ -513,7 +513,7 @@ describe("when the committer's email address is absent", () => {
 
 describe("when the committer is absent", () => {
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos([{ commit: { committer: null } }])
+		mockGithubPullRequestCommitDtos([{ commit: { committer: null } }])
 	})
 
 	it("omits the committer's name", async () => {
@@ -528,10 +528,10 @@ describe("when the committer is absent", () => {
 })
 
 describe("when the pull request does not have any commits", () => {
-	const commitDtos = dummyGithubCommitDtoVector(0)
+	const commitDtos = fakeGithubCommitDtos(0)
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
+		mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
 	})
 
 	it("returns an empty array of commits", async () => {
@@ -541,10 +541,10 @@ describe("when the pull request does not have any commits", () => {
 })
 
 describe("when the pull request has 1 commit", () => {
-	const commitDtos = dummyGithubCommitDtoVector(1)
+	const commitDtos = fakeGithubCommitDtos(1)
 
 	beforeEach(() => {
-		injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
+		mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
 	})
 
 	it("returns an array of 1 commit", async () => {
@@ -576,10 +576,10 @@ describe.each`
 `(
 	"when the pull request has $count commits with an API page size of 5",
 	(props: { count: number }) => {
-		const commitDtos = dummyGithubCommitDtoVector(props.count)
+		const commitDtos = fakeGithubCommitDtos(props.count)
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
+			mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 5 })
 		})
 
 		it(`returns an array of ${props.count} commits`, async () => {
@@ -607,10 +607,10 @@ describe.each`
 `(
 	"when the pull request has $count commits with an API page size of 30",
 	(props: { count: number }) => {
-		const commitDtos = dummyGithubCommitDtoVector(props.count)
+		const commitDtos = fakeGithubCommitDtos(props.count)
 
 		beforeEach(() => {
-			injectGithubPullRequestCommitDtos(commitDtos, { pageSize: 30 })
+			mockGithubPullRequestCommitDtos(commitDtos, { pageSize: 30 })
 		})
 
 		it(`returns an array of ${props.count} commits`, async () => {
@@ -638,8 +638,8 @@ describe.each`
 		let resourceUrl: `${GithubUrlString}/${string}`
 
 		beforeEach(() => {
-			resourceUrl = injectGithubPullRequestEventDto(props.reference)
-			injectNonexistingGithubResourceDto(resourceUrl, {
+			resourceUrl = mockGithubPullRequestEventDto(props.reference)
+			mockNonexistingGithubResourceDto(resourceUrl, {
 				documentationUrl:
 					"https://docs.github.com/rest/pulls/pulls#list-commits-on-a-pull-request",
 			})

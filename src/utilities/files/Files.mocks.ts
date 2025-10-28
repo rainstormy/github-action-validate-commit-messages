@@ -30,10 +30,10 @@ beforeEach(() => {
 	contentsByPath.clear()
 })
 
-export function injectJsonFile(path: string, content: JsonValue): void {
+export function mockJsonFile(path: string, content: JsonValue): void {
 	contentsByPath.set(path, content)
 }
 
-export function injectNonexistingFile(path: string): void {
+export function mockNonexistingFile(path: string): void {
 	contentsByPath.delete(path)
 }

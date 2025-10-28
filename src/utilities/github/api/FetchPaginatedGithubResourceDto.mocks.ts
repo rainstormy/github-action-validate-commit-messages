@@ -1,10 +1,10 @@
-import { injectFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
+import { mockFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
 import type { JsonValue } from "#types/JsonValue.ts"
 import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
-export function injectPaginatedGithubResourceDto<Dto extends JsonValue>(
+export function mockPaginatedGithubResourceDto<Dto extends JsonValue>(
 	url: `${GithubUrlString}/${string}`,
 	items: Array<Dto>,
 	options: { pageSize?: number } = {},
@@ -12,7 +12,7 @@ export function injectPaginatedGithubResourceDto<Dto extends JsonValue>(
 	const { pageSize = 30 } = options
 
 	if (items.length === 0) {
-		injectFetchableJsonResource(
+		mockFetchableJsonResource(
 			{ url, headers: expectedRequestHeaders() },
 			{
 				body: [],
@@ -30,7 +30,7 @@ export function injectPaginatedGithubResourceDto<Dto extends JsonValue>(
 	for (const [index, page] of Object.entries(pages)) {
 		const pageNumber = Number.parseInt(index, 10) + 1
 
-		injectFetchableJsonResource(
+		mockFetchableJsonResource(
 			{
 				url:
 					pageNumber === 1
@@ -68,13 +68,13 @@ function linkHeader(props: {
 		.join(", ")
 }
 
-export function injectNonexistingGithubResourceDto(
+export function mockNonexistingGithubResourceDto(
 	url: `${GithubUrlString}/${string}`,
 	props: {
 		documentationUrl: string
 	},
 ): void {
-	injectFetchableJsonResource(
+	mockFetchableJsonResource(
 		{ url, headers: expectedRequestHeaders() },
 		{
 			body: {

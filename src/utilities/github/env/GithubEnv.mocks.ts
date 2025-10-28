@@ -1,7 +1,7 @@
 import { vi } from "vitest"
 import type { GithubEnv } from "#utilities/github/env/GithubEnv.ts"
 
-export function injectGithubEnv(overrides: Partial<GithubEnv> = {}): void {
+export function mockGithubEnv(overrides: Partial<GithubEnv> = {}): void {
 	const {
 		apiBaseUrl = "https://api.github.com/repos/rainstormy/comet",
 		eventPath = "/github/workflow/event.json",

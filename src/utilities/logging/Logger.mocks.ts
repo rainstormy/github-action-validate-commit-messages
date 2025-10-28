@@ -14,6 +14,6 @@ export type LoggerMock = ModuleMock<
 
 vi.mock("#utilities/logging/Logger", () => mock)
 
-export function injectLogger(): LoggerMock {
+export function mockLogger(): LoggerMock {
 	return mock
 }

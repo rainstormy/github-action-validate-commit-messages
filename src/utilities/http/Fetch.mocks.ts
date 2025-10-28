@@ -84,7 +84,7 @@ function getExpectedRequestHeaders(
 		.join("\n")
 }
 
-export function injectFetchableJsonResource(
+export function mockFetchableJsonResource(
 	request: {
 		url: string
 		headers?: Record<string, string>
