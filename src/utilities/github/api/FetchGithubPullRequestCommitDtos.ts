@@ -1,6 +1,6 @@
 import {
-	GITHUB_COMMIT_DTO_SCHEMA,
 	type GithubCommitDto,
+	githubCommitDto,
 } from "#utilities/github/api/dtos/GithubCommitDto.ts"
 import { fetchGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
@@ -15,6 +15,6 @@ export async function fetchGithubPullRequestCommitDtos(
 
 	return await fetchGithubResourceDto(
 		`${env.apiBaseUrl}/pulls/${pullRequestNumber}/commits`,
-		GITHUB_COMMIT_DTO_SCHEMA,
+		githubCommitDto(),
 	)
 }
