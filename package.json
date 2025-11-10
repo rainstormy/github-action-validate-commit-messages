@@ -14,7 +14,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.7",
-		"@rainstormy/presets-biome": "2.0.3",
+		"@rainstormy/presets-biome": "2.1.0",
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "20.19.23",
 		"@typescript/native-preview": "7.0.0-dev.20251101.1",
