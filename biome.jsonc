@@ -1,8 +1,8 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
 	"extends": [
-		"@rainstormy/presets-biome/2.2",
-		"@rainstormy/presets-biome/2.2/vitest"
+		"@rainstormy/presets-biome/2.3",
+		"@rainstormy/presets-biome/2.3/vitest"
 	],
 	"files": {
 		"includes": [

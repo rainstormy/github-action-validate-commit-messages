@@ -28,7 +28,7 @@ let counter = 0
 
 export function fakeCommitSha(): CommitSha {
 	const index = counter % fakeCommitShas.length
-	counter++
+	counter += 1
 
 	return requireNotNullish(fakeCommitShas[index])
 }
