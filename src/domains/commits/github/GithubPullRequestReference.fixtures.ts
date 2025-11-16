@@ -20,7 +20,7 @@ let counter = 0
 
 export function fakeGithubPullRequestReference(): GithubPullRequestReference {
 	const index = counter % fakeReferences.length
-	counter++
+	counter += 1
 
 	return requireNotNullish(fakeReferences[index])
 }
