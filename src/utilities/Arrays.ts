@@ -10,3 +10,7 @@ export function* splitToChunks<Item>(
 export function notNullish<Item>(item: Item | null | undefined): item is Item {
 	return item !== null && item !== undefined
 }
+
+export function notEmptyString(item: string): boolean {
+	return item !== ""
+}
