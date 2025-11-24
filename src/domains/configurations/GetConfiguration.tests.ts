@@ -11,6 +11,10 @@ describe("the default configuration in the command-line", () => {
 		configuration = await getConfiguration()
 	})
 
+	it("recognises GitHub- and GitLab-style issue links", () => {
+		expect(configuration.tokens.issueLinkPrefixes).toEqual(["#", "GH-", "GL-"])
+	})
+
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
 		${"noCoAuthors"}                 | ${{}}
@@ -56,6 +60,10 @@ describe("the default configuration in GitHub Actions", () => {
 	beforeEach(async () => {
 		mockCometPlatform("gha")
 		configuration = await getConfiguration()
+	})
+
+	it("recognises GitHub- and GitLab-style issue links", () => {
+		expect(configuration.tokens.issueLinkPrefixes).toEqual(["#", "GH-", "GL-"])
 	})
 
 	it.each`
