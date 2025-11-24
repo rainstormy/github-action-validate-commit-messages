@@ -1,6 +1,10 @@
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
 export type Configuration = {
+	tokens: {
+		issueLinkPrefixes: Array<string>
+	}
+
 	/**
 	 * A record of rule keys to rule-specific options (if the rule is enabled) or null (if the rule is disabled).
 	 */
@@ -27,3 +31,4 @@ export type Configuration = {
 }
 
 export type RuleKey = keyof Configuration["rules"]
+export type TokenConfiguration = Configuration["tokens"]
