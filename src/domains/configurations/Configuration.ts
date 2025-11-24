@@ -1,6 +1,11 @@
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
 export type Configuration = {
+	tokens: {
+		issueReferencePatterns: Array<string>
+		squashMarkers: Array<string>
+	}
+
 	/**
 	 * A record of rule keys to rule-specific options (if the rule is enabled) or null (if the rule is disabled).
 	 */

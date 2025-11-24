@@ -16,6 +16,7 @@ export function getDefaultConfiguration(): Configuration {
 
 function getDefaultCliConfiguration(): Configuration {
 	return {
+		tokens: getDefaultTokens(),
 		rules: {
 			noCoAuthors: {},
 			noMergeCommits: {},
@@ -41,6 +42,7 @@ function getDefaultCliConfiguration(): Configuration {
 
 function getDefaultGhaConfiguration(): Configuration {
 	return {
+		tokens: getDefaultTokens(),
 		rules: {
 			noCoAuthors: {},
 			noMergeCommits: {},
@@ -61,5 +63,12 @@ function getDefaultGhaConfiguration(): Configuration {
 			useIssueReferences: null,
 			useLineWrapping: {},
 		},
+	}
+}
+
+function getDefaultTokens(): Configuration["tokens"] {
+	return {
+		issueReferencePatterns: [],
+		squashMarkers: ["amend!", "fixup!", "squash!"],
 	}
 }

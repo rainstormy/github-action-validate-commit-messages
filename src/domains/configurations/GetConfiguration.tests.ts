@@ -11,6 +11,18 @@ describe("the default configuration in the command-line", () => {
 		configuration = await getConfiguration()
 	})
 
+	it("does not define any issue reference patterns", () => {
+		expect(configuration.tokens.issueReferencePatterns).toEqual([])
+	})
+
+	it("defines three squash markers", () => {
+		expect(configuration.tokens.squashMarkers).toEqual([
+			"amend!",
+			"fixup!",
+			"squash!",
+		])
+	})
+
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
 		${"noCoAuthors"}                 | ${{}}
@@ -56,6 +68,18 @@ describe("the default configuration in GitHub Actions", () => {
 	beforeEach(async () => {
 		mockCometPlatform("gha")
 		configuration = await getConfiguration()
+	})
+
+	it("does not define any issue reference patterns", () => {
+		expect(configuration.tokens.issueReferencePatterns).toEqual([])
+	})
+
+	it("defines three squash markers", () => {
+		expect(configuration.tokens.squashMarkers).toEqual([
+			"amend!",
+			"fixup!",
+			"squash!",
+		])
 	})
 
 	it.each`
