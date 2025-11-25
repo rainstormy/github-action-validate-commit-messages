@@ -12,7 +12,7 @@
 | `build_cli`       | Generates production-grade build artefacts of the v2 command-line entrypoint with [Vite](https://vite.dev).             |
 | `build_gha`       | Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with [Vite](https://vite.dev).           |
 | `build_legacy_v1` | Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with [Vite](https://vite.dev).    |
-| `check`           | Runs `check_actions`, `check_fmt`, `check_renovate`, and `check_ts`.                                                    |
+| `check`           | Runs `check_actions`, `check_fmt`, and `check_ts`.                                                                      |
 | `check_actions`   | Verifies the syntax of the GitHub Actions workflows with [actionlint](https://github.com/rhysd/actionlint).             |
 | `check_fmt`       | Verifies the code style of the source code with [Biome](https://biomejs.dev).                                           |
 | `check_renovate`  | Verifies the syntax of the [Renovate](https://github.com/renovatebot/renovate) configuration.                           |
