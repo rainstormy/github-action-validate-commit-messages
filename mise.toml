@@ -15,21 +15,27 @@ alias = ["b"]
 
 [tasks.build_cli]
 # language=sh
-run = "vite build --ssr src/main-cli.ts --outDir dist/cli/"
+run = """
+	vite build --ssr src/main-cli.ts --outDir dist/cli/
+"""
 env = { COMET_PLATFORM = "cli" }
 description = "Generates production-grade build artefacts of the v2 command-line entrypoint with Vite."
 alias = ["bc"]
 
 [tasks.build_gha]
 # language=sh
-run = "vite build --ssr src/main-gha.ts --outDir dist/gha/"
+run = """
+	vite build --ssr src/main-gha.ts --outDir dist/gha/
+"""
 env = { COMET_PLATFORM = "gha" }
 description = "Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with Vite."
 alias = ["bg"]
 
 [tasks.build_legacy_v1]
 # language=sh
-run = "vite build --ssr src/legacy-v1-main.ts --outDir dist/"
+run = """
+	vite build --ssr src/legacy-v1-main.ts --outDir dist/
+"""
 description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]
@@ -39,19 +45,25 @@ alias = ["c"]
 
 [tasks.check_actions]
 # language=sh
-run = "actionlint"
+run = """
+	actionlint
+"""
 description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
 alias = ["ca"]
 
 [tasks.check_fmt]
 # language=sh
-run = "biome check --error-on-warnings"
+run = """
+	biome check --error-on-warnings
+"""
 description = "Verifies the code style of the source code with Biome."
 alias = ["cf"]
 
 [tasks.check_renovate]
 # language=sh
-run = "pnpm dlx --package renovate renovate-config-validator"
+run = """
+	pnpm dlx --package renovate renovate-config-validator
+"""
 description = "Verifies the syntax of the Renovate configuration."
 sources = [".github/renovate.json"] # Only run this task if `renovate.json` has changed since the last run.
 outputs = { auto = true }
@@ -59,39 +71,55 @@ alias = ["cr"]
 
 [tasks.check_ts]
 # language=sh
-run = "tsgo"
+run = """
+	tsgo
+"""
 description = "Verifies the type safety of the source code with TypeScript."
 alias = ["ct"]
 
 [tasks.fmt]
 # language=sh
-run = "biome check --skip-parse-errors --write"
+run = """
+	biome check --skip-parse-errors --write
+"""
 description = "Reformats the source code with Biome."
 alias = ["f"]
 
 [tasks.init]
 # language=sh
-run = ["pnpm install --ignore-scripts", "lefthook install"]
+run = """
+	pnpm install --ignore-scripts && \
+	lefthook install
+"""
 description = "Installs Node.js packages with pnpm and enables the Git hooks with Lefthook."
 alias = ["i"]
 
 [tasks.test]
 # language=sh
-run = "vitest run"
+run = """
+	vitest run
+"""
 env = { CI = 1 }
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
 
 [tasks.vitest]
 # language=sh
-run = "vitest watch --ui --open $LOCALHOST_VITEST_OPENS_AUTOMATICALLY --api.port $LOCALHOST_VITEST_PORT"
+run = """
+	vitest watch \
+		--ui \
+		--api.port "$LOCALHOST_VITEST_PORT" \
+		--open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
+"""
 env = { CI = 1 }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
 
 [tasks.yolo]
 # language=sh
-run = "lefthook uninstall"
+run = """
+	lefthook uninstall
+"""
 description = "Disables the Git hooks with Lefthook."
 
 [env]
