@@ -7,7 +7,7 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
-		"valibot": "1.1.0"
+		"valibot": "1.2.0"
 	},
 	"// dependencies": {
 		"valibot": "Valibot provides type-safe data validation."
