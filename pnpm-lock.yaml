@@ -16,8 +16,8 @@ importers:
         specifier: 2.3.7
         version: 2.3.7
       '@rainstormy/presets-biome':
-        specifier: 2.1.1
-        version: 2.1.1(@biomejs/biome@2.3.7)
+        specifier: 2.1.2
+        version: 2.1.2(@biomejs/biome@2.3.7)
       '@rainstormy/presets-typescript':
         specifier: 1.1.0
         version: 1.1.0(typescript@5.9.3)
@@ -263,8 +263,8 @@ packages:
   '@polka/url@1.0.0-next.25':
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
 
-  '@rainstormy/presets-biome@2.1.1':
-    resolution: {integrity: sha512-6JuqIcqn61LM26ArGYCHITs/cHVETpNXNhKhZOgPopaWpGfF5xH9s+vl+LzbFyPIUs6qXVsH8WCm7pgJ7WRxmQ==}
+  '@rainstormy/presets-biome@2.1.2':
+    resolution: {integrity: sha512-Tj4tmcQKaDubVufAmgNyVpBHxccz9kw8Sty1gTXlNOAV96JMJKly2CYK4Wvm/ke7qXauRcl7NknmasS85vUSmw==}
     peerDependencies:
       '@biomejs/biome': '>=2.2.0 <2.4.0'
 
@@ -860,7 +860,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.25': {}
 
-  '@rainstormy/presets-biome@2.1.1(@biomejs/biome@2.3.7)':
+  '@rainstormy/presets-biome@2.1.2(@biomejs/biome@2.3.7)':
     dependencies:
       '@biomejs/biome': 2.3.7
 
