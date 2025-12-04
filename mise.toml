@@ -5,7 +5,7 @@ min_version = "2025.11.0"
 
 [tools]
 actionlint = "1.7.8"
-node = "20.19.5"
+node = "20.19.6"
 pnpm = "10.22.0"
 
 [tasks.build]
