@@ -36,7 +36,7 @@ runs:
       #
     - name: Restore the pnpm store from the workflow cache
       if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
-      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
       with:
         key: pnpm:${{ hashFiles('mise.toml', 'pnpm-lock.yaml') }}
         restore-keys: 'pnpm:'
