@@ -16,7 +16,7 @@
 		"@biomejs/biome": "2.3.7",
 		"@rainstormy/presets-biome": "2.1.1",
 		"@rainstormy/presets-typescript": "1.1.0",
-		"@types/node": "20.19.23",
+		"@types/node": "20.19.27",
 		"@typescript/native-preview": "7.0.0-dev.20251201.1",
 		"@vitest/ui": "4.0.4",
 		"lefthook": "2.0.4",
