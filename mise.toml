@@ -97,7 +97,7 @@ alias = ["i"]
 run = """
 	vitest run
 """
-env = { CI = 1 }
+env = { CI = 1, COMET_PLATFORM = "cli" }
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
 
@@ -109,7 +109,7 @@ run = """
 		--api.port "$LOCALHOST_VITEST_PORT" \
 		--open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
 """
-env = { CI = 1 }
+env = { CI = 1, COMET_PLATFORM = "cli" }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
 
