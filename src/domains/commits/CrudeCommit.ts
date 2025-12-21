@@ -27,5 +27,8 @@ export async function getCrudeCommits(): Promise<CrudeCommits> {
 		case "gha": {
 			return getGithubPullRequestCrudeCommits()
 		}
+		default: {
+			throw new Error("Environment variable 'COMET_PLATFORM' is undefined")
+		}
 	}
 }

@@ -181,6 +181,7 @@ _.path = ["node_modules/.bin"]
 
 # Align the behaviour of the local environment with the CI environment in GitHub Actions by default.
 CI = 1
+COMET_PLATFORM = "cli"
 
 # Grab the current Comet version from the `version` field in `package.json`.
 COMET_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }

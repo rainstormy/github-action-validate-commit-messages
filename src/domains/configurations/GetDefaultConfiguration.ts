@@ -11,6 +11,9 @@ export function getDefaultConfiguration(): Configuration {
 		case "gha": {
 			return getDefaultGhaConfiguration()
 		}
+		default: {
+			throw new Error("Environment variable 'COMET_PLATFORM' is undefined")
+		}
 	}
 }
 
