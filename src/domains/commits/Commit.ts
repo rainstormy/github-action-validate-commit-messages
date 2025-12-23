@@ -1,6 +1,10 @@
-import type { BodyLines } from "#commits/BodyLine.ts"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
-import type { SubjectLine } from "#commits/SubjectLine.ts"
+import type { CoauthorToken } from "#commits/tokens/CoauthorToken.ts"
+import type { DependencyVersionToken } from "#commits/tokens/DependencyVersionToken.ts"
+import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.ts"
+import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
+import type { IssueReferenceToken } from "#commits/tokens/IssueReferenceToken.ts"
+import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import { notEmptyString } from "#utilities/Arrays.ts"
@@ -15,11 +19,23 @@ export type Commit = {
 	committerName: string | null
 	committerEmail: string | null
 	isMergeCommit: boolean
-	subjectLine: SubjectLine
-	bodyLines: BodyLines
+	subjectLine: TokenisedLine
+	bodyLines: TokenisedLines
 }
 
 export type Commits = Array<Commit>
+
+export type Token =
+	| string
+	| CoauthorToken
+	| DependencyVersionToken
+	| FencedCodeBlockToken
+	| HyperlinkToken
+	| IssueReferenceToken
+	| SquashMarkerToken
+
+export type TokenisedLine = Array<Token>
+export type TokenisedLines = Array<TokenisedLine>
 
 export function mapCrudeCommitToCommit(
 	crudeCommit: CrudeCommit,
