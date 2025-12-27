@@ -10,7 +10,7 @@ export type Configuration = {
 		noRepeatedSubjectLines: EmptyObject | null
 		noRevertRevertCommits: EmptyObject | null
 		noSingleWordSubjectLines: EmptyObject | null
-		noSquashPrefixes: EmptyObject | null // TODO: Rule options for `noSquashPrefixes`.
+		noSquashMarkers: EmptyObject | null // TODO: Rule options for `noSquashMarkers`.
 		noUnexpectedPunctuation: EmptyObject | null // TODO: Rule options for `noUnexpectedPunctuation`.
 		noUnexpectedWhitespace: EmptyObject | null
 		useAuthorEmailPatterns: EmptyObject | null // TODO: Rule options for `useAuthorEmailPatterns`.

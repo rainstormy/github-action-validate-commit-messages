@@ -35,7 +35,7 @@ describe("the default configuration in the command-line", () => {
 		disabledRuleKey
 		${"noRepeatedSubjectLines"}
 		${"noRevertRevertCommits"}
-		${"noSquashPrefixes"}
+		${"noSquashMarkers"}
 		${"useAuthorEmailPatterns"}
 		${"useAuthorNamePatterns"}
 		${"useCommitterEmailPatterns"}
@@ -65,7 +65,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"noRepeatedSubjectLines"}      | ${{}}
 		${"noRevertRevertCommits"}       | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
-		${"noSquashPrefixes"}            | ${{}}
+		${"noSquashMarkers"}             | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
