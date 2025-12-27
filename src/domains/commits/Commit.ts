@@ -3,7 +3,7 @@ import type { CoauthorToken } from "#commits/tokens/CoauthorToken.ts"
 import type { DependencyVersionToken } from "#commits/tokens/DependencyVersionToken.ts"
 import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.ts"
 import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
-import type { IssueReferenceToken } from "#commits/tokens/IssueReferenceToken.ts"
+import type { IssueLinkToken } from "#commits/tokens/IssueLinkToken.ts"
 import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
@@ -31,7 +31,7 @@ export type Token =
 	| DependencyVersionToken
 	| FencedCodeBlockToken
 	| HyperlinkToken
-	| IssueReferenceToken
+	| IssueLinkToken
 	| SquashMarkerToken
 
 export type TokenisedLine = Array<Token>
