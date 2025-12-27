@@ -40,7 +40,7 @@ describe("the default configuration in the command-line", () => {
 		${"useAuthorNamePatterns"}
 		${"useCommitterEmailPatterns"}
 		${"useCommitterNamePatterns"}
-		${"useIssueReferences"}
+		${"useIssueLinks"}
 	`(
 		"does not enable $disabledRuleKey'",
 		(props: { disabledRuleKey: RuleKey }) => {
@@ -87,7 +87,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useAuthorNamePatterns"}
 		${"useCommitterEmailPatterns"}
 		${"useCommitterNamePatterns"}
-		${"useIssueReferences"}
+		${"useIssueLinks"}
 	`(
 		"does not enable $disabledRuleKey'",
 		(props: { disabledRuleKey: RuleKey }) => {

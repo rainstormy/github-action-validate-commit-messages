@@ -36,7 +36,7 @@ function getDefaultCliConfiguration(): Configuration {
 			useConciseSubjectLines: {},
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: {},
-			useIssueReferences: null,
+			useIssueLinks: null,
 			useLineWrapping: {},
 		},
 	}
@@ -61,7 +61,7 @@ function getDefaultGhaConfiguration(): Configuration {
 			useConciseSubjectLines: {},
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: {},
-			useIssueReferences: null,
+			useIssueLinks: null,
 			useLineWrapping: {},
 		},
 	}

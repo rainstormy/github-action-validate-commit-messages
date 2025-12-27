@@ -21,7 +21,7 @@ export type Configuration = {
 		useConciseSubjectLines: EmptyObject | null // TODO: Rule options for `useConciseSubjectLines`.
 		useEmptyLineBeforeBodyLines: EmptyObject | null
 		useImperativeSubjectLines: EmptyObject | null // TODO: Rule options for `useImperativeSubjectLines`.
-		useIssueReferences: EmptyObject | null // TODO: Rule options for `useIssueReferences`.
+		useIssueLinks: EmptyObject | null // TODO: Rule options for `useIssueLinks`.
 		useLineWrapping: EmptyObject | null // TODO: Rule options for `useLineWrapping`.
 	}
 }
