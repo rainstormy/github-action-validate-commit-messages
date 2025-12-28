@@ -7,6 +7,8 @@ and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- **BREAKING:** Upgrade Node.js to 24.
 
 ## [1.1.9] - 2025-07-27
 ### Changed
