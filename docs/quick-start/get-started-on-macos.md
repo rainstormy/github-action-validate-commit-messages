@@ -305,10 +305,10 @@ Last updated: July 26, 2025.
 
 7. Verify that both installations succeeded:
    ```shell
-   node --version # -> 20.19.0 or newer
+   node --version # -> 24.12.0 or newer
    ```
    ```shell
-   pnpm --version # -> 10.12.0 or newer
+   pnpm --version # -> 10.22.0 or newer
    ```
 
 8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
