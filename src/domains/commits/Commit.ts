@@ -3,9 +3,15 @@ import type { CoauthorToken } from "#commits/tokens/CoauthorToken.ts"
 import type { DependencyVersionToken } from "#commits/tokens/DependencyVersionToken.ts"
 import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.ts"
 import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
-import type { IssueLinkToken } from "#commits/tokens/IssueLinkToken.ts"
+import {
+	type IssueLinkToken,
+	tokeniseIssueLinks,
+} from "#commits/tokens/IssueLinkToken.ts"
 import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
-import type { Configuration } from "#configurations/Configuration.ts"
+import type {
+	Configuration,
+	TokenConfiguration,
+} from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import { notEmptyString } from "#utilities/Arrays.ts"
 
@@ -37,11 +43,19 @@ export type Token =
 export type TokenisedLine = Array<Token>
 export type TokenisedLines = Array<TokenisedLine>
 
+export type Tokeniser = (
+	initialTokens: TokenisedLine,
+	configuration: TokenConfiguration,
+) => TokenisedLine
+
+export type Tokenisers = Array<Tokeniser>
+
 export function mapCrudeCommitToCommit(
 	crudeCommit: CrudeCommit,
-	_configuration: Configuration,
+	configuration: Configuration,
 ): Commit {
-	const [subjectLine = "", ...bodyLines] = crudeCommit.message.split("\n")
+	const [crudeSubjectLine = "", ...crudeBodyLines] =
+		crudeCommit.message.split("\n")
 
 	return {
 		sha: crudeCommit.sha,
@@ -50,7 +64,24 @@ export function mapCrudeCommitToCommit(
 		authorEmail: crudeCommit.authorEmail,
 		committerName: crudeCommit.committerName,
 		committerEmail: crudeCommit.committerEmail,
-		subjectLine: [subjectLine].filter(notEmptyString),
-		bodyLines: bodyLines.map((bodyLine) => [bodyLine].filter(notEmptyString)),
+		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens),
+		bodyLines: crudeBodyLines.map((crudeBodyLine) =>
+			[crudeBodyLine].filter(notEmptyString),
+		),
 	}
+}
+
+const tokenisers: Tokenisers = [tokeniseIssueLinks]
+
+function tokeniseSubjectLine(
+	crudeSubjectLine: string,
+	tokenConfiguration: TokenConfiguration,
+): TokenisedLine {
+	return tokenisers
+		.reduce<TokenisedLine>(
+			(tokenisedSubjectLineSoFar, tokenise) =>
+				tokenise(tokenisedSubjectLineSoFar, tokenConfiguration),
+			[crudeSubjectLine],
+		)
+		.filter(notEmptyString)
 }
