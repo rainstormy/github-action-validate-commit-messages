@@ -7,7 +7,10 @@ import {
 	type IssueLinkToken,
 	tokeniseIssueLinks,
 } from "#commits/tokens/IssueLinkToken.ts"
-import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
+import {
+	type SquashMarkerToken,
+	tokeniseSquashMarkers,
+} from "#commits/tokens/SquashMarkerToken.ts"
 import type {
 	Configuration,
 	TokenConfiguration,
@@ -71,7 +74,8 @@ export function mapCrudeCommitToCommit(
 	}
 }
 
-const tokenisers: Tokenisers = [tokeniseIssueLinks]
+// Ordered from the highest priority to the lowest priority.
+const tokenisers: Tokenisers = [tokeniseSquashMarkers, tokeniseIssueLinks]
 
 function tokeniseSubjectLine(
 	crudeSubjectLine: string,
