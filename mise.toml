@@ -92,6 +92,26 @@ run = """
 description = "Installs Node.js packages with pnpm and enables the Git hooks with Lefthook."
 alias = ["i"]
 
+[tasks.post-checkout]
+depends = ["init"]
+description = "Runs `init` after checking out a branch or a commit."
+hide = true
+
+[tasks.post-rewrite]
+depends = ["init"]
+description = "Runs `init` after rebasing onto another branch or commit."
+hide = true
+
+[tasks.pre-commit]
+depends = ["fmt"]
+description = "Runs `fmt` before committing changes."
+hide = true
+
+[tasks.pre-push]
+depends = ["check", "test"]
+description = "Runs `check` and `test` before allowing commits to be pushed."
+hide = true
+
 [tasks.test]
 # language=sh
 run = """
