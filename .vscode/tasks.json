@@ -112,8 +112,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "init",
-			"command": "mise run init",
+			"label": "install",
+			"command": "mise run install",
 			"type": "shell",
 			"presentation": {
 				"clear": true,

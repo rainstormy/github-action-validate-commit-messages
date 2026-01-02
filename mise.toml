@@ -83,23 +83,22 @@ run = """
 description = "Reformats the source code with Biome."
 alias = ["f"]
 
-[tasks.init]
+[tasks.install]
 # language=sh
 run = """
-	pnpm install --ignore-scripts && \
-	lefthook install
+	mise install
 """
-description = "Installs Node.js packages with pnpm and enables the Git hooks with Lefthook."
+description = "Installs all third-party dependencies with mise-en-place and pnpm and enables the Git hooks with Lefthook."
 alias = ["i"]
 
 [tasks.post-checkout]
-depends = ["init"]
-description = "Runs `init` after checking out a branch or a commit."
+depends = ["install"]
+description = "Runs `install` after checking out a branch or a commit."
 hide = true
 
 [tasks.post-rewrite]
-depends = ["init"]
-description = "Runs `init` after rebasing onto another branch or commit."
+depends = ["install"]
+description = "Runs `install` after rebasing onto another branch or commit."
 hide = true
 
 [tasks.pre-commit]
@@ -117,7 +116,6 @@ hide = true
 run = """
 	vitest run
 """
-env = { CI = 1 }
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
 
@@ -129,7 +127,6 @@ run = """
 		--api.port "$LOCALHOST_VITEST_PORT" \
 		--open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
 """
-env = { CI = 1 }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
 
@@ -140,6 +137,13 @@ run = """
 """
 description = "Disables the Git hooks with Lefthook."
 
+[hooks]
+# language=sh
+postinstall = """
+	pnpm install --frozen-lockfile --ignore-scripts && \
+	lefthook install
+"""
+
 [env]
 # Load environment variables from the `.env` and `.env.local` files.
 # https://mise.jdx.dev/environments/#env-file
@@ -149,8 +153,12 @@ _.file = [".env", ".env.local"]
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
 
+# Align the behaviour of the local environment with the CI environment in GitHub Actions by default.
+CI = 1
+
 # Grab the current Comet version from the `version` field in `package.json`.
 COMET_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }
 
 [settings]
+experimental = true # Enable the `[hooks]` section.
 task_output = "quiet"
