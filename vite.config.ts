@@ -5,7 +5,7 @@ import type { ViteUserConfig as ViteConfig } from "vitest/config"
 
 export default {
 	build: {
-		emptyOutDir: Boolean(env.COMET_PLATFORM), // Prevent the `build_legacy_v1` task from deleting the `dist/cli` and `dist/gha` directories.
+		emptyOutDir: Boolean(env.COMET_PLATFORM), // Prevent the `build-legacy-v1` task from deleting the `dist/cli` and `dist/gha` directories.
 		minify: "esbuild" as const,
 		reportCompressedSize: false,
 		rollupOptions: {

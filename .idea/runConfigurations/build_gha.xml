@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="build_gha" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
-    <mise configEnvironment="" taskName="build_gha" workingDirectory="$PROJECT_DIR$" taskParams="">
+  <configuration default="false" name="build-gha" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
+    <mise configEnvironment="" taskName="build-gha" workingDirectory="$PROJECT_DIR$" taskParams="">
       <envs />
     </mise>
     <method v="2" />

@@ -13,8 +13,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "build_cli",
-			"command": "mise run build_cli",
+			"label": "build-cli",
+			"command": "mise run build-cli",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -24,8 +24,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "build_gha",
-			"command": "mise run build_gha",
+			"label": "build-gha",
+			"command": "mise run build-gha",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -35,8 +35,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "build_legacy_v1",
-			"command": "mise run build_legacy_v1",
+			"label": "build-legacy-v1",
+			"command": "mise run build-legacy-v1",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -57,8 +57,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check_actions",
-			"command": "mise run check_actions",
+			"label": "check-actions",
+			"command": "mise run check-actions",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -68,8 +68,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check_fmt",
-			"command": "mise run check_fmt",
+			"label": "check-fmt",
+			"command": "mise run check-fmt",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -79,8 +79,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check_renovate",
-			"command": "mise run check_renovate",
+			"label": "check-renovate",
+			"command": "mise run check-renovate",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -90,8 +90,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check_ts",
-			"command": "mise run check_ts",
+			"label": "check-ts",
+			"command": "mise run check-ts",
 			"type": "shell",
 			"presentation": {
 				"clear": true,

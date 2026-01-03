@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="check_actions" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
-    <mise configEnvironment="" taskName="check_actions" workingDirectory="$PROJECT_DIR$" taskParams="">
+  <configuration default="false" name="check-actions" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
+    <mise configEnvironment="" taskName="check-actions" workingDirectory="$PROJECT_DIR$" taskParams="">
       <envs />
     </mise>
     <method v="2" />

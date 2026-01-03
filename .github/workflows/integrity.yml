@@ -71,34 +71,34 @@ jobs:
       - name: Verify the workflow syntax (actionlint)
         uses: ./.github/actions/task
         with:
-          cache-key: check_actions:${{ hashFiles('.github/**/*.yml', 'action.yml') }}
+          cache-key: check-actions:${{ hashFiles('.github/**/*.yml', 'action.yml') }}
           cache-path: node_modules/.cache/actionlint/
           # language=sh
-          task: check_actions
+          task: check-actions
         #
       - name: Verify the code style (Biome)
         uses: ./.github/actions/task
         with:
-          cache-key: check_fmt:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.ts', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
+          cache-key: check-fmt:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.ts', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
           cache-path: node_modules/.cache/biome/
           # language=sh
-          task: check_fmt
+          task: check-fmt
         #
       - name: Verify the Renovate configuration
         uses: ./.github/actions/task
         with:
-          cache-key: check_renovate:${{ hashFiles('.github/renovate.json') }}
+          cache-key: check-renovate:${{ hashFiles('.github/renovate.json') }}
           cache-path: node_modules/.cache/renovate/
           # language=sh
-          task: check_renovate
+          task: check-renovate
         #
       - name: Verify the type safety (TypeScript)
         uses: ./.github/actions/task
         with:
-          cache-key: check_ts:${{ hashFiles('src/**/*', '*.ts', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          cache-key: check-ts:${{ hashFiles('src/**/*', '*.ts', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
           cache-path: node_modules/.cache/typescript/
           # language=sh
-          task: check_ts
+          task: check-ts
 
   test:
     name: Unit tests
