@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="check-format" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
+    <mise configEnvironment="" taskName="check-format" workingDirectory="$PROJECT_DIR$" taskParams="">
+      <envs />
+    </mise>
+    <method v="2" />
+  </configuration>
+</component>

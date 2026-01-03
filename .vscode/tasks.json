@@ -68,8 +68,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check-fmt",
-			"command": "mise run check-fmt",
+			"label": "check-format",
+			"command": "mise run check-format",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -90,8 +90,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check-ts",
-			"command": "mise run check-ts",
+			"label": "check-types",
+			"command": "mise run check-types",
 			"type": "shell",
 			"presentation": {
 				"clear": true,
@@ -101,8 +101,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "fmt",
-			"command": "mise run fmt",
+			"label": "format",
+			"command": "mise run format",
 			"type": "shell",
 			"presentation": {
 				"clear": true,

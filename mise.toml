@@ -39,8 +39,8 @@ run = """
 description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]
-depends = ["check-actions", "check-fmt", "check-ts"] # Skip the time-consuming `check-renovate` task.
-description = "Runs `check-actions`, `check-fmt`, and `check-ts`."
+depends = ["check-actions", "check-format", "check-types"] # Skip the time-consuming `check-renovate` task.
+description = "Runs `check-actions`, `check-format`, and `check-types`."
 alias = ["c"]
 
 [tasks.check-actions]
@@ -51,7 +51,7 @@ run = """
 description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
 alias = ["ca"]
 
-[tasks.check-fmt]
+[tasks.check-format]
 # language=sh
 run = """
 	biome check --error-on-warnings
@@ -67,7 +67,7 @@ run = """
 description = "Verifies the syntax of the Renovate configuration."
 alias = ["cr"]
 
-[tasks.check-ts]
+[tasks.check-types]
 # language=sh
 run = """
 	tsgo
@@ -75,7 +75,7 @@ run = """
 description = "Verifies the type safety of the source code with TypeScript."
 alias = ["ct"]
 
-[tasks.fmt]
+[tasks.format]
 # language=sh
 run = """
 	biome check --skip-parse-errors --write
@@ -102,8 +102,8 @@ description = "Runs `install` after rebasing onto another branch or commit."
 hide = true
 
 [tasks.pre-commit]
-depends = ["fmt"]
-description = "Runs `fmt` before committing changes."
+depends = ["format"]
+description = "Runs `format` before committing changes."
 hide = true
 
 [tasks.pre-push]

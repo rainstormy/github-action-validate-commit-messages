@@ -79,10 +79,10 @@ jobs:
       - name: Verify the code style (Biome)
         uses: ./.github/actions/task
         with:
-          cache-key: check-fmt:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.ts', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
+          cache-key: check-format:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.ts', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
           cache-path: node_modules/.cache/biome/
           # language=sh
-          task: check-fmt
+          task: check-format
         #
       - name: Verify the Renovate configuration
         uses: ./.github/actions/task
@@ -95,10 +95,10 @@ jobs:
       - name: Verify the type safety (TypeScript)
         uses: ./.github/actions/task
         with:
-          cache-key: check-ts:${{ hashFiles('src/**/*', '*.ts', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
+          cache-key: check-types:${{ hashFiles('src/**/*', '*.ts', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
           cache-path: node_modules/.cache/typescript/
           # language=sh
-          task: check-ts
+          task: check-types
 
   test:
     name: Unit tests

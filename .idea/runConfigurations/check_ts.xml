@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="check-ts" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
-    <mise configEnvironment="" taskName="check-ts" workingDirectory="$PROJECT_DIR$" taskParams="">
-      <envs />
-    </mise>
-    <method v="2" />
-  </configuration>
-</component>
