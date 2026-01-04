@@ -79,6 +79,17 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "check-mise",
+			"command": "mise run check-mise",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "always"
+			},
+			"problemMatcher": []
+		},
+		{
 			"label": "check-renovate",
 			"command": "mise run check-renovate",
 			"type": "shell",
@@ -103,6 +114,17 @@
 		{
 			"label": "format",
 			"command": "mise run format",
+			"type": "shell",
+			"presentation": {
+				"clear": true,
+				"panel": "shared",
+				"reveal": "silent"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "format-mise",
+			"command": "mise run format-mise",
 			"type": "shell",
 			"presentation": {
 				"clear": true,

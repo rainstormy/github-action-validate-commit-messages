@@ -105,6 +105,16 @@ jobs:
           # language=sh
           task: check-format
         #
+      - name: Verify the mise-en-place configuration
+        uses: ./.github/actions/task
+        with:
+          # The cache key includes:
+          # - The mise configuration file (`mise.toml`).
+          cache-key: check-mise:${{ hashFiles('mise.toml') }}
+          cache-path: node_modules/.cache/mise/
+          # language=sh
+          task: check-mise
+        #
       - name: Verify the Renovate configuration
         uses: ./.github/actions/task
         with:

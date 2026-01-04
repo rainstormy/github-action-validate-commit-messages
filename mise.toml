@@ -16,7 +16,7 @@ alias = ["b"]
 [tasks.build-cli]
 # language=sh
 run = """
-	vite build --ssr src/main-cli.ts --outDir dist/cli/
+  vite build --ssr src/main-cli.ts --outDir dist/cli/
 """
 env = { COMET_PLATFORM = "cli" }
 description = "Generates production-grade build artefacts of the v2 command-line entrypoint with Vite."
@@ -25,7 +25,7 @@ alias = ["bc"]
 [tasks.build-gha]
 # language=sh
 run = """
-	vite build --ssr src/main-gha.ts --outDir dist/gha/
+  vite build --ssr src/main-gha.ts --outDir dist/gha/
 """
 env = { COMET_PLATFORM = "gha" }
 description = "Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with Vite."
@@ -34,61 +34,83 @@ alias = ["bg"]
 [tasks.build-legacy-v1]
 # language=sh
 run = """
-	vite build --ssr src/legacy-v1-main.ts --outDir dist/
+  vite build --ssr src/legacy-v1-main.ts --outDir dist/
 """
 description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
 
 [tasks.check]
-depends = ["check-actions", "check-format", "check-types"] # Skip the time-consuming `check-renovate` task.
-description = "Runs `check-actions`, `check-format`, and `check-types`."
+depends = [
+  "check-actions",
+  "check-format",
+  "check-mise",
+  # "check-renovate", # Skipped because it is often quite slow.
+  "check-types",
+]
+description = "Runs `check-actions`, `check-format`, `check-mise`, and `check-types`."
 alias = ["c"]
 
 [tasks.check-actions]
 # language=sh
 run = """
-	actionlint
+  actionlint
 """
-description = "Verifies the syntax of the GitHub Actions workflows with actionlint."
+description = "Verifies that the GitHub Actions workflows are valid with actionlint."
 alias = ["ca"]
 
 [tasks.check-format]
 # language=sh
 run = """
-	biome check --error-on-warnings
+  biome check --error-on-warnings
 """
-description = "Verifies the code style of the source code with Biome."
+description = "Verifies that the source code is clean and well-formatted with Biome."
 alias = ["cf"]
+
+[tasks.check-mise]
+# language=sh
+run = """
+  mise fmt --check
+"""
+description = "Verifies that the mise-en-place configuration file (`mise.toml`) is well-formatted." # This file.
+alias = ["cm"]
 
 [tasks.check-renovate]
 # language=sh
 run = """
-	pnpm dlx --package renovate renovate-config-validator
+  pnpm dlx --package renovate renovate-config-validator
 """
-description = "Verifies the syntax of the Renovate configuration."
+description = "Verifies that the Renovate configuration file (`.github/renovate.json`) is valid."
 alias = ["cr"]
 
 [tasks.check-types]
 # language=sh
 run = """
-	tsgo
+  tsgo
 """
-description = "Verifies the type safety of the source code with TypeScript."
+description = "Verifies that the source code is type-safe with TypeScript."
 alias = ["ct"]
 
 [tasks.format]
 # language=sh
 run = """
-	biome check --skip-parse-errors --write
+  biome check --skip-parse-errors --write
 """
 description = "Reformats the source code with Biome."
 alias = ["f"]
 
+[tasks.format-mise]
+# language=sh
+run = """
+  mise fmt
+"""
+description = "Reformats the mise-en-place configuration file (`mise.toml`)." # This file.
+alias = ["fm"]
+
 [tasks.install]
 # language=sh
 run = """
-	mise install
+  mise install
 """
-description = "Installs all third-party dependencies with mise-en-place and pnpm and enables the Git hooks with Lefthook."
+description = "Installs all third-party dependencies with mise-en-place and pnpm and (unless opted out) enables the Git hooks with Lefthook."
 alias = ["i"]
 
 [tasks.post-checkout]
@@ -102,8 +124,8 @@ description = "Runs `install` after rebasing onto another branch or commit."
 hide = true
 
 [tasks.pre-commit]
-depends = ["format"]
-description = "Runs `format` before committing changes."
+depends = ["format", "format-mise"]
+description = "Runs `format` and `format-mise` before committing changes."
 hide = true
 
 [tasks.pre-push]
@@ -114,7 +136,7 @@ hide = true
 [tasks.test]
 # language=sh
 run = """
-	vitest run
+  vitest run
 """
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
@@ -122,10 +144,10 @@ alias = ["t"]
 [tasks.vitest]
 # language=sh
 run = """
-	vitest watch \
-		--ui \
-		--api.port "$LOCALHOST_VITEST_PORT" \
-		--open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
+  vitest watch \
+    --ui \
+    --api.port "$LOCALHOST_VITEST_PORT" \
+    --open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
 """
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
@@ -133,22 +155,23 @@ alias = ["v"]
 [tasks.yolo]
 # language=sh
 run = """
-	lefthook uninstall
+  lefthook uninstall
 """
-description = "Disables the Git hooks with Lefthook."
+description = "Disables the Git hooks temporarily with Lefthook."
 
 [hooks]
 # language=sh
 postinstall = """
-	pnpm install --frozen-lockfile --ignore-scripts
+  pnpm install --frozen-lockfile --ignore-scripts
 
-	if [ -z "$LEFTHOOK" ] || [ "$LEFTHOOK" = '1' ] || [ "$LEFTHOOK" = 'true' ]; then
-		lefthook install
-	fi
+  if [ -z "$LEFTHOOK" ] || [ "$LEFTHOOK" = '1' ] || [ "$LEFTHOOK" = 'true' ]; then
+    lefthook install
+  fi
 """
 
 [env]
-# Load environment variables from the `.env` and `.env.local` files.
+# Load environment variables from the following .env files in prioritised order.
+# Variables declared in later files override earlier ones.
 # https://mise.jdx.dev/environments/#env-file
 _.file = [".env", ".env.local"]
 
@@ -163,7 +186,8 @@ CI = 1
 COMET_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }
 
 [settings]
-experimental = true # Enable the `[hooks]` section.
+# Enable mise hooks.
+experimental = true
 
 # Suppress printing the `run` input command in the console when running a mise task.
 quiet = true
