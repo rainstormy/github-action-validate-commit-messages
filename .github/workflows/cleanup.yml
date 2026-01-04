@@ -15,6 +15,10 @@ on:
     types:
       - closed
 
+# Provide `GH_REPO` and `GH_TOKEN` as environment variables only in the steps that need them.
+# This reduces their lexical scope and minimises the risk of leaking them to third-party actions.
+# https://cli.github.com/manual/gh_help_environment
+# https://docs.github.com/en/actions/tutorials/authenticate-with-github_token
 jobs:
   clean-up-workflow-cache:
     name: Clean up workflow cache
@@ -28,21 +32,18 @@ jobs:
       - name: Delete obsolete workflow cache entries
         # language=sh
         run: |
+          # Delete cache entries of the pull request ref.
+          # https://cli.github.com/manual/gh_cache_delete
           CACHE_IDS_TO_DELETE=$(gh cache list --ref "$BRANCH" --limit 100 --json id --jq '.[].id')
 
           # Make the script run to completion even if `gh cache` fails for some cache entries.
           set +e
 
           for CACHE_ID in $CACHE_IDS_TO_DELETE; do
-              gh cache delete "$CACHE_ID"
-              echo "Deleted cache $CACHE_ID on branch $BRANCH"
+            gh cache delete "$CACHE_ID"
+            echo "Deleted cache $CACHE_ID on branch $BRANCH"
           done
         env:
-          # Delete cache entries of the pull request ref.
-          # https://cli.github.com/manual/gh_cache_delete
-          BRANCH: refs/pull/${{ github.event.pull_request.number }}/merge
-          #
-          # An authentication token for the GitHub CLI (`gh`):
-          # https://cli.github.com/manual/gh_help_environment
-          GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: refs/pull/${{ github.event.pull_request.number }}/merge

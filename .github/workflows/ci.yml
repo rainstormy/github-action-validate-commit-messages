@@ -26,6 +26,7 @@ concurrency:
 jobs:
   integrity:
     name: Integrity
+    # Skip draft pull requests to reduce costs.
     if: github.event.pull_request.draft == false
     permissions:
       # To call reusable workflows in the same repository.
@@ -36,7 +37,7 @@ jobs:
 
   commit-messages:
     name: Commit messages
-    if: github.event.pull_request.draft == false
+    # Skip verification of commit messages when the software integrity checks fail, as it will most likely require another commit to fix them.
     needs: integrity
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
@@ -52,7 +53,8 @@ jobs:
         uses: ./.github/actions/build-artefacts
         #
       - name: Verify the commit messages
-        uses: ./ # Run the action on itself.
+        # Run the action on itself.
+        uses: ./
         with:
           github-token: ${{ github.token }}
           rules: |

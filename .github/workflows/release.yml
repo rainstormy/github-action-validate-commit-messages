@@ -42,7 +42,8 @@ jobs:
 
   release-branch:
     name: Release branch
-    if: github.ref_name == github.event.repository.default_branch # A release must always be created from the `main` branch.
+    # A release must always be created from the `main` branch.
+    if: github.ref_name == github.event.repository.default_branch
     needs: integrity
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 1
@@ -51,7 +52,8 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
-          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }} # Use a separate access token with permission to commit and push.
+          # Use a separate access token with permission to commit and push.
+          token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
       - name: Restore the build artefacts to be distributed in the release
         uses: ./.github/actions/build-artefacts
