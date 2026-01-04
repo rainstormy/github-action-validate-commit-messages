@@ -164,4 +164,6 @@ COMET_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.js
 
 [settings]
 experimental = true # Enable the `[hooks]` section.
-task_output = "quiet"
+
+# Suppress printing the `run` input command in the console when running a mise task.
+quiet = true
