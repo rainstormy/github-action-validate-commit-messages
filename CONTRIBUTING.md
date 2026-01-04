@@ -6,19 +6,23 @@
 - [Get started on 🟦 Windows](docs/quick-start/get-started-on-windows.md)
 
 ## Tasks
-| Name              | Description                                                                                                                                                                   |
-|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `build`           | Runs `build-cli`, `build-gha`, and `build-legacy-v1`.                                                                                                                         |
-| `build-cli`       | Generates production-grade build artefacts of the v2 command-line entrypoint with [Vite](https://vite.dev).                                                                   |
-| `build-gha`       | Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with [Vite](https://vite.dev).                                                                 |
-| `build-legacy-v1` | Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with [Vite](https://vite.dev).                                                          |
-| `check`           | Runs `check-actions`, `check-format`, and `check-types`.                                                                                                                      |
-| `check-actions`   | Verifies the syntax of the GitHub Actions workflows with [actionlint](https://github.com/rhysd/actionlint).                                                                   |
-| `check-format`    | Verifies the code style of the source code with [Biome](https://biomejs.dev).                                                                                                 |
-| `check-renovate`  | Verifies the syntax of the [Renovate](https://github.com/renovatebot/renovate) configuration.                                                                                 |
-| `check-types`     | Verifies the type safety of the source code with [TypeScript](https://www.typescriptlang.org).                                                                                |
-| `format`          | Reformats the source code with [Biome](https://biomejs.dev).                                                                                                                  |
-| `install`         | Installs all third-party dependencies with [mise-en-place](https://mise.jdx.dev) and [pnpm](https://pnpm.io) and enables the Git hooks with [Lefthook](https://lefthook.dev). |
-| `test`            | Runs the entire unit test suite once with [Vitest](https://vitest.dev).                                                                                                       |
-| `vitest`          | Starts the [Vitest UI](https://vitest.dev/guide/ui.html#vitest-ui) test explorer for continuous unit testing.                                                                 |
-| `yolo`            | Disables the Git hooks with [Lefthook](https://lefthook.dev).                                                                                                                 |
+```shell
+mise run name_of_task
+```
+
+| Task name         | Alias | Description                                                                                                                                                                   |
+|-------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `build`           | `b`   | Runs `build-cli`, `build-gha`, and `build-legacy-v1`.                                                                                                                         |
+| `build-cli`       | `bc`  | Generates production-grade build artefacts of the v2 command-line entrypoint with [Vite](https://vite.dev).                                                                   |
+| `build-gha`       | `bg`  | Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with [Vite](https://vite.dev).                                                                 |
+| `build-legacy-v1` |       | Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with [Vite](https://vite.dev).                                                          |
+| `check`           | `c`   | Runs `check-actions`, `check-format`, and `check-types`.                                                                                                                      |
+| `check-actions`   | `ca`  | Verifies the syntax of the GitHub Actions workflows with [actionlint](https://github.com/rhysd/actionlint).                                                                   |
+| `check-format`    | `cf`  | Verifies the code style of the source code with [Biome](https://biomejs.dev).                                                                                                 |
+| `check-renovate`  | `cr`  | Verifies the syntax of the [Renovate](https://github.com/renovatebot/renovate) configuration.                                                                                 |
+| `check-types`     | `ct`  | Verifies the type safety of the source code with [TypeScript](https://www.typescriptlang.org).                                                                                |
+| `format`          | `f`   | Reformats the source code with [Biome](https://biomejs.dev).                                                                                                                  |
+| `install`         | `i`   | Installs all third-party dependencies with [mise-en-place](https://mise.jdx.dev) and [pnpm](https://pnpm.io) and enables the Git hooks with [Lefthook](https://lefthook.dev). |
+| `test`            | `t`   | Runs the entire unit test suite once with [Vitest](https://vitest.dev).                                                                                                       |
+| `vitest`          | `v`   | Starts the [Vitest UI](https://vitest.dev/guide/ui.html#vitest-ui) test explorer for continuous unit testing.                                                                 |
+| `yolo`            |       | Disables the Git hooks with [Lefthook](https://lefthook.dev).                                                                                                                 |
