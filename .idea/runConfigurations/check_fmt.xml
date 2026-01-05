@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="check_fmt" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
-    <mise configEnvironment="" taskName="check_fmt" workingDirectory="$PROJECT_DIR$" taskParams="">
-      <envs />
-    </mise>
-    <method v="2" />
-  </configuration>
-</component>

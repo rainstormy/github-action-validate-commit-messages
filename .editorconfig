@@ -23,7 +23,8 @@ indent_size = 2
 indent_style = space
 trim_trailing_whitespace = false
 
+# mise-en-place prefers space indentation in TOML files.
 # YAML does not support tabs for indentation.
-[*.{yaml,yml}]
+[*.{toml,yaml,yml}]
 indent_size = 2
 indent_style = space

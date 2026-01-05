@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="build_cli" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
-    <mise configEnvironment="" taskName="build_cli" workingDirectory="$PROJECT_DIR$" taskParams="">
+  <configuration default="false" name="build-cli" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
+    <mise configEnvironment="" taskName="build-cli" workingDirectory="$PROJECT_DIR$" taskParams="">
       <envs />
     </mise>
     <method v="2" />

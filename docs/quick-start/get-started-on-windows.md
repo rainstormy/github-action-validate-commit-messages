@@ -64,7 +64,7 @@ Last updated: July 26, 2025.
    jq --version # -> 1.8.0 or newer
    ```
    ```powershell
-   yq --version # -> 4.45.0 or newer
+   yq --version # -> 4.50.0 or newer
    ```
 
 > [!TIP]  
@@ -196,10 +196,10 @@ Last updated: July 26, 2025.
 
 2. Verify that both installations succeeded:
    ```powershell
-   git --version # -> 2.50.0 or newer
+   git --version # -> 2.52.0 or newer
    ```
    ```powershell
-   gh --version # -> 2.75.0 or newer
+   gh --version # -> 2.83.0 or newer
    ```
 
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
@@ -285,7 +285,7 @@ Last updated: July 26, 2025.
 
 2. Verify that the installation succeeded:
    ```powershell
-   mise --version # -> 2025.7.0 or newer
+   mise --version # -> 2025.12.0 or newer
    ```
 
 3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
@@ -313,28 +313,29 @@ Last updated: July 26, 2025.
    mise trust
    ```
 
-6. Install the tools required by the project (including Node.js and pnpm):
+6. Install all third-party dependencies required by the project and enable the
+   Git hooks:
    ```powershell
    mise install
    ```
 
-7. Verify that both installations succeeded:
+7. Verify that the installations succeeded:
    ```powershell
    node --version # -> 24.12.0 or newer
    ```
    ```powershell
-   pnpm --version # -> 10.22.0 or newer
+   pnpm --version # -> 10.26.0 or newer
+   ```
+   ```powershell
+   biome --version # -> 2.3.0 or newer
+   ```
+   ```powershell
+   lefthook --version # -> 2.0.0 or newer
    ```
 
 8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
    ```powershell
    pnpm config --global set save-prefix ''
-   ```
-
-9. Install the Node.js packages required by the project and enable its Git
-   hooks:
-   ```powershell
-   mise run init
    ```
 
 > [!IMPORTANT]  

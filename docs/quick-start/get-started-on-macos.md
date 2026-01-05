@@ -35,7 +35,7 @@ Last updated: July 26, 2025.
 
 2. Verify that the installation succeeded:
    ```shell
-   brew --version # -> 4.5.0 or newer
+   brew --version # -> 5.0.0 or newer
    ```
 
 3. Install [jq](https://jqlang.org) and [yq](https://mikefarah.gitbook.io/yq):
@@ -43,12 +43,12 @@ Last updated: July 26, 2025.
    brew install jq yq
    ```
 
-4. Verify that both installations succeeded:
+4. Verify that the installations succeeded:
    ```shell
    jq --version # -> 1.8.0 or newer
    ```
    ```shell
-   yq --version # -> 4.46.0 or newer
+   yq --version # -> 4.50.0 or newer
    ```
 
 5. [Enable](https://github.com/DomT4/homebrew-autoupdate) daily package
@@ -181,12 +181,12 @@ Last updated: July 26, 2025.
    brew install git gh
    ```
 
-2. Verify that both installations succeeded:
+2. Verify that the installations succeeded:
    ```shell
-   git --version # -> 2.50.0 or newer
+   git --version # -> 2.52.0 or newer
    ```
    ```shell
-   gh --version # -> 2.75.0 or newer
+   gh --version # -> 2.83.0 or newer
    ```
 
 3. [Add](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)
@@ -270,7 +270,7 @@ Last updated: July 26, 2025.
 
 2. Verify that the installation succeeded:
    ```shell
-   mise --version # -> 2025.7.0 or newer
+   mise --version # -> 2025.12.0 or newer
    ```
 
 3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
@@ -298,28 +298,29 @@ Last updated: July 26, 2025.
    mise trust
    ```
 
-6. Install the tools required by the project (including Node.js and pnpm):
+6. Install all third-party dependencies required by the project and enable the
+   Git hooks:
    ```shell
    mise install
    ```
 
-7. Verify that both installations succeeded:
+7. Verify that the installations succeeded:
    ```shell
    node --version # -> 24.12.0 or newer
    ```
    ```shell
-   pnpm --version # -> 10.22.0 or newer
+   pnpm --version # -> 10.26.0 or newer
+   ```
+   ```shell
+   biome --version # -> 2.3.0 or newer
+   ```
+   ```shell
+   lefthook --version # -> 2.0.0 or newer
    ```
 
 8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
    ```shell
    pnpm config --global set save-prefix ''
-   ```
-
-9. Install the Node.js packages required by the project and enable its Git
-   hooks:
-   ```shell
-   mise run init
    ```
 
 > [!IMPORTANT]  

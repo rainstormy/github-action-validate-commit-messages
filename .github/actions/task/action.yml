@@ -49,7 +49,7 @@ runs:
       # language=sh
       run: |
         if [ ! -d ${{ inputs.cache-path }} ]; then
-            mkdir --parents ${{ inputs.cache-path }}
-            touch ${{ inputs.cache-path }}/.github-actions-cache
+          mkdir --parents ${{ inputs.cache-path }}
+          touch ${{ inputs.cache-path }}/.github-actions-cache
         fi
       shell: bash
