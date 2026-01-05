@@ -48,6 +48,12 @@ runs:
       run: pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
       #
+    - name: Prune the pnpm store before saving it to the workflow cache
+      if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
+      # language=sh
+      run: pnpm store prune
+      shell: bash
+      #
     - name: Mark dependencies as installed on the current runner
       if: success() && steps.skip-if-already-installed.outputs.installed != 'true'
       # language=sh
