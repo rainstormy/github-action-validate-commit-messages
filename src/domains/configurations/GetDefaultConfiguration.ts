@@ -1,4 +1,7 @@
-import type { Configuration } from "#configurations/Configuration.ts"
+import type {
+	Configuration,
+	TokenConfiguration,
+} from "#configurations/Configuration.ts"
 import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 
 export function getDefaultConfiguration(): Configuration {
@@ -11,18 +14,22 @@ export function getDefaultConfiguration(): Configuration {
 		case "gha": {
 			return getDefaultGhaConfiguration()
 		}
+		default: {
+			throw new Error("Environment variable 'COMET_PLATFORM' is undefined")
+		}
 	}
 }
 
 function getDefaultCliConfiguration(): Configuration {
 	return {
+		tokens: getDefaultTokenConfiguration(),
 		rules: {
 			noCoAuthors: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: null,
 			noRevertRevertCommits: null,
 			noSingleWordSubjectLines: {},
-			noSquashPrefixes: null,
+			noSquashMarkers: null,
 			noUnexpectedPunctuation: {},
 			noUnexpectedWhitespace: {},
 			useAuthorEmailPatterns: null,
@@ -33,7 +40,7 @@ function getDefaultCliConfiguration(): Configuration {
 			useConciseSubjectLines: {},
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: {},
-			useIssueReferences: null,
+			useIssueLinks: null,
 			useLineWrapping: {},
 		},
 	}
@@ -41,13 +48,14 @@ function getDefaultCliConfiguration(): Configuration {
 
 function getDefaultGhaConfiguration(): Configuration {
 	return {
+		tokens: getDefaultTokenConfiguration(),
 		rules: {
 			noCoAuthors: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
 			noRevertRevertCommits: {},
 			noSingleWordSubjectLines: {},
-			noSquashPrefixes: {},
+			noSquashMarkers: {},
 			noUnexpectedPunctuation: {},
 			noUnexpectedWhitespace: {},
 			useAuthorEmailPatterns: null,
@@ -58,8 +66,14 @@ function getDefaultGhaConfiguration(): Configuration {
 			useConciseSubjectLines: {},
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: {},
-			useIssueReferences: null,
+			useIssueLinks: null,
 			useLineWrapping: {},
 		},
+	}
+}
+
+function getDefaultTokenConfiguration(): TokenConfiguration {
+	return {
+		issueLinkPrefixes: ["#", "GH-", "GL-"],
 	}
 }

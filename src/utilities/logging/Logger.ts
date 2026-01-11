@@ -27,5 +27,8 @@ export function printError(message: string): void {
 			console.log(`::error::${escapedMessage}`)
 			break
 		}
+		default: {
+			throw new Error("Environment variable 'COMET_PLATFORM' is undefined")
+		}
 	}
 }

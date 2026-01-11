@@ -11,6 +11,10 @@ describe("the default configuration in the command-line", () => {
 		configuration = await getConfiguration()
 	})
 
+	it("recognises GitHub- and GitLab-style issue links", () => {
+		expect(configuration.tokens.issueLinkPrefixes).toEqual(["#", "GH-", "GL-"])
+	})
+
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
 		${"noCoAuthors"}                 | ${{}}
@@ -35,12 +39,12 @@ describe("the default configuration in the command-line", () => {
 		disabledRuleKey
 		${"noRepeatedSubjectLines"}
 		${"noRevertRevertCommits"}
-		${"noSquashPrefixes"}
+		${"noSquashMarkers"}
 		${"useAuthorEmailPatterns"}
 		${"useAuthorNamePatterns"}
 		${"useCommitterEmailPatterns"}
 		${"useCommitterNamePatterns"}
-		${"useIssueReferences"}
+		${"useIssueLinks"}
 	`(
 		"does not enable $disabledRuleKey'",
 		(props: { disabledRuleKey: RuleKey }) => {
@@ -58,6 +62,10 @@ describe("the default configuration in GitHub Actions", () => {
 		configuration = await getConfiguration()
 	})
 
+	it("recognises GitHub- and GitLab-style issue links", () => {
+		expect(configuration.tokens.issueLinkPrefixes).toEqual(["#", "GH-", "GL-"])
+	})
+
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
 		${"noCoAuthors"}                 | ${{}}
@@ -65,7 +73,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"noRepeatedSubjectLines"}      | ${{}}
 		${"noRevertRevertCommits"}       | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
-		${"noSquashPrefixes"}            | ${{}}
+		${"noSquashMarkers"}             | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
@@ -87,7 +95,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useAuthorNamePatterns"}
 		${"useCommitterEmailPatterns"}
 		${"useCommitterNamePatterns"}
-		${"useIssueReferences"}
+		${"useIssueLinks"}
 	`(
 		"does not enable $disabledRuleKey'",
 		(props: { disabledRuleKey: RuleKey }) => {
