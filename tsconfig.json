@@ -14,6 +14,7 @@
 			"#configurations/*": ["./src/domains/configurations/*"],
 			"#legacy-v1/*": ["./src/legacy-v1/*"],
 			"#programs/*": ["./src/domains/programs/*"],
+			"#rules/*": ["./src/domains/rules/*"],
 			"#types/*": ["./src/types/*"],
 			"#utilities/*": ["./src/utilities/*"]
 		},
