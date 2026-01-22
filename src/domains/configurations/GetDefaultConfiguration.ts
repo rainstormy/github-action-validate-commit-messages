@@ -24,9 +24,10 @@ function getDefaultCliConfiguration(): Configuration {
 	return {
 		tokens: getDefaultTokenConfiguration(),
 		rules: {
-			noCoAuthors: {},
+			noExcessiveCommitsPerBranch: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: null,
+			noRestrictedFooterLines: {},
 			noRevertRevertCommits: null,
 			noSingleWordSubjectLines: {},
 			noSquashMarkers: null,
@@ -42,6 +43,7 @@ function getDefaultCliConfiguration(): Configuration {
 			useImperativeSubjectLines: {},
 			useIssueLinks: null,
 			useLineWrapping: {},
+			useSignedCommits: {},
 		},
 	}
 }
@@ -50,9 +52,10 @@ function getDefaultGhaConfiguration(): Configuration {
 	return {
 		tokens: getDefaultTokenConfiguration(),
 		rules: {
-			noCoAuthors: {},
+			noExcessiveCommitsPerBranch: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
+			noRestrictedFooterLines: {},
 			noRevertRevertCommits: {},
 			noSingleWordSubjectLines: {},
 			noSquashMarkers: {},
@@ -68,6 +71,7 @@ function getDefaultGhaConfiguration(): Configuration {
 			useImperativeSubjectLines: {},
 			useIssueLinks: null,
 			useLineWrapping: {},
+			useSignedCommits: {},
 		},
 	}
 }

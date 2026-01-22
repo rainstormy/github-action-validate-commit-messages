@@ -17,9 +17,10 @@ describe("the default configuration in the command-line", () => {
 
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
-		${"noCoAuthors"}                 | ${{}}
+		${"noExcessiveCommitsPerBranch"} | ${{}}
 		${"noMergeCommits"}              | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
+		${"noRestrictedFooterLines"}     | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
@@ -27,6 +28,7 @@ describe("the default configuration in the command-line", () => {
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
 		${"useImperativeSubjectLines"}   | ${{}}
 		${"useLineWrapping"}             | ${{}}
+		${"useSignedCommits"}            | ${{}}
 	`(
 		"enables $enabledRuleKey",
 		(props: { enabledRuleKey: RuleKey; expectedRuleOptions: object }) => {
@@ -68,9 +70,10 @@ describe("the default configuration in GitHub Actions", () => {
 
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
-		${"noCoAuthors"}                 | ${{}}
+		${"noExcessiveCommitsPerBranch"} | ${{}}
 		${"noMergeCommits"}              | ${{}}
 		${"noRepeatedSubjectLines"}      | ${{}}
+		${"noRestrictedFooterLines"}     | ${{}}
 		${"noRevertRevertCommits"}       | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
 		${"noSquashMarkers"}             | ${{}}
@@ -81,6 +84,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
 		${"useImperativeSubjectLines"}   | ${{}}
 		${"useLineWrapping"}             | ${{}}
+		${"useSignedCommits"}            | ${{}}
 	`(
 		"enables $enabledRuleKey",
 		(props: { enabledRuleKey: RuleKey; expectedRuleOptions: object }) => {
