@@ -6,9 +6,10 @@ import type {
 	RuleOptions,
 } from "#configurations/Configuration.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
-import { noCoAuthors } from "#rules/NoCoAuthors.ts"
+import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
+import { noRestrictedFooterLines } from "#rules/NoRestrictedFooterLines.ts"
 import { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
 import { noSingleWordSubjectLines } from "#rules/NoSingleWordSubjectLines.ts"
 import { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
@@ -24,6 +25,7 @@ import { useEmptyLineBeforeBodyLines } from "#rules/UseEmptyLineBeforeBodyLines.
 import { useImperativeSubjectLines } from "#rules/UseImperativeSubjectLines.ts"
 import { useIssueLinks } from "#rules/UseIssueLinks.ts"
 import { useLineWrapping } from "#rules/UseLineWrapping.ts"
+import { useSignedCommits } from "#rules/UseSignedCommits.ts"
 import { notNullishValue } from "#utilities/Arrays.ts"
 
 export type Rule = (commits: Commits) => Concerns
@@ -34,9 +36,10 @@ type RuleFactory = {
 }
 
 const rules: RuleFactory = {
-	noCoAuthors,
+	noExcessiveCommitsPerBranch,
 	noMergeCommits,
 	noRepeatedSubjectLines,
+	noRestrictedFooterLines,
 	noRevertRevertCommits,
 	noSingleWordSubjectLines,
 	noSquashMarkers,
@@ -52,6 +55,7 @@ const rules: RuleFactory = {
 	useImperativeSubjectLines,
 	useIssueLinks,
 	useLineWrapping,
+	useSignedCommits,
 }
 
 export function mapCommitsToConcerns(

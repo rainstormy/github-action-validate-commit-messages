@@ -1,6 +1,7 @@
-import type { NoCoAuthorsOptions } from "#rules/NoCoAuthors.ts"
+import type { NoExcessiveCommitsPerBranchOptions } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import type { NoMergeCommitsOptions } from "#rules/NoMergeCommits.ts"
 import type { NoRepeatedSubjectLinesOptions } from "#rules/NoRepeatedSubjectLines.ts"
+import type { NoRestrictedFooterLinesOptions } from "#rules/NoRestrictedFooterLines.ts"
 import type { NoRevertRevertCommitsOptions } from "#rules/NoRevertRevertCommits.ts"
 import type { NoSingleWordSubjectLinesOptions } from "#rules/NoSingleWordSubjectLines.ts"
 import type { NoSquashMarkersOptions } from "#rules/NoSquashMarkers.ts"
@@ -16,6 +17,7 @@ import type { UseEmptyLineBeforeBodyLinesOptions } from "#rules/UseEmptyLineBefo
 import type { UseImperativeSubjectLinesOptions } from "#rules/UseImperativeSubjectLines.ts"
 import type { UseIssueLinksOptions } from "#rules/UseIssueLinks.ts"
 import type { UseLineWrappingOptions } from "#rules/UseLineWrapping.ts"
+import type { UseSignedCommitsOptions } from "#rules/UseSignedCommits.ts"
 
 export type Configuration = {
 	tokens: {
@@ -26,9 +28,10 @@ export type Configuration = {
 	 * A record of rule keys to rule-specific options (if the rule is enabled) or null (if the rule is disabled).
 	 */
 	rules: {
-		noCoAuthors: NoCoAuthorsOptions | null
+		noExcessiveCommitsPerBranch: NoExcessiveCommitsPerBranchOptions | null
 		noMergeCommits: NoMergeCommitsOptions | null
 		noRepeatedSubjectLines: NoRepeatedSubjectLinesOptions | null
+		noRestrictedFooterLines: NoRestrictedFooterLinesOptions | null
 		noRevertRevertCommits: NoRevertRevertCommitsOptions | null
 		noSingleWordSubjectLines: NoSingleWordSubjectLinesOptions | null
 		noSquashMarkers: NoSquashMarkersOptions | null
@@ -44,6 +47,7 @@ export type Configuration = {
 		useImperativeSubjectLines: UseImperativeSubjectLinesOptions | null
 		useIssueLinks: UseIssueLinksOptions | null
 		useLineWrapping: UseLineWrappingOptions | null
+		useSignedCommits: UseSignedCommitsOptions | null
 	}
 }
 
