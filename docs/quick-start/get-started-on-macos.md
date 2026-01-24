@@ -318,11 +318,6 @@ Last updated: July 26, 2025.
    lefthook --version # -> 2.0.0 or newer
    ```
 
-8. [Pin](https://pnpm.io/settings#saveprefix) packages to an exact version:
-   ```shell
-   pnpm config --global set save-prefix ''
-   ```
-
 > [!IMPORTANT]  
 > If `pnpm --version` reports an unexpected version, e.g. `9.15.1` or older, it
 > may be installed globally via Corepack or npm. Try uninstalling it:

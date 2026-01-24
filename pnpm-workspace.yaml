@@ -1,0 +1,29 @@
+# Configure pnpm, especially to reduce the risk of supply chain attacks.
+# https://pnpm.io/settings
+# https://pnpm.io/blog/2025/12/05/newsroom-npm-supply-chain-security
+
+# Disallow transitive dependencies from being installed from untrusted sources.
+blockExoticSubdeps: true
+
+# Require a minimum release age of 7 days before allowing packages to be installed.
+# This reduces the risk of supply chain attacks in the npm registry.
+minimumReleaseAge: 10080 # 7 * 1440 minutes
+
+# Allow certain packages to bypass the minimum release age requirement.
+# This allows urgent security upgrades to be installed despite being less than 7 days old.
+# Expand the whitelist as needed. Add new packages with exact version numbers to the top.
+minimumReleaseAgeExclude:
+  # CVE-2025-66020.
+  # https://github.com/open-circle/valibot/security/advisories/GHSA-vqpr-j7v3-hqw9
+  - 'valibot@1.2.0'
+
+# Pin packages to exact versions to ensure that all developers use the same versions.
+savePrefix: ''
+
+# Disallow direct and transitive dependencies with unreviewed build scripts.
+strictDepBuilds: true
+
+# Prevent packages from being upgraded when their trust evidence or provenance is weaker than the previous version.
+# This reduces the risk of installing compromised packages.
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 10080 # 7 * 1440 minutes
