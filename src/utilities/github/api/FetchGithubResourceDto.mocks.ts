@@ -1,4 +1,7 @@
-import { mockFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
+import {
+	mockFetchableJsonResource,
+	mockFetchError,
+} from "#utilities/http/Fetch.mocks.ts"
 import type { JsonValue } from "#types/JsonValue.ts"
 import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
@@ -84,6 +87,15 @@ export function mockNonexistingGithubResourceDto(
 			},
 			statusCode: 404,
 		},
+	)
+}
+
+export function mockSabotagedGithubResourceDto(
+	url: `${GithubUrlString}/${string}`,
+): void {
+	mockFetchError(
+		{ url, headers: expectedRequestHeaders() },
+		new Error("Network timeout"),
 	)
 }
 
