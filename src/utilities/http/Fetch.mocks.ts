@@ -14,7 +14,7 @@ const responsesByUrl: Map<
 	`${HttpMethod} ${string}`,
 	Array<{
 		request: Omit<RequestOptions, "method">
-		response: Response
+		response: Response | Error
 	}>
 > = new Map()
 
@@ -56,6 +56,9 @@ function getResponseByUrl(url: string, options: RequestOptions = {}): Response {
 		)?.response ?? null
 
 	if (matchingResponse !== null) {
+		if (matchingResponse instanceof Error) {
+			throw matchingResponse
+		}
 		return matchingResponse
 	}
 
@@ -153,6 +156,33 @@ export function mockFetchableJsonResource(
 				throw new Error("Not implemented")
 			},
 		},
+	})
+}
+
+export function mockFetchError(
+	request: {
+		url: string
+		headers?: Record<string, string>
+	},
+	error: Error,
+): void {
+	const method = "GET"
+	const url = request.url
+
+	const key = `${method} ${url}` as const
+
+	if (!responsesByUrl.has(key)) {
+		responsesByUrl.set(key, [])
+	}
+
+	const existingResponses = responsesByUrl.get(key)
+	assertNotNullish(existingResponses)
+
+	existingResponses.push({
+		request: {
+			headers: toLowercaseHeaderNames(request.headers),
+		},
+		response: error,
 	})
 }
 

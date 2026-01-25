@@ -1,5 +1,8 @@
 import { mockGithubPullRequestCommitDtos } from "#utilities/github/api/FetchGithubPullRequestCommitDtos.mocks.ts"
-import { mockNonexistingGithubResourceDto } from "#utilities/github/api/FetchGithubResourceDto.mocks.ts"
+import {
+	mockNonexistingGithubResourceDto,
+	mockSabotagedGithubResourceDto,
+} from "#utilities/github/api/FetchGithubResourceDto.mocks.ts"
 import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
@@ -652,3 +655,16 @@ describe.each`
 		})
 	},
 )
+
+describe("when a network error occurs", () => {
+	beforeEach(() => {
+		const resourceUrl = mockGithubPullRequestEventDto()
+		mockSabotagedGithubResourceDto(resourceUrl)
+	})
+
+	it("throws an error", async () => {
+		await expect(getGithubPullRequestCrudeCommits()).rejects.toThrow(
+			"Network timeout",
+		)
+	})
+})
