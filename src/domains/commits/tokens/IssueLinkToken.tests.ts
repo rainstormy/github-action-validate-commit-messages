@@ -36,6 +36,7 @@ describe("in the default configuration", () => {
 		${"(GH-15) #30 [#45]:  make the program act like a clown GL-60"}   | ${[issueLink("(GH-15) "), issueLink("#30 "), issueLink("[#45]:  "), "make the program act like a clown", issueLink(" GL-60")]}
 		${"Add some extra love to the code #7"}                            | ${["Add some extra love to the code", issueLink(" #7")]}
 		${"squash! Apply strawberry jam to make the code sweeter (#7044)"} | ${[squashMarker("squash! "), "Apply strawberry jam to make the code sweeter", issueLink(" (#7044)")]}
+		${"amend!(#42)Soften the API boundaries"}                          | ${[squashMarker("amend!"), issueLink("(#42)"), "Soften the API boundaries"]}
 		${"Make the user interface less chaotic [GL-11] #17 "}             | ${["Make the user interface less chaotic", issueLink(" [GL-11] "), issueLink("#17 ")]}
 		${"squash! #12 Throw a tantrum (#34) #56 {GH-78} #90"}             | ${[squashMarker("squash! "), issueLink("#12 "), "Throw a tantrum", issueLink(" (#34) "), issueLink("#56 "), issueLink("{GH-78} "), issueLink("#90")]}
 		${"fixup! Close #1337 by fixing the bug"}                          | ${[squashMarker("fixup! "), "Close", issueLink(" #1337 "), "by fixing the bug"]}

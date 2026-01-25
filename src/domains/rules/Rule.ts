@@ -74,11 +74,11 @@ const rules: RuleFactory = {
 }
 
 export function mapCommitsToConcerns(
-	_commits: Commits,
+	commits: Commits,
 	configuration: Configuration,
 ): Concerns {
-	const _rules = getEnabledRules(configuration.rules)
-	return []
+	const enabledRules = getEnabledRules(configuration.rules)
+	return enabledRules.flatMap((verify: Rule) => verify(commits))
 }
 
 function getEnabledRules(configuration: RuleConfiguration): Rules {
