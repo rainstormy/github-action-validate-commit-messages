@@ -26,11 +26,10 @@ export type FilesMock = ModuleMock<
 
 vi.mock("#utilities/files/Files.ts", () => mock)
 
-export function mockFiles(): FilesMock {
+export function mockFiles(): void {
 	beforeEach(() => {
 		contentsByPath.clear()
 	})
-	return mock
 }
 
 export function mockJsonFile(path: string, content: JsonValue): void {
