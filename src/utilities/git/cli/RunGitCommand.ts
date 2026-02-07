@@ -3,7 +3,7 @@ import { spawn } from "node:child_process"
 import { GitCommandError } from "#utilities/git/cli/GitCommandError.ts"
 
 export async function runGitCommand(
-	args: [command: "remote" | "rev-parse", ...Array<string>],
+	args: [command: "log" | "remote" | "rev-parse", ...Array<string>],
 ): Promise<string> {
 	return new Promise((resolve, reject) => {
 		let stdout = ""
