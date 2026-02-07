@@ -2,9 +2,12 @@
 import { spawn } from "node:child_process"
 import { GitCommandError } from "#utilities/git/cli/GitCommandError.ts"
 
-export async function runGitCommand(
-	args: [command: "remote" | "rev-parse", ...Array<string>],
-): Promise<string> {
+export type GitCommand =
+	| ["--no-pager", "log", ...Array<string>]
+	| ["remote", ...Array<string>]
+	| ["rev-parse", ...Array<string>]
+
+export async function runGitCommand(args: GitCommand): Promise<string> {
 	return new Promise((resolve, reject) => {
 		let stdout = ""
 		let stderr = ""
