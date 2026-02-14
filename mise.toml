@@ -4,8 +4,16 @@
 min_version = "2026.1.0"
 
 [tools]
+# actionlint is a linter for GitHub Actions workflows.
+# https://github.com/rhysd/actionlint
 actionlint = "1.7.10"
+
+# Node.js is a JavaScript server runtime.
+# https://nodejs.org
 node = "24.13.0"
+
+# pnpm is a Node.js package manager.
+# https://pnpm.io
 pnpm = "10.26.2"
 
 [tasks.build]
