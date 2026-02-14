@@ -118,6 +118,7 @@ alias = ["i"]
 run = """
   vitest run
 """
+env = { CI = 1 }
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
 
@@ -129,6 +130,7 @@ run = """
     --api.port "$LOCALHOST_VITEST_PORT" \
     --open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
 """
+env = { CI = 1 }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
 
@@ -142,10 +144,12 @@ description = "Disables the Git hooks temporarily with Lefthook."
 [hooks]
 # language=sh
 postinstall = """
-  pnpm install --frozen-lockfile --ignore-scripts
+  if [ -z "$CI" ]; then
+    pnpm install --frozen-lockfile --ignore-scripts
 
-  if [ -z "$LEFTHOOK" ] || [ "$LEFTHOOK" = '1' ] || [ "$LEFTHOOK" = 'true' ]; then
-    lefthook install
+    if [ -z "$LEFTHOOK" ] || [ "$LEFTHOOK" = '1' ] || [ "$LEFTHOOK" = 'true' ]; then
+      lefthook install
+    fi
   fi
 """
 
@@ -159,8 +163,6 @@ _.file = [".env", ".env.local"]
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
 
-# Align the behaviour of the local environment with the CI environment in GitHub Actions by default.
-CI = 1
 COMET_PLATFORM = "cli"
 
 # Grab the current Comet version from the `version` field in `package.json`.
