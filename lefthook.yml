@@ -4,22 +4,25 @@
 post-checkout:
   commands:
     mise:
+      # Re-installs third-party dependencies after checking out a branch or a commit.
       # language=sh
-      run: mise run post-checkout
+      run: mise install
 
 post-rewrite:
   commands:
     mise:
+      # Re-installs third-party dependencies after rebasing onto another branch or commit.
       # language=sh
-      run: mise run post-rewrite
+      run: mise install
   only:
     - rebase
 
 pre-commit:
   commands:
     mise:
+      # Reformats files before committing changes.
       # language=sh
-      run: mise run pre-commit
+      run: mise run format && mise run format-mise
       stage_fixed: true
   skip:
     - merge
@@ -28,5 +31,6 @@ pre-commit:
 pre-push:
   commands:
     mise:
+      # Runs `check` and `test` before allowing commits to be pushed.
       # language=sh
-      run: mise run pre-push
+      run: mise run check && mise run test
