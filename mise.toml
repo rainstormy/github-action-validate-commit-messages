@@ -113,26 +113,6 @@ run = """
 description = "Installs all third-party dependencies with mise-en-place and pnpm and (unless opted out) enables the Git hooks with Lefthook."
 alias = ["i"]
 
-[tasks.post-checkout]
-depends = ["install"]
-description = "Runs `install` after checking out a branch or a commit."
-hide = true
-
-[tasks.post-rewrite]
-depends = ["install"]
-description = "Runs `install` after rebasing onto another branch or commit."
-hide = true
-
-[tasks.pre-commit]
-depends = ["format", "format-mise"]
-description = "Runs `format` and `format-mise` before committing changes."
-hide = true
-
-[tasks.pre-push]
-depends = ["check", "test"]
-description = "Runs `check` and `test` before allowing commits to be pushed."
-hide = true
-
 [tasks.test]
 # language=sh
 run = """
