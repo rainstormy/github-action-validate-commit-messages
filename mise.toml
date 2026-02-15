@@ -50,11 +50,10 @@ description = "Generates production-grade build artefacts of the legacy v1 GitHu
 depends = [
   "check-actions",
   "check-format",
-  "check-mise",
   # "check-renovate", # Skipped because it is often quite slow.
   "check-types",
 ]
-description = "Runs `check-actions`, `check-format`, `check-mise`, and `check-types`."
+description = "Runs `check-actions`, `check-format`, and `check-types`."
 alias = ["c"]
 
 [tasks.check-actions]
@@ -68,18 +67,11 @@ alias = ["ca"]
 [tasks.check-format]
 # language=sh
 run = """
-  biome check --error-on-warnings
+  biome check --error-on-warnings && \
+  mise fmt --check
 """
 description = "Verifies that the source code is clean and well-formatted with Biome."
 alias = ["cf"]
-
-[tasks.check-mise]
-# language=sh
-run = """
-  mise fmt --check
-"""
-description = "Verifies that the mise-en-place configuration file (`mise.toml`) is well-formatted." # This file.
-alias = ["cm"]
 
 [tasks.check-renovate]
 # language=sh
@@ -100,18 +92,11 @@ alias = ["ct"]
 [tasks.format]
 # language=sh
 run = """
-  biome check --skip-parse-errors --write
+  biome check --skip-parse-errors --write && \
+  mise fmt
 """
 description = "Reformats the source code with Biome."
 alias = ["f"]
-
-[tasks.format-mise]
-# language=sh
-run = """
-  mise fmt
-"""
-description = "Reformats the mise-en-place configuration file (`mise.toml`)." # This file.
-alias = ["fm"]
 
 [tasks.install]
 # language=sh
