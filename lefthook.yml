@@ -22,7 +22,7 @@ pre-commit:
     mise:
       # Reformats files before committing changes.
       # language=sh
-      run: mise run format && mise run format-mise
+      run: mise run format
       stage_fixed: true
   skip:
     - merge
