@@ -1,3 +1,4 @@
+import { getGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits.ts"
 import { getGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
@@ -22,7 +23,7 @@ export async function getCrudeCommits(): Promise<CrudeCommits> {
 
 	switch (platform) {
 		case "cli": {
-			return []
+			return getGitBranchCrudeCommits()
 		}
 		case "gha": {
 			return getGithubPullRequestCrudeCommits()
