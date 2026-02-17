@@ -18,7 +18,8 @@
 			"#types/*": ["./src/types/*"],
 			"#utilities/*": ["./src/utilities/*"]
 		},
-		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo"
+		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
+		"types": ["node"]
 	},
 	"include": ["**/*.ts"],
 	"exclude": ["dist/", "node_modules/"]
