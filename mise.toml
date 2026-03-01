@@ -6,7 +6,7 @@ min_version = "2026.2.0"
 [tools]
 # actionlint is a linter for GitHub Actions workflows.
 # https://github.com/rhysd/actionlint
-actionlint = "1.7.10"
+actionlint = "1.7.11"
 
 # Node.js is a JavaScript server runtime.
 # https://nodejs.org
