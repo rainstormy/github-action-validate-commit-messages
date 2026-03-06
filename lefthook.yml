@@ -3,17 +3,27 @@
 
 post-checkout:
   commands:
+    # Re-installs third-party dependencies after checking out a branch or a commit.
+    # Only runs if `mise.toml` or `pnpm-lock.yaml` has changed during the checkout.
     mise:
-      # Re-installs third-party dependencies after checking out a branch or a commit.
       # language=sh
-      run: mise install
+      run: |
+        if ! git diff --quiet HEAD@\{1\} HEAD -- 'mise.toml' 'pnpm-lock.yaml'; then
+          mise install
+        fi
 
 post-rewrite:
   commands:
+    # Re-installs third-party dependencies after rebasing onto another branch or commit.
+    # Only runs if `mise.toml` or `pnpm-lock.yaml` has changed during the rebase.
     mise:
-      # Re-installs third-party dependencies after rebasing onto another branch or commit.
+      use_stdin: true
       # language=sh
-      run: mise install
+      run: |
+        read -r BASE_SHA _
+        if ! git diff --quiet "$BASE_SHA~1" HEAD -- 'mise.toml' 'pnpm-lock.yaml'; then
+          mise install
+        fi
   only:
     - rebase
 
