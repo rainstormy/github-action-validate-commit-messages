@@ -5,12 +5,7 @@ import type {
 	RuleKey,
 	RuleOptions,
 } from "#configurations/Configuration.ts"
-import type { AuthorEmailAddressConcern } from "#rules/concerns/AuthorEmailAddressConcern.ts"
-import type { AuthorNameConcern } from "#rules/concerns/AuthorNameConcern.ts"
-import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
-import type { CommitterEmailAddressConcern } from "#rules/concerns/CommitterEmailAddressConcern.ts"
-import type { CommitterNameConcern } from "#rules/concerns/CommitterNameConcern.ts"
-import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import type { Concerns } from "#rules/concerns/Concern.ts"
 import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
@@ -35,16 +30,6 @@ import { notNullishValue } from "#utilities/Arrays.ts"
 
 export type Rule = (commits: Commits) => Concerns
 export type Rules = Array<Rule>
-
-export type Concern =
-	| AuthorEmailAddressConcern
-	| AuthorNameConcern
-	| BodyLineConcern
-	| CommitterEmailAddressConcern
-	| CommitterNameConcern
-	| SubjectLineConcern
-
-export type Concerns = Array<Concern>
 
 type RuleFactory = {
 	[Key in RuleKey]: (options: RuleOptions<Key>) => Rule
