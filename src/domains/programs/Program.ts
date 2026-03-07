@@ -1,7 +1,7 @@
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { getCrudeCommits } from "#commits/CrudeCommit.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
-import { mapCommitsToConcerns } from "#rules/Rule.ts"
+import { mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
 import { assertError } from "#utilities/Assertions.ts"
 import { printError, printMessage } from "#utilities/logging/Logger.ts"

@@ -1,8 +1,10 @@
-import type { Rule } from "#rules/Rule.ts"
+import type { Commits } from "#commits/Commit.ts"
+import type { Concerns } from "#rules/concerns/Concern.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
-export type UseSignedCommitsOptions = EmptyObject
-
-export function useSignedCommits(): Rule {
+export function useSignedCommits(
+	_commits: Commits,
+	_configuration: EmptyObject | null,
+): Concerns {
 	throw new Error("The `useSignedCommits` rule has not been implemented yet") // TODO: To be implemented.
 }
