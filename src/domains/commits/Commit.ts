@@ -1,16 +1,11 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
-import type { CoauthorToken } from "#commits/tokens/CoauthorToken.ts"
-import type { DependencyVersionToken } from "#commits/tokens/DependencyVersionToken.ts"
-import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.ts"
-import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
-import {
-	type IssueLinkToken,
-	tokeniseIssueLinks,
-} from "#commits/tokens/IssueLinkToken.ts"
-import {
-	type SquashMarkerToken,
-	tokeniseSquashMarkers,
-} from "#commits/tokens/SquashMarkerToken.ts"
+import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
+import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
+import type {
+	TokenisedLine,
+	TokenisedLines,
+	Tokenisers,
+} from "#commits/tokens/Token.ts"
 import type {
 	Configuration,
 	TokenConfiguration,
@@ -33,25 +28,6 @@ export type Commit = {
 }
 
 export type Commits = Array<Commit>
-
-export type Token =
-	| string
-	| CoauthorToken
-	| DependencyVersionToken
-	| FencedCodeBlockToken
-	| HyperlinkToken
-	| IssueLinkToken
-	| SquashMarkerToken
-
-export type TokenisedLine = Array<Token>
-export type TokenisedLines = Array<TokenisedLine>
-
-export type Tokeniser = (
-	initialTokens: TokenisedLine,
-	configuration: TokenConfiguration,
-) => TokenisedLine
-
-export type Tokenisers = Array<Tokeniser>
 
 export function mapCrudeCommitToCommit(
 	crudeCommit: CrudeCommit,

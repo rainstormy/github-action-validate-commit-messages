@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { mapCrudeCommitToCommit, type TokenisedLine } from "#commits/Commit.ts"
+import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import { getDefaultConfiguration } from "#configurations/GetDefaultConfiguration.ts"
 

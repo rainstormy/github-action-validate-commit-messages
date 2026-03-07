@@ -1,4 +1,4 @@
-import type { TokenisedLine } from "#commits/Commit.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
 
 export type IssueLinkToken = {

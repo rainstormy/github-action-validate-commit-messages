@@ -1,4 +1,4 @@
-import type { TokenisedLine } from "#commits/Commit.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 
 export type SquashMarkerToken = {
 	type: "squash-marker"
