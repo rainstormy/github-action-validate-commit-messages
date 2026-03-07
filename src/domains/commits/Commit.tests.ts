@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest"
-import {
-	mapCrudeCommitToCommit,
-	type TokenisedLine,
-	type TokenisedLines,
-} from "#commits/Commit.ts"
+import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
+import type { TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
 import { getDefaultConfiguration } from "#configurations/GetDefaultConfiguration.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
