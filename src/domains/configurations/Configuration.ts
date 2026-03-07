@@ -1,23 +1,25 @@
-import type { NoExcessiveCommitsPerBranchOptions } from "#rules/NoExcessiveCommitsPerBranch.ts"
-import type { NoMergeCommitsOptions } from "#rules/NoMergeCommits.ts"
-import type { NoRepeatedSubjectLinesOptions } from "#rules/NoRepeatedSubjectLines.ts"
-import type { NoRestrictedFooterLinesOptions } from "#rules/NoRestrictedFooterLines.ts"
-import type { NoRevertRevertCommitsOptions } from "#rules/NoRevertRevertCommits.ts"
-import type { NoSingleWordSubjectLinesOptions } from "#rules/NoSingleWordSubjectLines.ts"
-import type { NoSquashMarkersOptions } from "#rules/NoSquashMarkers.ts"
-import type { NoUnexpectedPunctuationOptions } from "#rules/NoUnexpectedPunctuation.ts"
-import type { NoUnexpectedWhitespaceOptions } from "#rules/NoUnexpectedWhitespace.ts"
-import type { UseAuthorEmailPatternsOptions } from "#rules/UseAuthorEmailPatterns.ts"
-import type { UseAuthorNamePatternsOptions } from "#rules/UseAuthorNamePatterns.ts"
-import type { UseCapitalisedSubjectLinesOptions } from "#rules/UseCapitalisedSubjectLines.ts"
-import type { UseCommitterEmailPatternsOptions } from "#rules/UseCommitterEmailPatterns.ts"
-import type { UseCommitterNamePatternsOptions } from "#rules/UseCommitterNamePatterns.ts"
-import type { UseConciseSubjectLinesOptions } from "#rules/UseConciseSubjectLines.ts"
-import type { UseEmptyLineBeforeBodyLinesOptions } from "#rules/UseEmptyLineBeforeBodyLines.ts"
-import type { UseImperativeSubjectLinesOptions } from "#rules/UseImperativeSubjectLines.ts"
-import type { UseIssueLinksOptions } from "#rules/UseIssueLinks.ts"
-import type { UseLineWrappingOptions } from "#rules/UseLineWrapping.ts"
-import type { UseSignedCommitsOptions } from "#rules/UseSignedCommits.ts"
+import type { Commits } from "#commits/Commit.ts"
+import type { Concerns } from "#rules/concerns/Concern.ts"
+import type { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
+import type { noMergeCommits } from "#rules/NoMergeCommits.ts"
+import type { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
+import type { noRestrictedFooterLines } from "#rules/NoRestrictedFooterLines.ts"
+import type { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
+import type { noSingleWordSubjectLines } from "#rules/NoSingleWordSubjectLines.ts"
+import type { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
+import type { noUnexpectedPunctuation } from "#rules/NoUnexpectedPunctuation.ts"
+import type { noUnexpectedWhitespace } from "#rules/NoUnexpectedWhitespace.ts"
+import type { useAuthorEmailPatterns } from "#rules/UseAuthorEmailPatterns.ts"
+import type { useAuthorNamePatterns } from "#rules/UseAuthorNamePatterns.ts"
+import type { useCapitalisedSubjectLines } from "#rules/UseCapitalisedSubjectLines.ts"
+import type { useCommitterEmailPatterns } from "#rules/UseCommitterEmailPatterns.ts"
+import type { useCommitterNamePatterns } from "#rules/UseCommitterNamePatterns.ts"
+import type { useConciseSubjectLines } from "#rules/UseConciseSubjectLines.ts"
+import type { useEmptyLineBeforeBodyLines } from "#rules/UseEmptyLineBeforeBodyLines.ts"
+import type { useImperativeSubjectLines } from "#rules/UseImperativeSubjectLines.ts"
+import type { useIssueLinks } from "#rules/UseIssueLinks.ts"
+import type { useLineWrapping } from "#rules/UseLineWrapping.ts"
+import type { useSignedCommits } from "#rules/UseSignedCommits.ts"
 
 export type Configuration = {
 	tokens: {
@@ -28,33 +30,41 @@ export type Configuration = {
 	 * A record of rule keys to rule-specific options (if the rule is enabled) or null (if the rule is disabled).
 	 */
 	rules: {
-		noExcessiveCommitsPerBranch: NoExcessiveCommitsPerBranchOptions | null
-		noMergeCommits: NoMergeCommitsOptions | null
-		noRepeatedSubjectLines: NoRepeatedSubjectLinesOptions | null
-		noRestrictedFooterLines: NoRestrictedFooterLinesOptions | null
-		noRevertRevertCommits: NoRevertRevertCommitsOptions | null
-		noSingleWordSubjectLines: NoSingleWordSubjectLinesOptions | null
-		noSquashMarkers: NoSquashMarkersOptions | null
-		noUnexpectedPunctuation: NoUnexpectedPunctuationOptions | null
-		noUnexpectedWhitespace: NoUnexpectedWhitespaceOptions | null
-		useAuthorEmailPatterns: UseAuthorEmailPatternsOptions | null
-		useAuthorNamePatterns: UseAuthorNamePatternsOptions | null
-		useCapitalisedSubjectLines: UseCapitalisedSubjectLinesOptions | null
-		useCommitterEmailPatterns: UseCommitterEmailPatternsOptions | null
-		useCommitterNamePatterns: UseCommitterNamePatternsOptions | null
-		useConciseSubjectLines: UseConciseSubjectLinesOptions | null
-		useEmptyLineBeforeBodyLines: UseEmptyLineBeforeBodyLinesOptions | null
-		useImperativeSubjectLines: UseImperativeSubjectLinesOptions | null
-		useIssueLinks: UseIssueLinksOptions | null
-		useLineWrapping: UseLineWrappingOptions | null
-		useSignedCommits: UseSignedCommitsOptions | null
+		noExcessiveCommitsPerBranch: RuleOptionsOf<
+			typeof noExcessiveCommitsPerBranch
+		>
+		noMergeCommits: RuleOptionsOf<typeof noMergeCommits>
+		noRepeatedSubjectLines: RuleOptionsOf<typeof noRepeatedSubjectLines>
+		noRestrictedFooterLines: RuleOptionsOf<typeof noRestrictedFooterLines>
+		noRevertRevertCommits: RuleOptionsOf<typeof noRevertRevertCommits>
+		noSingleWordSubjectLines: RuleOptionsOf<typeof noSingleWordSubjectLines>
+		noSquashMarkers: RuleOptionsOf<typeof noSquashMarkers>
+		noUnexpectedPunctuation: RuleOptionsOf<typeof noUnexpectedPunctuation>
+		noUnexpectedWhitespace: RuleOptionsOf<typeof noUnexpectedWhitespace>
+		useAuthorEmailPatterns: RuleOptionsOf<typeof useAuthorEmailPatterns>
+		useAuthorNamePatterns: RuleOptionsOf<typeof useAuthorNamePatterns>
+		useCapitalisedSubjectLines: RuleOptionsOf<typeof useCapitalisedSubjectLines>
+		useCommitterEmailPatterns: RuleOptionsOf<typeof useCommitterEmailPatterns>
+		useCommitterNamePatterns: RuleOptionsOf<typeof useCommitterNamePatterns>
+		useConciseSubjectLines: RuleOptionsOf<typeof useConciseSubjectLines>
+		useEmptyLineBeforeBodyLines: RuleOptionsOf<
+			typeof useEmptyLineBeforeBodyLines
+		>
+		useImperativeSubjectLines: RuleOptionsOf<typeof useImperativeSubjectLines>
+		useIssueLinks: RuleOptionsOf<typeof useIssueLinks>
+		useLineWrapping: RuleOptionsOf<typeof useLineWrapping>
+		useSignedCommits: RuleOptionsOf<typeof useSignedCommits>
 	}
 }
 
 export type RuleConfiguration = Configuration["rules"]
 export type RuleKey = keyof RuleConfiguration
-export type RuleOptions<Key extends RuleKey> = NonNullable<
-	RuleConfiguration[Key]
->
+
+export type RuleOptionsOf<
+	Rule extends (
+		commits: Commits,
+		options: Record<string, unknown> | null,
+	) => Concerns,
+> = Parameters<Rule>[1]
 
 export type TokenConfiguration = Configuration["tokens"]

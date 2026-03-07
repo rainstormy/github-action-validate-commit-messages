@@ -1,17 +1,18 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { Rule } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
-export type UseCapitalisedSubjectLinesOptions = EmptyObject
-
 const ruleName = "useCapitalisedSubjectLines"
 
-export function useCapitalisedSubjectLines(): Rule {
-	return (commits: Commits): Concerns =>
-		commits.map(verifyCommit).filter(notNullish)
+export function useCapitalisedSubjectLines(
+	commits: Commits,
+	configuration: EmptyObject | null,
+): Concerns {
+	return configuration !== null
+		? commits.map(verifyCommit).filter(notNullish)
+		: []
 }
 
 function verifyCommit(commit: Commit): Concern | null {

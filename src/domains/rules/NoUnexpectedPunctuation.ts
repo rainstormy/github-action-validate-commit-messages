@@ -1,9 +1,11 @@
-import type { Rule } from "#rules/Rule.ts"
+import type { Commits } from "#commits/Commit.ts"
+import type { Concerns } from "#rules/concerns/Concern.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
-export type NoUnexpectedPunctuationOptions = EmptyObject
-
-export function noUnexpectedPunctuation(): Rule {
+export function noUnexpectedPunctuation(
+	_commits: Commits,
+	_configuration: EmptyObject | null,
+): Concerns {
 	throw new Error(
 		"The `noUnexpectedPunctuation` rule has not been implemented yet",
 	) // TODO: To be implemented.
