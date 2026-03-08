@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommit } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
+import type { RuleKey } from "#configurations/Configuration.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { useCapitalisedSubjectLines } from "#rules/UseCapitalisedSubjectLines.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const ruleName = "useCapitalisedSubjectLines"
+const rule: RuleKey = "useCapitalisedSubjectLines"
 
 describe.each`
 	subjectLine                                             | expectedCharacterRange
@@ -34,11 +35,11 @@ describe.each`
 			it("raises a concern about the first non-capitalised character", () => {
 				const actualConcerns = useCapitalisedSubjectLines([commit], {})
 				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(
-						ruleName,
-						commit.sha,
-						props.expectedCharacterRange,
-					),
+					subjectLineConcern({
+						rule,
+						commit: commit.sha,
+						columns: props.expectedCharacterRange,
+					}),
 				])
 			})
 		})
@@ -163,9 +164,9 @@ describe("when verifying a set of multiple commits and some commits have non-cap
 		it("raises concerns about the commits with non-capitalised subject lines", () => {
 			const actualConcerns = useCapitalisedSubjectLines(commits, {})
 			expect(actualConcerns).toEqual<Concerns>([
-				subjectLineConcern(ruleName, commits[0].sha, [0, 1]),
-				subjectLineConcern(ruleName, commits[3].sha, [0, 1]),
-				subjectLineConcern(ruleName, commits[5].sha, [7, 8]),
+				subjectLineConcern({ rule, commit: commits[0].sha, columns: [0, 1] }),
+				subjectLineConcern({ rule, commit: commits[3].sha, columns: [0, 1] }),
+				subjectLineConcern({ rule, commit: commits[5].sha, columns: [7, 8] }),
 			])
 		})
 	})

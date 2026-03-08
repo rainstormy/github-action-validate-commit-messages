@@ -4,20 +4,13 @@ import type { CommitSha } from "#types/CommitSha.ts"
 
 export type SubjectLineConcern = {
 	location: "subject-line"
-	violatedRule: RuleKey
-	commitSha: CommitSha
-	characterRange: CharacterRange
+	rule: RuleKey
+	commit: CommitSha
+	columns: CharacterRange
 }
 
 export function subjectLineConcern(
-	violatedRule: RuleKey,
-	commitSha: CommitSha,
-	characterRange: CharacterRange,
+	props: Omit<SubjectLineConcern, "location">,
 ): SubjectLineConcern {
-	return {
-		location: "subject-line",
-		violatedRule,
-		commitSha,
-		characterRange,
-	}
+	return { ...props, location: "subject-line" }
 }

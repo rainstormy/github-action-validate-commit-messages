@@ -4,20 +4,13 @@ import type { CommitSha } from "#types/CommitSha.ts"
 
 export type CommitterNameConcern = {
 	location: "committer-name"
-	violatedRule: RuleKey
-	commitSha: CommitSha
-	characterRange: CharacterRange
+	rule: RuleKey
+	commit: CommitSha
+	columns: CharacterRange
 }
 
 export function committerNameConcern(
-	violatedRule: RuleKey,
-	commitSha: CommitSha,
-	characterRange: CharacterRange,
+	props: Omit<CommitterNameConcern, "location">,
 ): CommitterNameConcern {
-	return {
-		location: "committer-name",
-		violatedRule,
-		commitSha,
-		characterRange,
-	}
+	return { ...props, location: "committer-name" }
 }

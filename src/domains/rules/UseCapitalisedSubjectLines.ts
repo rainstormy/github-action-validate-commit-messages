@@ -1,10 +1,11 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
+import type { RuleKey } from "#configurations/Configuration.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
-const ruleName = "useCapitalisedSubjectLines"
+const rule: RuleKey = "useCapitalisedSubjectLines"
 
 export function useCapitalisedSubjectLines(
 	commits: Commits,
@@ -26,10 +27,11 @@ function verifyCommit(commit: Commit): Concern | null {
 				const leadingWhitespaceOffset = token.length - trimmedToken.length
 				const startIndex = index + leadingWhitespaceOffset
 
-				return subjectLineConcern(ruleName, commit.sha, [
-					startIndex,
-					startIndex + 1,
-				])
+				return subjectLineConcern({
+					rule,
+					commit: commit.sha,
+					columns: [startIndex, startIndex + 1],
+				})
 			}
 
 			return null
