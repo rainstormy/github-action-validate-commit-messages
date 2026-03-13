@@ -27,13 +27,14 @@ describe.each`
 describe("when there is 1 commit with no parents", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit d13efe7d13084bf4a026f74349478d40a713949e
+			output: `
+commit d13efe7d13084bf4a026f74349478d40a713949e
 tree 6feccc6788c0ef8667a9aaf6386d72b6b5deba17
 author Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 1766222736 -0500
 committer Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 1766222736 -0500
 
     init
-`,
+`.trimStart(),
 		})
 	})
 
@@ -59,14 +60,15 @@ committer Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 176
 describe("when there is 1 commit with a single parent", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit 3ed87c9813318c942b8729d52b84027b584b5
+			output: `
+commit 3ed87c9813318c942b8729d52b84027b584b5
 tree d8242af2d280a7805e8d481a8ac36b7224edde6d
 parent b34f54dae2045478f57846dfdd5762f4afb721
 author Raph <theraffaelloexperience@tmnt.com> 1769800893 -0500
 committer Master Splinter <sensei@ninja-academy.com> 1769801867 -0500
 
     fixup! fighting the foot clan
-`,
+`.trimStart(),
 		})
 	})
 
@@ -90,7 +92,8 @@ committer Master Splinter <sensei@ninja-academy.com> 1769801867 -0500
 describe("when there is 1 commit with 2 parents", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit 13441212913598c08d18d15ccc3aed86ab24a1b
+			output: `
+commit 13441212913598c08d18d15ccc3aed86ab24a1b
 tree b03e611c6d8ff9c63932ef5868253fc52c65cc
 parent fd2d1de72b1ac59bfb375a0e1e946926ceb99d
 parent 7ea6b181df3b6cac8989a46cc6623f74d686dd1
@@ -98,7 +101,7 @@ author April O'Neil <april@secondtimearound.com> 1771411236 -0500
 committer Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0500
 
     Deliver unlimited power with technological genius
-`,
+`.trimStart(),
 		})
 	})
 
@@ -125,7 +128,8 @@ committer Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0
 describe("when there is 1 commit with 3 parents", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit 6bbee9b37a298f5e9140127d6363ed1d69d44f
+			output: `
+commit 6bbee9b37a298f5e9140127d6363ed1d69d44f
 tree 10205843deec3d2f71d4c1cc52a898467f246a7b
 parent 5d5a4a61a0ac31c52c8f24412fa4732dfae48a9
 parent 67c7cf2a57f70ab31eb375337b4ff5db31b6829
@@ -136,7 +140,7 @@ committer Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500
     Let's gather all mutants for a massive pizza party!!
 
     Under parental supervision, of course ;)
-`,
+`.trimStart(),
 		})
 	})
 
@@ -168,7 +172,8 @@ committer Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500
 describe("when there is 1 commit with a signature", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit 76c79cc7bd33295c2c53aff2d1a25c9e698ab10
+			output: `
+commit 76c79cc7bd33295c2c53aff2d1a25c9e698ab10
 tree f36f404d67ee425b1e8e3374222eeb8cecff54
 parent b8f2e2cca67d1e1866a58848c259d11b9c8f1
 author Master Splinter <sensei@ninja-academy.com> 1675536219 +0100
@@ -181,7 +186,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
  -----END SSH SIGNATURE-----
 
     Teach them the ancient signature move
-`,
+`.trimStart(),
 		})
 	})
 
@@ -213,7 +218,8 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 describe("when there are 5 commits", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit 2128dcace99359e3a48329c99a4427ab9618433
+			output: `
+commit 2128dcace99359e3a48329c99a4427ab9618433
 tree 81211f2bd34af2b685705a50eaa6df9bb705591
 parent 58bab2d74be7e9d1ec4acd59d6de43ef27c651
 parent 1643d4a4aac6f87fae4fd79fca43ea6553cb4e0
@@ -265,7 +271,7 @@ gpgsig -----BEGIN PGP SIGNATURE-----
 
 
     Upgrade the Battle Shell to 7.3.1
-`,
+`.trimStart(),
 		})
 	})
 
@@ -340,7 +346,8 @@ gpgsig -----BEGIN PGP SIGNATURE-----
 describe("when there are 4 commits", () => {
 	beforeEach(() => {
 		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-			output: `commit f319eba917534964b83177abaa3de4bee24ee0fd
+			output: `
+commit f319eba917534964b83177abaa3de4bee24ee0fd
 tree e5aeef82441e9041529c2d36c462cc9d5520e3
 parent 9cd55379ae9a5107dcfd4dc8637b597112947be
 author Mortu <mortu@utroms.outerspace> 1873522994 +1000
@@ -399,7 +406,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
     FAST FORWARD! #2105
 
     back, back, back to the sewers
-`,
+`.trimStart(),
 		})
 	})
 
