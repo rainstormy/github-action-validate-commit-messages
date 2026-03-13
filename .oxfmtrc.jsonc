@@ -1,0 +1,27 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"ignorePatterns": [
+		".idea/",
+		"dist/",
+		"node_modules/",
+		"**/*.{md,toml,yaml,yml}" // TODO: Format Markdown, TOML, and YAML files with Oxfmt.
+	],
+	"printWidth": 80, // TODO: Inherited from Prettier and Biome. Increase to 100 characters (the default value in Oxfmt).
+	"semi": false, // Omit semicolons to reduce noise, see https://slides.com/evanyou/semicolons for motivation.
+	"sortImports": {
+		"customGroups": [
+			{ "groupName": "mocks", "elementNamePattern": ["**/*.mocks.*"] }
+		],
+		"groups": ["mocks", "builtin", "external", "subpath", "unknown"],
+		"newlinesBetween": false
+	},
+	"sortPackageJson": false, // Currently, Oxfmt will separate dependencies from their maintenance comments.
+	"overrides": [
+		{
+			"files": ["**/*.{json,jsonc}"],
+			"options": {
+				"trailingComma": "none" // JSON does not allow trailing commas.
+			}
+		}
+	]
+}
