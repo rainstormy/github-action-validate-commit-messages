@@ -14,7 +14,7 @@ describe.each`
 	${"\\w+\\.\\w+ .+\\s.+"} | ${["\\w+\\.\\w+", ".+\\s.+"]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
-	(testRow: { readonly rawPatterns: string; readonly expectedPatterns: ReadonlyArray<string> }) => {
+	(testRow: { rawPatterns: string; expectedPatterns: Array<string> }) => {
 		const { rawPatterns, expectedPatterns } = testRow
 
 		it(`includes ${formatPatterns(expectedPatterns)}`, () => {
@@ -35,7 +35,7 @@ describe.each`
 	${"\\w+\\.\\w+ .+\\s.+ \\w+\\.\\w+"} | ${"Input parameter 'acknowledged-author-names--patterns' must not contain duplicates: \\w+\\.\\w+"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
-	(testRow: { readonly rawPatterns: string; readonly expectedErrorMessage: string }) => {
+	(testRow: { rawPatterns: string; expectedErrorMessage: string }) => {
 		const { rawPatterns, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -50,6 +50,6 @@ function parseConfiguration(
 	return parse(legacyV1AcknowledgedAuthorNamesConfigurationSchema, rawConfiguration)
 }
 
-function formatPatterns(patterns: ReadonlyArray<string>): string {
+function formatPatterns(patterns: Array<string>): string {
 	return `${count(patterns, "pattern", "patterns")}: ${patterns.join(", ")}`
 }

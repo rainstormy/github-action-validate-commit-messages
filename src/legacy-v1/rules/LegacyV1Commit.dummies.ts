@@ -1,18 +1,18 @@
 import type { LegacyV1RawCommit } from "#legacy-v1/rules/LegacyV1Commit.ts"
 
 type DummyCommitProps = {
-	readonly sha?: string
-	readonly author?: {
-		readonly name: string | null
-		readonly emailAddress: string | null
+	sha?: string
+	author?: {
+		name: string | null
+		emailAddress: string | null
 	}
-	readonly committer?: {
-		readonly name: string | null
-		readonly emailAddress: string | null
+	committer?: {
+		name: string | null
+		emailAddress: string | null
 	}
-	readonly subjectLine: string
-	readonly body?: string
-	readonly numberOfParents?: number
+	subjectLine: string
+	body?: string
+	numberOfParents?: number
 }
 
 export function legacyV1DummyCommit({

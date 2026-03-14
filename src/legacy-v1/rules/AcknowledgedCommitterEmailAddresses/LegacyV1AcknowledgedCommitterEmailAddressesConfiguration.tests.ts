@@ -14,7 +14,7 @@ describe.each`
 	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com"} | ${[".+@alpha-company\\.com", ".+@bravo-company\\.com", ".+@charlie-company\\.com"]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
-	(testRow: { readonly rawPatterns: string; readonly expectedPatterns: ReadonlyArray<string> }) => {
+	(testRow: { rawPatterns: string; expectedPatterns: Array<string> }) => {
 		const { rawPatterns, expectedPatterns } = testRow
 
 		it(`includes ${formatPatterns(expectedPatterns)}`, () => {
@@ -36,7 +36,7 @@ describe.each`
 	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@charlie-company\\.com .+@bravo-company\\.com .+@bravo-company\\.com"} | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: .+@bravo-company\\.com .+@charlie-company\\.com"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
-	(testRow: { readonly rawPatterns: string; readonly expectedErrorMessage: string }) => {
+	(testRow: { rawPatterns: string; expectedErrorMessage: string }) => {
 		const { rawPatterns, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -51,6 +51,6 @@ function parseConfiguration(
 	return parse(legacyV1AcknowledgedCommitterEmailAddressesConfigurationSchema, rawConfiguration)
 }
 
-function formatPatterns(patterns: ReadonlyArray<string>): string {
+function formatPatterns(patterns: Array<string>): string {
 	return `${count(patterns, "pattern", "patterns")}: ${patterns.join(", ")}`
 }

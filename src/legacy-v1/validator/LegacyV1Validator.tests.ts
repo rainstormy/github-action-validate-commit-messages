@@ -124,10 +124,7 @@ describe("when the configuration has default settings", () => {
 		${"amend! solve the problem!"}                                              | ${["capitalised-subject-lines", "no-squash-commits", "no-trailing-punctuation-in-subject-lines"]}
 	`(
 		"a commit with a subject line of $subjectLine",
-		(testRow: {
-			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
-		}) => {
+		(testRow: { subjectLine: string; expectedViolatedRuleKeys: LegacyV1RuleKeys }) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
@@ -166,9 +163,9 @@ describe("when the configuration has default settings", () => {
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			subjectLine: string
+			body: string
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
@@ -186,10 +183,10 @@ describe("when the configuration has default settings", () => {
 	`(
 		"a merge commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly numberOfParents: number
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			subjectLine: string
+			body: string
+			numberOfParents: number
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const { subjectLine, body, numberOfParents, expectedViolatedRuleKeys } = testRow
 
@@ -214,9 +211,9 @@ describe("when the configuration has default settings", () => {
 	`(
 		"multiple commits with subject lines of $subjectLines",
 		(testRow: {
-			readonly subjectLines: ReadonlyArray<string>
-			readonly numberOfParents: number
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			subjectLines: Array<string>
+			numberOfParents: number
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const { subjectLines, numberOfParents, expectedViolatedRuleKeys } = testRow
 
@@ -256,11 +253,11 @@ describe("when the configuration overrides 'acknowledged-author-email-addresses-
 	`(
 		"a commit with an author with a name of $authorName and an email address of $authorEmailAddress and a committer with a name of $committerName and an email address of $committerEmailAddress",
 		(testRow: {
-			readonly authorName: string | null
-			readonly authorEmailAddress: string | null
-			readonly committerName: string | null
-			readonly committerEmailAddress: string | null
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			authorName: string | null
+			authorEmailAddress: string | null
+			committerName: string | null
+			committerEmailAddress: string | null
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const {
 				authorName,
@@ -306,10 +303,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 		${"deckenize the module"} | ${["capitalised-subject-lines", "imperative-subject-lines"]}
 	`(
 		"a commit with a subject line of $subjectLine",
-		(testRow: {
-			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
-		}) => {
+		(testRow: { subjectLine: string; expectedViolatedRuleKeys: LegacyV1RuleKeys }) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
@@ -336,10 +330,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 		${"deckenize the module"} | ${["capitalised-subject-lines", "imperative-subject-lines"]}
 	`(
 		"a commit with a subject line of $subjectLine",
-		(testRow: {
-			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
-		}) => {
+		(testRow: { subjectLine: string; expectedViolatedRuleKeys: LegacyV1RuleKeys }) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
@@ -370,10 +361,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		${"amend! #55: make the program act like a clown"}            | ${["capitalised-subject-lines", "no-squash-commits"]}
 	`(
 		"a commit with a subject line of $subjectLine",
-		(testRow: {
-			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
-		}) => {
+		(testRow: { subjectLine: string; expectedViolatedRuleKeys: LegacyV1RuleKeys }) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
@@ -390,9 +378,9 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	`(
 		"a merge commit with a subject line of $subjectLine",
 		(testRow: {
-			readonly subjectLine: string
-			readonly numberOfParents: number
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			subjectLine: string
+			numberOfParents: number
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const { subjectLine, numberOfParents, expectedViolatedRuleKeys } = testRow
 
@@ -411,10 +399,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 		${["#1 Make the formatter happy again", "#1 Make the formatter happy again"]} | ${["unique-subject-lines"]}
 	`(
 		"multiple commits with subject lines of $subjectLines",
-		(testRow: {
-			readonly subjectLines: ReadonlyArray<string>
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
-		}) => {
+		(testRow: { subjectLines: Array<string>; expectedViolatedRuleKeys: LegacyV1RuleKeys }) => {
 			const { subjectLines, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
@@ -444,9 +429,9 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			subjectLine: string
+			body: string
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
@@ -475,9 +460,9 @@ describe("when the configuration overrides 'limit-length-of-subject-lines--max-c
 	`(
 		"a commit with a subject line of $subjectLine and a body of $body",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
+			subjectLine: string
+			body: string
+			expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
@@ -505,10 +490,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 		${"Throw a tantrum;"}                   | ${["no-trailing-punctuation-in-subject-lines"]}
 	`(
 		"a commit with a subject line of $subjectLine",
-		(testRow: {
-			readonly subjectLine: string
-			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
-		}) => {
+		(testRow: { subjectLine: string; expectedViolatedRuleKeys: LegacyV1RuleKeys }) => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {

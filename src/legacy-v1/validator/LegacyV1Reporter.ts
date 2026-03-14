@@ -6,10 +6,10 @@ import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configu
 
 export type LegacyV1Reporter<Result> = (
 	invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,
-) => ReadonlyArray<Result>
+) => Array<Result>
 
-export type LegacyV1InvalidCommitsByViolatedRuleKey = Readonly<
-	Partial<Record<LegacyV1RuleKey, LegacyV1Commits>>
+export type LegacyV1InvalidCommitsByViolatedRuleKey = Partial<
+	Record<LegacyV1RuleKey, LegacyV1Commits>
 >
 
 export function legacyV1ViolatedRulesReporter(): LegacyV1Reporter<LegacyV1RuleKey> {
@@ -243,7 +243,7 @@ ${indent}Avoiding unnecessary commits will help you preserve the traceability of
 
 	return (
 		invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,
-	): ReadonlyArray<string> =>
+	): Array<string> =>
 		Object.entries(invalidCommitsByViolatedRuleKeys).map(([violatedRuleKey, invalidCommits]) =>
 			getInstruction(violatedRuleKey as LegacyV1RuleKey, invalidCommits),
 		)

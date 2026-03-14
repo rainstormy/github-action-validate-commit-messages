@@ -11,6 +11,6 @@ export function legacyV1EmptyLineAfterSubjectLines(): LegacyV1Rule {
 	}
 }
 
-function hasOneEmptyLineAfterSubjectLine(bodyLines: ReadonlyArray<string>): boolean {
+function hasOneEmptyLineAfterSubjectLine(bodyLines: Array<string>): boolean {
 	return bodyLines[0] === "" && (bodyLines.length === 1 || bodyLines[1] !== "")
 }

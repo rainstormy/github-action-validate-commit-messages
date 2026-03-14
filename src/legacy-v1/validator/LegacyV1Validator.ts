@@ -28,16 +28,16 @@ import type {
 export type LegacyV1Validator = <Result>(
 	rawCommits: LegacyV1RawCommits,
 	reporter: LegacyV1Reporter<Result>,
-) => ReadonlyArray<Result>
+) => Array<Result>
 
 export function legacyV1ValidatorFrom(configuration: LegacyV1Configuration): LegacyV1Validator {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(configuration)
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom(configuration)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
 
 	return <Result>(
 		rawCommits: LegacyV1RawCommits,
 		makeReport: LegacyV1Reporter<Result>,
-	): ReadonlyArray<Result> => {
+	): Array<Result> => {
 		const refinedCommits = rawCommits
 			.map((rawCommit) => legacyV1ParseCommit(rawCommit))
 			.map((parsedCommit) => refineCommit(parsedCommit))
@@ -56,9 +56,7 @@ export function legacyV1ValidatorFrom(configuration: LegacyV1Configuration): Leg
 	}
 }
 
-export function legacyV1RulesFrom(
-	configuration: LegacyV1Configuration,
-): ReadonlyArray<LegacyV1Rule> {
+export function legacyV1RulesFrom(configuration: LegacyV1Configuration): Array<LegacyV1Rule> {
 	function getRuleFromKey(ruleKey: LegacyV1RuleKey): LegacyV1Rule {
 		switch (ruleKey) {
 			case "acknowledged-author-email-addresses": {
