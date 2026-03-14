@@ -15,7 +15,7 @@ describe.each`
 	${"deckenise,deckenize"} | ${["deckenise", "deckenize"]}
 `(
 	"a whitelist of words from a valid string of $rawWords",
-	(testRow: { readonly rawWords: string; readonly expectedWords: ReadonlyArray<string> }) => {
+	(testRow: { rawWords: string; expectedWords: Array<string> }) => {
 		const { rawWords, expectedWords } = testRow
 
 		it(`includes ${formatWords(expectedWords)}`, () => {
@@ -35,7 +35,7 @@ describe.each`
 	${"deckenize,deckenise,deckenise,deckenize"}       | ${"Input parameter 'imperative-subject-lines--whitelist' must not contain duplicates: deckenize, deckenise"}
 `(
 	"a whitelist of words from an invalid string of $rawWords",
-	(testRow: { readonly rawWords: string; readonly expectedErrorMessage: string }) => {
+	(testRow: { rawWords: string; expectedErrorMessage: string }) => {
 		const { rawWords, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -50,6 +50,6 @@ function parseConfiguration(
 	return parse(legacyV1ImperativeSubjectLinesConfigurationSchema, rawConfiguration)
 }
 
-function formatWords(words: ReadonlyArray<string>): string {
+function formatWords(words: Array<string>): string {
 	return words.length === 0 ? "no words" : `${count(words, "word", "words")}: ${words.join(", ")}`
 }

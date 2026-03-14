@@ -1379,7 +1379,7 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 
 function validateInstructionsFrom(
 	configuration: LegacyV1Configuration,
-): (commits: LegacyV1RawCommits) => ReadonlyArray<string> {
-	return (commits: LegacyV1RawCommits): ReadonlyArray<string> =>
+): (commits: LegacyV1RawCommits) => Array<string> {
+	return (commits: LegacyV1RawCommits): Array<string> =>
 		legacyV1ValidatorFrom(configuration)(commits, legacyV1InstructiveReporter(configuration))
 }

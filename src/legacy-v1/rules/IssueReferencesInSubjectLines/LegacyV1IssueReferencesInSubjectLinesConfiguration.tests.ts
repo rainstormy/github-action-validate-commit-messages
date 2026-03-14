@@ -14,7 +14,7 @@ describe.each`
 	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"} | ${["ALPHA-[1-9][0-9]*", "BRAVO-[1-9][0-9]*", "CHARLIE-[1-9][0-9]*"]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
-	(testRow: { readonly rawPatterns: string; readonly expectedPatterns: ReadonlyArray<string> }) => {
+	(testRow: { rawPatterns: string; expectedPatterns: Array<string> }) => {
 		const { rawPatterns, expectedPatterns } = testRow
 
 		it(`includes ${formatPatterns(expectedPatterns)}`, () => {
@@ -37,7 +37,7 @@ describe.each`
 	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]* CHARLIE-[1-9][0-9]* BRAVO-[1-9][0-9]* BRAVO-[1-9][0-9]*"} | ${"Input parameter 'issue-references-in-subject-lines--patterns' must not contain duplicates: BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
-	(testRow: { readonly rawPatterns: string; readonly expectedErrorMessage: string }) => {
+	(testRow: { rawPatterns: string; expectedErrorMessage: string }) => {
 		const { rawPatterns, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -59,10 +59,7 @@ describe.each`
 	${",as-suffix,,  ,as-prefix"} | ${["as-suffix", "as-prefix"]}
 `(
 	"a list of allowed positions from a valid string of $rawPositions",
-	(testRow: {
-		readonly rawPositions: string
-		readonly expectedPositions: ReadonlyArray<string>
-	}) => {
+	(testRow: { rawPositions: string; expectedPositions: Array<string> }) => {
 		const { rawPositions, expectedPositions } = testRow
 
 		it(`includes ${formatPositions(expectedPositions)}`, () => {
@@ -87,7 +84,7 @@ describe.each`
 	${"as-suffix,as-prefix,as-prefix,as-prefix,as-suffix"} | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must not contain duplicates: as-suffix, as-prefix"}
 `(
 	"a list of allowed positions from an invalid string of $rawPositions",
-	(testRow: { readonly rawPositions: string; readonly expectedErrorMessage: string }) => {
+	(testRow: { rawPositions: string; expectedErrorMessage: string }) => {
 		const { rawPositions, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -107,10 +104,10 @@ function parseConfiguration(
 	return parse(legacyV1IssueReferencesInSubjectLinesConfigurationSchema, rawConfiguration)
 }
 
-function formatPatterns(patterns: ReadonlyArray<string>): string {
+function formatPatterns(patterns: Array<string>): string {
 	return `${count(patterns, "pattern", "patterns")}: ${patterns.join(", ")}`
 }
 
-function formatPositions(positions: ReadonlyArray<string>): string {
+function formatPositions(positions: Array<string>): string {
 	return `${count(positions, "position", "positions")}: ${positions.join(", ")}`
 }

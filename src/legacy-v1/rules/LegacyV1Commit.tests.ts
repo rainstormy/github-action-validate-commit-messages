@@ -12,7 +12,7 @@ import {
 import { legacyV1RulesFrom } from "#legacy-v1/validator/LegacyV1Validator.ts"
 
 describe("when the configuration has default settings", () => {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(legacyV1DummyDefaultConfiguration)
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom(legacyV1DummyDefaultConfiguration)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
 
 	describe.each`
@@ -35,18 +35,18 @@ describe("when the configuration has default settings", () => {
 	`(
 		"a commit with a subject line of $subjectLine that is a child of $parentShas",
 		(testRow: {
-			readonly sha: string
-			readonly subjectLine: string
-			readonly body: string
-			readonly parentShas: ReadonlyArray<string>
-			readonly authorName: string | null
-			readonly authorEmailAddress: string | null
-			readonly committerName: string | null
-			readonly committerEmailAddress: string | null
-			readonly squashPrefixes: ReadonlyArray<string>
-			readonly refinedSubjectLine: string
-			readonly bodyLines: ReadonlyArray<string>
-			readonly coAuthors: ReadonlyArray<string>
+			sha: string
+			subjectLine: string
+			body: string
+			parentShas: Array<string>
+			authorName: string | null
+			authorEmailAddress: string | null
+			committerName: string | null
+			committerEmailAddress: string | null
+			squashPrefixes: Array<string>
+			refinedSubjectLine: string
+			bodyLines: Array<string>
+			coAuthors: Array<string>
 		}) => {
 			const {
 				sha,
@@ -132,7 +132,7 @@ describe("when the configuration has default settings", () => {
 })
 
 describe("when the configuration overrides 'no-squash-commits--disallowed-prefixes' with 'wip!' and 'amend!'", () => {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom({
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom({
 		...legacyV1DummyDefaultConfiguration,
 		noSquashCommits: {
 			disallowedPrefixes: ["wip!", "amend!"],
@@ -150,10 +150,10 @@ describe("when the configuration overrides 'no-squash-commits--disallowed-prefix
 	`(
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly squashPrefixes: ReadonlyArray<string>
-			readonly refinedSubjectLine: string
+			subjectLine: string
+			body: string
+			squashPrefixes: Array<string>
+			refinedSubjectLine: string
 		}) => {
 			const { subjectLine, body, squashPrefixes, refinedSubjectLine } = testRow
 
@@ -189,7 +189,7 @@ describe("when the configuration overrides 'no-squash-commits--disallowed-prefix
 })
 
 describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with GitHub-style issue references as prefix", () => {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom(
 		legacyV1DummyGithubStyleIssueReferencesAsPrefixConfiguration,
 	)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
@@ -210,11 +210,11 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	`(
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly squashPrefixes: ReadonlyArray<string>
-			readonly issueReferences: ReadonlyArray<string>
-			readonly refinedSubjectLine: string
+			subjectLine: string
+			body: string
+			squashPrefixes: Array<string>
+			issueReferences: Array<string>
+			refinedSubjectLine: string
 		}) => {
 			const { subjectLine, body, squashPrefixes, issueReferences, refinedSubjectLine } = testRow
 
@@ -254,7 +254,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 })
 
 describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with GitHub-style issue references as suffix", () => {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom(
 		legacyV1DummyGithubStyleIssueReferencesAsSuffixConfiguration,
 	)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
@@ -275,11 +275,11 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	`(
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly squashPrefixes: ReadonlyArray<string>
-			readonly issueReferences: ReadonlyArray<string>
-			readonly refinedSubjectLine: string
+			subjectLine: string
+			body: string
+			squashPrefixes: Array<string>
+			issueReferences: Array<string>
+			refinedSubjectLine: string
 		}) => {
 			const { subjectLine, body, squashPrefixes, issueReferences, refinedSubjectLine } = testRow
 
@@ -319,7 +319,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 })
 
 describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with Jira-style issue references", () => {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom(
 		legacyV1DummyJiraStyleIssueReferencesConfiguration,
 	)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
@@ -335,11 +335,11 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	`(
 		"a commit with a subject line of $subjectLine",
 		(testRow: {
-			readonly subjectLine: string
-			readonly body: string
-			readonly squashPrefixes: ReadonlyArray<string>
-			readonly issueReferences: ReadonlyArray<string>
-			readonly refinedSubjectLine: string
+			subjectLine: string
+			body: string
+			squashPrefixes: Array<string>
+			issueReferences: Array<string>
+			refinedSubjectLine: string
 		}) => {
 			const { subjectLine, body, squashPrefixes, issueReferences, refinedSubjectLine } = testRow
 
@@ -378,19 +378,19 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 	)
 })
 
-function formatSquashPrefixes(prefixes: ReadonlyArray<string>): string {
+function formatSquashPrefixes(prefixes: Array<string>): string {
 	return prefixes.length === 0
 		? "no squash prefixes"
 		: `${count(prefixes, "squash prefix", "squash prefixes")}: ${prefixes.join(", ")}`
 }
 
-function formatIssueReferences(references: ReadonlyArray<string>): string {
+function formatIssueReferences(references: Array<string>): string {
 	return references.length === 0
 		? "no issue references"
 		: `${count(references, "issue reference", "issue references")}: ${references.join(" ")}`
 }
 
-function formatParents(parentShas: ReadonlyArray<string>): string {
+function formatParents(parentShas: Array<string>): string {
 	return `${count(parentShas, "parent commit", "parent commits")}: ${parentShas.join(", ")}`
 }
 
@@ -414,7 +414,7 @@ function formatCommitterEmailAddress(committerEmailAddress: string | null): stri
 		: `a committer email address of '${committerEmailAddress}'`
 }
 
-function formatBodyLines(bodyLines: ReadonlyArray<string>): string {
+function formatBodyLines(bodyLines: Array<string>): string {
 	return bodyLines.length === 0
 		? "no body lines"
 		: `${count(bodyLines, "body line", "body lines")}: ${bodyLines
@@ -422,7 +422,7 @@ function formatBodyLines(bodyLines: ReadonlyArray<string>): string {
 				.join(", ")}`
 }
 
-function formatCoAuthors(coAuthors: ReadonlyArray<string>): string {
+function formatCoAuthors(coAuthors: Array<string>): string {
 	return coAuthors.length === 0
 		? "no co-authors"
 		: `${count(coAuthors, "co-author", "co-authors")}: ${coAuthors.join(", ")}`
