@@ -2,9 +2,7 @@ export function vectorOf<Item, Count extends number>(
 	count: Count,
 	itemFactory: (index: number) => Item,
 ): Vector<Item, Count> {
-	return Array.from({ length: count }, (_ignored, index) =>
-		itemFactory(index),
-	) as Vector<Item, Count>
+	return Array.from({ length: count }, (_, index) => itemFactory(index)) as Vector<Item, Count>
 }
 
 export type Vector<Item, Count extends number> = Count extends Count

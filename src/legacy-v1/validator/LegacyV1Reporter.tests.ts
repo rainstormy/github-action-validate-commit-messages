@@ -239,8 +239,7 @@ describe("when the configuration has default settings", () => {
 		const report = validate([
 			legacyV1DummyCommit({
 				sha: "d06f00d",
-				subjectLine:
-					"Install some extremely redundant heavyweight dependencies",
+				subjectLine: "Install some extremely redundant heavyweight dependencies",
 				body: "\nWe had to make the bundle heavier to make it appear more valuable.",
 			}),
 			legacyV1DummyCommit({
@@ -1248,9 +1247,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 })
 
 describe("when the configuration overrides 'issue-references-in-subject-lines--patterns' with Jira-style issue references", () => {
-	const validate = validateInstructionsFrom(
-		legacyV1DummyJiraStyleIssueReferencesConfiguration,
-	)
+	const validate = validateInstructionsFrom(legacyV1DummyJiraStyleIssueReferencesConfiguration)
 
 	describe("a report generated from a valid commit and a commit without an issue reference", () => {
 		const report = validate([
@@ -1382,10 +1379,7 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 
 function validateInstructionsFrom(
 	configuration: LegacyV1Configuration,
-): (commits: LegacyV1RawCommits) => ReadonlyArray<string> {
-	return (commits: LegacyV1RawCommits): ReadonlyArray<string> =>
-		legacyV1ValidatorFrom(configuration)(
-			commits,
-			legacyV1InstructiveReporter(configuration),
-		)
+): (commits: LegacyV1RawCommits) => Array<string> {
+	return (commits: LegacyV1RawCommits): Array<string> =>
+		legacyV1ValidatorFrom(configuration)(commits, legacyV1InstructiveReporter(configuration))
 }

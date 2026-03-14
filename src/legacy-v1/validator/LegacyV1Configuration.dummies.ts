@@ -107,48 +107,33 @@ export const legacyV1DummyLegendaryCompanyEmailAddressesAndFourLetterNamesConfig
 const githubStyleIssueReference = "#[1-9][0-9]*"
 const jiraStyleIssueReference = "UNICORN-[1-9][0-9]*"
 
-export const legacyV1DummyGithubStyleIssueReferencesAsPrefixConfiguration: LegacyV1Configuration =
-	{
-		...legacyV1DummyDefaultConfiguration,
-		ruleKeys: [
-			...legacyV1DummyDefaultConfiguration.ruleKeys,
-			"issue-references-in-subject-lines",
+export const legacyV1DummyGithubStyleIssueReferencesAsPrefixConfiguration: LegacyV1Configuration = {
+	...legacyV1DummyDefaultConfiguration,
+	ruleKeys: [...legacyV1DummyDefaultConfiguration.ruleKeys, "issue-references-in-subject-lines"],
+	issueReferencesInSubjectLines: {
+		allowedPositions: ["as-prefix"],
+		patterns: [
+			`\\(${githubStyleIssueReference}\\)`,
+			`${githubStyleIssueReference}:`,
+			githubStyleIssueReference,
 		],
-		issueReferencesInSubjectLines: {
-			allowedPositions: ["as-prefix"],
-			patterns: [
-				`\\(${githubStyleIssueReference}\\)`,
-				`${githubStyleIssueReference}:`,
-				githubStyleIssueReference,
-			],
-		},
-	}
+	},
+}
 
-export const legacyV1DummyGithubStyleIssueReferencesAsSuffixConfiguration: LegacyV1Configuration =
-	{
-		...legacyV1DummyDefaultConfiguration,
-		ruleKeys: [
-			...legacyV1DummyDefaultConfiguration.ruleKeys,
-			"issue-references-in-subject-lines",
-		],
-		issueReferencesInSubjectLines: {
-			allowedPositions: ["as-suffix"],
-			patterns: [
-				`\\(${githubStyleIssueReference}\\)`,
-				githubStyleIssueReference,
-			],
-		},
-	}
+export const legacyV1DummyGithubStyleIssueReferencesAsSuffixConfiguration: LegacyV1Configuration = {
+	...legacyV1DummyDefaultConfiguration,
+	ruleKeys: [...legacyV1DummyDefaultConfiguration.ruleKeys, "issue-references-in-subject-lines"],
+	issueReferencesInSubjectLines: {
+		allowedPositions: ["as-suffix"],
+		patterns: [`\\(${githubStyleIssueReference}\\)`, githubStyleIssueReference],
+	},
+}
 
-export const legacyV1DummyJiraStyleIssueReferencesConfiguration: LegacyV1Configuration =
-	{
-		...legacyV1DummyDefaultConfiguration,
-		ruleKeys: [
-			...legacyV1DummyDefaultConfiguration.ruleKeys,
-			"issue-references-in-subject-lines",
-		],
-		issueReferencesInSubjectLines: {
-			...legacyV1DummyDefaultConfiguration.issueReferencesInSubjectLines,
-			patterns: [`\\(${jiraStyleIssueReference}\\)`, jiraStyleIssueReference],
-		},
-	}
+export const legacyV1DummyJiraStyleIssueReferencesConfiguration: LegacyV1Configuration = {
+	...legacyV1DummyDefaultConfiguration,
+	ruleKeys: [...legacyV1DummyDefaultConfiguration.ruleKeys, "issue-references-in-subject-lines"],
+	issueReferencesInSubjectLines: {
+		...legacyV1DummyDefaultConfiguration.issueReferencesInSubjectLines,
+		patterns: [`\\(${jiraStyleIssueReference}\\)`, jiraStyleIssueReference],
+	},
+}

@@ -6,15 +6,9 @@ import { legacyV1CapitalisedSubjectLines } from "#legacy-v1/rules/CapitalisedSub
 import { legacyV1EmptyLineAfterSubjectLines } from "#legacy-v1/rules/EmptyLineAfterSubjectLines/LegacyV1EmptyLineAfterSubjectLines.ts"
 import { legacyV1ImperativeSubjectLines } from "#legacy-v1/rules/ImperativeSubjectLines/LegacyV1ImperativeSubjectLines.ts"
 import { legacyV1IssueReferencesInSubjectLines } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLines.ts"
-import {
-	type LegacyV1RawCommits,
-	legacyV1ParseCommit,
-} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import { type LegacyV1RawCommits, legacyV1ParseCommit } from "#legacy-v1/rules/LegacyV1Commit.ts"
 import { legacyV1CommitRefinerFrom } from "#legacy-v1/rules/LegacyV1CommitRefiner.ts"
-import type {
-	LegacyV1Rule,
-	LegacyV1RuleKey,
-} from "#legacy-v1/rules/LegacyV1Rule.ts"
+import type { LegacyV1Rule, LegacyV1RuleKey } from "#legacy-v1/rules/LegacyV1Rule.ts"
 import { legacyV1LimitLengthOfBodyLines } from "#legacy-v1/rules/LimitLengthOfBodyLines/LegacyV1LimitLengthOfBodyLines.ts"
 import { legacyV1LimitLengthOfSubjectLines } from "#legacy-v1/rules/LimitLengthOfSubjectLines/LegacyV1LimitLengthOfSubjectLines.ts"
 import { legacyV1MultiWordSubjectLines } from "#legacy-v1/rules/MultiWordSubjectLines/LegacyV1MultiWordSubjectLines.ts"
@@ -34,18 +28,16 @@ import type {
 export type LegacyV1Validator = <Result>(
 	rawCommits: LegacyV1RawCommits,
 	reporter: LegacyV1Reporter<Result>,
-) => ReadonlyArray<Result>
+) => Array<Result>
 
-export function legacyV1ValidatorFrom(
-	configuration: LegacyV1Configuration,
-): LegacyV1Validator {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(configuration)
+export function legacyV1ValidatorFrom(configuration: LegacyV1Configuration): LegacyV1Validator {
+	const rules: Array<LegacyV1Rule> = legacyV1RulesFrom(configuration)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
 
 	return <Result>(
 		rawCommits: LegacyV1RawCommits,
 		makeReport: LegacyV1Reporter<Result>,
-	): ReadonlyArray<Result> => {
+	): Array<Result> => {
 		const refinedCommits = rawCommits
 			.map((rawCommit) => legacyV1ParseCommit(rawCommit))
 			.map((parsedCommit) => refineCommit(parsedCommit))
@@ -64,9 +56,7 @@ export function legacyV1ValidatorFrom(
 	}
 }
 
-export function legacyV1RulesFrom(
-	configuration: LegacyV1Configuration,
-): ReadonlyArray<LegacyV1Rule> {
+export function legacyV1RulesFrom(configuration: LegacyV1Configuration): Array<LegacyV1Rule> {
 	function getRuleFromKey(ruleKey: LegacyV1RuleKey): LegacyV1Rule {
 		switch (ruleKey) {
 			case "acknowledged-author-email-addresses": {
@@ -75,9 +65,7 @@ export function legacyV1RulesFrom(
 				)
 			}
 			case "acknowledged-author-names": {
-				return legacyV1AcknowledgedAuthorNames(
-					configuration.acknowledgedAuthorNames,
-				)
+				return legacyV1AcknowledgedAuthorNames(configuration.acknowledgedAuthorNames)
 			}
 			case "acknowledged-committer-email-addresses": {
 				return legacyV1AcknowledgedCommitterEmailAddresses(
@@ -85,9 +73,7 @@ export function legacyV1RulesFrom(
 				)
 			}
 			case "acknowledged-committer-names": {
-				return legacyV1AcknowledgedCommitterNames(
-					configuration.acknowledgedCommitterNames,
-				)
+				return legacyV1AcknowledgedCommitterNames(configuration.acknowledgedCommitterNames)
 			}
 			case "capitalised-subject-lines": {
 				return legacyV1CapitalisedSubjectLines()
@@ -96,24 +82,16 @@ export function legacyV1RulesFrom(
 				return legacyV1EmptyLineAfterSubjectLines()
 			}
 			case "imperative-subject-lines": {
-				return legacyV1ImperativeSubjectLines(
-					configuration.imperativeSubjectLines,
-				)
+				return legacyV1ImperativeSubjectLines(configuration.imperativeSubjectLines)
 			}
 			case "issue-references-in-subject-lines": {
-				return legacyV1IssueReferencesInSubjectLines(
-					configuration.issueReferencesInSubjectLines,
-				)
+				return legacyV1IssueReferencesInSubjectLines(configuration.issueReferencesInSubjectLines)
 			}
 			case "limit-length-of-body-lines": {
-				return legacyV1LimitLengthOfBodyLines(
-					configuration.limitLengthOfBodyLines,
-				)
+				return legacyV1LimitLengthOfBodyLines(configuration.limitLengthOfBodyLines)
 			}
 			case "limit-length-of-subject-lines": {
-				return legacyV1LimitLengthOfSubjectLines(
-					configuration.limitLengthOfSubjectLines,
-				)
+				return legacyV1LimitLengthOfSubjectLines(configuration.limitLengthOfSubjectLines)
 			}
 			case "multi-word-subject-lines": {
 				return legacyV1MultiWordSubjectLines()

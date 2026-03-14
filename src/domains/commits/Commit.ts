@@ -1,15 +1,8 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
-import type {
-	TokenisedLine,
-	TokenisedLines,
-	Tokenisers,
-} from "#commits/tokens/Token.ts"
-import type {
-	Configuration,
-	TokenConfiguration,
-} from "#configurations/Configuration.ts"
+import type { TokenisedLine, TokenisedLines, Tokenisers } from "#commits/tokens/Token.ts"
+import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import { notEmptyString } from "#utilities/Arrays.ts"
 
@@ -33,8 +26,7 @@ export function mapCrudeCommitToCommit(
 	crudeCommit: CrudeCommit,
 	configuration: Configuration,
 ): Commit {
-	const [crudeSubjectLine = "", ...crudeBodyLines] =
-		crudeCommit.message.split("\n")
+	const [crudeSubjectLine = "", ...crudeBodyLines] = crudeCommit.message.split("\n")
 
 	return {
 		sha: crudeCommit.sha,
@@ -44,9 +36,7 @@ export function mapCrudeCommitToCommit(
 		committerName: crudeCommit.committerName,
 		committerEmail: crudeCommit.committerEmail,
 		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens),
-		bodyLines: crudeBodyLines.map((crudeBodyLine) =>
-			[crudeBodyLine].filter(notEmptyString),
-		),
+		bodyLines: crudeBodyLines.map((crudeBodyLine) => [crudeBodyLine].filter(notEmptyString)),
 	}
 }
 

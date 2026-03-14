@@ -6,11 +6,7 @@ export async function getGitDefaultBranch(): Promise<string | null> {
 	const remote = await getPreferredRemote()
 
 	if (remote !== null) {
-		const remoteDefaultBranch = await runGitCommand([
-			"rev-parse",
-			"--abbrev-ref",
-			`${remote}/HEAD`,
-		])
+		const remoteDefaultBranch = await runGitCommand(["rev-parse", "--abbrev-ref", `${remote}/HEAD`])
 
 		if (remoteDefaultBranch) {
 			return remoteDefaultBranch

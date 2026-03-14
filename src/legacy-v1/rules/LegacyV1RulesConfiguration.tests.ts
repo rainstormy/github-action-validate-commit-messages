@@ -40,10 +40,7 @@ describe.each`
 	${allAvailableRuleKeys.join(",")}                                                                                                           | ${allAvailableRuleKeys}
 `(
 	"a ruleset from a valid string of $rawRuleKeys",
-	(testRow: {
-		readonly rawRuleKeys: string
-		readonly expectedRuleKeys: LegacyV1RuleKeys
-	}) => {
+	(testRow: { rawRuleKeys: string; expectedRuleKeys: LegacyV1RuleKeys }) => {
 		const { rawRuleKeys, expectedRuleKeys } = testRow
 
 		it(`includes ${formatRuleKeys(expectedRuleKeys)}`, () => {
@@ -65,16 +62,11 @@ describe.each`
 	${"no-easter-eggs, no-squash-commits, no-easter-eggs, no-letters-in-subject-lines, no-squash-commits"}                               | ${"Input parameter 'rules' must not contain unknown values: no-easter-eggs, no-letters-in-subject-lines"}
 `(
 	"a ruleset from an invalid string of $rawRuleKeys",
-	(testRow: {
-		readonly rawRuleKeys: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { rawRuleKeys: string; expectedErrorMessage: string }) => {
 		const { rawRuleKeys, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() => parseConfiguration(rawRuleKeys)).toThrow(
-				expectedErrorMessage,
-			)
+			expect(() => parseConfiguration(rawRuleKeys)).toThrow(expectedErrorMessage)
 		})
 	},
 )
@@ -83,6 +75,6 @@ function parseConfiguration(rawRuleKeys: string): LegacyV1RuleKeys {
 	return parse(legacyV1RuleKeysConfigurationSchema, rawRuleKeys)
 }
 
-function formatRuleKeys(ruleKeys: ReadonlyArray<string>): string {
+function formatRuleKeys(ruleKeys: Array<string>): string {
 	return `${count(ruleKeys, "rule", "rules")}: ${ruleKeys.join(", ")}`
 }

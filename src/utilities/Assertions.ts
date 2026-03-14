@@ -8,9 +8,8 @@ export function requireNotNullish<Value extends NonNullable<unknown>>(
 
 export function assertNotNullish<Value extends NonNullable<unknown>>(
 	value: Value | null | undefined,
-	errorMessage: (invalidValue: null | undefined) => string = (
-		invalidValue: null | undefined,
-	) => `Expected a not-nullish value, but got ${invalidValue}`,
+	errorMessage: (invalidValue: null | undefined) => string = (invalidValue: null | undefined) =>
+		`Expected a not-nullish value, but got ${invalidValue}`,
 ): asserts value is Value {
 	if (value === null || value === undefined) {
 		throw new Error(errorMessage(value))

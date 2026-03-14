@@ -67,57 +67,48 @@ describe("in the default configuration", () => {
 		${"tmnt"}
 		${"renovate[bot]"}
 		${"Nimbus (Bot)"}
-	`(
-		"when the author's name is $authorName",
-		(props: { authorName: string }) => {
-			const crudeCommit = fakeCrudeCommit({
-				authorName: props.authorName,
-			})
+	`("when the author's name is $authorName", (props: { authorName: string }) => {
+		const crudeCommit = fakeCrudeCommit({
+			authorName: props.authorName,
+		})
 
-			it("preserves the author's name", () => {
-				const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-				expect(commit.authorName).toBe(props.authorName)
-			})
-		},
-	)
+		it("preserves the author's name", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.authorName).toBe(props.authorName)
+		})
+	})
 
 	describe.each`
 		authorEmail
 		${"tmnt@fastforward.com"}
 		${"29139614+renovate[bot]@users.noreply.github.com"}
 		${"146315497+rainstormybot-nimbus@users.noreply.github.com"}
-	`(
-		"when the author's email address is $authorEmail",
-		(props: { authorEmail: string }) => {
-			const crudeCommit = fakeCrudeCommit({
-				authorEmail: props.authorEmail,
-			})
+	`("when the author's email address is $authorEmail", (props: { authorEmail: string }) => {
+		const crudeCommit = fakeCrudeCommit({
+			authorEmail: props.authorEmail,
+		})
 
-			it("preserves the author's email address", () => {
-				const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-				expect(commit.authorEmail).toBe(props.authorEmail)
-			})
-		},
-	)
+		it("preserves the author's email address", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.authorEmail).toBe(props.authorEmail)
+		})
+	})
 
 	describe.each`
 		committerName
 		${"baxter.stockman"}
 		${"GitHub"}
 		${"Michelangelo di Lodovico Buonarroti Simoni"}
-	`(
-		"when the committer's name is $committerName",
-		(props: { committerName: string }) => {
-			const crudeCommit = fakeCrudeCommit({
-				committerName: props.committerName,
-			})
+	`("when the committer's name is $committerName", (props: { committerName: string }) => {
+		const crudeCommit = fakeCrudeCommit({
+			committerName: props.committerName,
+		})
 
-			it("preserves the committer's name", () => {
-				const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-				expect(commit.committerName).toBe(props.committerName)
-			})
-		},
-	)
+		it("preserves the committer's name", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.committerName).toBe(props.committerName)
+		})
+	})
 
 	describe.each`
 		committerEmail
@@ -157,9 +148,7 @@ describe("in the default configuration", () => {
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"refactor the taxi module",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["refactor the taxi module"])
 		})
 
 		it("has no body lines", () => {
@@ -189,9 +178,7 @@ describe("in the default configuration", () => {
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"Fix this confusing plate of spaghetti",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["Fix this confusing plate of spaghetti"])
 		})
 
 		it("has 1 empty body line", () => {
@@ -225,15 +212,12 @@ describe("in the default configuration", () => {
 
 	describe("when the commit message has a subject line, 1 empty line, and 1 body line", () => {
 		const crudeCommit = fakeCrudeCommit({
-			message:
-				"  added some extra love to the code\n\nThe architecture is much more flexible now.",
+			message: "  added some extra love to the code\n\nThe architecture is much more flexible now.",
 		})
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"  added some extra love to the code",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["  added some extra love to the code"])
 		})
 
 		it("has 1 empty body line and 1 tokenised body line", () => {
@@ -253,9 +237,7 @@ describe("in the default configuration", () => {
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"Upgrade dependencies",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["Upgrade dependencies"])
 		})
 
 		it("has 2 tokenised body lines", () => {
@@ -275,9 +257,7 @@ describe("in the default configuration", () => {
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"Clean up to improve maintainability",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["Clean up to improve maintainability"])
 		})
 
 		it("has 1 empty body line and 3 tokenised body lines", () => {
@@ -299,9 +279,7 @@ describe("in the default configuration", () => {
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"Release the robot butler",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["Release the robot butler"])
 		})
 
 		it("has 3 tokenised body lines, 1 empty body line, and 2 more tokenised body lines", () => {
@@ -319,15 +297,12 @@ describe("in the default configuration", () => {
 
 	describe("when the commit message has a subject line, 2 empty lines, and 1 body line", () => {
 		const crudeCommit = fakeCrudeCommit({
-			message:
-				"Make the commit scream fixup! again\n\n\nThis commit renames a variable.",
+			message: "Make the commit scream fixup! again\n\n\nThis commit renames a variable.",
 		})
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"Make the commit scream fixup! again",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["Make the commit scream fixup! again"])
 		})
 
 		it("has 2 empty body lines and 1 tokenised body line", () => {
@@ -348,9 +323,7 @@ describe("in the default configuration", () => {
 
 		it("has a tokenised subject line", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual<TokenisedLine>([
-				"Do some pair programming",
-			])
+			expect(commit.subjectLine).toEqual<TokenisedLine>(["Do some pair programming"])
 		})
 
 		it("has 1 tokenised body line, 1 empty body line, 4 tokenised body lines, and 1 trailing empty body line", () => {

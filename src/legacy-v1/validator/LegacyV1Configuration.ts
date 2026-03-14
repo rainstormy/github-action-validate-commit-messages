@@ -13,27 +13,19 @@ import { legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema } from "
 
 export const legacyV1ConfigurationSchema = object({
 	ruleKeys: legacyV1RuleKeysConfigurationSchema,
-	acknowledgedAuthorEmailAddresses:
-		legacyV1AcknowledgedAuthorEmailAddressesConfigurationSchema,
+	acknowledgedAuthorEmailAddresses: legacyV1AcknowledgedAuthorEmailAddressesConfigurationSchema,
 	acknowledgedAuthorNames: legacyV1AcknowledgedAuthorNamesConfigurationSchema,
 	acknowledgedCommitterEmailAddresses:
 		legacyV1AcknowledgedCommitterEmailAddressesConfigurationSchema,
-	acknowledgedCommitterNames:
-		legacyV1AcknowledgedCommitterNamesConfigurationSchema,
+	acknowledgedCommitterNames: legacyV1AcknowledgedCommitterNamesConfigurationSchema,
 	imperativeSubjectLines: legacyV1ImperativeSubjectLinesConfigurationSchema,
-	issueReferencesInSubjectLines:
-		legacyV1IssueReferencesInSubjectLinesConfigurationSchema,
+	issueReferencesInSubjectLines: legacyV1IssueReferencesInSubjectLinesConfigurationSchema,
 	limitLengthOfBodyLines: legacyV1LimitLengthOfBodyLinesConfigurationSchema,
-	limitLengthOfSubjectLines:
-		legacyV1LimitLengthOfSubjectLinesConfigurationSchema,
+	limitLengthOfSubjectLines: legacyV1LimitLengthOfSubjectLinesConfigurationSchema,
 	noSquashCommits: legacyV1NoSquashCommitsConfigurationSchema,
 	noTrailingPunctuationInSubjectLines:
 		legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema,
 })
 
-export type LegacyV1RawConfiguration = InferInput<
-	typeof legacyV1ConfigurationSchema
->
-export type LegacyV1Configuration = InferOutput<
-	typeof legacyV1ConfigurationSchema
->
+export type LegacyV1RawConfiguration = InferInput<typeof legacyV1ConfigurationSchema>
+export type LegacyV1Configuration = InferOutput<typeof legacyV1ConfigurationSchema>

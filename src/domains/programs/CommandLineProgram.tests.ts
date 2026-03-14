@@ -2,10 +2,7 @@ import { mockLogger } from "#utilities/logging/Logger.mocks.ts"
 import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { mockCometVersion } from "#utilities/version/CometVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
-import {
-	commandLineProgram,
-	getHelpText,
-} from "#programs/CommandLineProgram.ts"
+import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 
@@ -22,25 +19,22 @@ describe.each`
 	${["-h"]}
 	${["--config", "configs/comet.jsonc", "--help"]}
 	${["-h", "-v"]}
-`(
-	"when the args of $args contain the '--help'/'-h' flag",
-	(props: { args: Array<string> }) => {
-		let exitCode: ExitCode
+`("when the args of $args contain the '--help'/'-h' flag", (props: { args: Array<string> }) => {
+	let exitCode: ExitCode
 
-		beforeEach(async () => {
-			exitCode = await commandLineProgram(props.args)
-		})
+	beforeEach(async () => {
+		exitCode = await commandLineProgram(props.args)
+	})
 
-		it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
-			expect(exitCode).toBe(EXIT_CODE_SUCCESS)
-		})
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
 
-		it("prints a help text with usage instructions", () => {
-			expect(printMessage).toHaveBeenCalledWith(getHelpText())
-			expect(printMessage).toHaveBeenCalledTimes(1)
-		})
-	},
-)
+	it("prints a help text with usage instructions", () => {
+		expect(printMessage).toHaveBeenCalledWith(getHelpText())
+		expect(printMessage).toHaveBeenCalledTimes(1)
+	})
+})
 
 describe("the help text", () => {
 	it("is a list of program arguments and options", () => {

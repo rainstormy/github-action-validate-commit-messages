@@ -1,18 +1,7 @@
-export function indexOfFromBinarySearch(
-	sortedValues: ReadonlyArray<string>,
-	target: string,
-): number {
-	function binarySearch(
-		inclusiveStartIndex: number,
-		inclusiveEndIndex: number,
-	): number {
-		const middleIndex = Math.floor(
-			(inclusiveStartIndex + inclusiveEndIndex) / 2,
-		)
-		const comparison = target.localeCompare(
-			sortedValues[middleIndex] ?? "",
-			"en",
-		)
+export function indexOfFromBinarySearch(sortedValues: Array<string>, target: string): number {
+	function binarySearch(inclusiveStartIndex: number, inclusiveEndIndex: number): number {
+		const middleIndex = Math.floor((inclusiveStartIndex + inclusiveEndIndex) / 2)
+		const comparison = target.localeCompare(sortedValues[middleIndex] ?? "", "en")
 
 		if (comparison === 0) {
 			return middleIndex
@@ -28,52 +17,39 @@ export function indexOfFromBinarySearch(
 	return binarySearch(0, sortedValues.length - 1)
 }
 
-export function countOccurrences(
-	value: string,
-	characterToCount: string,
-): number {
+export function countOccurrences(value: string, characterToCount: string): number {
 	return value.split(characterToCount).length - 1
 }
 
-export function requireAtLeastOneValue(values: ReadonlyArray<string>): boolean {
+export function requireAtLeastOneValue(values: Array<string>): boolean {
 	return values.length > 0
 }
 
-export function requireNoDuplicateValues(
-	values: ReadonlyArray<string>,
-): boolean {
+export function requireNoDuplicateValues(values: Array<string>): boolean {
 	return new Set(values).size === values.length
 }
 
-export function getDuplicateValues(
-	values: ReadonlyArray<string>,
-): ReadonlyArray<string> {
-	return [
-		...new Set(
-			values.filter((value, index) => values.lastIndexOf(value) !== index),
-		),
-	]
+export function getDuplicateValues(values: Array<string>): Array<string> {
+	return [...new Set(values.filter((value, index) => values.lastIndexOf(value) !== index))]
 }
 
 export function requireNoUnknownValues<Value extends string>(
-	knownValues: ReadonlyArray<Value>,
-): (values: ReadonlyArray<string>) => values is ReadonlyArray<Value> {
-	return (values: ReadonlyArray<string>): values is ReadonlyArray<Value> =>
+	knownValues: Array<Value>,
+): (values: Array<string>) => values is Array<Value> {
+	return (values: Array<string>): values is Array<Value> =>
 		values.every((value) => isKnownValue(value, knownValues))
 }
 
 export function getUnknownValues<Value extends string>(
-	knownValues: ReadonlyArray<Value>,
-	values: ReadonlyArray<string>,
-): ReadonlyArray<string> {
-	return [
-		...new Set(values.filter((value) => !isKnownValue(value, knownValues))),
-	]
+	knownValues: Array<Value>,
+	values: Array<string>,
+): Array<string> {
+	return [...new Set(values.filter((value) => !isKnownValue(value, knownValues)))]
 }
 
 function isKnownValue<Value extends string>(
 	value: string,
-	knownValues: ReadonlyArray<Value>,
+	knownValues: Array<Value>,
 ): value is Value {
-	return (knownValues as ReadonlyArray<string>).includes(value)
+	return (knownValues as Array<string>).includes(value)
 }

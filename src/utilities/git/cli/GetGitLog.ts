@@ -2,10 +2,7 @@ import type { NonEmptyArray } from "#utilities/Arrays.ts"
 import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts"
 import { runGitCommand } from "#utilities/git/cli/RunGitCommand.ts"
 
-export async function getGitLog(
-	fromRef: string,
-	toRef: string,
-): Promise<Array<GitLogCommitDto>> {
+export async function getGitLog(fromRef: string, toRef: string): Promise<Array<GitLogCommitDto>> {
 	const range = `${fromRef}..${toRef}`
 	const output = await runGitCommand([
 		"--no-pager", // Print all output at once instead of using pagination.
@@ -97,9 +94,7 @@ function trimTrailingNewlines(dto: GitLogCommitDto): GitLogCommitDto {
 		Object.entries(dto).map(([key, values]) => [
 			key,
 			values.map((value) =>
-				value.endsWith("\n\n")
-					? value.slice(0, -"\n\n".length)
-					: value.slice(0, -"\n".length),
+				value.endsWith("\n\n") ? value.slice(0, -"\n\n".length) : value.slice(0, -"\n".length),
 			),
 		]),
 	) as GitLogCommitDto

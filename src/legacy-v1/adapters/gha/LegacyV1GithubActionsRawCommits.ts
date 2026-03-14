@@ -29,9 +29,7 @@ function mapCommitDtoToRawCommit(dto: GithubCommitDto): LegacyV1RawCommit {
 	}
 }
 
-function mapUserDtoToUserIdentity(
-	dto: GithubCommitUserDto | null,
-): LegacyV1UserIdentity {
+function mapUserDtoToUserIdentity(dto: GithubCommitUserDto | null): LegacyV1UserIdentity {
 	return {
 		name: dto?.name ?? null,
 		emailAddress: dto?.email ?? null,

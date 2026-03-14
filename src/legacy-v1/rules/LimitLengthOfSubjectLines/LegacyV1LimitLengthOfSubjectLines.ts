@@ -10,9 +10,7 @@ export function legacyV1LimitLengthOfSubjectLines({
 		key: "limit-length-of-subject-lines",
 		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
-				.filter(
-					({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "),
-				)
+				.filter(({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "))
 				.filter(
 					({ parents, refinedSubjectLine }) =>
 						parents.length === 1 || !refinedSubjectLine.startsWith("Merge "),

@@ -11,9 +11,5 @@ export function mockGithubPullRequestCommitDtos(
 	options: { pageSize?: number } = {},
 ): void {
 	const resourceUrl = mockGithubPullRequestEventDto()
-	mockGithubResourceDto<GithubCommitDto>(
-		resourceUrl,
-		dtos.map(fakeGithubCommitDto),
-		options,
-	)
+	mockGithubResourceDto<GithubCommitDto>(resourceUrl, dtos.map(fakeGithubCommitDto), options)
 }
