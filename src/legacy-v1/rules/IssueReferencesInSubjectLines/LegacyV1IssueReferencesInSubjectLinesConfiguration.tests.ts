@@ -10,7 +10,7 @@ import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 describe.each`
 	rawPatterns                                                  | expectedPatterns
 	${"#[1-9][0-9]*"}                                            | ${["#[1-9][0-9]*"]}
-	${" (PEGASUS|UNICORN)-\\d+ "}                                | ${["(PEGASUS|UNICORN)-\\d+"]}
+	${String.raw` (PEGASUS|UNICORN)-\d+ `}                       | ${[String.raw`(PEGASUS|UNICORN)-\d+`]}
 	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"} | ${["ALPHA-[1-9][0-9]*", "BRAVO-[1-9][0-9]*", "CHARLIE-[1-9][0-9]*"]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",

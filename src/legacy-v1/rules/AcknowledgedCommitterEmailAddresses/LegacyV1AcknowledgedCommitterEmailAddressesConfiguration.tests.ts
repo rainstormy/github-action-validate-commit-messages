@@ -8,10 +8,10 @@ import {
 import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
-	rawPatterns                                                                 | expectedPatterns
-	${"\\d+\\+.+@users\\.noreply\\.github\\.com"}                               | ${["\\d+\\+.+@users\\.noreply\\.github\\.com"]}
-	${" .+@(pegasus|unicorn)-company\\.com "}                                   | ${[".+@(pegasus|unicorn)-company\\.com"]}
-	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com"} | ${[".+@alpha-company\\.com", ".+@bravo-company\\.com", ".+@charlie-company\\.com"]}
+	rawPatterns                                                                        | expectedPatterns
+	${String.raw`\d+\+.+@users\.noreply\.github\.com`}                                 | ${[String.raw`\d+\+.+@users\.noreply\.github\.com`]}
+	${String.raw` .+@(pegasus|unicorn)-company\.com `}                                 | ${[String.raw`.+@(pegasus|unicorn)-company\.com`]}
+	${String.raw`.+@alpha-company\.com .+@bravo-company\.com .+@charlie-company\.com`} | ${[String.raw`.+@alpha-company\.com`, String.raw`.+@bravo-company\.com`, String.raw`.+@charlie-company\.com`]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
 	(testRow: { rawPatterns: string; expectedPatterns: Array<string> }) => {
@@ -28,12 +28,12 @@ describe.each`
 )
 
 describe.each`
-	rawPatterns                                                                                                                                        | expectedErrorMessage
-	${""}                                                                                                                                              | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must specify at least one value"}
-	${"  "}                                                                                                                                            | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must specify at least one value"}
-	${"\\d+\\+.+@users\\.noreply\\.github\\.com \\d+\\+.+@users\\.noreply\\.github\\.com"}                                                             | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: \\d+\\+.+@users\\.noreply\\.github\\.com"}
-	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@alpha-company\\.com"}                                                 | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: .+@alpha-company\\.com"}
-	${".+@alpha-company\\.com .+@bravo-company\\.com .+@charlie-company\\.com .+@charlie-company\\.com .+@bravo-company\\.com .+@bravo-company\\.com"} | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: .+@bravo-company\\.com .+@charlie-company\\.com"}
+	rawPatterns                                                                                                                                            | expectedErrorMessage
+	${""}                                                                                                                                                  | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must specify at least one value"}
+	${"  "}                                                                                                                                                | ${"Input parameter 'acknowledged-committer-email-addresses--patterns' must specify at least one value"}
+	${String.raw`\d+\+.+@users\.noreply\.github\.com \d+\+.+@users\.noreply\.github\.com`}                                                                 | ${String.raw`Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: \d+\+.+@users\.noreply\.github\.com`}
+	${String.raw`.+@alpha-company\.com .+@bravo-company\.com .+@charlie-company\.com .+@alpha-company\.com`}                                               | ${String.raw`Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: .+@alpha-company\.com`}
+	${String.raw`.+@alpha-company\.com .+@bravo-company\.com .+@charlie-company\.com .+@charlie-company\.com .+@bravo-company\.com .+@bravo-company\.com`} | ${String.raw`Input parameter 'acknowledged-committer-email-addresses--patterns' must not contain duplicates: .+@bravo-company\.com .+@charlie-company\.com`}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
 	(testRow: { rawPatterns: string; expectedErrorMessage: string }) => {

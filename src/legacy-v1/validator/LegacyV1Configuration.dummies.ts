@@ -17,22 +17,22 @@ export const legacyV1DummyDefaultConfiguration: LegacyV1Configuration = {
 		"unique-subject-lines",
 	],
 	acknowledgedAuthorEmailAddresses: {
-		patterns: ["^\\b$"], // A regular expression that never matches anything.
+		patterns: [String.raw`^\b$`], // A regular expression that never matches anything.
 	},
 	acknowledgedAuthorNames: {
-		patterns: ["^\\b$"], // A regular expression that never matches anything.
+		patterns: [String.raw`^\b$`], // A regular expression that never matches anything.
 	},
 	acknowledgedCommitterEmailAddresses: {
-		patterns: ["^\\b$"], // A regular expression that never matches anything.
+		patterns: [String.raw`^\b$`], // A regular expression that never matches anything.
 	},
 	acknowledgedCommitterNames: {
-		patterns: ["^\\b$"], // A regular expression that never matches anything.
+		patterns: [String.raw`^\b$`], // A regular expression that never matches anything.
 	},
 	imperativeSubjectLines: {
 		whitelist: [],
 	},
 	issueReferencesInSubjectLines: {
-		patterns: ["^\\b$"], // A regular expression that never matches anything.
+		patterns: [String.raw`^\b$`], // A regular expression that never matches anything.
 		allowedPositions: ["as-prefix", "as-suffix"],
 	},
 	limitLengthOfBodyLines: {
@@ -49,12 +49,12 @@ export const legacyV1DummyDefaultConfiguration: LegacyV1Configuration = {
 	},
 }
 
-const noreplyGithubEmailAddresses = "\\d+\\+.+@users\\.noreply\\.github\\.com"
-const fictiveCompanyEmailAddresses = ".+@fictivecompany\\.com"
-const legendaryCompanyEmailAddresses = ".+@thelegendary\\.com"
-const twoWordNames = ".+\\s.+"
-const threeLetterNames = "\\w{3}"
-const fourLetterNames = "\\w{4}"
+const noreplyGithubEmailAddresses = String.raw`\d+\+.+@users\.noreply\.github\.com`
+const fictiveCompanyEmailAddresses = String.raw`.+@fictivecompany\.com`
+const legendaryCompanyEmailAddresses = String.raw`.+@thelegendary\.com`
+const twoWordNames = String.raw`.+\s.+`
+const threeLetterNames = String.raw`\w{3}`
+const fourLetterNames = String.raw`\w{4}`
 
 export const legacyV1DummyNoreplyGithubOrFictiveCompanyEmailAddressesAndTwoWordOrThreeLetterNamesConfiguration: LegacyV1Configuration =
 	{

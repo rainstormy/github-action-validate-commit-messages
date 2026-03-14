@@ -8,10 +8,10 @@ import {
 import { count } from "#legacy-v1/utilities/StringUtilities.ts"
 
 describe.each`
-	rawPatterns              | expectedPatterns
-	${".+"}                  | ${[".+"]}
-	${" .+\\s.+ "}           | ${[".+\\s.+"]}
-	${"\\w+\\.\\w+ .+\\s.+"} | ${["\\w+\\.\\w+", ".+\\s.+"]}
+	rawPatterns                    | expectedPatterns
+	${".+"}                        | ${[".+"]}
+	${String.raw` .+\s.+ `}        | ${[String.raw`.+\s.+`]}
+	${String.raw`\w+\.\w+ .+\s.+`} | ${[String.raw`\w+\.\w+`, String.raw`.+\s.+`]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
 	(testRow: { rawPatterns: string; expectedPatterns: Array<string> }) => {
@@ -28,11 +28,11 @@ describe.each`
 )
 
 describe.each`
-	rawPatterns                          | expectedErrorMessage
-	${""}                                | ${"Input parameter 'acknowledged-committer-names--patterns' must specify at least one value"}
-	${"  "}                              | ${"Input parameter 'acknowledged-committer-names--patterns' must specify at least one value"}
-	${".+ .+"}                           | ${"Input parameter 'acknowledged-committer-names--patterns' must not contain duplicates: .+"}
-	${"\\w+\\.\\w+ .+\\s.+ \\w+\\.\\w+"} | ${"Input parameter 'acknowledged-committer-names--patterns' must not contain duplicates: \\w+\\.\\w+"}
+	rawPatterns                             | expectedErrorMessage
+	${""}                                   | ${"Input parameter 'acknowledged-committer-names--patterns' must specify at least one value"}
+	${"  "}                                 | ${"Input parameter 'acknowledged-committer-names--patterns' must specify at least one value"}
+	${".+ .+"}                              | ${"Input parameter 'acknowledged-committer-names--patterns' must not contain duplicates: .+"}
+	${String.raw`\w+\.\w+ .+\s.+ \w+\.\w+`} | ${String.raw`Input parameter 'acknowledged-committer-names--patterns' must not contain duplicates: \w+\.\w+`}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
 	(testRow: { rawPatterns: string; expectedErrorMessage: string }) => {
