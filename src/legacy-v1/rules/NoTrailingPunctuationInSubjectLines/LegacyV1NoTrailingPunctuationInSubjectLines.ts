@@ -9,9 +9,7 @@ export function legacyV1NoTrailingPunctuationInSubjectLines({
 	const whitelist = [...customWhitelist, ...builtInWhitelist]
 
 	function hasWhitelistedSuffix(value: string): boolean {
-		return whitelist.some((whitelistedSuffix) =>
-			value.endsWith(whitelistedSuffix),
-		)
+		return whitelist.some((whitelistedSuffix) => value.endsWith(whitelistedSuffix))
 	}
 
 	return {
@@ -19,12 +17,8 @@ export function legacyV1NoTrailingPunctuationInSubjectLines({
 		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.filter(({ refinedSubjectLine }) => refinedSubjectLine.length > 0)
-				.filter(({ refinedSubjectLine }) =>
-					hasTrailingPunctuation(refinedSubjectLine),
-				)
-				.filter(
-					({ refinedSubjectLine }) => !hasWhitelistedSuffix(refinedSubjectLine),
-				),
+				.filter(({ refinedSubjectLine }) => hasTrailingPunctuation(refinedSubjectLine))
+				.filter(({ refinedSubjectLine }) => !hasWhitelistedSuffix(refinedSubjectLine)),
 	}
 }
 

@@ -6,9 +6,7 @@ const resultsByCommand: Map<string, GitCommandResult> = vi.hoisted(
 	() => new Map<string, GitCommandResult>(),
 )
 
-type GitCommandResult =
-	| { output: string; exitCode?: 0 }
-	| { output?: string; exitCode: number }
+type GitCommandResult = { output: string; exitCode?: 0 } | { output?: string; exitCode: number }
 
 const mock: RunGitCommandMock = vi.hoisted(
 	(): RunGitCommandMock => ({
@@ -50,9 +48,6 @@ export function mockGitCli(): void {
 	})
 }
 
-export function mockGitCommand(
-	command: string,
-	result: GitCommandResult,
-): void {
+export function mockGitCommand(command: string, result: GitCommandResult): void {
 	resultsByCommand.set(command, result)
 }

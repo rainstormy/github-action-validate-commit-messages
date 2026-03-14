@@ -15,10 +15,7 @@ describe.each`
 	${"deckenise,deckenize"} | ${["deckenise", "deckenize"]}
 `(
 	"a whitelist of words from a valid string of $rawWords",
-	(testRow: {
-		readonly rawWords: string
-		readonly expectedWords: ReadonlyArray<string>
-	}) => {
+	(testRow: { readonly rawWords: string; readonly expectedWords: ReadonlyArray<string> }) => {
 		const { rawWords, expectedWords } = testRow
 
 		it(`includes ${formatWords(expectedWords)}`, () => {
@@ -38,16 +35,11 @@ describe.each`
 	${"deckenize,deckenise,deckenise,deckenize"}       | ${"Input parameter 'imperative-subject-lines--whitelist' must not contain duplicates: deckenize, deckenise"}
 `(
 	"a whitelist of words from an invalid string of $rawWords",
-	(testRow: {
-		readonly rawWords: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawWords: string; readonly expectedErrorMessage: string }) => {
 		const { rawWords, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() => parseConfiguration({ whitelist: rawWords })).toThrow(
-				expectedErrorMessage,
-			)
+			expect(() => parseConfiguration({ whitelist: rawWords })).toThrow(expectedErrorMessage)
 		})
 	},
 )
@@ -55,14 +47,9 @@ describe.each`
 function parseConfiguration(
 	rawConfiguration: LegacyV1RawImperativeSubjectLinesConfiguration,
 ): LegacyV1ImperativeSubjectLinesConfiguration {
-	return parse(
-		legacyV1ImperativeSubjectLinesConfigurationSchema,
-		rawConfiguration,
-	)
+	return parse(legacyV1ImperativeSubjectLinesConfigurationSchema, rawConfiguration)
 }
 
 function formatWords(words: ReadonlyArray<string>): string {
-	return words.length === 0
-		? "no words"
-		: `${count(words, "word", "words")}: ${words.join(", ")}`
+	return words.length === 0 ? "no words" : `${count(words, "word", "words")}: ${words.join(", ")}`
 }

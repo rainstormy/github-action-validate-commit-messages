@@ -8,9 +8,7 @@ export function legacyV1CommitRefinerFrom(
 ): LegacyV1CommitRefiner {
 	const refiners = rules
 		.map((rule) => rule.refine)
-		.filter(
-			(refiner): refiner is LegacyV1CommitRefiner => refiner !== undefined,
-		)
+		.filter((refiner): refiner is LegacyV1CommitRefiner => refiner !== undefined)
 
 	return compoundCommitRefinerFrom(refiners)
 }

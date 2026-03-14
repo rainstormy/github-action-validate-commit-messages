@@ -6,7 +6,5 @@ export function useConciseSubjectLines(
 	_commits: Commits,
 	_configuration: EmptyObject | null,
 ): Concerns {
-	throw new Error(
-		"The `useConciseSubjectLines` rule has not been implemented yet",
-	) // TODO: To be implemented.
+	throw new Error("The `useConciseSubjectLines` rule has not been implemented yet") // TODO: To be implemented.
 }

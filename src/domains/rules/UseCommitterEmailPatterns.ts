@@ -6,7 +6,5 @@ export function useCommitterEmailPatterns(
 	_commits: Commits,
 	_configuration: EmptyObject | null,
 ): Concerns {
-	throw new Error(
-		"The `useCommitterEmailPatterns` rule has not been implemented yet",
-	) // TODO: To be implemented.
+	throw new Error("The `useCommitterEmailPatterns` rule has not been implemented yet") // TODO: To be implemented.
 }

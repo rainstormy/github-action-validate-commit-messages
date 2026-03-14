@@ -1,9 +1,6 @@
 import type { LegacyV1IssueReferencePosition } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration.ts"
 import type { LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
-import type {
-	LegacyV1RuleKey,
-	LegacyV1RuleKeys,
-} from "#legacy-v1/rules/LegacyV1Rule.ts"
+import type { LegacyV1RuleKey, LegacyV1RuleKeys } from "#legacy-v1/rules/LegacyV1Rule.ts"
 import { count, pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { LegacyV1Configuration } from "#legacy-v1/validator/LegacyV1Configuration.ts"
 
@@ -18,8 +15,7 @@ export type LegacyV1InvalidCommitsByViolatedRuleKey = Readonly<
 export function legacyV1ViolatedRulesReporter(): LegacyV1Reporter<LegacyV1RuleKey> {
 	return (
 		invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,
-	): LegacyV1RuleKeys =>
-		Object.keys(invalidCommitsByViolatedRuleKeys) as LegacyV1RuleKeys
+	): LegacyV1RuleKeys => Object.keys(invalidCommitsByViolatedRuleKeys) as LegacyV1RuleKeys
 }
 
 export function legacyV1InstructiveReporter(
@@ -32,20 +28,18 @@ export function legacyV1InstructiveReporter(
 			.map((pattern) => `${indent}${pattern}`)
 			.join("\n")
 
-	const indentedListOfAuthorNamePatterns =
-		configuration.acknowledgedAuthorNames.patterns
-			.map((pattern) => `${indent}${pattern}`)
-			.join("\n")
+	const indentedListOfAuthorNamePatterns = configuration.acknowledgedAuthorNames.patterns
+		.map((pattern) => `${indent}${pattern}`)
+		.join("\n")
 
 	const indentedListOfCommitterEmailAddressPatterns =
 		configuration.acknowledgedCommitterEmailAddresses.patterns
 			.map((pattern) => `${indent}${pattern}`)
 			.join("\n")
 
-	const indentedListOfCommitterNamePatterns =
-		configuration.acknowledgedCommitterNames.patterns
-			.map((pattern) => `${indent}${pattern}`)
-			.join("\n")
+	const indentedListOfCommitterNamePatterns = configuration.acknowledgedCommitterNames.patterns
+		.map((pattern) => `${indent}${pattern}`)
+		.join("\n")
 
 	const nounsByIssueReferencePosition = {
 		"as-prefix": "the start",
@@ -57,20 +51,18 @@ export function legacyV1InstructiveReporter(
 		"as-suffix": "end",
 	} as const satisfies Record<LegacyV1IssueReferencePosition, string>
 
-	const startOrEndWithIssueReference =
-		configuration.issueReferencesInSubjectLines.allowedPositions
-			.map((position) => verbsByIssueReferencePosition[position])
-			.join(" or ")
+	const startOrEndWithIssueReference = configuration.issueReferencesInSubjectLines.allowedPositions
+		.map((position) => verbsByIssueReferencePosition[position])
+		.join(" or ")
 
 	const issueReferenceAtTheStartOrTheEnd =
 		configuration.issueReferencesInSubjectLines.allowedPositions
 			.map((position) => nounsByIssueReferencePosition[position])
 			.join(" or ")
 
-	const indentedListOfIssueReferencePatterns =
-		configuration.issueReferencesInSubjectLines.patterns
-			.map((pattern) => `${indent}${pattern}`)
-			.join("\n")
+	const indentedListOfIssueReferencePatterns = configuration.issueReferencesInSubjectLines.patterns
+		.map((pattern) => `${indent}${pattern}`)
+		.join("\n")
 
 	const maximumBodyLineLength = count(
 		configuration.limitLengthOfBodyLines.maximumCharacters,
@@ -84,10 +76,7 @@ export function legacyV1InstructiveReporter(
 		"characters",
 	)
 
-	function getInstruction(
-		ruleKey: LegacyV1RuleKey,
-		invalidCommits: LegacyV1Commits,
-	): string {
+	function getInstruction(ruleKey: LegacyV1RuleKey, invalidCommits: LegacyV1Commits): string {
 		const commitCount = invalidCommits.length
 
 		const addressOrAddresses = pluralise(commitCount, "address", "addresses")
@@ -255,8 +244,7 @@ ${indent}Avoiding unnecessary commits will help you preserve the traceability of
 	return (
 		invalidCommitsByViolatedRuleKeys: LegacyV1InvalidCommitsByViolatedRuleKey,
 	): ReadonlyArray<string> =>
-		Object.entries(invalidCommitsByViolatedRuleKeys).map(
-			([violatedRuleKey, invalidCommits]) =>
-				getInstruction(violatedRuleKey as LegacyV1RuleKey, invalidCommits),
+		Object.entries(invalidCommitsByViolatedRuleKeys).map(([violatedRuleKey, invalidCommits]) =>
+			getInstruction(violatedRuleKey as LegacyV1RuleKey, invalidCommits),
 		)
 }

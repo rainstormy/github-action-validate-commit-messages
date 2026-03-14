@@ -2,10 +2,7 @@ import type {
 	LegacyV1IssueReferencePosition,
 	LegacyV1IssueReferencesInSubjectLinesConfiguration,
 } from "#legacy-v1/rules/IssueReferencesInSubjectLines/LegacyV1IssueReferencesInSubjectLinesConfiguration.ts"
-import type {
-	LegacyV1Commit,
-	LegacyV1Commits,
-} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Commit, LegacyV1Commits } from "#legacy-v1/rules/LegacyV1Commit.ts"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export function legacyV1IssueReferencesInSubjectLines({
@@ -13,9 +10,7 @@ export function legacyV1IssueReferencesInSubjectLines({
 	allowedPositions,
 }: LegacyV1IssueReferencesInSubjectLinesConfiguration): LegacyV1Rule {
 	const combinedPattern = patterns
-		.flatMap((pattern) =>
-			allowedPositions.map((position) => getPositionPattern(position, pattern)),
-		)
+		.flatMap((pattern) => allowedPositions.map((position) => getPositionPattern(position, pattern)))
 		.join("|")
 
 	const combinedRegex = new RegExp(combinedPattern, "u")
@@ -33,9 +28,7 @@ export function legacyV1IssueReferencesInSubjectLines({
 			const issueReference = regexMatch[0]
 
 			if (currentSubjectLine.startsWith(issueReference)) {
-				const refinedSubjectLine = currentSubjectLine
-					.slice(issueReference.length)
-					.trim()
+				const refinedSubjectLine = currentSubjectLine.slice(issueReference.length).trim()
 
 				return {
 					...commit,
@@ -45,9 +38,7 @@ export function legacyV1IssueReferencesInSubjectLines({
 			}
 
 			if (currentSubjectLine.endsWith(issueReference)) {
-				const refinedSubjectLine = currentSubjectLine
-					.slice(0, -issueReference.length)
-					.trim()
+				const refinedSubjectLine = currentSubjectLine.slice(0, -issueReference.length).trim()
 
 				return {
 					...commit,
@@ -61,17 +52,12 @@ export function legacyV1IssueReferencesInSubjectLines({
 		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
 			refinedCommits
 				.filter(({ parents }) => parents.length === 1)
-				.filter(
-					({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "),
-				)
+				.filter(({ refinedSubjectLine }) => !refinedSubjectLine.startsWith("Revert "))
 				.filter(({ issueReferences }) => issueReferences.length === 0),
 	}
 }
 
-function getPositionPattern(
-	position: LegacyV1IssueReferencePosition,
-	pattern: string,
-): string {
+function getPositionPattern(position: LegacyV1IssueReferencePosition, pattern: string): string {
 	switch (position) {
 		case "as-prefix": {
 			return `^(?:${pattern})`

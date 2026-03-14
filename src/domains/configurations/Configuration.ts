@@ -30,9 +30,7 @@ export type Configuration = {
 	 * A record of rule keys to rule-specific options (if the rule is enabled) or null (if the rule is disabled).
 	 */
 	rules: {
-		noExcessiveCommitsPerBranch: RuleOptionsOf<
-			typeof noExcessiveCommitsPerBranch
-		>
+		noExcessiveCommitsPerBranch: RuleOptionsOf<typeof noExcessiveCommitsPerBranch>
 		noMergeCommits: RuleOptionsOf<typeof noMergeCommits>
 		noRepeatedSubjectLines: RuleOptionsOf<typeof noRepeatedSubjectLines>
 		noRestrictedFooterLines: RuleOptionsOf<typeof noRestrictedFooterLines>
@@ -47,9 +45,7 @@ export type Configuration = {
 		useCommitterEmailPatterns: RuleOptionsOf<typeof useCommitterEmailPatterns>
 		useCommitterNamePatterns: RuleOptionsOf<typeof useCommitterNamePatterns>
 		useConciseSubjectLines: RuleOptionsOf<typeof useConciseSubjectLines>
-		useEmptyLineBeforeBodyLines: RuleOptionsOf<
-			typeof useEmptyLineBeforeBodyLines
-		>
+		useEmptyLineBeforeBodyLines: RuleOptionsOf<typeof useEmptyLineBeforeBodyLines>
 		useImperativeSubjectLines: RuleOptionsOf<typeof useImperativeSubjectLines>
 		useIssueLinks: RuleOptionsOf<typeof useIssueLinks>
 		useLineWrapping: RuleOptionsOf<typeof useLineWrapping>
@@ -61,10 +57,7 @@ export type RuleConfiguration = Configuration["rules"]
 export type RuleKey = keyof RuleConfiguration
 
 export type RuleOptionsOf<
-	Rule extends (
-		commits: Commits,
-		options: Record<string, unknown> | null,
-	) => Concerns,
+	Rule extends (commits: Commits, options: Record<string, unknown> | null) => Concerns,
 > = Parameters<Rule>[1]
 
 export type TokenConfiguration = Configuration["tokens"]

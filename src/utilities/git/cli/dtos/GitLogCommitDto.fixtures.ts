@@ -4,9 +4,7 @@ import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts
 
 export type GitLogCommitDtoTemplate = Partial<GitLogCommitDto>
 
-export function fakeGitLogCommitDto(
-	overrides: GitLogCommitDtoTemplate = {},
-): GitLogCommitDto {
+export function fakeGitLogCommitDto(overrides: GitLogCommitDtoTemplate = {}): GitLogCommitDto {
 	return {
 		author: ["Master Splinter <sensei@ninja-academy.com> 1769801867 -0500"],
 		commit: [fakeCommitSha()],

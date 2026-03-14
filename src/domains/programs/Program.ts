@@ -8,10 +8,7 @@ import { printError, printMessage } from "#utilities/logging/Logger.ts"
 
 export async function program(_args: Array<string>): Promise<ExitCode> {
 	try {
-		const [crudeCommits, configuration] = await Promise.all([
-			getCrudeCommits(),
-			getConfiguration(),
-		])
+		const [crudeCommits, configuration] = await Promise.all([getCrudeCommits(), getConfiguration()])
 
 		const commits = crudeCommits.map((crudeCommit) =>
 			mapCrudeCommitToCommit(crudeCommit, configuration),

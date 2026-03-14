@@ -1,8 +1,5 @@
 import type { LegacyV1AcknowledgedCommitterNamesConfiguration } from "#legacy-v1/rules/AcknowledgedCommitterNames/LegacyV1AcknowledgedCommitterNamesConfiguration.ts"
-import type {
-	LegacyV1Commits,
-	LegacyV1UserIdentity,
-} from "#legacy-v1/rules/LegacyV1Commit.ts"
+import type { LegacyV1Commits, LegacyV1UserIdentity } from "#legacy-v1/rules/LegacyV1Commit.ts"
 import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export function legacyV1AcknowledgedCommitterNames({
@@ -13,17 +10,13 @@ export function legacyV1AcknowledgedCommitterNames({
 		"u",
 	)
 
-	function hasAcknowledgedCommitterName(
-		committer: LegacyV1UserIdentity,
-	): boolean {
+	function hasAcknowledgedCommitterName(committer: LegacyV1UserIdentity): boolean {
 		return committer.name !== null && acknowledgedNameRegex.test(committer.name)
 	}
 
 	return {
 		key: "acknowledged-committer-names",
 		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
-			refinedCommits.filter(
-				({ committer }) => !hasAcknowledgedCommitterName(committer),
-			),
+			refinedCommits.filter(({ committer }) => !hasAcknowledgedCommitterName(committer)),
 	}
 }

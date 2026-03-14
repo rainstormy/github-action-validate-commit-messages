@@ -18,10 +18,7 @@ describe.each`
 	${"... ?? !! && || // "} | ${["...", "??", "!!", "&&", "||", "//"]}
 `(
 	"a whitelist of suffixes from a valid string of $rawSuffixes",
-	(testRow: {
-		readonly rawSuffixes: string
-		readonly expectedSuffixes: ReadonlyArray<string>
-	}) => {
+	(testRow: { readonly rawSuffixes: string; readonly expectedSuffixes: ReadonlyArray<string> }) => {
 		const { rawSuffixes, expectedSuffixes } = testRow
 
 		it(`includes ${formatSuffixes(expectedSuffixes)}`, () => {
@@ -41,16 +38,11 @@ describe.each`
 	${"- + ! ? : : + + . , !"} | ${"Input parameter 'no-trailing-punctuation-in-subject-lines--whitelist' must not contain duplicates: + ! :"}
 `(
 	"a whitelist of suffixes from an invalid string of $rawSuffixes",
-	(testRow: {
-		readonly rawSuffixes: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawSuffixes: string; readonly expectedErrorMessage: string }) => {
 		const { rawSuffixes, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(
-				expectedErrorMessage,
-			)
+			expect(() => parseConfiguration({ whitelist: rawSuffixes })).toThrow(expectedErrorMessage)
 		})
 	},
 )
@@ -58,10 +50,7 @@ describe.each`
 function parseConfiguration(
 	rawConfiguration: LegacyV1RawNoTrailingPunctuationInSubjectLinesConfiguration,
 ): LegacyV1NoTrailingPunctuationInSubjectLinesConfiguration {
-	return parse(
-		legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema,
-		rawConfiguration,
-	)
+	return parse(legacyV1NoTrailingPunctuationInSubjectLinesConfigurationSchema, rawConfiguration)
 }
 
 function formatSuffixes(suffixes: ReadonlyArray<string>): string {

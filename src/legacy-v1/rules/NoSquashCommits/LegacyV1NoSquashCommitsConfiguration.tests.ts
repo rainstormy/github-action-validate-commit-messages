@@ -16,10 +16,7 @@ describe.each`
 	${"amend!,  , fixup!, squash!, "} | ${["amend!", "fixup!", "squash!"]}
 `(
 	"a list of disallowed prefixes from a valid string of $rawPrefixes",
-	(testRow: {
-		readonly rawPrefixes: string
-		readonly expectedPrefixes: ReadonlyArray<string>
-	}) => {
+	(testRow: { readonly rawPrefixes: string; readonly expectedPrefixes: ReadonlyArray<string> }) => {
 		const { rawPrefixes, expectedPrefixes } = testRow
 
 		it(`includes ${formatPrefixes(expectedPrefixes)}`, () => {
@@ -42,16 +39,13 @@ describe.each`
 	${"amend!,fixup!,amend!,squash!,amend!,fixup!"} | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must not contain duplicates: amend!, fixup!"}
 `(
 	"a list of disallowed prefixes from an invalid string of $rawPrefixes",
-	(testRow: {
-		readonly rawPrefixes: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawPrefixes: string; readonly expectedErrorMessage: string }) => {
 		const { rawPrefixes, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() =>
-				parseConfiguration({ disallowedPrefixes: rawPrefixes }),
-			).toThrow(expectedErrorMessage)
+			expect(() => parseConfiguration({ disallowedPrefixes: rawPrefixes })).toThrow(
+				expectedErrorMessage,
+			)
 		})
 	},
 )

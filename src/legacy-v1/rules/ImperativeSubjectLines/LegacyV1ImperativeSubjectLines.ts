@@ -4445,9 +4445,7 @@ export const legacyV1SortedImperativeVerbs: ReadonlyArray<string> = [
 export function legacyV1ImperativeSubjectLines({
 	whitelist,
 }: LegacyV1ImperativeSubjectLinesConfiguration): LegacyV1Rule {
-	const customWordsToAccept = new Set(
-		whitelist.map((word) => word.toLowerCase()),
-	)
+	const customWordsToAccept = new Set(whitelist.map((word) => word.toLowerCase()))
 
 	return {
 		key: "imperative-subject-lines",

@@ -26,7 +26,5 @@ export type Tokeniser = (
 export type Tokenisers = Array<Tokeniser>
 
 export function formatTokenisedLine(tokens: TokenisedLine): string {
-	return tokens
-		.map((token) => (typeof token === "string" ? token : token.value))
-		.join("")
+	return tokens.map((token) => (typeof token === "string" ? token : token.value)).join("")
 }

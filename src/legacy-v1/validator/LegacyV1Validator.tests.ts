@@ -131,9 +131,7 @@ describe("when the configuration has default settings", () => {
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -175,9 +173,7 @@ describe("when the configuration has default settings", () => {
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine, body }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine, body })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -195,8 +191,7 @@ describe("when the configuration has default settings", () => {
 			readonly numberOfParents: number
 			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
-			const { subjectLine, body, numberOfParents, expectedViolatedRuleKeys } =
-				testRow
+			const { subjectLine, body, numberOfParents, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
 				const actualViolatedRuleKeys = validate([
@@ -223,14 +218,11 @@ describe("when the configuration has default settings", () => {
 			readonly numberOfParents: number
 			readonly expectedViolatedRuleKeys: LegacyV1RuleKeys
 		}) => {
-			const { subjectLines, numberOfParents, expectedViolatedRuleKeys } =
-				testRow
+			const { subjectLines, numberOfParents, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
 				const actualViolatedRuleKeys = validate(
-					subjectLines.map((subjectLine) =>
-						legacyV1DummyCommit({ subjectLine, numberOfParents }),
-					),
+					subjectLines.map((subjectLine) => legacyV1DummyCommit({ subjectLine, numberOfParents })),
 				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
@@ -321,9 +313,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -353,9 +343,7 @@ describe("when the configuration overrides 'imperative-subject-lines--whitelist'
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -389,9 +377,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -433,9 +419,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
 				const actualViolatedRuleKeys = validate(
-					subjectLines.map((subjectLine) =>
-						legacyV1DummyCommit({ subjectLine }),
-					),
+					subjectLines.map((subjectLine) => legacyV1DummyCommit({ subjectLine })),
 				)
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
@@ -467,9 +451,7 @@ describe("when the configuration overrides 'limit-length-of-body-lines--max-char
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine, body }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine, body })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -500,9 +482,7 @@ describe("when the configuration overrides 'limit-length-of-subject-lines--max-c
 			const { subjectLine, body, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine, body }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine, body })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -532,9 +512,7 @@ describe("when the configuration overrides 'no-trailing-punctuation-in-subject-l
 			const { subjectLine, expectedViolatedRuleKeys } = testRow
 
 			it(`violates ${formatRuleKeys(expectedViolatedRuleKeys)}`, () => {
-				const actualViolatedRuleKeys = validate([
-					legacyV1DummyCommit({ subjectLine }),
-				])
+				const actualViolatedRuleKeys = validate([legacyV1DummyCommit({ subjectLine })])
 				expect(actualViolatedRuleKeys).toStrictEqual(expectedViolatedRuleKeys)
 			})
 		},
@@ -545,10 +523,7 @@ function validateViolatedRulesFrom(
 	configuration: LegacyV1Configuration,
 ): (rawCommits: LegacyV1RawCommits) => LegacyV1RuleKeys {
 	return (rawCommits: LegacyV1RawCommits): LegacyV1RuleKeys =>
-		legacyV1ValidatorFrom(configuration)(
-			rawCommits,
-			legacyV1ViolatedRulesReporter(),
-		)
+		legacyV1ValidatorFrom(configuration)(rawCommits, legacyV1ViolatedRulesReporter())
 }
 
 function formatRuleKeys(ruleKeys: LegacyV1RuleKeys): string {

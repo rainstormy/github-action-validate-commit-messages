@@ -28,7 +28,5 @@ export type LegacyV1RuleKeys = ReadonlyArray<LegacyV1RuleKey>
 export type LegacyV1Rule = {
 	readonly key: LegacyV1RuleKey
 	readonly refine?: LegacyV1CommitRefiner
-	readonly getInvalidCommits: (
-		refinedCommits: LegacyV1Commits,
-	) => LegacyV1Commits
+	readonly getInvalidCommits: (refinedCommits: LegacyV1Commits) => LegacyV1Commits
 }
