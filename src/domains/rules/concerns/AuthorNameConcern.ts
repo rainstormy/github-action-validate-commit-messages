@@ -9,8 +9,6 @@ export type AuthorNameConcern = {
 	columns: CharacterRange
 }
 
-export function authorNameConcern(
-	props: Omit<AuthorNameConcern, "location">,
-): AuthorNameConcern {
+export function authorNameConcern(props: Omit<AuthorNameConcern, "location">): AuthorNameConcern {
 	return { ...props, location: "author-name" }
 }

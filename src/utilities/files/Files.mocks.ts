@@ -2,9 +2,7 @@ import { beforeEach, vi } from "vitest"
 import type { JsonValue } from "#types/JsonValue.ts"
 import type { ModuleMock } from "#types/ModuleMock.ts"
 
-const contentsByPath: Map<string, JsonValue> = vi.hoisted(
-	() => new Map<string, JsonValue>(),
-)
+const contentsByPath: Map<string, JsonValue> = vi.hoisted(() => new Map<string, JsonValue>())
 
 const mock: FilesMock = vi.hoisted(
 	(): FilesMock => ({

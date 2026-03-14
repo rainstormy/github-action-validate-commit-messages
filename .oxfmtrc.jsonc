@@ -1,17 +1,9 @@
 {
 	"$schema": "./node_modules/oxfmt/configuration_schema.json",
-	"ignorePatterns": [
-		".idea/",
-		"dist/",
-		"node_modules/",
-		"**/*.{md,toml,yaml,yml}" // TODO: Format Markdown, TOML, and YAML files with Oxfmt.
-	],
-	"printWidth": 80, // TODO: Inherited from Prettier and Biome. Increase to 100 characters (the default value in Oxfmt).
+	"ignorePatterns": [".idea/", "dist/", "node_modules/", "**/*.md", "pnpm-lock.yaml"],
 	"semi": false, // Omit semicolons to reduce noise, see https://slides.com/evanyou/semicolons for motivation.
 	"sortImports": {
-		"customGroups": [
-			{ "groupName": "mocks", "elementNamePattern": ["**/*.mocks.*"] }
-		],
+		"customGroups": [{ "groupName": "mocks", "elementNamePattern": ["**/*.mocks.*"] }],
 		"groups": ["mocks", "builtin", "external", "subpath", "unknown"],
 		"newlinesBetween": false
 	},
@@ -21,6 +13,12 @@
 			"files": ["**/*.{json,jsonc}"],
 			"options": {
 				"trailingComma": "none" // JSON does not allow trailing commas.
+			}
+		},
+		{
+			"files": ["**/*.{yml,yaml}"],
+			"options": {
+				"singleQuote": true // Use single quotes in YAML to match the GitHub Actions syntax for `hashFiles()`.
 			}
 		}
 	]

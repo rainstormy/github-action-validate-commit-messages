@@ -37,10 +37,7 @@ export type Concern =
 
 export type Concerns = Array<Concern>
 
-export function mapCommitsToConcerns(
-	commits: Commits,
-	configuration: Configuration,
-): Concerns {
+export function mapCommitsToConcerns(commits: Commits, configuration: Configuration): Concerns {
 	const rules = configuration.rules
 	return [
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),

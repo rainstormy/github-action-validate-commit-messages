@@ -47,13 +47,10 @@ describe("the default configuration in the command-line", () => {
 		${"useCommitterEmailPatterns"}
 		${"useCommitterNamePatterns"}
 		${"useIssueLinks"}
-	`(
-		"does not enable $disabledRuleKey'",
-		(props: { disabledRuleKey: RuleKey }) => {
-			const ruleOptions = configuration.rules[props.disabledRuleKey]
-			expect(ruleOptions).toBeNull()
-		},
-	)
+	`("does not enable $disabledRuleKey'", (props: { disabledRuleKey: RuleKey }) => {
+		const ruleOptions = configuration.rules[props.disabledRuleKey]
+		expect(ruleOptions).toBeNull()
+	})
 })
 
 describe("the default configuration in GitHub Actions", () => {
@@ -100,11 +97,8 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useCommitterEmailPatterns"}
 		${"useCommitterNamePatterns"}
 		${"useIssueLinks"}
-	`(
-		"does not enable $disabledRuleKey'",
-		(props: { disabledRuleKey: RuleKey }) => {
-			const ruleOptions = configuration.rules[props.disabledRuleKey]
-			expect(ruleOptions).toBeNull()
-		},
-	)
+	`("does not enable $disabledRuleKey'", (props: { disabledRuleKey: RuleKey }) => {
+		const ruleOptions = configuration.rules[props.disabledRuleKey]
+		expect(ruleOptions).toBeNull()
+	})
 })

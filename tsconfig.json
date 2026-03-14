@@ -1,9 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": [
-		"@rainstormy/presets-typescript/base",
-		"@rainstormy/presets-typescript/es2023"
-	],
+	"extends": ["@rainstormy/presets-typescript/base", "@rainstormy/presets-typescript/es2023"],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
 		"erasableSyntaxOnly": true,

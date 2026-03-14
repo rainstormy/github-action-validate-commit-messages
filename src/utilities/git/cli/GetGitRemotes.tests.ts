@@ -57,8 +57,6 @@ describe("when the 'git remote' command fails", () => {
 	})
 
 	it("throws an error", async () => {
-		await expect(getGitRemotes()).rejects.toThrow(
-			"Command 'git remote' failed with exit code 1",
-		)
+		await expect(getGitRemotes()).rejects.toThrow("Command 'git remote' failed with exit code 1")
 	})
 })

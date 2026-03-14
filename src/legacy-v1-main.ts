@@ -20,8 +20,6 @@ try {
 		process.exit(1)
 	}
 } catch (error) {
-	printGithubActionsError(
-		error instanceof Error ? error.message : "An unspecified error occurred",
-	)
+	printGithubActionsError(error instanceof Error ? error.message : "An unspecified error occurred")
 	process.exit(1)
 }

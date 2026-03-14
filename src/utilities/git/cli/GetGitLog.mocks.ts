@@ -11,11 +11,7 @@ export function mockGitLog(dtos: Array<GitLogCommitDtoTemplate>): void {
 		output: "origin/main",
 	})
 	mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-		output: dtos
-			.map(fakeGitLogCommitDto)
-			.map(formatCommitDto)
-			.reverse()
-			.join("\n\n"),
+		output: dtos.map(fakeGitLogCommitDto).map(formatCommitDto).reverse().join("\n\n"),
 	})
 }
 

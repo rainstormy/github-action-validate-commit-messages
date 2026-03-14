@@ -1,7 +1,4 @@
-import {
-	mockFetchableJsonResource,
-	mockFetchError,
-} from "#utilities/http/Fetch.mocks.ts"
+import { mockFetchableJsonResource, mockFetchError } from "#utilities/http/Fetch.mocks.ts"
 import type { JsonValue } from "#types/JsonValue.ts"
 import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
@@ -35,10 +32,7 @@ export function mockGithubResourceDto<Dto extends JsonValue>(
 
 		mockFetchableJsonResource(
 			{
-				url:
-					pageNumber === 1
-						? url
-						: `${url}?per_page=${pageSize}&page=${pageNumber}`,
+				url: pageNumber === 1 ? url : `${url}?per_page=${pageSize}&page=${pageNumber}`,
 				headers: expectedRequestHeaders(),
 			},
 			{
@@ -90,13 +84,8 @@ export function mockNonexistingGithubResourceDto(
 	)
 }
 
-export function mockSabotagedGithubResourceDto(
-	url: `${GithubUrlString}/${string}`,
-): void {
-	mockFetchError(
-		{ url, headers: expectedRequestHeaders() },
-		new Error("Network timeout"),
-	)
+export function mockSabotagedGithubResourceDto(url: `${GithubUrlString}/${string}`): void {
+	mockFetchError({ url, headers: expectedRequestHeaders() }, new Error("Network timeout"))
 }
 
 function expectedRequestHeaders(): Record<string, string> {

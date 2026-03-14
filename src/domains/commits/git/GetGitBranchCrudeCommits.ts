@@ -33,9 +33,7 @@ function mapDtoToCrudeCommit(dto: GitLogCommitDto): CrudeCommit {
 /**
  * Parses a string on the form `name <email> timestamp timezone` into a pair of name and email.
  */
-function parseUser(
-	line: string | undefined,
-): [name: string | null, email: string | null] {
+function parseUser(line: string | undefined): [name: string | null, email: string | null] {
 	if (line === undefined) {
 		return [null, null]
 	}

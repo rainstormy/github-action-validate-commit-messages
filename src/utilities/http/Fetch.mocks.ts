@@ -51,9 +51,8 @@ function getResponseByUrl(url: string, options: RequestOptions = {}): Response {
 	}
 
 	const matchingResponse =
-		potentialResponses.find(({ request }) =>
-			deepEquals(actualHeaders, request.headers),
-		)?.response ?? null
+		potentialResponses.find(({ request }) => deepEquals(actualHeaders, request.headers))
+			?.response ?? null
 
 	if (matchingResponse !== null) {
 		if (matchingResponse instanceof Error) {
@@ -105,11 +104,7 @@ export function mockFetchableJsonResource(
 
 	const key = `${method} ${url}` as const
 
-	const {
-		body: responseBody,
-		statusCode = HTTP_200_OK,
-		headers: responseHeaders = {},
-	} = response
+	const { body: responseBody, statusCode = HTTP_200_OK, headers: responseHeaders = {} } = response
 
 	if (!responsesByUrl.has(key)) {
 		responsesByUrl.set(key, [])
@@ -186,9 +181,7 @@ export function mockFetchError(
 	})
 }
 
-function toLowercaseHeaderNames(
-	headers: Record<string, string> = {},
-): Record<string, string> {
+function toLowercaseHeaderNames(headers: Record<string, string> = {}): Record<string, string> {
 	return Object.fromEntries(
 		Object.entries(headers).map(([key, value]) => [key.toLowerCase(), value]),
 	)

@@ -1,12 +1,4 @@
-import {
-	check,
-	type InferInput,
-	type InferOutput,
-	object,
-	pipe,
-	string,
-	transform,
-} from "valibot"
+import { check, type InferInput, type InferOutput, object, pipe, string, transform } from "valibot"
 import {
 	getDuplicateValues,
 	requireAtLeastOneValue,

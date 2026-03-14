@@ -12,9 +12,7 @@ import {
 import { legacyV1RulesFrom } from "#legacy-v1/validator/LegacyV1Validator.ts"
 
 describe("when the configuration has default settings", () => {
-	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(
-		legacyV1DummyDefaultConfiguration,
-	)
+	const rules: ReadonlyArray<LegacyV1Rule> = legacyV1RulesFrom(legacyV1DummyDefaultConfiguration)
 	const refineCommit = legacyV1CommitRefinerFrom(rules)
 
 	describe.each`
@@ -119,9 +117,7 @@ describe("when the configuration has default settings", () => {
 			})
 
 			it(`has ${formatCommitterEmailAddress(committerEmailAddress)}`, () => {
-				expect(commit.committer.emailAddress).toStrictEqual(
-					committerEmailAddress,
-				)
+				expect(commit.committer.emailAddress).toStrictEqual(committerEmailAddress)
 			})
 
 			it(`has ${formatBodyLines(bodyLines)}`, () => {
@@ -220,13 +216,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			readonly issueReferences: ReadonlyArray<string>
 			readonly refinedSubjectLine: string
 		}) => {
-			const {
-				subjectLine,
-				body,
-				squashPrefixes,
-				issueReferences,
-				refinedSubjectLine,
-			} = testRow
+			const { subjectLine, body, squashPrefixes, issueReferences, refinedSubjectLine } = testRow
 
 			const commit = refineCommit(
 				legacyV1ParseCommit({
@@ -291,13 +281,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			readonly issueReferences: ReadonlyArray<string>
 			readonly refinedSubjectLine: string
 		}) => {
-			const {
-				subjectLine,
-				body,
-				squashPrefixes,
-				issueReferences,
-				refinedSubjectLine,
-			} = testRow
+			const { subjectLine, body, squashPrefixes, issueReferences, refinedSubjectLine } = testRow
 
 			const commit = refineCommit(
 				legacyV1ParseCommit({
@@ -357,13 +341,7 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 			readonly issueReferences: ReadonlyArray<string>
 			readonly refinedSubjectLine: string
 		}) => {
-			const {
-				subjectLine,
-				body,
-				squashPrefixes,
-				issueReferences,
-				refinedSubjectLine,
-			} = testRow
+			const { subjectLine, body, squashPrefixes, issueReferences, refinedSubjectLine } = testRow
 
 			const commit = refineCommit(
 				legacyV1ParseCommit({
@@ -403,33 +381,21 @@ describe("when the configuration overrides 'issue-references-in-subject-lines--p
 function formatSquashPrefixes(prefixes: ReadonlyArray<string>): string {
 	return prefixes.length === 0
 		? "no squash prefixes"
-		: `${count(prefixes, "squash prefix", "squash prefixes")}: ${prefixes.join(
-				", ",
-			)}`
+		: `${count(prefixes, "squash prefix", "squash prefixes")}: ${prefixes.join(", ")}`
 }
 
 function formatIssueReferences(references: ReadonlyArray<string>): string {
 	return references.length === 0
 		? "no issue references"
-		: `${count(
-				references,
-				"issue reference",
-				"issue references",
-			)}: ${references.join(" ")}`
+		: `${count(references, "issue reference", "issue references")}: ${references.join(" ")}`
 }
 
 function formatParents(parentShas: ReadonlyArray<string>): string {
-	return `${count(
-		parentShas,
-		"parent commit",
-		"parent commits",
-	)}: ${parentShas.join(", ")}`
+	return `${count(parentShas, "parent commit", "parent commits")}: ${parentShas.join(", ")}`
 }
 
 function formatAuthorName(authorName: string | null): string {
-	return authorName === null
-		? "no author name"
-		: `an author name of '${authorName}'`
+	return authorName === null ? "no author name" : `an author name of '${authorName}'`
 }
 
 function formatAuthorEmailAddress(authorEmailAddress: string | null): string {
@@ -439,14 +405,10 @@ function formatAuthorEmailAddress(authorEmailAddress: string | null): string {
 }
 
 function formatCommitterName(committerName: string | null): string {
-	return committerName === null
-		? "no committer name"
-		: `a committer name of '${committerName}'`
+	return committerName === null ? "no committer name" : `a committer name of '${committerName}'`
 }
 
-function formatCommitterEmailAddress(
-	committerEmailAddress: string | null,
-): string {
+function formatCommitterEmailAddress(committerEmailAddress: string | null): string {
 	return committerEmailAddress === null
 		? "no committer email address"
 		: `a committer email address of '${committerEmailAddress}'`

@@ -4,9 +4,7 @@ import { naturalNumber } from "#types/NaturalNumber.ts"
 /**
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#pull_request
  */
-export type GithubPullRequestEventDto = InferOutput<
-	ReturnType<typeof githubPullRequestEventDto>
->
+export type GithubPullRequestEventDto = InferOutput<ReturnType<typeof githubPullRequestEventDto>>
 
 export function githubPullRequestEventDto() {
 	return object({
@@ -16,8 +14,6 @@ export function githubPullRequestEventDto() {
 	})
 }
 
-export function isGithubPullRequestEventDto(
-	dto: unknown,
-): dto is GithubPullRequestEventDto {
+export function isGithubPullRequestEventDto(dto: unknown): dto is GithubPullRequestEventDto {
 	return is(githubPullRequestEventDto(), dto)
 }

@@ -6,7 +6,5 @@ export function useCommitterNamePatterns(
 	_commits: Commits,
 	_configuration: EmptyObject | null,
 ): Concerns {
-	throw new Error(
-		"The `useCommitterNamePatterns` rule has not been implemented yet",
-	) // TODO: To be implemented.
+	throw new Error("The `useCommitterNamePatterns` rule has not been implemented yet") // TODO: To be implemented.
 }

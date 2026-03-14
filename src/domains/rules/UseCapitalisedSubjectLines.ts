@@ -11,9 +11,7 @@ export function useCapitalisedSubjectLines(
 	commits: Commits,
 	configuration: EmptyObject | null,
 ): Concerns {
-	return configuration !== null
-		? commits.map(verifyCommit).filter(notNullish)
-		: []
+	return configuration !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
 
 function verifyCommit(commit: Commit): Concern | null {

@@ -1,12 +1,4 @@
-import {
-	check,
-	type InferInput,
-	type InferOutput,
-	object,
-	pipe,
-	string,
-	transform,
-} from "valibot"
+import { check, type InferInput, type InferOutput, object, pipe, string, transform } from "valibot"
 import {
 	getDuplicateValues,
 	getUnknownValues,
@@ -14,17 +6,12 @@ import {
 	requireNoDuplicateValues,
 	requireNoUnknownValues,
 } from "#legacy-v1/utilities/IterableUtilities.ts"
-import {
-	splitByComma,
-	splitBySpace,
-} from "#legacy-v1/utilities/StringUtilities.ts"
+import { splitByComma, splitBySpace } from "#legacy-v1/utilities/StringUtilities.ts"
 
 const issueReferencePositions = ["as-prefix", "as-suffix"] as const
 
-export type LegacyV1IssueReferencePosition =
-	(typeof issueReferencePositions)[number]
-export type LegacyV1IssueReferencePositions =
-	Array<LegacyV1IssueReferencePosition>
+export type LegacyV1IssueReferencePosition = (typeof issueReferencePositions)[number]
+export type LegacyV1IssueReferencePositions = Array<LegacyV1IssueReferencePosition>
 
 export const legacyV1IssueReferencesInSubjectLinesConfigurationSchema = object({
 	allowedPositions: pipe(

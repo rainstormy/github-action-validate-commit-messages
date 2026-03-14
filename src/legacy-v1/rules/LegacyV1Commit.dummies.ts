@@ -29,12 +29,9 @@ export function legacyV1DummyCommit({
 	body = "\nThis is a dummy commit message body.",
 	numberOfParents = 1,
 }: DummyCommitProps): LegacyV1RawCommit {
-	const parents = Array.from(
-		{ length: numberOfParents },
-		(_ignored, index) => ({
-			sha: `c0ffee${index}`,
-		}),
-	)
+	const parents = Array.from({ length: numberOfParents }, (_ignored, index) => ({
+		sha: `c0ffee${index}`,
+	}))
 
 	return {
 		sha,

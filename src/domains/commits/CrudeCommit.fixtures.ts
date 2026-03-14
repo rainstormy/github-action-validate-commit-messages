@@ -3,9 +3,7 @@ import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 
 export type CrudeCommitTemplate = Partial<CrudeCommit>
 
-export function fakeCrudeCommit(
-	overrides: CrudeCommitTemplate = {},
-): CrudeCommit {
+export function fakeCrudeCommit(overrides: CrudeCommitTemplate = {}): CrudeCommit {
 	return {
 		parents: overrides.parents ?? [fakeCommitSha()],
 		sha: overrides.sha ?? fakeCommitSha(),

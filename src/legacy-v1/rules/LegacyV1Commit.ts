@@ -32,9 +32,7 @@ export type LegacyV1UserIdentity = {
 	readonly emailAddress: string | null
 }
 
-export function legacyV1ParseCommit(
-	rawCommit: LegacyV1RawCommit,
-): LegacyV1Commit {
+export function legacyV1ParseCommit(rawCommit: LegacyV1RawCommit): LegacyV1Commit {
 	const { sha, author, committer, parents, commitMessage } = rawCommit
 	const [originalSubjectLine = "", ...bodyLines] = commitMessage.split("\n")
 

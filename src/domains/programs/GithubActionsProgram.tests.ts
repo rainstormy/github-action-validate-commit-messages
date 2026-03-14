@@ -1,7 +1,4 @@
-import {
-	mockJsonFile,
-	mockNonexistingFile,
-} from "#utilities/files/Files.mocks.ts"
+import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.mocks.ts"
 import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
 import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { mockLogger } from "#utilities/logging/Logger.mocks.ts"
@@ -51,9 +48,7 @@ describe("when the event payload is missing in the file system", () => {
 	})
 
 	it("prints the error message raised by the file system", () => {
-		expect(printError).toHaveBeenCalledWith(
-			`Failed to read ${eventPath}: File not found`,
-		)
+		expect(printError).toHaveBeenCalledWith(`Failed to read ${eventPath}: File not found`)
 		expect(printError).toHaveBeenCalledTimes(1)
 	})
 })

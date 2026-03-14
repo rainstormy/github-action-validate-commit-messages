@@ -1,7 +1,4 @@
-import {
-	mockGitLog,
-	mockSabotagedGitLog,
-} from "#utilities/git/cli/GetGitLog.mocks.ts"
+import { mockGitLog, mockSabotagedGitLog } from "#utilities/git/cli/GetGitLog.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { getGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits.ts"
@@ -44,21 +41,18 @@ describe.each`
 	parentSha
 	${fakeCommitSha()}
 	${fakeCommitSha()}
-`(
-	"when the commit has 1 parent with a SHA of $parentSha",
-	(props: { parentSha: CommitSha }) => {
-		const parents: Vector<CommitSha, 1> = [props.parentSha]
+`("when the commit has 1 parent with a SHA of $parentSha", (props: { parentSha: CommitSha }) => {
+	const parents: Vector<CommitSha, 1> = [props.parentSha]
 
-		beforeEach(() => {
-			mockGitLog([{ parent: parents }])
-		})
+	beforeEach(() => {
+		mockGitLog([{ parent: parents }])
+	})
 
-		it("preserves the parent SHA", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.parents).toEqual([parents[0]])
-		})
-	},
-)
+	it("preserves the parent SHA", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.parents).toEqual([parents[0]])
+	})
+})
 
 describe("when the commit has 2 parents", () => {
 	const parents: Vector<CommitSha, 2> = [fakeCommitSha(), fakeCommitSha()]
@@ -74,11 +68,7 @@ describe("when the commit has 2 parents", () => {
 })
 
 describe("when the commit has 3 parents", () => {
-	const parents: Vector<CommitSha, 3> = [
-		fakeCommitSha(),
-		fakeCommitSha(),
-		fakeCommitSha(),
-	]
+	const parents: Vector<CommitSha, 3> = [fakeCommitSha(), fakeCommitSha(), fakeCommitSha()]
 
 	beforeEach(() => {
 		mockGitLog([{ parent: parents }])
@@ -94,21 +84,18 @@ describe.each`
 	message
 	${"Release the robot butler"}
 	${"some refactoring"}
-`(
-	"when the commit message of $message has a single line",
-	(props: { message: string }) => {
-		const message = props.message
+`("when the commit message of $message has a single line", (props: { message: string }) => {
+	const message = props.message
 
-		beforeEach(() => {
-			mockGitLog([{ message: [message] }])
-		})
+	beforeEach(() => {
+		mockGitLog([{ message: [message] }])
+	})
 
-		it("preserves the commit message as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.message).toBe(message)
-		})
-	},
-)
+	it("preserves the commit message as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.message).toBe(message)
+	})
+})
 
 describe.each`
 	message
@@ -134,41 +121,35 @@ describe.each`
 	message
 	${""}
 	${"   "}
-`(
-	"when the commit message of $message is blank",
-	(props: { message: string }) => {
-		const message = props.message
+`("when the commit message of $message is blank", (props: { message: string }) => {
+	const message = props.message
 
-		beforeEach(() => {
-			mockGitLog([{ message: [message] }])
-		})
+	beforeEach(() => {
+		mockGitLog([{ message: [message] }])
+	})
 
-		it("preserves the commit message as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.message).toBe(message)
-		})
-	},
-)
+	it("preserves the commit message as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.message).toBe(message)
+	})
+})
 
 describe.each`
 	message
 	${"Apply strawberry jam to make the code sweeter\nSweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic."}
 	${"fixup!  added some extra love to the code\n\nSome improvements that we made:\n  - The code is more readable now.\n  - The function is much faster now.\n  - The architecture is much more flexible now."}
-`(
-	"when the commit message of $message has multiple lines",
-	(props: { message: string }) => {
-		const message = props.message
+`("when the commit message of $message has multiple lines", (props: { message: string }) => {
+	const message = props.message
 
-		beforeEach(() => {
-			mockGitLog([{ message: [message] }])
-		})
+	beforeEach(() => {
+		mockGitLog([{ message: [message] }])
+	})
 
-		it("preserves the commit message as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.message).toBe(message)
-		})
-	},
-)
+	it("preserves the commit message as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.message).toBe(message)
+	})
+})
 
 describe.each`
 	message
@@ -194,21 +175,18 @@ describe.each`
 	message
 	${"Test\n\nIt works now."}
 	${"Test\n    \nIt works now."}
-`(
-	"when the commit message of $message has a blank body line",
-	(props: { message: string }) => {
-		const message = props.message
+`("when the commit message of $message has a blank body line", (props: { message: string }) => {
+	const message = props.message
 
-		beforeEach(() => {
-			mockGitLog([{ message: [message] }])
-		})
+	beforeEach(() => {
+		mockGitLog([{ message: [message] }])
+	})
 
-		it("preserves the commit message as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.message).toBe(message)
-		})
-	},
-)
+	it("preserves the commit message as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.message).toBe(message)
+	})
+})
 
 describe.each`
 	authorName         | authorEmail
@@ -222,9 +200,7 @@ describe.each`
 		const authorEmail = props.authorEmail
 
 		beforeEach(() => {
-			mockGitLog([
-				{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] },
-			])
+			mockGitLog([{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the author's name", async () => {
@@ -250,9 +226,7 @@ describe.each`
 		const authorEmail = "25199993+noname@users.noreply.github.com"
 
 		beforeEach(() => {
-			mockGitLog([
-				{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] },
-			])
+			mockGitLog([{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the author's name as is", async () => {
@@ -266,24 +240,19 @@ describe.each`
 	authorName
 	${""}
 	${"   "}
-`(
-	"when the author's name of $authorName is blank",
-	(props: { authorName: string }) => {
-		const authorName = props.authorName
-		const authorEmail = "25199993+noname@users.noreply.github.com"
+`("when the author's name of $authorName is blank", (props: { authorName: string }) => {
+	const authorName = props.authorName
+	const authorEmail = "25199993+noname@users.noreply.github.com"
 
-		beforeEach(() => {
-			mockGitLog([
-				{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] },
-			])
-		})
+	beforeEach(() => {
+		mockGitLog([{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] }])
+	})
 
-		it("preserves the author's name as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.authorName).toBe(authorName)
-		})
-	},
-)
+	it("preserves the author's name as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.authorName).toBe(authorName)
+	})
+})
 
 describe("when the author's name is absent", () => {
 	const authorEmail = "25199993+noname@users.noreply.github.com"
@@ -314,9 +283,7 @@ describe.each`
 		const authorEmail = props.authorEmail
 
 		beforeEach(() => {
-			mockGitLog([
-				{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] },
-			])
+			mockGitLog([{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the author's email address as is", async () => {
@@ -330,24 +297,19 @@ describe.each`
 	authorEmail
 	${""}
 	${"   "}
-`(
-	"when the author's email address of $authorEmail is blank",
-	(props: { authorEmail: string }) => {
-		const authorName = "Unnamed 1"
-		const authorEmail = props.authorEmail
+`("when the author's email address of $authorEmail is blank", (props: { authorEmail: string }) => {
+	const authorName = "Unnamed 1"
+	const authorEmail = props.authorEmail
 
-		beforeEach(() => {
-			mockGitLog([
-				{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] },
-			])
-		})
+	beforeEach(() => {
+		mockGitLog([{ author: [`${authorName} <${authorEmail}> 1769801867 -0500`] }])
+	})
 
-		it("preserves the author's email address as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.authorEmail).toBe(authorEmail)
-		})
-	},
-)
+	it("preserves the author's email address as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.authorEmail).toBe(authorEmail)
+	})
+})
 
 describe("when the author's email address is absent", () => {
 	const authorName = "Unnamed 1"
@@ -443,26 +405,23 @@ describe.each`
 	committerName
 	${""}
 	${"   "}
-`(
-	"when the committer's name of $committerName is blank",
-	(props: { committerName: string }) => {
-		const committerName = props.committerName
-		const committerEmail = "25199993+noname@users.noreply.github.com"
+`("when the committer's name of $committerName is blank", (props: { committerName: string }) => {
+	const committerName = props.committerName
+	const committerEmail = "25199993+noname@users.noreply.github.com"
 
-		beforeEach(() => {
-			mockGitLog([
-				{
-					committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
-				},
-			])
-		})
+	beforeEach(() => {
+		mockGitLog([
+			{
+				committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
+			},
+		])
+	})
 
-		it("preserves the committer's name as is", async () => {
-			const [commit] = await getGitBranchCrudeCommits()
-			expect(commit?.committerName).toBe(committerName)
-		})
-	},
-)
+	it("preserves the committer's name as is", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.committerName).toBe(committerName)
+	})
+})
 
 describe("when the committer's name is absent", () => {
 	const committerEmail = "25199993+noname@users.noreply.github.com"

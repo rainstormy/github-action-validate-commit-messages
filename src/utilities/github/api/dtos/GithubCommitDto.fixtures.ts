@@ -2,13 +2,11 @@ import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import { type Vector, vectorOf } from "#types/Vector.ts"
 import type { GithubCommitDto } from "#utilities/github/api/dtos/GithubCommitDto.ts"
 
-export type GithubCommitDtoTemplate = Partial<
-	Pick<GithubCommitDto, "sha" | "parents">
-> & { commit?: Partial<GithubCommitDto["commit"]> }
+export type GithubCommitDtoTemplate = Partial<Pick<GithubCommitDto, "sha" | "parents">> & {
+	commit?: Partial<GithubCommitDto["commit"]>
+}
 
-export function fakeGithubCommitDto(
-	overrides: GithubCommitDtoTemplate = {},
-): GithubCommitDto {
+export function fakeGithubCommitDto(overrides: GithubCommitDtoTemplate = {}): GithubCommitDto {
 	return {
 		parents: overrides.parents ?? [{ sha: fakeCommitSha() }],
 		sha: overrides.sha ?? fakeCommitSha(),

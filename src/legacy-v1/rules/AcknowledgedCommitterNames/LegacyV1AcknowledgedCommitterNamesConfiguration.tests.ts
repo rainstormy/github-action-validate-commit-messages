@@ -14,10 +14,7 @@ describe.each`
 	${"\\w+\\.\\w+ .+\\s.+"} | ${["\\w+\\.\\w+", ".+\\s.+"]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
-	(testRow: {
-		readonly rawPatterns: string
-		readonly expectedPatterns: ReadonlyArray<string>
-	}) => {
+	(testRow: { readonly rawPatterns: string; readonly expectedPatterns: ReadonlyArray<string> }) => {
 		const { rawPatterns, expectedPatterns } = testRow
 
 		it(`includes ${formatPatterns(expectedPatterns)}`, () => {
@@ -38,16 +35,11 @@ describe.each`
 	${"\\w+\\.\\w+ .+\\s.+ \\w+\\.\\w+"} | ${"Input parameter 'acknowledged-committer-names--patterns' must not contain duplicates: \\w+\\.\\w+"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
-	(testRow: {
-		readonly rawPatterns: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawPatterns: string; readonly expectedErrorMessage: string }) => {
 		const { rawPatterns, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() => parseConfiguration({ patterns: rawPatterns })).toThrow(
-				expectedErrorMessage,
-			)
+			expect(() => parseConfiguration({ patterns: rawPatterns })).toThrow(expectedErrorMessage)
 		})
 	},
 )
@@ -55,10 +47,7 @@ describe.each`
 function parseConfiguration(
 	rawConfiguration: LegacyV1RawAcknowledgedCommitterNamesConfiguration,
 ): LegacyV1AcknowledgedCommitterNamesConfiguration {
-	return parse(
-		legacyV1AcknowledgedCommitterNamesConfigurationSchema,
-		rawConfiguration,
-	)
+	return parse(legacyV1AcknowledgedCommitterNamesConfigurationSchema, rawConfiguration)
 }
 
 function formatPatterns(patterns: ReadonlyArray<string>): string {

@@ -44,16 +44,13 @@ describe.each`
 	${"1e9"}             | ${"Input parameter 'limit-length-of-subject-lines--max-characters' must be a positive integer: 1e9"}
 `(
 	"a maximum number of characters from an invalid string of $rawMaximumCharacters",
-	(testRow: {
-		readonly rawMaximumCharacters: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawMaximumCharacters: string; readonly expectedErrorMessage: string }) => {
 		const { rawMaximumCharacters, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() =>
-				parseConfiguration({ maximumCharacters: rawMaximumCharacters }),
-			).toThrow(expectedErrorMessage)
+			expect(() => parseConfiguration({ maximumCharacters: rawMaximumCharacters })).toThrow(
+				expectedErrorMessage,
+			)
 		})
 	},
 )
@@ -61,8 +58,5 @@ describe.each`
 function parseConfiguration(
 	rawConfiguration: LegacyV1RawLimitLengthOfSubjectLinesConfiguration,
 ): LegacyV1LimitLengthOfSubjectLinesConfiguration {
-	return parse(
-		legacyV1LimitLengthOfSubjectLinesConfigurationSchema,
-		rawConfiguration,
-	)
+	return parse(legacyV1LimitLengthOfSubjectLinesConfigurationSchema, rawConfiguration)
 }

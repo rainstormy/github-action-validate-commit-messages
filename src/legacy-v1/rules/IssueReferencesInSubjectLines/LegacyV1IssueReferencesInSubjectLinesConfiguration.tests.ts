@@ -14,10 +14,7 @@ describe.each`
 	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"} | ${["ALPHA-[1-9][0-9]*", "BRAVO-[1-9][0-9]*", "CHARLIE-[1-9][0-9]*"]}
 `(
 	"a list of patterns from a valid string of $rawPatterns",
-	(testRow: {
-		readonly rawPatterns: string
-		readonly expectedPatterns: ReadonlyArray<string>
-	}) => {
+	(testRow: { readonly rawPatterns: string; readonly expectedPatterns: ReadonlyArray<string> }) => {
 		const { rawPatterns, expectedPatterns } = testRow
 
 		it(`includes ${formatPatterns(expectedPatterns)}`, () => {
@@ -40,10 +37,7 @@ describe.each`
 	${"ALPHA-[1-9][0-9]* BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]* CHARLIE-[1-9][0-9]* BRAVO-[1-9][0-9]* BRAVO-[1-9][0-9]*"} | ${"Input parameter 'issue-references-in-subject-lines--patterns' must not contain duplicates: BRAVO-[1-9][0-9]* CHARLIE-[1-9][0-9]*"}
 `(
 	"a list of patterns from an invalid string of $rawPatterns",
-	(testRow: {
-		readonly rawPatterns: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawPatterns: string; readonly expectedErrorMessage: string }) => {
 		const { rawPatterns, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -93,10 +87,7 @@ describe.each`
 	${"as-suffix,as-prefix,as-prefix,as-prefix,as-suffix"} | ${"Input parameter 'issue-references-in-subject-lines--allowed-positions' must not contain duplicates: as-suffix, as-prefix"}
 `(
 	"a list of allowed positions from an invalid string of $rawPositions",
-	(testRow: {
-		readonly rawPositions: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { readonly rawPositions: string; readonly expectedErrorMessage: string }) => {
 		const { rawPositions, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
@@ -113,10 +104,7 @@ describe.each`
 function parseConfiguration(
 	rawConfiguration: LegacyV1RawIssueReferencesInSubjectLinesConfiguration,
 ): LegacyV1IssueReferencesInSubjectLinesConfiguration {
-	return parse(
-		legacyV1IssueReferencesInSubjectLinesConfigurationSchema,
-		rawConfiguration,
-	)
+	return parse(legacyV1IssueReferencesInSubjectLinesConfigurationSchema, rawConfiguration)
 }
 
 function formatPatterns(patterns: ReadonlyArray<string>): string {
