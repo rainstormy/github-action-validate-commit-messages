@@ -1,6 +1,5 @@
-/// <reference types="vite/client" />
-/// <reference path="utilities/platform/CometPlatform" />
-/// <reference path="utilities/version/CometVersion" />
+import type { CometPlatform } from "utilities/platform/CometPlatform.ts"
+import type { CometVersion } from "utilities/version/CometVersion.ts"
 
 interface ViteTypeOptions {
 	strictImportMetaEnv: unknown

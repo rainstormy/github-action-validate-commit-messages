@@ -16,7 +16,7 @@
 			"#utilities/*": ["./src/utilities/*"]
 		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
-		"types": ["node"]
+		"types": ["node", "vite/client"]
 	},
 	"include": ["**/*.ts"],
 	"exclude": ["dist/", "node_modules/"]

@@ -10,13 +10,10 @@ import type { JsonValue } from "#types/JsonValue.ts"
 import { assertNotNullish } from "#utilities/Assertions.ts"
 import { deepEquals } from "#utilities/Comparisons.ts"
 
-const responsesByUrl: Map<
+const responsesByUrl = new Map<
 	`${HttpMethod} ${string}`,
-	Array<{
-		request: Omit<RequestOptions, "method">
-		response: Response | Error
-	}>
-> = new Map()
+	Array<{ request: Omit<RequestOptions, "method">; response: Response | Error }>
+>()
 
 export function mockFetch(): void {
 	beforeEach(() => {
@@ -72,10 +69,7 @@ function trimQueryString(url: string): string {
 }
 
 function getExpectedRequests(): string {
-	return Array.from(responsesByUrl.keys())
-		.filter(Boolean)
-		.map((key) => `${indent}${key}`)
-		.join("\n")
+	return [...responsesByUrl.keys()].map((key) => `${indent}${key}`).join("\n")
 }
 
 function getExpectedRequestHeaders(

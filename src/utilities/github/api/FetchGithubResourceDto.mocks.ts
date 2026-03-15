@@ -24,7 +24,7 @@ export function mockGithubResourceDto<Dto extends JsonValue>(
 		return
 	}
 
-	const pages = Array.from(splitToChunks(items, pageSize))
+	const pages = [...splitToChunks(items, pageSize)]
 	const pageCount = pages.length
 
 	for (const [index, page] of Object.entries(pages)) {
