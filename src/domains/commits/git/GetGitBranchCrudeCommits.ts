@@ -12,7 +12,7 @@ export async function getGitBranchCrudeCommits(): Promise<CrudeCommits> {
 	}
 
 	const dtos = await getGitLog(fromRef, "HEAD")
-	return dtos.map(mapDtoToCrudeCommit).reverse()
+	return dtos.map(mapDtoToCrudeCommit).toReversed()
 }
 
 function mapDtoToCrudeCommit(dto: GitLogCommitDto): CrudeCommit {
