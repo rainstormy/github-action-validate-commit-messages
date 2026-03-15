@@ -1,17 +1,15 @@
 import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.mocks.ts"
 import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
 import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
-import { mockLogger } from "#utilities/logging/Logger.mocks.ts"
 import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { githubActionsProgram } from "#programs/GithubActionsProgram.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
+import { printError } from "#utilities/logging/Logger.ts"
 
 beforeEach(() => {
 	mockCometPlatform("gha")
 })
-
-const { printError } = mockLogger()
 
 describe("when the event payload is not a pull request", () => {
 	let exitCode: ExitCode

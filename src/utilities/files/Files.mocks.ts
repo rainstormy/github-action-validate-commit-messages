@@ -1,28 +1,19 @@
 import { beforeEach, vi } from "vitest"
 import type { JsonValue } from "#types/JsonValue.ts"
-import type { ModuleMock } from "#types/ModuleMock.ts"
 
-const contentsByPath: Map<string, JsonValue> = vi.hoisted(() => new Map<string, JsonValue>())
+vi.mock(import("#utilities/files/Files.ts"), () => ({
+	readJsonFile: vi.fn(async (path) => {
+		const content = contentsByPath.get(path) ?? null
 
-const mock: FilesMock = vi.hoisted(
-	(): FilesMock => ({
-		readJsonFile: vi.fn(async (path) => {
-			const content = contentsByPath.get(path) ?? null
+		if (content === null) {
+			throw new Error(`Failed to read ${path}: File not found`)
+		}
 
-			if (content === null) {
-				throw new Error(`Failed to read ${path}: File not found`)
-			}
-
-			return content
-		}),
+		return content
 	}),
-)
+}))
 
-export type FilesMock = ModuleMock<
-	typeof import("#utilities/files/Files.ts") // CAUTION: `vi.mock()` below must always refer to the same path as here.
->
-
-vi.mock("#utilities/files/Files.ts", () => mock)
+const contentsByPath = new Map<string, JsonValue>()
 
 export function mockFiles(): void {
 	beforeEach(() => {
