@@ -1,7 +1,7 @@
 import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
 import {
-	fakeGitLogCommitDto,
 	type GitLogCommitDtoTemplate,
+	fakeGitLogCommitDto,
 } from "#utilities/git/cli/dtos/GitLogCommitDto.fixtures.ts"
 import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts"
 

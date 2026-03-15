@@ -1,4 +1,4 @@
-import { exactOptional, type InferOutput, object, string } from "valibot"
+import { type InferOutput, exactOptional, object, string } from "valibot"
 
 /**
  * @see https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-commits-on-a-pull-request

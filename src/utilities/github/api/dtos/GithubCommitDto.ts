@@ -1,4 +1,4 @@
-import { array, type InferOutput, nullable, object, string } from "valibot"
+import { type InferOutput, array, nullable, object, string } from "valibot"
 import { commitSha } from "#types/CommitSha.ts"
 import { githubCommitUserDto } from "#utilities/github/api/dtos/GithubCommitUserDto.ts"
 import { githubParentCommitDto } from "#utilities/github/api/dtos/GithubParentCommitDto.ts"

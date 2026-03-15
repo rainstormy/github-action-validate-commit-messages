@@ -1,4 +1,4 @@
-import { mockFetchableJsonResource, mockFetchError } from "#utilities/http/Fetch.mocks.ts"
+import { mockFetchError, mockFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
 import type { JsonValue } from "#types/JsonValue.ts"
 import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"

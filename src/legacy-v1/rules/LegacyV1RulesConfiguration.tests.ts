@@ -1,8 +1,8 @@
 import { parse } from "valibot"
 import { describe, expect, it } from "vitest"
 import {
-	legacyV1RuleKeys as allAvailableRuleKeys,
 	type LegacyV1RuleKeys,
+	legacyV1RuleKeys as allAvailableRuleKeys,
 } from "#legacy-v1/rules/LegacyV1Rule.ts"
 import { legacyV1RuleKeysConfigurationSchema } from "#legacy-v1/rules/LegacyV1RulesConfiguration.ts"
 import { count } from "#legacy-v1/utilities/StringUtilities.ts"

@@ -1,4 +1,4 @@
-import { array, type GenericSchema, type InferOutput, parse } from "valibot"
+import { type GenericSchema, type InferOutput, array, parse } from "valibot"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
