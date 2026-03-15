@@ -67,10 +67,9 @@ alias = ["ca"]
 [tasks.check-format]
 # language=sh
 run = """
-  biome check --error-on-warnings && \
-  mise fmt --check
+  oxlint --deny-warnings && oxfmt --check
 """
-description = "Verifies that the source code is clean and well-formatted with Biome."
+description = "Verifies that the source code is clean and well-formatted with Oxlint and Oxfmt."
 alias = ["cf"]
 
 [tasks.check-renovate]
@@ -92,10 +91,9 @@ alias = ["ct"]
 [tasks.format]
 # language=sh
 run = """
-  biome check --skip-parse-errors --write && \
-  mise fmt
+  oxlint --fix-dangerously && oxfmt
 """
-description = "Reformats the source code with Biome."
+description = "Applies linting suggestions with Oxlint and reformats the source code with Oxfmt."
 alias = ["f"]
 
 [tasks.install]
