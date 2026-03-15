@@ -1,7 +1,6 @@
 # Get started on 🐧 Ubuntu
 
-This guide describes the necessary steps for you to start coding in this
-project.
+This guide describes the necessary steps for you to start coding in this project.
 
 Last updated: July 26, 2025.
 
@@ -24,8 +23,7 @@ Last updated: July 26, 2025.
 > copy, paste, and run them as one.
 
 ## 🐧 1. Install [Zsh](https://zsh.sourceforge.io) and essential packages
-1. Install [jq](https://jqlang.org), [yq](https://mikefarah.gitbook.io/yq), and
-   Zsh:
+1. Install [jq](https://jqlang.org), [yq](https://mikefarah.gitbook.io/yq), and Zsh:
    ```shell
    sudo apt update && \
    sudo apt install jq zsh && \
@@ -64,8 +62,7 @@ Last updated: July 26, 2025.
 > [!NOTE]  
 > 1Password requires a subscription.
 
-1. [Download](https://1password.com/downloads/linux) 1Password for
-   Debian/Ubuntu (`.deb`) and save it in the `~/Downloads/` directory.
+1. [Download](https://1password.com/downloads/linux) 1Password for Debian/Ubuntu (`.deb`) and save it in the `~/Downloads/` directory.
 
 2. Install 1Password:
    ```shell
@@ -77,8 +74,7 @@ Last updated: July 26, 2025.
 
 4. [Enable](https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent)
    the SSH agent in 1Password:  
-   Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer** › **Set up
-   the SSH agent** › **Use key names**.  
+   Go to **Settings** (<kbd>Ctrl</kbd><kbd>,</kbd>) › **Developer** › **Set up the SSH agent** › **Use key names**.  
    Select **Use the SSH agent**.
 
    ![](assets/downscaled/1password-ssh-agent-ubuntu.png)
@@ -121,10 +117,8 @@ Last updated: July 26, 2025.
    ![](assets/downscaled/1password-cli.png)
 
 9. [Generate](https://developer.1password.com/docs/ssh/manage-keys/#generate-an-ssh-key)
-   two SSH keys in your 1Password vault; one to authenticate to GitHub and one
-   to sign commits.  
-   You may replace 'GitHub authentication key' and 'GitHub signing key' with
-   names of your choice:
+   two SSH keys in your 1Password vault; one to authenticate to GitHub and one to sign commits.  
+   You may replace 'GitHub authentication key' and 'GitHub signing key' with names of your choice:
    ```shell
    OP_AUTH_KEY_NAME='GitHub authentication key'
    ```
@@ -145,8 +139,7 @@ Last updated: July 26, 2025.
 ### Using [OpenSSH](https://www.openssh.com)
 1. [Generate](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
    an SSH key to authenticate to GitHub.  
-   You may replace 'id_github_auth' with a name of your choice and enter a
-   passphrase to protect the key:
+   You may replace 'id_github_auth' with a name of your choice and enter a passphrase to protect the key:
    ```shell
    SSH_AUTH_KEY_FILENAME='id_github_auth'
    ```
@@ -159,8 +152,7 @@ Last updated: July 26, 2025.
    ```
 
 2. Generate an SSH key to sign commits.  
-   You may replace 'id_github_sign' with a name of your choice and enter a
-   passphrase to protect the key:
+   You may replace 'id_github_sign' with a name of your choice and enter a passphrase to protect the key:
    ```shell
    SSH_SIGN_KEY_FILENAME='id_github_sign'
    ```
@@ -212,22 +204,17 @@ Last updated: July 26, 2025.
    echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
    ```
 
-6. [Create](https://cli.github.com/manual/gh_auth_login) an access token that
-   grants the GitHub CLI access to your SSH keys.  
-   Choose **GitHub.com** and **SSH** as the preferred protocol and skip SSH key
-   generation.  
-   Then copy the one-time code, trigger the web-based authentication flow on
-   github.com, and authorise the GitHub CLI to access your GitHub account:
+6. [Create](https://cli.github.com/manual/gh_auth_login) an access token that grants the GitHub CLI access to your SSH keys.  
+   Choose **GitHub.com** and **SSH** as the preferred protocol and skip SSH key generation.  
+   Then copy the one-time code, trigger the web-based authentication flow on github.com, and authorise the GitHub CLI to access your GitHub account:
    ```shell
    gh auth login --scopes admin:public_key,admin:ssh_signing_key
    ```
 
    ![](assets/downscaled/gh-auth-token.png)
 
-7. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your
-   GitHub account.  
-   You may replace 'Rainstorm authentication key' and 'Rainstorm signing key'
-   with names of your choice:
+7. [Add](https://cli.github.com/manual/gh_ssh-key_add) the SSH keys to your GitHub account.  
+   You may replace 'Rainstorm authentication key' and 'Rainstorm signing key' with names of your choice:
    ```shell
    GH_AUTH_KEY_NAME='Rainstorm authentication key'
    ```
@@ -239,20 +226,17 @@ Last updated: July 26, 2025.
    echo "$GH_SIGN_KEY" | gh ssh-key add - --title "$GH_SIGN_KEY_NAME" --type signing
    ```
 
-8. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your
-   SSH keys from the GitHub CLI.  
+8. [Revoke](https://cli.github.com/manual/gh_auth_refresh) the access to your SSH keys from the GitHub CLI.  
    Copy the one-time code and authorise the GitHub CLI again:
    ```shell
    gh auth refresh --remove-scopes admin:public_key,admin:ssh_signing_key
    ```
 
-9. [Specify](https://github.com/settings/profile) your full name (first and last
-   names) in your GitHub profile:
+9. [Specify](https://github.com/settings/profile) your full name (first and last names) in your GitHub profile:
 
    ![](assets/downscaled/github-profile-name.png)
 
-10. Declare your identity using your GitHub profile name and noreply email
-    address:
+10. Declare your identity using your GitHub profile name and noreply email address:
     ```shell
     GH_USER="$(gh api user)" && \
     git config --global user.name "$(echo "$GH_USER" | jq --raw-output 'if (.name | test("^\\p{Lu}.*\\s")) then .name else error("Full name must contain at least two words where the first word starts with a capital letter") end')" && \
@@ -260,8 +244,7 @@ Last updated: July 26, 2025.
     ```
 
 11. [Sign](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
-    your commits to make GitHub display
-    a <span style="border: 1px green solid; border-radius: 4rem; color: green; font-size: smaller; font-weight: bold; padding: 0.25rem 0.5rem;">
+    your commits to make GitHub display a <span style="border: 1px green solid; border-radius: 4rem; color: green; font-size: smaller; font-weight: bold; padding: 0.25rem 0.5rem;">
     Verified</span> badge next to your commits:
     ```shell
     git config --global user.signingkey "$GH_SIGN_KEY" && \
@@ -276,8 +259,7 @@ Last updated: July 26, 2025.
     ```
 
 ## 🐧 4. Prepare your workspace
-1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place and
-   activate it in the shell:
+1. [Install](https://mise.jdx.dev/getting-started.html) mise-en-place and activate it in the shell:
    ```shell
    sudo install -dm 755 /etc/apt/keyrings && \
    wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null && \
@@ -306,20 +288,17 @@ Last updated: July 26, 2025.
    cd "$DESTINATION_PATH"
    ```
 
-4. Create a file named `.env.local` in the project root directory to define
-   environment variables in your local development environment:
+4. Create a file named `.env.local` in the project root directory to define environment variables in your local development environment:
    ```shell
    touch .env.local
    ```
 
-5. [Mark](https://mise.jdx.dev/cli/trust.html) the project configuration as
-   trusted:
+5. [Mark](https://mise.jdx.dev/cli/trust.html) the project configuration as trusted:
    ```shell
    mise trust
    ```
 
-6. Install all third-party dependencies required by the project and enable the
-   Git hooks:
+6. Install all third-party dependencies required by the project and enable the Git hooks:
    ```shell
    mise install
    ```
@@ -332,7 +311,7 @@ Last updated: July 26, 2025.
    pnpm --version # -> 10.26.0 or newer
    ```
    ```shell
-   biome --version # -> 2.3.0 or newer
+   oxlint --version # -> 1.55.0 or newer
    ```
    ```shell
    lefthook --version # -> 2.0.0 or newer
@@ -351,8 +330,7 @@ Last updated: July 26, 2025.
 > [!NOTE]  
 > IntelliJ IDEA requires a subscription.
 
-1. [Download](https://www.jetbrains.com/toolbox-app) the JetBrains Toolbox App
-   for Linux (`.tar.gz`) and save it in the `~/Downloads/` directory.
+1. [Download](https://www.jetbrains.com/toolbox-app) the JetBrains Toolbox App for Linux (`.tar.gz`) and save it in the `~/Downloads/` directory.
 
 2. [Install](https://www.jetbrains.com/help/idea/installation-guide.html#toolbox_linux)
    and launch the JetBrains Toolbox App:
@@ -365,8 +343,7 @@ Last updated: July 26, 2025.
 3. Launch JetBrains Toolbox and sign in with your JetBrains account.
 
 4. [Install](https://www.jetbrains.com/help/idea/installation-guide.html#toolbox_linux)
-   **IntelliJ IDEA Ultimate**, but do not launch it yet. Quit IntelliJ IDEA if
-   it is running (<kbd>Alt</kbd><kbd>F4</kbd>).
+   **IntelliJ IDEA Ultimate**, but do not launch it yet. Quit IntelliJ IDEA if it is running (<kbd>Alt</kbd><kbd>F4</kbd>).
 
    ![](assets/downscaled/jetbrains-toolbox.png)
 
@@ -384,8 +361,7 @@ Last updated: July 26, 2025.
    ```
 
 7. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
-   IntelliJ IDEA as the default editor in Git to edit commit messages and
-   conduct interactive rebases:
+   IntelliJ IDEA as the default editor in Git to edit commit messages and conduct interactive rebases:
    ```shell
    git config --global core.editor 'idea --wait'
    ```
@@ -399,15 +375,13 @@ Last updated: July 26, 2025.
 
    ![](assets/downscaled/intellij-trust-plugins.png)
 
-10. [Mark](https://www.jetbrains.com/help/idea/project-security.html) the
-    workspace as trusted:
+10. [Mark](https://www.jetbrains.com/help/idea/project-security.html) the workspace as trusted:
     ![](assets/downscaled/intellij-trust-workspace.png)
 
 11. You're all set &mdash; let the coding begin!
 
 ### Using [Visual Studio Code](https://code.visualstudio.com) (VS Code)
-1. [Download](https://code.visualstudio.com/Download) Visual Studio Code for
-   Debian/Ubuntu (`.deb`) and save it in the `~/Downloads/` directory.
+1. [Download](https://code.visualstudio.com/Download) Visual Studio Code for Debian/Ubuntu (`.deb`) and save it in the `~/Downloads/` directory.
 
 2. Install Visual Studio Code:
    ```shell
@@ -429,8 +403,7 @@ Last updated: July 26, 2025.
    ```
 
 6. [Use](https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration#_basic_client_configuration)
-   Visual Studio Code as the default editor in Git to edit commit messages and
-   conduct interactive rebases:
+   Visual Studio Code as the default editor in Git to edit commit messages and conduct interactive rebases:
    ```shell
    git config --global core.editor 'code --wait'
    ```
@@ -445,8 +418,7 @@ Last updated: July 26, 2025.
 
    ![](assets/downscaled/vscode-trust-workspace.png)
 
-9. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript
-   version specified for the workspace:
+9. Open any TypeScript file (`.ts` or `.tsx`) and allow using the TypeScript version specified for the workspace:
 
    ![](assets/downscaled/vscode-typescript.png)
 

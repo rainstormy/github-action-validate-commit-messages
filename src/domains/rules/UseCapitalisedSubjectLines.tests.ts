@@ -126,26 +126,23 @@ describe.each`
 	${"\t\t"}
 	${"amend!"}
 	${"#12"}
-`(
-	"when the subject line of $subjectLine is blank",
-	(props: { subjectLine: string }) => {
-		const commit = fakeCommit({ message: props.subjectLine })
+`("when the subject line of $subjectLine is blank", (props: { subjectLine: string }) => {
+	const commit = fakeCommit({ message: props.subjectLine })
 
-		describe("and the rule is enabled", () => {
-			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], {})
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
+	describe("and the rule is enabled", () => {
+		it("does not raise any concerns", () => {
+			const actualConcerns = useCapitalisedSubjectLines([commit], {})
+			expect(actualConcerns).toEqual<Concerns>([])
 		})
+	})
 
-		describe("and the rule is disabled", () => {
-			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], null)
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
+	describe("and the rule is disabled", () => {
+		it("does not raise any concerns", () => {
+			const actualConcerns = useCapitalisedSubjectLines([commit], null)
+			expect(actualConcerns).toEqual<Concerns>([])
 		})
-	},
-)
+	})
+})
 
 describe("when verifying a set of multiple commits and some commits have non-capitalised subject lines", () => {
 	const commits: Vector<Commit, 7> = [

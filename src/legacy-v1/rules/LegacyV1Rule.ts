@@ -23,12 +23,10 @@ export const legacyV1RuleKeys = [
 ] as const
 
 export type LegacyV1RuleKey = (typeof legacyV1RuleKeys)[number]
-export type LegacyV1RuleKeys = ReadonlyArray<LegacyV1RuleKey>
+export type LegacyV1RuleKeys = Array<LegacyV1RuleKey>
 
 export type LegacyV1Rule = {
-	readonly key: LegacyV1RuleKey
-	readonly refine?: LegacyV1CommitRefiner
-	readonly getInvalidCommits: (
-		refinedCommits: LegacyV1Commits,
-	) => LegacyV1Commits
+	key: LegacyV1RuleKey
+	refine?: LegacyV1CommitRefiner
+	getInvalidCommits: (refinedCommits: LegacyV1Commits) => LegacyV1Commits
 }

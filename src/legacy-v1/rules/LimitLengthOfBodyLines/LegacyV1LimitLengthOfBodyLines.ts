@@ -12,8 +12,7 @@ export function legacyV1LimitLengthOfBodyLines({
 			refinedCommits
 				.filter(
 					({ parents, bodyLines }) =>
-						parents.length === 1 ||
-						!bodyLines.some((line) => line.startsWith("Conflicts:")),
+						parents.length === 1 || !bodyLines.some((line) => line.startsWith("Conflicts:")),
 				)
 				.filter(({ bodyLines }) =>
 					bodyLines.some(
@@ -27,10 +26,7 @@ export function legacyV1LimitLengthOfBodyLines({
 	}
 }
 
-function isInVerbatimZone(
-	bodyLines: ReadonlyArray<string>,
-	lineNumber: number,
-): boolean {
+function isInVerbatimZone(bodyLines: Array<string>, lineNumber: number): boolean {
 	const numberOfPrecedingTripleBackticksLines = bodyLines
 		.slice(0, lineNumber)
 		.filter((line) => line.startsWith("```")).length

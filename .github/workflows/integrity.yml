@@ -91,17 +91,18 @@ jobs:
           # language=sh
           task: check-actions
         #
-      - name: Verify the code style (Biome)
+      - name: Verify the code style (Oxlint and Oxfmt)
         uses: ./.github/actions/task
         with:
           # The cache key includes:
-          # - Files covered by Biome, as defined in `biome.jsonc`.
-          # - The Biome configuration file (`biome.jsonc`).
-          # - The EditorConfig file respected by Biome (`.editorconfig`).
+          # - Files covered by Oxlint and Oxfmt, as defined in `.oxlintrc.jsonc` and `.oxfmtrc.jsonc`.
+          # - The Oxlint configuration file (`.oxlintrc.jsonc`).
+          # - The Oxfmt configuration file (`.oxfmtrc.jsonc`).
+          # - The EditorConfig file respected by Oxfmt (`.editorconfig`).
           # - Tool versions and mise task definitions (`mise.toml`).
           # - Node.js package versions (`pnpm-lock.yaml`).
-          cache-key: check-format:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.ts', '.editorconfig', 'mise.toml', 'pnpm-lock.yaml') }}
-          cache-path: node_modules/.cache/biome/
+          cache-key: check-format:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.toml', '*.ts', '*.yaml', '*.yml', '.editorconfig') }}
+          cache-path: node_modules/.cache/oxc/
           # language=sh
           task: check-format
         #

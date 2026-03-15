@@ -1,4 +1,3 @@
-// biome-ignore lint/correctness/noNodejsModules: This file needs access to spawning Git processes.
 import { spawn } from "node:child_process"
 import { GitCommandError } from "#utilities/git/cli/GitCommandError.ts"
 

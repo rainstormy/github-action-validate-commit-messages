@@ -1,15 +1,8 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
-import type {
-	TokenisedLine,
-	TokenisedLines,
-	Tokenisers,
-} from "#commits/tokens/Token.ts"
-import type {
-	Configuration,
-	TokenConfiguration,
-} from "#configurations/Configuration.ts"
+import type { TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
+import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import { notEmptyString } from "#utilities/Arrays.ts"
 
@@ -33,8 +26,7 @@ export function mapCrudeCommitToCommit(
 	crudeCommit: CrudeCommit,
 	configuration: Configuration,
 ): Commit {
-	const [crudeSubjectLine = "", ...crudeBodyLines] =
-		crudeCommit.message.split("\n")
+	const [crudeSubjectLine = "", ...crudeBodyLines] = crudeCommit.message.split("\n")
 
 	return {
 		sha: crudeCommit.sha,
@@ -43,25 +35,14 @@ export function mapCrudeCommitToCommit(
 		authorEmail: crudeCommit.authorEmail,
 		committerName: crudeCommit.committerName,
 		committerEmail: crudeCommit.committerEmail,
-		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens),
-		bodyLines: crudeBodyLines.map((crudeBodyLine) =>
-			[crudeBodyLine].filter(notEmptyString),
-		),
+		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens).filter(notEmptyString),
+		bodyLines: crudeBodyLines.map((crudeBodyLine) => [crudeBodyLine].filter(notEmptyString)),
 	}
 }
-
-// Ordered from the highest priority to the lowest priority.
-const tokenisers: Tokenisers = [tokeniseSquashMarkers, tokeniseIssueLinks]
 
 function tokeniseSubjectLine(
 	crudeSubjectLine: string,
 	tokenConfiguration: TokenConfiguration,
 ): TokenisedLine {
-	return tokenisers
-		.reduce<TokenisedLine>(
-			(tokenisedSubjectLineSoFar, tokenise) =>
-				tokenise(tokenisedSubjectLineSoFar, tokenConfiguration),
-			[crudeSubjectLine],
-		)
-		.filter(notEmptyString)
+	return tokeniseIssueLinks(tokeniseSquashMarkers([crudeSubjectLine]), tokenConfiguration)
 }

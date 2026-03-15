@@ -15,10 +15,7 @@ describe.each`
 	${"160"}             | ${160}
 `(
 	"a maximum number of characters from a valid string of $rawMaximumCharacters",
-	(testRow: {
-		readonly rawMaximumCharacters: string
-		readonly expectedMaximumCharacters: number
-	}) => {
+	(testRow: { rawMaximumCharacters: string; expectedMaximumCharacters: number }) => {
 		const { rawMaximumCharacters, expectedMaximumCharacters } = testRow
 
 		const { maximumCharacters: actualMaximumCharacters } = parseConfiguration({
@@ -44,16 +41,13 @@ describe.each`
 	${"1e9"}             | ${"Input parameter 'limit-length-of-body-lines--max-characters' must be a positive integer: 1e9"}
 `(
 	"a maximum number of characters from an invalid string of $rawMaximumCharacters",
-	(testRow: {
-		readonly rawMaximumCharacters: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { rawMaximumCharacters: string; expectedErrorMessage: string }) => {
 		const { rawMaximumCharacters, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() =>
-				parseConfiguration({ maximumCharacters: rawMaximumCharacters }),
-			).toThrow(expectedErrorMessage)
+			expect(() => parseConfiguration({ maximumCharacters: rawMaximumCharacters })).toThrow(
+				expectedErrorMessage,
+			)
 		})
 	},
 )
@@ -61,8 +55,5 @@ describe.each`
 function parseConfiguration(
 	rawConfiguration: LegacyV1RawLimitLengthOfBodyLinesConfiguration,
 ): LegacyV1LimitLengthOfBodyLinesConfiguration {
-	return parse(
-		legacyV1LimitLengthOfBodyLinesConfigurationSchema,
-		rawConfiguration,
-	)
+	return parse(legacyV1LimitLengthOfBodyLinesConfigurationSchema, rawConfiguration)
 }

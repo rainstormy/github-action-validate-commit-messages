@@ -4,10 +4,9 @@ import { naturalNumber } from "#types/NaturalNumber.ts"
 /**
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#pull_request
  */
-export type GithubPullRequestEventDto = InferOutput<
-	ReturnType<typeof githubPullRequestEventDto>
->
+export type GithubPullRequestEventDto = InferOutput<ReturnType<typeof githubPullRequestEventDto>>
 
+// oxlint-disable-next-line typescript/explicit-function-return-type: Rely on type inference for Valibot schemas.
 export function githubPullRequestEventDto() {
 	return object({
 		pull_request: object({
@@ -16,8 +15,6 @@ export function githubPullRequestEventDto() {
 	})
 }
 
-export function isGithubPullRequestEventDto(
-	dto: unknown,
-): dto is GithubPullRequestEventDto {
+export function isGithubPullRequestEventDto(dto: unknown): dto is GithubPullRequestEventDto {
 	return is(githubPullRequestEventDto(), dto)
 }

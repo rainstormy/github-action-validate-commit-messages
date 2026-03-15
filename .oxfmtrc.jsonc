@@ -1,0 +1,25 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"ignorePatterns": [".idea/", "dist/", "node_modules/", "**/*.md", "pnpm-lock.yaml"],
+	"semi": false, // Omit semicolons to reduce noise, see https://slides.com/evanyou/semicolons for motivation.
+	"sortImports": {
+		"customGroups": [{ "groupName": "mocks", "elementNamePattern": ["**/*.mocks.*"] }],
+		"groups": ["mocks", "builtin", "external", "subpath", "unknown"],
+		"newlinesBetween": false
+	},
+	"sortPackageJson": false, // Currently, Oxfmt will separate dependencies from their maintenance comments.
+	"overrides": [
+		{
+			"files": ["**/*.{json,jsonc}"],
+			"options": {
+				"trailingComma": "none" // JSON does not allow trailing commas.
+			}
+		},
+		{
+			"files": ["**/*.{yml,yaml}"],
+			"options": {
+				"singleQuote": true // Use single quotes in YAML to match the GitHub Actions syntax for `hashFiles()`.
+			}
+		}
+	]
+}

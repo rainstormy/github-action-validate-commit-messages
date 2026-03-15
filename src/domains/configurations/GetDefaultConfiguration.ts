@@ -1,7 +1,4 @@
-import type {
-	Configuration,
-	TokenConfiguration,
-} from "#configurations/Configuration.ts"
+import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 
 export function getDefaultConfiguration(): Configuration {

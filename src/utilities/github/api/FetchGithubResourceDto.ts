@@ -1,4 +1,4 @@
-import { array, type GenericSchema, type InferOutput, parse } from "valibot"
+import { type GenericSchema, type InferOutput, array, parse } from "valibot"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
@@ -21,7 +21,7 @@ export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 	let nextResourceUrl: string | null = resourceUrl
 
 	while (nextResourceUrl !== null) {
-		// biome-ignore lint/performance/noAwaitInLoops: The paginated API makes each loop iteration depend on the result of the previous iteration.
+		// oxlint-disable-next-line eslint/no-await-in-loop: The paginated API makes each loop iteration depend on the result of the previous iteration.
 		const response: Response = await fetch(nextResourceUrl, {
 			headers: {
 				accept: "application/vnd.github+json",
@@ -36,9 +36,7 @@ export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 			)
 		}
 
-		deferredCheckedPages.push(
-			response.json().then((data: unknown) => parse(arraySchema, data)),
-		)
+		deferredCheckedPages.push(response.json().then((data: unknown) => parse(arraySchema, data)))
 
 		const link = response.headers.get("link")
 		const nextPageMatch = link ? nextPageRegex.exec(link) : null

@@ -1,4 +1,4 @@
 {
-	"recommendations": ["biomejs.biome", "hverlin.mise-vscode"],
+	"recommendations": ["hverlin.mise-vscode", "oxc.oxc-vscode"],
 	"unwantedRecommendations": []
 }

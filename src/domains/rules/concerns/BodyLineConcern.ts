@@ -10,8 +10,6 @@ export type BodyLineConcern = {
 	columns: CharacterRange
 }
 
-export function bodyLineConcern(
-	props: Omit<BodyLineConcern, "location">,
-): BodyLineConcern {
+export function bodyLineConcern(props: Omit<BodyLineConcern, "location">): BodyLineConcern {
 	return { ...props, location: "body-line" }
 }

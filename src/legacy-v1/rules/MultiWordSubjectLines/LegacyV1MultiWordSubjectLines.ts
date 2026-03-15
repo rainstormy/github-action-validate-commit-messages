@@ -5,9 +5,7 @@ export function legacyV1MultiWordSubjectLines(): LegacyV1Rule {
 	return {
 		key: "multi-word-subject-lines",
 		getInvalidCommits: (refinedCommits: LegacyV1Commits): LegacyV1Commits =>
-			refinedCommits.filter(
-				({ refinedSubjectLine }) => countWords(refinedSubjectLine) <= 1,
-			),
+			refinedCommits.filter(({ refinedSubjectLine }) => countWords(refinedSubjectLine) <= 1),
 	}
 }
 

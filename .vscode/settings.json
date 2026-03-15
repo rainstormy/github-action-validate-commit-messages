@@ -1,5 +1,6 @@
 {
-	"editor.defaultFormatter": "biomejs.biome",
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"git.allowNoVerifyCommit": true,
 	"javascript.preferences.importModuleSpecifier": "relative",
 	"search.exclude": {
 		"dist/": true,
@@ -8,6 +9,7 @@
 	},
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"typescript.preferences.importModuleSpecifierEnding": "js",
 	"typescript.preferences.preferTypeOnlyAutoImports": true,
 	"typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,12 +1,4 @@
-import {
-	check,
-	type InferInput,
-	type InferOutput,
-	object,
-	pipe,
-	string,
-	transform,
-} from "valibot"
+import { type InferInput, type InferOutput, check, object, pipe, string, transform } from "valibot"
 import { requirePositiveInteger } from "#legacy-v1/utilities/StringUtilities.ts"
 
 export const legacyV1LimitLengthOfSubjectLinesConfigurationSchema = object({

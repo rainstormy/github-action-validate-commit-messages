@@ -38,11 +38,11 @@ inputs:
   limit-length-of-body-lines--max-characters:
     description: A positive integer that specifies the maximum number of characters per line in the commit message body to be accepted by `limit-length-of-body-lines`.
     required: false
-    default: "72"
+    default: '72'
   limit-length-of-subject-lines--max-characters:
     description: A positive integer that specifies the maximum number of characters in the subject line to be accepted by `limit-length-of-subject-lines`.
     required: false
-    default: "50"
+    default: '50'
   no-squash-commits--disallowed-prefixes:
     description: A comma-separated, case-sensitive list of subject line prefixes to be rejected by `no-squash-commits`.
     required: false

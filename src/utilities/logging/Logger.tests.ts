@@ -1,5 +1,5 @@
 import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
-import { beforeEach, describe, expect, it, type MockInstance, vi } from "vitest"
+import { type MockInstance, beforeEach, describe, expect, it, vi } from "vitest"
 import { printError } from "#utilities/logging/Logger.ts"
 
 // Undo the automatic use of `mockLogger` in `VitestSetup.mocks.ts`.

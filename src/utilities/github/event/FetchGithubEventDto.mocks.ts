@@ -1,8 +1,8 @@
 import { mockJsonFile } from "#utilities/files/Files.mocks.ts"
 import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
 import {
-	fakeGithubPullRequestReference,
 	type GithubPullRequestReference,
+	fakeGithubPullRequestReference,
 } from "#commits/github/GithubPullRequestReference.fixtures.ts"
 import { assertNotNullish } from "#utilities/Assertions.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"

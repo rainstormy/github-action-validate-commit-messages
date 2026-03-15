@@ -1,4 +1,4 @@
-// biome-ignore-all lint/suspicious/noConsole: Using `console` is intentional in this file.
+// oxlint-disable eslint/no-console: Using `console` is intentional in this file.
 
 import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 

@@ -16,10 +16,7 @@ describe.each`
 	${"amend!,  , fixup!, squash!, "} | ${["amend!", "fixup!", "squash!"]}
 `(
 	"a list of disallowed prefixes from a valid string of $rawPrefixes",
-	(testRow: {
-		readonly rawPrefixes: string
-		readonly expectedPrefixes: ReadonlyArray<string>
-	}) => {
+	(testRow: { rawPrefixes: string; expectedPrefixes: Array<string> }) => {
 		const { rawPrefixes, expectedPrefixes } = testRow
 
 		it(`includes ${formatPrefixes(expectedPrefixes)}`, () => {
@@ -42,16 +39,13 @@ describe.each`
 	${"amend!,fixup!,amend!,squash!,amend!,fixup!"} | ${"Input parameter 'no-squash-commits--disallowed-prefixes' must not contain duplicates: amend!, fixup!"}
 `(
 	"a list of disallowed prefixes from an invalid string of $rawPrefixes",
-	(testRow: {
-		readonly rawPrefixes: string
-		readonly expectedErrorMessage: string
-	}) => {
+	(testRow: { rawPrefixes: string; expectedErrorMessage: string }) => {
 		const { rawPrefixes, expectedErrorMessage } = testRow
 
 		it(`raises an error with a message of '${expectedErrorMessage}'`, () => {
-			expect(() =>
-				parseConfiguration({ disallowedPrefixes: rawPrefixes }),
-			).toThrow(expectedErrorMessage)
+			expect(() => parseConfiguration({ disallowedPrefixes: rawPrefixes })).toThrow(
+				expectedErrorMessage,
+			)
 		})
 	},
 )
@@ -62,6 +56,6 @@ function parseConfiguration(
 	return parse(legacyV1NoSquashCommitsConfigurationSchema, rawConfiguration)
 }
 
-function formatPrefixes(prefixes: ReadonlyArray<string>): string {
+function formatPrefixes(prefixes: Array<string>): string {
 	return `${count(prefixes, "prefix", "prefixes")}: ${prefixes.join(", ")}`
 }

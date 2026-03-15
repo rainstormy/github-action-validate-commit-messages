@@ -13,9 +13,49 @@ minimumReleaseAge: 10080 # 7 * 1440 minutes
 # This allows urgent security upgrades to be installed despite being less than 7 days old.
 # Expand the whitelist as needed. Add new packages with exact version numbers to the top.
 minimumReleaseAgeExclude:
-  # CVE-2025-66020.
-  # https://github.com/open-circle/valibot/security/advisories/GHSA-vqpr-j7v3-hqw9
-  - 'valibot@1.2.0'
+  # Oxfmt
+  - 'oxfmt@0.40.0'
+  - '@oxfmt/binding-android-arm-eabi@0.40.0'
+  - '@oxfmt/binding-android-arm64@0.40.0'
+  - '@oxfmt/binding-darwin-arm64@0.40.0'
+  - '@oxfmt/binding-darwin-x64@0.40.0'
+  - '@oxfmt/binding-freebsd-x64@0.40.0'
+  - '@oxfmt/binding-linux-arm-gnueabihf@0.40.0'
+  - '@oxfmt/binding-linux-arm-musleabihf@0.40.0'
+  - '@oxfmt/binding-linux-arm64-gnu@0.40.0'
+  - '@oxfmt/binding-linux-arm64-musl@0.40.0'
+  - '@oxfmt/binding-linux-ppc64-gnu@0.40.0'
+  - '@oxfmt/binding-linux-riscv64-gnu@0.40.0'
+  - '@oxfmt/binding-linux-riscv64-musl@0.40.0'
+  - '@oxfmt/binding-linux-s390x-gnu@0.40.0'
+  - '@oxfmt/binding-linux-x64-gnu@0.40.0'
+  - '@oxfmt/binding-linux-x64-musl@0.40.0'
+  - '@oxfmt/binding-openharmony-arm64@0.40.0'
+  - '@oxfmt/binding-win32-arm64-msvc@0.40.0'
+  - '@oxfmt/binding-win32-ia32-msvc@0.40.0'
+  - '@oxfmt/binding-win32-x64-msvc@0.40.0'
+
+  # Oxlint
+  - 'oxlint@1.55.0'
+  - '@oxlint/binding-android-arm-eabi@1.55.0'
+  - '@oxlint/binding-android-arm64@1.55.0'
+  - '@oxlint/binding-darwin-arm64@1.55.0'
+  - '@oxlint/binding-darwin-x64@1.55.0'
+  - '@oxlint/binding-freebsd-x64@1.55.0'
+  - '@oxlint/binding-linux-arm-gnueabihf@1.55.0'
+  - '@oxlint/binding-linux-arm-musleabihf@1.55.0'
+  - '@oxlint/binding-linux-arm64-gnu@1.55.0'
+  - '@oxlint/binding-linux-arm64-musl@1.55.0'
+  - '@oxlint/binding-linux-ppc64-gnu@1.55.0'
+  - '@oxlint/binding-linux-riscv64-gnu@1.55.0'
+  - '@oxlint/binding-linux-riscv64-musl@1.55.0'
+  - '@oxlint/binding-linux-s390x-gnu@1.55.0'
+  - '@oxlint/binding-linux-x64-gnu@1.55.0'
+  - '@oxlint/binding-linux-x64-musl@1.55.0'
+  - '@oxlint/binding-openharmony-arm64@1.55.0'
+  - '@oxlint/binding-win32-arm64-msvc@1.55.0'
+  - '@oxlint/binding-win32-ia32-msvc@1.55.0'
+  - '@oxlint/binding-win32-x64-msvc@1.55.0'
 
 # Pin packages to exact versions to ensure that all developers use the same versions.
 savePrefix: ''

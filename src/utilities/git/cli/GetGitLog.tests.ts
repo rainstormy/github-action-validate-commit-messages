@@ -11,10 +11,9 @@ describe.each`
 	"when there are no commits between $fromRef and $toRef",
 	(props: { fromRef: string; toRef: string }) => {
 		beforeEach(() => {
-			mockGitCommand(
-				`--no-pager log --format=raw --no-color ${props.fromRef}..${props.toRef}`,
-				{ output: "" },
-			)
+			mockGitCommand(`--no-pager log --format=raw --no-color ${props.fromRef}..${props.toRef}`, {
+				output: "",
+			})
 		})
 
 		it("returns an empty list", async () => {
@@ -80,9 +79,7 @@ committer Master Splinter <sensei@ninja-academy.com> 1769801867 -0500
 				tree: ["d8242af2d280a7805e8d481a8ac36b7224edde6d"],
 				parent: ["b34f54dae2045478f57846dfdd5762f4afb721"],
 				author: ["Raph <theraffaelloexperience@tmnt.com> 1769800893 -0500"],
-				committer: [
-					"Master Splinter <sensei@ninja-academy.com> 1769801867 -0500",
-				],
+				committer: ["Master Splinter <sensei@ninja-academy.com> 1769801867 -0500"],
 				message: ["fixup! fighting the foot clan"],
 			},
 		])
@@ -116,9 +113,7 @@ committer Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0
 					"7ea6b181df3b6cac8989a46cc6623f74d686dd1",
 				],
 				author: ["April O'Neil <april@secondtimearound.com> 1771411236 -0500"],
-				committer: [
-					"Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0500",
-				],
+				committer: ["Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0500"],
 				message: ["Deliver unlimited power with technological genius"],
 			},
 		])
@@ -158,9 +153,7 @@ committer Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500
 				author: [
 					"Michelangelo di Lodovico Buonarroti Simoni <cowabunga@pizza-party.com> 1784831778 -0500",
 				],
-				committer: [
-					'Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500',
-				],
+				committer: ['Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500'],
 				message: [
 					"Let's gather all mutants for a massive pizza party!!\n\nUnder parental supervision, of course ;)",
 				],
@@ -198,9 +191,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 				tree: ["f36f404d67ee425b1e8e3374222eeb8cecff54"],
 				parent: ["b8f2e2cca67d1e1866a58848c259d11b9c8f1"],
 				author: ["Master Splinter <sensei@ninja-academy.com> 1675536219 +0100"],
-				committer: [
-					"Master Splinter <sensei@ninja-academy.com> 1675536219 +0100",
-				],
+				committer: ["Master Splinter <sensei@ninja-academy.com> 1675536219 +0100"],
 				gpgsig: [
 					"-----BEGIN SSH SIGNATURE-----\n" +
 						"k1MWQyOTVmM2UzY2E0YjFhNWRkN2UyZjY3ODk5MzJlZDM1NTRlZmY3NWY5OTg1OWFjMzdj\n" +
@@ -418,9 +409,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 				tree: ["e5aeef82441e9041529c2d36c462cc9d5520e3"],
 				parent: ["9cd55379ae9a5107dcfd4dc8637b597112947be"],
 				author: ["Mortu <mortu@utroms.outerspace> 1873522994 +1000"],
-				committer: [
-					"Professor Honeycutt <fugitoid@dhoonib.outerspace> 1873573232 +0900",
-				],
+				committer: ["Professor Honeycutt <fugitoid@dhoonib.outerspace> 1873573232 +0900"],
 				gpgsig: [
 					"-----BEGIN PGP SIGNATURE-----\n" +
 						"\n" +
@@ -448,21 +437,15 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 				author: [
 					"Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 1809064863 -0500",
 				],
-				committer: [
-					"Donatello <42069849+gogogadget@users.noreply.github.com> 1809068484 -0500",
-				],
-				message: [
-					"stealth: be one with the shadows\n\nmutant chain reaction\nin the underground",
-				],
+				committer: ["Donatello <42069849+gogogadget@users.noreply.github.com> 1809068484 -0500"],
+				message: ["stealth: be one with the shadows\n\nmutant chain reaction\nin the underground"],
 			},
 			{
 				commit: ["b314f63fc4e891b47a44358cf5aeac5bb2e9820"],
 				tree: ["c9b89de1ee14b433fb37608d612b78143cb2949d"],
 				parent: ["26ecb332bc4787332cc9bb5fff90c8100225a69ff"],
 				author: ["Oroku Saki <shredderhimself@thefoot.com> 1723364474 -0400"],
-				committer: [
-					"Karai <02968712+misssaki@users.noreply.github.com> 1723469209 -0400",
-				],
+				committer: ["Karai <02968712+misssaki@users.noreply.github.com> 1723469209 -0400"],
 				message: ["squash! the defects"],
 			},
 			{
@@ -470,9 +453,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 				tree: ["bd30f04235483f8c8732e5858259e019a3c3f"],
 				parent: ["7510ce207c15627da956d49da26f2726c36270"],
 				author: ["Cody Jones <cody.jones@oneil.tech> 4265024500 +0000"],
-				committer: [
-					"Serling <10930296+turtle-x@users.noreply.github.com> 4265024500 +0000",
-				],
+				committer: ["Serling <10930296+turtle-x@users.noreply.github.com> 4265024500 +0000"],
 				gpgsig: [
 					"-----BEGIN SSH SIGNATURE-----\n" +
 						"OWJiNzhkYWJ+MmM3ZTdiZjhhNWMtMzU3MC00MGQxLTk/MTAtZWUzNDMyZTA4ZjU2NDdjMT\n" +
@@ -489,10 +470,9 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 
 describe("when the 'git log' command fails", () => {
 	beforeEach(() => {
-		mockGitCommand(
-			"--no-pager log --format=raw --no-color upstream/next..HEAD",
-			{ exitCode: 128 },
-		)
+		mockGitCommand("--no-pager log --format=raw --no-color upstream/next..HEAD", {
+			exitCode: 128,
+		})
 	})
 
 	it("throws an error", async () => {

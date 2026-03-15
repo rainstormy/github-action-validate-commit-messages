@@ -1,9 +1,6 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": [
-		"@rainstormy/presets-typescript/base",
-		"@rainstormy/presets-typescript/es2023"
-	],
+	"extends": ["@rainstormy/presets-typescript/base", "@rainstormy/presets-typescript/es2023"],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
 		"erasableSyntaxOnly": true,
@@ -19,7 +16,7 @@
 			"#utilities/*": ["./src/utilities/*"]
 		},
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
-		"types": ["node"]
+		"types": ["node", "vite/client"]
 	},
 	"include": ["**/*.ts"],
 	"exclude": ["dist/", "node_modules/"]

@@ -1,7 +1,7 @@
 import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
 import {
-	fakeGitLogCommitDto,
 	type GitLogCommitDtoTemplate,
+	fakeGitLogCommitDto,
 } from "#utilities/git/cli/dtos/GitLogCommitDto.fixtures.ts"
 import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts"
 
@@ -11,11 +11,7 @@ export function mockGitLog(dtos: Array<GitLogCommitDtoTemplate>): void {
 		output: "origin/main",
 	})
 	mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", {
-		output: dtos
-			.map(fakeGitLogCommitDto)
-			.map(formatCommitDto)
-			.reverse()
-			.join("\n\n"),
+		output: dtos.map(fakeGitLogCommitDto).map(formatCommitDto).toReversed().join("\n\n"),
 	})
 }
 

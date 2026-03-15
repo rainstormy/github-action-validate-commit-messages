@@ -3,22 +3,17 @@ import type { LegacyV1Rule } from "#legacy-v1/rules/LegacyV1Rule.ts"
 
 export type LegacyV1CommitRefiner = (commit: LegacyV1Commit) => LegacyV1Commit
 
-export function legacyV1CommitRefinerFrom(
-	rules: ReadonlyArray<LegacyV1Rule>,
-): LegacyV1CommitRefiner {
+export function legacyV1CommitRefinerFrom(rules: Array<LegacyV1Rule>): LegacyV1CommitRefiner {
 	const refiners = rules
 		.map((rule) => rule.refine)
-		.filter(
-			(refiner): refiner is LegacyV1CommitRefiner => refiner !== undefined,
-		)
+		.filter((refiner): refiner is LegacyV1CommitRefiner => refiner !== undefined)
 
 	return compoundCommitRefinerFrom(refiners)
 }
 
-function compoundCommitRefinerFrom(
-	refiners: ReadonlyArray<LegacyV1CommitRefiner>,
-): LegacyV1CommitRefiner {
+function compoundCommitRefinerFrom(refiners: Array<LegacyV1CommitRefiner>): LegacyV1CommitRefiner {
 	function refineCommit(commit: LegacyV1Commit): LegacyV1Commit {
+		// oxlint-disable-next-line unicorn/no-array-reduce: This is legacy code.
 		const refinedCommit = refiners.reduce(
 			(refinedCommitSoFar, refiner) => refiner(refinedCommitSoFar),
 			commit,

@@ -8,6 +8,6 @@ export function printGithubActionsError(message: string): void {
 		.replaceAll("\r", "%0D")
 		.replaceAll("\n", "%0A")
 
-	// biome-ignore lint/suspicious/noConsole: Using `console` is intentional in this case.
+	// oxlint-disable-next-line eslint/no-console: Using `console` is intentional in this case.
 	console.log(`::error::${escapedMessage}`)
 }
