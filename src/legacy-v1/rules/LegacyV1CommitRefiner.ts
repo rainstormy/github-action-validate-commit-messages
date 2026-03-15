@@ -13,6 +13,7 @@ export function legacyV1CommitRefinerFrom(rules: Array<LegacyV1Rule>): LegacyV1C
 
 function compoundCommitRefinerFrom(refiners: Array<LegacyV1CommitRefiner>): LegacyV1CommitRefiner {
 	function refineCommit(commit: LegacyV1Commit): LegacyV1Commit {
+		// oxlint-disable-next-line unicorn/no-array-reduce: This is legacy code.
 		const refinedCommit = refiners.reduce(
 			(refinedCommitSoFar, refiner) => refiner(refinedCommitSoFar),
 			commit,

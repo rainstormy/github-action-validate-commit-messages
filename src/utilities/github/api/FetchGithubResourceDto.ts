@@ -21,7 +21,7 @@ export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 	let nextResourceUrl: string | null = resourceUrl
 
 	while (nextResourceUrl !== null) {
-		// biome-ignore lint/performance/noAwaitInLoops: The paginated API makes each loop iteration depend on the result of the previous iteration.
+		// oxlint-disable-next-line eslint/no-await-in-loop: The paginated API makes each loop iteration depend on the result of the previous iteration.
 		const response: Response = await fetch(nextResourceUrl, {
 			headers: {
 				accept: "application/vnd.github+json",

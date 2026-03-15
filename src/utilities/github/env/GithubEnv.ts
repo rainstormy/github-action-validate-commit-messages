@@ -1,4 +1,3 @@
-// biome-ignore lint/correctness/noNodejsModules: This file needs access to environment variables.
 import process from "node:process"
 import { type HttpUrlString, requireHttpUrlString } from "#types/HttpUrlString.ts"
 import { requireNotBlankString } from "#utilities/Assertions.ts"

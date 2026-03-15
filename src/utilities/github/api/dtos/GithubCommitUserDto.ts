@@ -5,6 +5,7 @@ import { type InferOutput, exactOptional, object, string } from "valibot"
  */
 export type GithubCommitUserDto = InferOutput<ReturnType<typeof githubCommitUserDto>>
 
+// oxlint-disable-next-line typescript/explicit-function-return-type: Rely on type inference for Valibot schemas.
 export function githubCommitUserDto() {
 	return object({
 		name: exactOptional(string()),

@@ -6,6 +6,7 @@ import { naturalNumber } from "#types/NaturalNumber.ts"
  */
 export type GithubPullRequestEventDto = InferOutput<ReturnType<typeof githubPullRequestEventDto>>
 
+// oxlint-disable-next-line typescript/explicit-function-return-type: Rely on type inference for Valibot schemas.
 export function githubPullRequestEventDto() {
 	return object({
 		pull_request: object({

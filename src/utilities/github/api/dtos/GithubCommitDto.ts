@@ -8,6 +8,7 @@ import { githubParentCommitDto } from "#utilities/github/api/dtos/GithubParentCo
  */
 export type GithubCommitDto = InferOutput<ReturnType<typeof githubCommitDto>>
 
+// oxlint-disable-next-line typescript/explicit-function-return-type: Rely on type inference for Valibot schemas.
 export function githubCommitDto() {
 	return object({
 		sha: commitSha(),

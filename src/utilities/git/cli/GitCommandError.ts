@@ -1,3 +1,4 @@
+// oxlint-disable-next-line max-classes-per-file: Custom errors must extend the `Error` class.
 export class GitCommandError extends Error {
 	exitCode: number | null
 
