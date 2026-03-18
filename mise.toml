@@ -14,7 +14,7 @@ node = "24.13.1"
 
 # pnpm is a Node.js package manager.
 # https://pnpm.io
-pnpm = "10.30.3"
+pnpm = "10.32.1"
 
 [tasks.build]
 depends = ["build-cli", "build-gha", "build-legacy-v1"]
