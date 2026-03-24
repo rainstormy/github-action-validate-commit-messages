@@ -109,7 +109,7 @@ alias = ["i"]
 run = """
   vitest run
 """
-env = { CI = 1 }
+env = { CI = 1, COMET_PLATFORM = "cli" }
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
 
@@ -121,7 +121,7 @@ run = """
     --api.port "$LOCALHOST_VITEST_PORT" \
     --open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
 """
-env = { CI = 1 }
+env = { CI = 1, COMET_PLATFORM = "cli" }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
 
@@ -153,8 +153,6 @@ _.file = [".env", ".env.local"]
 # Make CLI programs in `node_modules` available directly in the command line.
 # https://mise.jdx.dev/mise-cookbook/nodejs.html#add-node-modules-binaries-to-the-path
 _.path = ["node_modules/.bin"]
-
-COMET_PLATFORM = "cli"
 
 # Grab the current Comet version from the `version` field in `package.json`.
 COMET_VERSION = { value = "{{ exec(command=\"jq --raw-output .version package.json\") }}" }
