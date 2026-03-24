@@ -22,6 +22,8 @@ describe("in the default configuration", () => {
 		${"squash the bugs"}                                                               | ${["squash the bugs"]}
 		${"Squash tennis and pumpkins"}                                                    | ${["Squash tennis and pumpkins"]}
 		${"!!!amend!!!this"}                                                               | ${["!!!amend!!!this"]}
+		${"Done!"}                                                                         | ${["Done!"]}
+		${"let's go!!"}                                                                    | ${["let's go!!"]}
 		${"amend!"}                                                                        | ${[squashMarker("amend!")]}
 		${" amend!Apply strawberry jam to make the code sweeter"}                          | ${[squashMarker(" amend!"), "Apply strawberry jam to make the code sweeter"]}
 		${" fixup!  "}                                                                     | ${[squashMarker(" fixup!  ")]}
