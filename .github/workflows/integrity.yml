@@ -138,8 +138,6 @@ jobs:
       # To check out the repository.
       # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
       contents: read
-    env:
-      TEST_REPORT_PATH: node_modules/.cache/vitest/report.xml
     steps:
       - name: Check out the repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -159,9 +157,4 @@ jobs:
           cache-key: test:${{ hashFiles('src/**/*', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json', 'vite.config.ts') }}
           cache-path: node_modules/.cache/vitest/
           # language=sh
-          task: test --reporter=default --reporter=junit --outputFile.junit="$TEST_REPORT_PATH"
-        #
-      - name: Add a test report to the job summary
-        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2.4
-        with:
-          paths: ${{ env.TEST_REPORT_PATH }}
+          task: test --reporter default --reporter github-actions
