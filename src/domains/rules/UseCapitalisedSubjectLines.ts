@@ -28,7 +28,7 @@ function verifyCommit(commit: Commit): Concern | null {
 				return subjectLineConcern({
 					rule,
 					commit: commit.sha,
-					columns: [startIndex, startIndex + 1],
+					range: [startIndex, startIndex + 1],
 				})
 			}
 

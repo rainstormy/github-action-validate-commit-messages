@@ -6,7 +6,7 @@ export type AuthorNameConcern = {
 	location: "author-name"
 	rule: RuleKey
 	commit: CommitSha
-	columns: CharacterRange
+	range: CharacterRange
 }
 
 export function authorNameConcern(props: Omit<AuthorNameConcern, "location">): AuthorNameConcern {

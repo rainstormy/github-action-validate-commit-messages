@@ -24,7 +24,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1",
 	const concern = subjectLineConcern({
 		rule: "useCapitalisedSubjectLines",
 		commit: commit.sha,
-		columns: [0, 1],
+		range: [0, 1],
 	})
 
 	it("describes the rule violation in the subject line", () => {
@@ -48,7 +48,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8",
 	const concern = subjectLineConcern({
 		rule: "useCapitalisedSubjectLines",
 		commit: commit.sha,
-		columns: [7, 8],
+		range: [7, 8],
 	})
 
 	it("describes the rule violation in the subject line", () => {

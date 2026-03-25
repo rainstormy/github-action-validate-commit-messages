@@ -12,7 +12,7 @@ export function commitwiseReport(commits: Commits, concerns: Concerns): string {
 const SHORT_SHA_LENGTH = 7
 
 function formatConcern(commits: Commits, concern: Concern): string {
-	const [startIndex] = concern.columns
+	const [startIndex] = concern.range
 	const messageOffset = SHORT_SHA_LENGTH + " ".length + startIndex
 
 	const message = `┬\n╰─ ${formatRule(concern.rule)}\n   (${concern.rule})`

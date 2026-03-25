@@ -7,7 +7,7 @@ export type BodyLineConcern = {
 	rule: RuleKey
 	commit: CommitSha
 	line: number
-	columns: CharacterRange
+	range: CharacterRange
 }
 
 export function bodyLineConcern(props: Omit<BodyLineConcern, "location">): BodyLineConcern {

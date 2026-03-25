@@ -6,7 +6,7 @@ export type AuthorEmailAddressConcern = {
 	location: "author-email-address"
 	rule: RuleKey
 	commit: CommitSha
-	columns: CharacterRange
+	range: CharacterRange
 }
 
 export function authorEmailAddressConcern(

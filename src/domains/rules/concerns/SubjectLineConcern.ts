@@ -6,7 +6,7 @@ export type SubjectLineConcern = {
 	location: "subject-line"
 	rule: RuleKey
 	commit: CommitSha
-	columns: CharacterRange
+	range: CharacterRange
 }
 
 export function subjectLineConcern(

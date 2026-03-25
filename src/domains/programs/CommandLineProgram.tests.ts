@@ -39,7 +39,7 @@ describe("the help text", () => {
 		expect(getHelpText()).toBe("Usage: comet [options]")
 	})
 
-	it("fits within 80 columns", () => {
+	it("fits within a window of 80 characters", () => {
 		const lines = getHelpText().split("\n")
 
 		for (const line of lines) {

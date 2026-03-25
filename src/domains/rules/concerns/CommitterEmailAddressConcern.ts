@@ -6,7 +6,7 @@ export type CommitterEmailAddressConcern = {
 	location: "committer-email-address"
 	rule: RuleKey
 	commit: CommitSha
-	columns: CharacterRange
+	range: CharacterRange
 }
 
 export function committerEmailAddressConcern(
