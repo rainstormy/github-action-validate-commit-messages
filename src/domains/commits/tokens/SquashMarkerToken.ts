@@ -1,4 +1,4 @@
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import type { Token, TokenisedLine } from "#commits/tokens/Token.ts"
 
 export type SquashMarkerToken = {
 	type: "squash-marker"
@@ -7,6 +7,10 @@ export type SquashMarkerToken = {
 
 export function squashMarker(value: string): SquashMarkerToken {
 	return { type: "squash-marker", value }
+}
+
+export function isSquashMarker(token: Token): token is SquashMarkerToken {
+	return typeof token === "object" && token.type === "squash-marker"
 }
 
 const regex = /^\s*(?:amend!+\s*|fixup!+\s*|squash!+\s*|!amend\b\s*|!fixup\b\s*|!squash\b\s*)+/iu
