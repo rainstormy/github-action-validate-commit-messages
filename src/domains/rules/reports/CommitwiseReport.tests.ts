@@ -56,6 +56,46 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8",
 	})
 })
 
+describe("when 'noSquashMarkers' has a concern about characters 0-6", () => {
+	const commit = fakeCommit({
+		sha: "ffebad193fe7d02aa9b19b70ee132a26f14f8caf",
+		message: "amend!Apply strawberry jam to make the code sweeter",
+	})
+	const concern = subjectLineConcern("noSquashMarkers", commit.sha, { range: [0, 6] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+ffebad1 amend!Apply strawberry jam to make the code sweeter
+        ──┬───
+          ╰─ Commits with squash markers must be combined with their ancestors.
+             (noSquashMarkers)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noSquashMarkers' has a concern about characters 1-14", () => {
+	const commit = fakeCommit({
+		sha: "56c750b0811fbcad2b237b2b99fc7d3fc91b926",
+		message: " fixup! fixup! found a funny easter egg",
+	})
+	const concern = subjectLineConcern("noSquashMarkers", commit.sha, { range: [1, 14] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+56c750b  fixup! fixup! found a funny easter egg
+         ──────┬──────
+               ╰─ Commits with squash markers must be combined with their ancestors.
+                  (noSquashMarkers)
+`.trim(),
+		)
+	})
+})
+
 describe.todo("when there are multiple concerns of different types", () => {
 	const commits: Vector<Commit, 3> = [fakeCommit(), fakeCommit(), fakeCommit()]
 	const concerns: Concerns = []

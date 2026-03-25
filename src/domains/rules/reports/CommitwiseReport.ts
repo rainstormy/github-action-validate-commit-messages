@@ -2,6 +2,7 @@ import type { Commit, Commits } from "#commits/Commit.ts"
 import { formatTokenisedLine } from "#commits/tokens/Token.ts"
 import type { RuleKey } from "#configurations/Configuration.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 import { indentString } from "#utilities/Strings.ts"
 
@@ -12,11 +13,7 @@ export function commitwiseReport(commits: Commits, concerns: Concerns): string {
 const SHORT_SHA_LENGTH = 7
 
 function formatConcern(commits: Commits, concern: Concern): string {
-	const [startIndex] = concern.range
-	const messageOffset = SHORT_SHA_LENGTH + " ".length + startIndex
-
-	const message = `┬\n╰─ ${formatRule(concern.rule)}\n   (${concern.rule})`
-	return `${formatCommit(commits, concern)}\n${indentString(message, messageOffset)}`
+	return `${formatCommit(commits, concern)}\n${formatMessage(concern)}`
 }
 
 function formatCommit(commits: Commits, concern: Concern): string {
@@ -30,6 +27,33 @@ function formatCommit(commits: Commits, concern: Concern): string {
 
 function formatSubjectLine(commit: Commit): string {
 	return formatTokenisedLine(commit.subjectLine)
+}
+
+function formatMessage(concern: Concern): string {
+	const [start] = concern.range
+
+	const [rangeMarker, rangeOffset] = formatRangeMarker(concern.range)
+	const message = `${formatRule(concern.rule)}\n ${" ".repeat(rangeOffset)}(${concern.rule})`
+
+	const messageOffset = SHORT_SHA_LENGTH + " ".length + start
+	return indentString(`${rangeMarker} ${message}`, messageOffset)
+}
+
+function formatRangeMarker(range: CharacterRange): [string, offset: number] {
+	const [start, end] = range
+	const length = end - start
+
+	if (length === 1) {
+		return ["┬\n╰─", 2]
+	}
+
+	const firstHalfLength = Math.trunc((length - "┬".length) / 2)
+	const secondHalfLength = length - firstHalfLength - "┬".length
+
+	return [
+		`${"─".repeat(firstHalfLength)}┬${"─".repeat(secondHalfLength)}\n${indentString("╰─", firstHalfLength)}`,
+		firstHalfLength + 2,
+	]
 }
 
 function formatRule(rule: RuleKey): string {
@@ -53,7 +77,7 @@ function formatRule(rule: RuleKey): string {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "noSquashMarkers": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return "Commits with squash markers must be combined with their ancestors."
 		}
 		case "noUnexpectedPunctuation": {
 			throw new Error(`Not implemented yet: ${rule}`)

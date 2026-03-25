@@ -25,7 +25,9 @@ function verifyCommit(commit: Commit): Concern | null {
 				const leadingWhitespaceOffset = token.length - trimmedToken.length
 				const startIndex = index + leadingWhitespaceOffset
 
-				return subjectLineConcern(rule, commit.sha, { range: [startIndex, startIndex + 1] })
+				return subjectLineConcern(rule, commit.sha, {
+					range: [startIndex, startIndex + 1],
+				})
 			}
 
 			return null
