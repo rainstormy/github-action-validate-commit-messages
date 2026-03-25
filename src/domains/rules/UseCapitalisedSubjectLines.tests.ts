@@ -35,11 +35,7 @@ describe.each`
 			it("raises a concern about the first non-capitalised character", () => {
 				const actualConcerns = useCapitalisedSubjectLines([commit], {})
 				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern({
-						rule,
-						commit: commit.sha,
-						range: props.expectedRange,
-					}),
+					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
 				])
 			})
 		})
@@ -161,9 +157,9 @@ describe("when verifying a set of multiple commits and some commits have non-cap
 		it("raises concerns about the commits with non-capitalised subject lines", () => {
 			const actualConcerns = useCapitalisedSubjectLines(commits, {})
 			expect(actualConcerns).toEqual<Concerns>([
-				subjectLineConcern({ rule, commit: commits[0].sha, range: [0, 1] }),
-				subjectLineConcern({ rule, commit: commits[3].sha, range: [0, 1] }),
-				subjectLineConcern({ rule, commit: commits[5].sha, range: [7, 8] }),
+				subjectLineConcern(rule, commits[0].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[3].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [7, 8] }),
 			])
 		})
 	})

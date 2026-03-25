@@ -21,11 +21,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1",
 		sha: "497de39943643a56f7a69d3d19723e3035318644",
 		message: "release the robot butler",
 	})
-	const concern = subjectLineConcern({
-		rule: "useCapitalisedSubjectLines",
-		commit: commit.sha,
-		range: [0, 1],
-	})
+	const concern = subjectLineConcern("useCapitalisedSubjectLines", commit.sha, { range: [0, 1] })
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([commit], [concern])
@@ -45,11 +41,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8",
 		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
 		message: "fixup! resolve a bug that thought it was a feature",
 	})
-	const concern = subjectLineConcern({
-		rule: "useCapitalisedSubjectLines",
-		commit: commit.sha,
-		range: [7, 8],
-	})
+	const concern = subjectLineConcern("useCapitalisedSubjectLines", commit.sha, { range: [7, 8] })
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([commit], [concern])

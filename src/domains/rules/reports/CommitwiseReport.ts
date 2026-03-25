@@ -21,8 +21,8 @@ function formatConcern(commits: Commits, concern: Concern): string {
 
 function formatCommit(commits: Commits, concern: Concern): string {
 	const commit = requireNotNullish(
-		commits.find(({ sha }) => sha === concern.commit),
-		() => `Concerned commit ${concern.commit} not found`,
+		commits.find(({ sha }) => sha === concern.commitSha),
+		() => `Concerned commit ${concern.commitSha} not found`,
 	)
 
 	return `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatSubjectLine(commit)}`
