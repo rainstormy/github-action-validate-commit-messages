@@ -5,10 +5,14 @@ import type { CommitSha } from "#types/CommitSha.ts"
 export type AuthorNameConcern = {
 	location: "author-name"
 	rule: RuleKey
-	commit: CommitSha
-	columns: CharacterRange
+	commitSha: CommitSha
+	range: CharacterRange
 }
 
-export function authorNameConcern(props: Omit<AuthorNameConcern, "location">): AuthorNameConcern {
-	return { ...props, location: "author-name" }
+export function authorNameConcern(
+	rule: RuleKey,
+	commitSha: CommitSha,
+	props: Pick<AuthorNameConcern, "range">,
+): AuthorNameConcern {
+	return { location: "author-name", rule, commitSha, ...props }
 }

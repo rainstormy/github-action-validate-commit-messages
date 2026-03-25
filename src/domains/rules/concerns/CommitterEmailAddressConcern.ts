@@ -5,12 +5,14 @@ import type { CommitSha } from "#types/CommitSha.ts"
 export type CommitterEmailAddressConcern = {
 	location: "committer-email-address"
 	rule: RuleKey
-	commit: CommitSha
-	columns: CharacterRange
+	commitSha: CommitSha
+	range: CharacterRange
 }
 
 export function committerEmailAddressConcern(
-	props: Omit<CommitterEmailAddressConcern, "location">,
+	rule: RuleKey,
+	commitSha: CommitSha,
+	props: Pick<CommitterEmailAddressConcern, "range">,
 ): CommitterEmailAddressConcern {
-	return { ...props, location: "committer-email-address" }
+	return { location: "committer-email-address", rule, commitSha, ...props }
 }

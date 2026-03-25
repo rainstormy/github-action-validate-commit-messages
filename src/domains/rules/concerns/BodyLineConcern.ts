@@ -5,11 +5,15 @@ import type { CommitSha } from "#types/CommitSha.ts"
 export type BodyLineConcern = {
 	location: "body-line"
 	rule: RuleKey
-	commit: CommitSha
+	commitSha: CommitSha
 	line: number
-	columns: CharacterRange
+	range: CharacterRange
 }
 
-export function bodyLineConcern(props: Omit<BodyLineConcern, "location">): BodyLineConcern {
-	return { ...props, location: "body-line" }
+export function bodyLineConcern(
+	rule: RuleKey,
+	commitSha: CommitSha,
+	props: Pick<BodyLineConcern, "line" | "range">,
+): BodyLineConcern {
+	return { location: "body-line", rule, commitSha, ...props }
 }

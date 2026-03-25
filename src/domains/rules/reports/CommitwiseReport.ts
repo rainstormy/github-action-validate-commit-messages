@@ -12,7 +12,7 @@ export function commitwiseReport(commits: Commits, concerns: Concerns): string {
 const SHORT_SHA_LENGTH = 7
 
 function formatConcern(commits: Commits, concern: Concern): string {
-	const [startIndex] = concern.columns
+	const [startIndex] = concern.range
 	const messageOffset = SHORT_SHA_LENGTH + " ".length + startIndex
 
 	const message = `┬\n╰─ ${formatRule(concern.rule)}\n   (${concern.rule})`
@@ -21,8 +21,8 @@ function formatConcern(commits: Commits, concern: Concern): string {
 
 function formatCommit(commits: Commits, concern: Concern): string {
 	const commit = requireNotNullish(
-		commits.find(({ sha }) => sha === concern.commit),
-		() => `Concerned commit ${concern.commit} not found`,
+		commits.find(({ sha }) => sha === concern.commitSha),
+		() => `Concerned commit ${concern.commitSha} not found`,
 	)
 
 	return `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatSubjectLine(commit)}`
