@@ -32,8 +32,10 @@ function formatSubjectLine(commit: Commit): string {
 function formatMessage(concern: Concern): string {
 	const [start] = concern.range
 
+	const ruleMessage = formatRule(concern.rule)
+
 	const [rangeMarker, rangeOffset] = formatRangeMarker(concern.range)
-	const message = `${formatRule(concern.rule)}\n ${" ".repeat(rangeOffset)}(${concern.rule.key})`
+	const message = `${ruleMessage}\n ${" ".repeat(rangeOffset)}(${concern.rule.key})`
 
 	const messageOffset = SHORT_SHA_LENGTH + " ".length + start
 	return indentString(`${rangeMarker} ${message}`, messageOffset)
@@ -101,7 +103,7 @@ function formatRule(rule: RuleContext): string {
 			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useConciseSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule.key}`)
+			return `Subject lines must not exceed ${rule.options.maxLength} characters.`
 		}
 		case "useEmptyLineBeforeBodyLines": {
 			throw new Error(`Not implemented yet: ${rule.key}`)

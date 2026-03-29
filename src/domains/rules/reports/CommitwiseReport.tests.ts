@@ -151,6 +151,102 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8",
 	})
 })
 
+describe("when 'useConciseSubjectLines' has a concern about characters 20-25", () => {
+	const commit = fakeCommit({
+		sha: "68e921648c4a19e93d72f42a5d39c3eba704e41",
+		message: "Remove redundant call to `wrapper`",
+	})
+	const concern = subjectLineConcern(
+		ruleContext("useConciseSubjectLines", { maxLength: 20 }),
+		commit.sha,
+		{ range: [20, 25] },
+	)
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+68e9216 Remove redundant call to \`wrapper\`
+                            ──┬──
+                              ╰─ Subject lines must not exceed 20 characters.
+                                 (useConciseSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useConciseSubjectLines' has a concern about characters 20-67", () => {
+	const commit = fakeCommit({
+		sha: "9bed522bd48f0aee7574635bb23f5decdc4999",
+		message: "revisit the boolean properties in the `IceCreamMachine` constructor",
+	})
+	const concern = subjectLineConcern(
+		ruleContext("useConciseSubjectLines", { maxLength: 20 }),
+		commit.sha,
+		{ range: [20, 67] },
+	)
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+9bed522 revisit the boolean properties in the \`IceCreamMachine\` constructor
+                            ───────────────────────┬───────────────────────
+                                                   ╰─ Subject lines must not exceed 20 characters.
+                                                      (useConciseSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useConciseSubjectLines' has a concern about characters 50-52", () => {
+	const commit = fakeCommit({
+		sha: "e8c95d69587a51685070837aaf3a8746e3cbba8",
+		message: "Retrieve data from the exclusive third-party service",
+	})
+	const concern = subjectLineConcern(
+		ruleContext("useConciseSubjectLines", { maxLength: 50 }),
+		commit.sha,
+		{ range: [50, 52] },
+	)
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+e8c95d6 Retrieve data from the exclusive third-party service
+                                                          ┬─
+                                                          ╰─ Subject lines must not exceed 50 characters.
+                                                             (useConciseSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useConciseSubjectLines' has a concern about characters 72-76", () => {
+	const commit = fakeCommit({
+		sha: "be86674322213fb408d176589fadbcd44a2df",
+		message: "make a genuine attempt to fix the bugs that the users were complaining about",
+	})
+	const concern = subjectLineConcern(
+		ruleContext("useConciseSubjectLines", { maxLength: 72 }),
+		commit.sha,
+		{ range: [72, 76] },
+	)
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+be86674 make a genuine attempt to fix the bugs that the users were complaining about
+                                                                                ─┬──
+                                                                                 ╰─ Subject lines must not exceed 72 characters.
+                                                                                    (useConciseSubjectLines)
+`.trim(),
+		)
+	})
+})
+
 describe.todo("when there are multiple concerns of different types", () => {
 	const commits: Vector<Commit, 3> = [fakeCommit(), fakeCommit(), fakeCommit()]
 	const concerns: Concerns = []

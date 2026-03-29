@@ -25,7 +25,7 @@ describe("the default configuration in the command-line", () => {
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
-		${"useConciseSubjectLines"}      | ${{}}
+		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
 		${"useImperativeSubjectLines"}   | ${{}}
 		${"useLineWrapping"}             | ${{}}
@@ -78,7 +78,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
-		${"useConciseSubjectLines"}      | ${{}}
+		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
 		${"useImperativeSubjectLines"}   | ${{}}
 		${"useLineWrapping"}             | ${{}}
