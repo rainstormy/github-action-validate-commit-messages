@@ -4,7 +4,6 @@ import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.
 import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
 import type { IssueLinkToken } from "#commits/tokens/IssueLinkToken.ts"
 import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
-import type { TokenConfiguration } from "#configurations/Configuration.ts"
 
 export type Token =
 	| string
@@ -17,13 +16,6 @@ export type Token =
 
 export type TokenisedLine = Array<Token>
 export type TokenisedLines = Array<TokenisedLine>
-
-export type Tokeniser = (
-	initialTokens: TokenisedLine,
-	configuration: TokenConfiguration,
-) => TokenisedLine
-
-export type Tokenisers = Array<Tokeniser>
 
 export function formatTokenisedLine(tokens: TokenisedLine): string {
 	return tokens.map((token) => (typeof token === "string" ? token : token.value)).join("")
