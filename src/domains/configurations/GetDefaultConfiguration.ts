@@ -73,7 +73,7 @@ function getDefaultGhaConfiguration(): Configuration {
 	}
 }
 
-function getDefaultTokenConfiguration(): TokenConfiguration {
+export function getDefaultTokenConfiguration(): TokenConfiguration {
 	return {
 		issueLinkPrefixes: ["#", "GH-", "GL-"],
 	}
