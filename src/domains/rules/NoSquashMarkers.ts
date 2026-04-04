@@ -8,8 +8,8 @@ import { notNullish } from "#utilities/Arrays.ts"
 
 const rule: RuleKey = "noSquashMarkers"
 
-export function noSquashMarkers(commits: Commits, configuration: EmptyObject | null): Concerns {
-	return configuration !== null ? commits.map(verifyCommit).filter(notNullish) : []
+export function noSquashMarkers(commits: Commits, options: EmptyObject | null): Concerns {
+	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
 
 function verifyCommit(commit: Commit): Concern | null {
