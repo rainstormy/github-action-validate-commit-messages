@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest"
-import { fakeCommit } from "#commits/Commit.fixtures.ts"
+import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit, Commits } from "#commits/Commit.ts"
+import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
 import type { Vector } from "#types/Vector.ts"
+
+const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
 describe("when there are no concerns", () => {
 	const commits: Commits = []

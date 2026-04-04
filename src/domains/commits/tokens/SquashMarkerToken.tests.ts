@@ -4,56 +4,81 @@ import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
-import { getDefaultConfiguration } from "#configurations/GetDefaultConfiguration.ts"
+import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 
-describe("in the default configuration", () => {
-	const configuration = getDefaultConfiguration()
+const configuration = fakeConfiguration()
 
-	describe.each`
-		subjectLine                                                                        | expectedTokens
-		${"Make the commit scream fixup! again"}                                           | ${["Make the commit scream fixup! again"]}
-		${"there's no squash! to see here"}                                                | ${["there's no squash! to see here"]}
-		${"wip! Make amend!s"}                                                             | ${["wip! Make amend!s"]}
-		${"!amendrelease"}                                                                 | ${["!amendrelease"]}
-		${"!fixuptest"}                                                                    | ${["!fixuptest"]}
-		${"!squashAdd more numbers to the spreadsheet"}                                    | ${["!squashAdd more numbers to the spreadsheet"]}
-		${"amend the message"}                                                             | ${["amend the message"]}
-		${"fixup"}                                                                         | ${["fixup"]}
-		${"squash the bugs"}                                                               | ${["squash the bugs"]}
-		${"Squash tennis and pumpkins"}                                                    | ${["Squash tennis and pumpkins"]}
-		${"!!!amend!!!this"}                                                               | ${["!!!amend!!!this"]}
-		${"Done!"}                                                                         | ${["Done!"]}
-		${"let's go!!"}                                                                    | ${["let's go!!"]}
-		${"amend!"}                                                                        | ${[squashMarker("amend!")]}
-		${" amend!Apply strawberry jam to make the code sweeter"}                          | ${[squashMarker(" amend!"), "Apply strawberry jam to make the code sweeter"]}
-		${" fixup!  "}                                                                     | ${[squashMarker(" fixup!  ")]}
-		${"fixup! Resolve a bug that thought it was a feature"}                            | ${[squashMarker("fixup! "), "Resolve a bug that thought it was a feature"]}
-		${"squash!   "}                                                                    | ${[squashMarker("squash!   ")]}
-		${" squash!  Make the formatter happy again :)"}                                   | ${[squashMarker(" squash!  "), "Make the formatter happy again :)"]}
-		${"!amend"}                                                                        | ${[squashMarker("!amend")]}
-		${"!amend some refactoring"}                                                       | ${[squashMarker("!amend "), "some refactoring"]}
-		${"  !fixup "}                                                                     | ${[squashMarker("  !fixup ")]}
-		${" !fixup   Compare the list of items to the objects downloaded from the server"} | ${[squashMarker(" !fixup   "), "Compare the list of items to the objects downloaded from the server"]}
-		${"!squash "}                                                                      | ${[squashMarker("!squash ")]}
-		${"  !squash revisited the haircut of the main module"}                            | ${[squashMarker("  !squash "), "revisited the haircut of the main module"]}
-		${" amend!solve the problem!"}                                                     | ${[squashMarker(" amend!"), "solve the problem!"]}
-		${"fixup! - encourages the program to act like a clown"}                           | ${[squashMarker("fixup! "), "- encourages the program to act like a clown"]}
-		${"fixup! Fixup!! Fix this confusing plate of spaghetti"}                          | ${[squashMarker("fixup! Fixup!! "), "Fix this confusing plate of spaghetti"]}
-		${" amend!squash!!   fixup!!amend Mess up the squash! markers"}                    | ${[squashMarker(" amend!squash!!   fixup!!"), "amend Mess up the squash! markers"]}
-		${"!amend!fixup!SQUASH fixup! Every bus optimised"}                                | ${[squashMarker("!amend!fixup!SQUASH fixup! "), "Every bus optimised"]}
-		${"#1 fixup! Apply some magic"}                                                    | ${[issueLink("#1 "), "fixup! Apply some magic"]}
-		${"!squash#6 !fixup! carry on then #11"}                                           | ${[squashMarker("!squash"), issueLink("#6 "), "!fixup! carry on then", issueLink(" #11")]}
-	`(
-		"when the commit message has a subject line of $subjectLine",
-		(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
-			const crudeCommit = fakeCrudeCommit({
-				message: `${props.subjectLine}\nbody text`,
-			})
+describe.each`
+	subjectLine                                                                        | expectedTokens
+	${"amend!"}                                                                        | ${[squashMarker("amend!")]}
+	${" amend!Apply strawberry jam to make the code sweeter"}                          | ${[squashMarker(" amend!"), "Apply strawberry jam to make the code sweeter"]}
+	${" fixup!  "}                                                                     | ${[squashMarker(" fixup!  ")]}
+	${"fixup! Resolve a bug that thought it was a feature"}                            | ${[squashMarker("fixup! "), "Resolve a bug that thought it was a feature"]}
+	${"squash!   "}                                                                    | ${[squashMarker("squash!   ")]}
+	${" squash!  Make the formatter happy again :)"}                                   | ${[squashMarker(" squash!  "), "Make the formatter happy again :)"]}
+	${"!amend"}                                                                        | ${[squashMarker("!amend")]}
+	${"!amend some refactoring"}                                                       | ${[squashMarker("!amend "), "some refactoring"]}
+	${"  !fixup "}                                                                     | ${[squashMarker("  !fixup ")]}
+	${" !fixup   Compare the list of items to the objects downloaded from the server"} | ${[squashMarker(" !fixup   "), "Compare the list of items to the objects downloaded from the server"]}
+	${"!squash "}                                                                      | ${[squashMarker("!squash ")]}
+	${"  !squash revisited the haircut of the main module"}                            | ${[squashMarker("  !squash "), "revisited the haircut of the main module"]}
+	${" amend!solve the problem!"}                                                     | ${[squashMarker(" amend!"), "solve the problem!"]}
+	${"fixup! - encourages the program to act like a clown"}                           | ${[squashMarker("fixup! "), "- encourages the program to act like a clown"]}
+	${"fixup! Fixup!! Fix this confusing plate of spaghetti"}                          | ${[squashMarker("fixup! Fixup!! "), "Fix this confusing plate of spaghetti"]}
+	${" amend!squash!!   fixup!!amend Mess up the squash! markers"}                    | ${[squashMarker(" amend!squash!!   fixup!!"), "amend Mess up the squash! markers"]}
+	${"!amend!fixup!SQUASH fixup! Every bus optimised"}                                | ${[squashMarker("!amend!fixup!SQUASH fixup! "), "Every bus optimised"]}
+	${"!squash#6 !fixup! carry on then #11"}                                           | ${[squashMarker("!squash"), issueLink("#6 "), "!fixup! carry on then", issueLink(" #11")]}
+`(
+	"when the subject line of $subjectLine contains squash markers",
+	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-			it("has a tokenised subject line", () => {
-				const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-				expect(commit.subjectLine).toEqual(props.expectedTokens)
-			})
-		},
-	)
-})
+		it("extracts squash marker tokens", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                    | expectedTokens
+	${"#1 fixup! Apply some magic"}                                | ${[issueLink("#1 "), "fixup! Apply some magic"]}
+	${"GH-45 GL-193 squash! amend! redo the artistic performance"} | ${[issueLink("GH-45 "), issueLink("GL-193 "), "squash! amend! redo the artistic performance"]}
+`(
+	"when the subject line of $subjectLine has issue links before potential squash markers",
+	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("does not extract any squash marker tokens", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
+		})
+	},
+)
+
+describe.each`
+	subjectLine
+	${"Make the commit scream fixup! again"}
+	${"there's no squash! to see here"}
+	${"wip! Make amend!s"}
+	${"!amendrelease"}
+	${"!fixuptest"}
+	${"!squashAdd more numbers to the spreadsheet"}
+	${"amend the message"}
+	${"fixup"}
+	${"squash the bugs"}
+	${"Squash tennis and pumpkins"}
+	${"!!!amend!!!this"}
+	${"Done!"}
+	${"let's go!!"}
+`(
+	"when the subject line of $subjectLine does not contain any squash markers",
+	(props: { subjectLine: string }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("leaves the subject line unchanged", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual([props.subjectLine])
+		})
+	},
+)

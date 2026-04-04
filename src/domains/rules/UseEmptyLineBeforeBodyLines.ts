@@ -4,7 +4,7 @@ import type { EmptyObject } from "#types/EmptyObject.ts"
 
 export function useEmptyLineBeforeBodyLines(
 	_commits: Commits,
-	_configuration: EmptyObject | null,
+	_options: EmptyObject | null,
 ): Concerns {
 	throw new Error("The `useEmptyLineBeforeBodyLines` rule has not been implemented yet") // TODO: To be implemented.
 }

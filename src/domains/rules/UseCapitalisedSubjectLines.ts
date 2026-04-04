@@ -9,9 +9,9 @@ const rule: RuleKey = "useCapitalisedSubjectLines"
 
 export function useCapitalisedSubjectLines(
 	commits: Commits,
-	configuration: EmptyObject | null,
+	options: EmptyObject | null,
 ): Concerns {
-	return configuration !== null ? commits.map(verifyCommit).filter(notNullish) : []
+	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
 
 function verifyCommit(commit: Commit): Concern | null {

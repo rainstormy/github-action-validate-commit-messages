@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { fakeCommit } from "#commits/Commit.fixtures.ts"
+import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
+import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { RuleKey, RuleOptionsOf } from "#configurations/Configuration.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -12,6 +13,8 @@ const rule: RuleKey = "noSquashMarkers"
 
 const enabled: RuleOptionsOf<typeof noSquashMarkers> = {}
 const disabled: RuleOptionsOf<typeof noSquashMarkers> = null
+
+const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
 describe.each`
 	subjectLine                                             | expectedRange
