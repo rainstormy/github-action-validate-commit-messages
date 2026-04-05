@@ -21,45 +21,45 @@ describe("when there are no concerns", () => {
 	})
 })
 
-describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1", () => {
+describe("when 'noRevertRevertCommits' has a concern about characters 0-16", () => {
 	const commit = fakeCommit({
-		sha: "497de39943643a56f7a69d3d19723e3035318644",
-		message: "release the robot butler",
+		sha: "d4e7a978cea34b727ea52f90c928fd535e4aee",
+		message: 'Revert "Revert "Make the program act like a clown""',
 	})
-	const concern = subjectLineConcern(inRule("useCapitalisedSubjectLines"), commit.sha, {
-		range: [0, 1],
+	const concern = subjectLineConcern(inRule("noRevertRevertCommits"), commit.sha, {
+		range: [0, 16],
 	})
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([commit], [concern])
 		expect(actualOutput).toBe(
 			`
-497de39 release the robot butler
-        ┬
-        ╰─ The first letter in subject lines must be in uppercase.
-           (useCapitalisedSubjectLines)
+d4e7a97 Revert "Revert "Make the program act like a clown""
+        ───────┬────────
+               ╰─ Cherry-pick the original commit instead of reverting it over.
+                  (noRevertRevertCommits)
 `.trim(),
 		)
 	})
 })
 
-describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8", () => {
+describe("when 'noRevertRevertCommits' has a concern about characters 1-26", () => {
 	const commit = fakeCommit({
-		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
-		message: "fixup! resolve a bug that thought it was a feature",
+		sha: "34aa41b818c40682cabeecd5623dfe51df7a4a5",
+		message: ' revert "revert  "revert "repair the soft ice machine """',
 	})
-	const concern = subjectLineConcern(inRule("useCapitalisedSubjectLines"), commit.sha, {
-		range: [7, 8],
+	const concern = subjectLineConcern(inRule("noRevertRevertCommits"), commit.sha, {
+		range: [1, 26],
 	})
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([commit], [concern])
 		expect(actualOutput).toBe(
 			`
-92d6b11 fixup! resolve a bug that thought it was a feature
-               ┬
-               ╰─ The first letter in subject lines must be in uppercase.
-                  (useCapitalisedSubjectLines)
+34aa41b  revert "revert  "revert "repair the soft ice machine """
+         ────────────┬────────────
+                     ╰─ Cherry-pick the original commit instead of reverting it over.
+                        (noRevertRevertCommits)
 `.trim(),
 		)
 	})
@@ -100,6 +100,50 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14", () => {
          ──────┬──────
                ╰─ Commits with squash markers must be combined with their ancestors.
                   (noSquashMarkers)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1", () => {
+	const commit = fakeCommit({
+		sha: "497de39943643a56f7a69d3d19723e3035318644",
+		message: "release the robot butler",
+	})
+	const concern = subjectLineConcern(inRule("useCapitalisedSubjectLines"), commit.sha, {
+		range: [0, 1],
+	})
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+497de39 release the robot butler
+        ┬
+        ╰─ The first letter in subject lines must be in uppercase.
+           (useCapitalisedSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8", () => {
+	const commit = fakeCommit({
+		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
+		message: "fixup! resolve a bug that thought it was a feature",
+	})
+	const concern = subjectLineConcern(inRule("useCapitalisedSubjectLines"), commit.sha, {
+		range: [7, 8],
+	})
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+92d6b11 fixup! resolve a bug that thought it was a feature
+               ┬
+               ╰─ The first letter in subject lines must be in uppercase.
+                  (useCapitalisedSubjectLines)
 `.trim(),
 		)
 	})

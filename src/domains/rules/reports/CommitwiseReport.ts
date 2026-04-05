@@ -71,7 +71,7 @@ function formatRule(rule: RuleContext): string {
 			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noRevertRevertCommits": {
-			throw new Error(`Not implemented yet: ${rule.key}`)
+			return "Cherry-pick the original commit instead of reverting it over."
 		}
 		case "noSingleWordSubjectLines": {
 			throw new Error(`Not implemented yet: ${rule.key}`)
