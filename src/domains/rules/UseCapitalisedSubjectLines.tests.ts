@@ -2,17 +2,15 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
-import type { RuleKey, RuleOptionsOf } from "#configurations/Configuration.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import { ruleContext } from "#rules/Rule.ts"
 import { useCapitalisedSubjectLines } from "#rules/UseCapitalisedSubjectLines.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule: RuleKey = "useCapitalisedSubjectLines"
-
-const enabled: RuleOptionsOf<typeof useCapitalisedSubjectLines> = {}
-const disabled: RuleOptionsOf<typeof useCapitalisedSubjectLines> = null
+const enabled = ruleContext("useCapitalisedSubjectLines", {})
+const disabled = ruleContext("useCapitalisedSubjectLines", null)
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
@@ -39,16 +37,16 @@ describe.each`
 
 		describe("and the rule is enabled", () => {
 			it("raises a concern about the first non-capitalised character", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], enabled)
+				const actualConcerns = useCapitalisedSubjectLines([commit], enabled.options)
 				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
+					subjectLineConcern(enabled, commit.sha, { range: props.expectedRange }),
 				])
 			})
 		})
 
 		describe("and the rule is disabled", () => {
 			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], disabled)
+				const actualConcerns = useCapitalisedSubjectLines([commit], disabled.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -78,14 +76,14 @@ describe.each`
 
 		describe("and the rule is enabled", () => {
 			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], enabled)
+				const actualConcerns = useCapitalisedSubjectLines([commit], enabled.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
 
 		describe("and the rule is disabled", () => {
 			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], disabled)
+				const actualConcerns = useCapitalisedSubjectLines([commit], disabled.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -107,14 +105,14 @@ describe.each`
 
 		describe("and the rule is enabled", () => {
 			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], enabled)
+				const actualConcerns = useCapitalisedSubjectLines([commit], enabled.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
 
 		describe("and the rule is disabled", () => {
 			it("does not raise any concerns", () => {
-				const actualConcerns = useCapitalisedSubjectLines([commit], disabled)
+				const actualConcerns = useCapitalisedSubjectLines([commit], disabled.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -133,14 +131,14 @@ describe.each`
 
 	describe("and the rule is enabled", () => {
 		it("does not raise any concerns", () => {
-			const actualConcerns = useCapitalisedSubjectLines([commit], enabled)
+			const actualConcerns = useCapitalisedSubjectLines([commit], enabled.options)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})
 
 	describe("and the rule is disabled", () => {
 		it("does not raise any concerns", () => {
-			const actualConcerns = useCapitalisedSubjectLines([commit], disabled)
+			const actualConcerns = useCapitalisedSubjectLines([commit], disabled.options)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})
@@ -161,18 +159,18 @@ describe("when verifying a set of multiple commits and some commits have non-cap
 
 	describe("and the rule is enabled", () => {
 		it("raises concerns about the commits with non-capitalised subject lines", () => {
-			const actualConcerns = useCapitalisedSubjectLines(commits, enabled)
+			const actualConcerns = useCapitalisedSubjectLines(commits, enabled.options)
 			expect(actualConcerns).toEqual<Concerns>([
-				subjectLineConcern(rule, commits[0].sha, { range: [0, 1] }),
-				subjectLineConcern(rule, commits[3].sha, { range: [0, 1] }),
-				subjectLineConcern(rule, commits[5].sha, { range: [7, 8] }),
+				subjectLineConcern(enabled, commits[0].sha, { range: [0, 1] }),
+				subjectLineConcern(enabled, commits[3].sha, { range: [0, 1] }),
+				subjectLineConcern(enabled, commits[5].sha, { range: [7, 8] }),
 			])
 		})
 	})
 
 	describe("and the rule is disabled", () => {
 		it("does not raise any concerns", () => {
-			const actualConcerns = useCapitalisedSubjectLines(commits, disabled)
+			const actualConcerns = useCapitalisedSubjectLines(commits, disabled.options)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})
@@ -188,14 +186,14 @@ describe("when verifying a set of multiple commits and all commits have capitali
 
 	describe("and the rule is enabled", () => {
 		it("does not raise any concerns", () => {
-			const actualConcerns = useCapitalisedSubjectLines(commits, enabled)
+			const actualConcerns = useCapitalisedSubjectLines(commits, enabled.options)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})
 
 	describe("and the rule is disabled", () => {
 		it("does not raise any concerns", () => {
-			const actualConcerns = useCapitalisedSubjectLines(commits, disabled)
+			const actualConcerns = useCapitalisedSubjectLines(commits, disabled.options)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})

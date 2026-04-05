@@ -3,7 +3,7 @@ import { type MockInstance, beforeEach, describe, expect, it, vi } from "vitest"
 import { printError } from "#utilities/logging/Logger.ts"
 
 // Undo the automatic use of `mockLogger` in `VitestSetup.mocks.ts`.
-vi.unmock("#utilities/logging/Logger.ts")
+vi.unmock(import("#utilities/logging/Logger.ts"))
 
 describe.each`
 	errorMessage                                                                                  | expectedErrorMessage
