@@ -1,4 +1,5 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
+import { tokeniseDependencyVersions } from "#commits/tokens/DependencyVersionToken.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
 import type { TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
@@ -44,5 +45,7 @@ function tokeniseSubjectLine(
 	crudeSubjectLine: string,
 	tokenConfiguration: TokenConfiguration,
 ): TokenisedLine {
-	return tokeniseIssueLinks(tokeniseSquashMarkers([crudeSubjectLine]), tokenConfiguration)
+	return tokeniseDependencyVersions(
+		tokeniseIssueLinks(tokeniseSquashMarkers([crudeSubjectLine]), tokenConfiguration),
+	)
 }
