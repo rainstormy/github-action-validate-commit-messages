@@ -1,7 +1,7 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { formatTokenisedLine } from "#commits/tokens/Token.ts"
-import type { RuleKey } from "#configurations/Configuration.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { RuleContext } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 import { indentString } from "#utilities/Strings.ts"
@@ -33,7 +33,7 @@ function formatMessage(concern: Concern): string {
 	const [start] = concern.range
 
 	const [rangeMarker, rangeOffset] = formatRangeMarker(concern.range)
-	const message = `${formatRule(concern.rule)}\n ${" ".repeat(rangeOffset)}(${concern.rule})`
+	const message = `${formatRule(concern.rule)}\n ${" ".repeat(rangeOffset)}(${concern.rule.key})`
 
 	const messageOffset = SHORT_SHA_LENGTH + " ".length + start
 	return indentString(`${rangeMarker} ${message}`, messageOffset)
@@ -56,67 +56,67 @@ function formatRangeMarker(range: CharacterRange): [string, offset: number] {
 	]
 }
 
-function formatRule(rule: RuleKey): string {
-	switch (rule) {
+function formatRule(rule: RuleContext): string {
+	switch (rule.key) {
 		case "noExcessiveCommitsPerBranch": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noMergeCommits": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noRepeatedSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noRestrictedFooterLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noRevertRevertCommits": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noSingleWordSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noSquashMarkers": {
 			return "Commits with squash markers must be combined with their ancestors."
 		}
 		case "noUnexpectedPunctuation": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noUnexpectedWhitespace": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useAuthorEmailPatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useAuthorNamePatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useCapitalisedSubjectLines": {
 			return "The first letter in subject lines must be in uppercase."
 		}
 		case "useCommitterEmailPatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useCommitterNamePatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useConciseSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useEmptyLineBeforeBodyLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useImperativeSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useIssueLinks": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useLineWrapping": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "useSignedCommits": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 	}
 }
