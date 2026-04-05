@@ -23,8 +23,8 @@ export function isDependencyVersion(token: Token): token is DependencyVersionTok
  *
  * @see https://semver.org
  */
-const dependencyVersionRegex =
-	/(?<=\s)([0-9a-f]{7,}|v?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)(?=\s|$)/gu
+const regex =
+	/(?<=\s)([0-9a-f]{7,}|v?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)(?=\s|"|$)/gu
 
 export function tokeniseDependencyVersions(initialTokens: TokenisedLine): TokenisedLine {
 	const result: TokenisedLine = []
@@ -33,7 +33,7 @@ export function tokeniseDependencyVersions(initialTokens: TokenisedLine): Tokeni
 		if (typeof token === "string") {
 			result.push(
 				...token
-					.split(dependencyVersionRegex)
+					.split(regex)
 					// `split()` with a regex preserves the string delimiter (i.e. the substrings that match the regex).
 					// Every other item in the array is a match.
 					.map((part, index) => (index % 2 === 1 ? dependencyVersion(part) : part)),

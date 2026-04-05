@@ -3,6 +3,7 @@ import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { dependencyVersion } from "#commits/tokens/DependencyVersionToken.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
+import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
@@ -21,6 +22,7 @@ describe.each`
 	${"Release v0.1.0-next"}                                         | ${["Release ", dependencyVersion("v0.1.0-next")]}
 	${"Pin the Node.js image to 4af617c"}                            | ${["Pin the Node.js image to ", dependencyVersion("4af617c")]}
 	${"Upgrade nginx image digest to 9d739ff1ada6"}                  | ${["Upgrade nginx image digest to ", dependencyVersion("9d739ff1ada6")]}
+	${'Revert "Upgrade nginx image digest to 9d739ff1ada6"'}         | ${[revertMarker('Revert "'), "Upgrade nginx image digest to ", dependencyVersion("9d739ff1ada6"), '"']}
 	${"#2: Refresh master to commit dfbc095"}                        | ${[issueLink("#2: "), "Refresh master to commit ", dependencyVersion("dfbc095")]}
 	${"fixup! Bump @typescript-eslint/parser from 5.52.0 to 5.59.1"} | ${[squashMarker("fixup! "), "Bump @typescript-eslint/parser from ", dependencyVersion("5.52.0"), " to ", dependencyVersion("5.59.1")]}
 	${"amend! Upgrade React to 19.2.0 (#52)"}                        | ${[squashMarker("amend! "), "Upgrade React to ", dependencyVersion("19.2.0"), issueLink(" (#52)")]}

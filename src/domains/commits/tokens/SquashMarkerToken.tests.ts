@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
+import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
@@ -44,8 +45,9 @@ describe.each`
 	subjectLine                                                    | expectedTokens
 	${"#1 fixup! Apply some magic"}                                | ${[issueLink("#1 "), "fixup! Apply some magic"]}
 	${"GH-45 GL-193 squash! amend! redo the artistic performance"} | ${[issueLink("GH-45 "), issueLink("GL-193 "), "squash! amend! redo the artistic performance"]}
+	${'Revert "fixup! Apply some magic"'}                          | ${[revertMarker('Revert "'), 'fixup! Apply some magic"']}
 `(
-	"when the subject line of $subjectLine has issue links before potential squash markers",
+	"when the subject line of $subjectLine has other tokens before potential squash markers",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
