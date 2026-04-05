@@ -13,7 +13,8 @@ export function isRevertMarker(token: Token): token is RevertMarkerToken {
 	return typeof token === "object" && token.type === "revert-marker"
 }
 
-const regex = /^\s*(?:revert\s+")+(?=[^"])/iu
+// Assume all revert markers to contain a double quote `"` followed by a non-quote character (quote pair consistency not enforced for simplicity).
+const regex = /^(?:\s*revert\s+")+(?=[^"])/iu
 
 export function tokeniseRevertMarkers(initialTokens: TokenisedLine): TokenisedLine {
 	const result: TokenisedLine = []

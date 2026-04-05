@@ -18,12 +18,32 @@ describe.each`
 	${'revert "Fix a nasty bug"'}                                    | ${[revertMarker('revert "'), 'Fix a nasty bug"']}
 	${'REVERT "Refactor the authentication module"'}                 | ${[revertMarker('REVERT "'), 'Refactor the authentication module"']}
 	${' Revert " Apply strawberry jam to make the code sweeter" '}   | ${[revertMarker(' Revert "'), ' Apply strawberry jam to make the code sweeter" ']}
+	${'  revert " revert "Find a new court jester to blame " " '}    | ${[revertMarker('  revert " revert "'), 'Find a new court jester to blame " " ']}
 	${'Revert  "Make the program act like a clown"'}                 | ${[revertMarker('Revert  "'), 'Make the program act like a clown"']}
 	${'Revert "Upgrade React to 19.2.0 (#42)"'}                      | ${[revertMarker('Revert "'), "Upgrade React to ", dependencyVersion("19.2.0"), issueLink(" (#42)"), '"']}
 	${'fixup! Revert "Add an amazing feature"'}                      | ${[squashMarker("fixup! "), revertMarker('Revert "'), 'Add an amazing feature"']}
 	${'squash!Revert "Revert "Refactor the authentication module""'} | ${[squashMarker("squash!"), revertMarker('Revert "Revert "'), 'Refactor the authentication module""']}
 `(
 	"when the subject line of $subjectLine contains revert markers",
+	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("extracts revert marker tokens", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                 | expectedTokens
+	${'Revert "Repair the soft ice machine'}                    | ${[revertMarker('Revert "'), "Repair the soft ice machine"]}
+	${'Revert "Revert "Repair the soft ice machine"'}           | ${[revertMarker('Revert "Revert "'), 'Repair the soft ice machine"']}
+	${'Revert "Revert "Revert "Repair the soft ice machine'}    | ${[revertMarker('Revert "Revert "Revert "'), "Repair the soft ice machine"]}
+	${'  revert " revert "Find a new court jester to blame " '} | ${[revertMarker('  revert " revert "'), 'Find a new court jester to blame " ']}
+	${'fixup! Revert "Add an amazing feature'}                  | ${[squashMarker("fixup! "), revertMarker('Revert "'), "Add an amazing feature"]}
+`(
+	"when the subject line of $subjectLine contains revert markers with inconsistent pairs of quotes",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
@@ -58,8 +78,9 @@ describe.each`
 	${'Revert "'}
 	${'Revert ""'}
 	${"Revert 'the next big thing'"}
-	${"Revert some more stuff"}
-	${"Reverted the secret stuff"}
+	${'revert more stuff"'}
+	${"Reverted some secret stuff"}
+	${'Revert ""weirdly quoted message'}
 	${'"Revert "Make the formatter happy again""'}
 	${'Revert"without-space"'}
 	${'fix: Revert "something"'}
