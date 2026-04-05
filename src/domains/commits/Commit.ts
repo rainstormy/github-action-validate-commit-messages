@@ -1,6 +1,7 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { tokeniseDependencyVersions } from "#commits/tokens/DependencyVersionToken.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
+import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
 import type { TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
 import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
@@ -46,6 +47,9 @@ function tokeniseSubjectLine(
 	tokenConfiguration: TokenConfiguration,
 ): TokenisedLine {
 	return tokeniseDependencyVersions(
-		tokeniseIssueLinks(tokeniseSquashMarkers([crudeSubjectLine]), tokenConfiguration),
+		tokeniseIssueLinks(
+			tokeniseRevertMarkers(tokeniseSquashMarkers([crudeSubjectLine])),
+			tokenConfiguration,
+		),
 	)
 }
