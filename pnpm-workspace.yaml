@@ -56,6 +56,8 @@ minimumReleaseAgeExclude:
   - '@oxlint/binding-win32-arm64-msvc@1.55.0'
   - '@oxlint/binding-win32-ia32-msvc@1.55.0'
   - '@oxlint/binding-win32-x64-msvc@1.55.0'
+  # Renovate security update: vite@8.0.5
+  - vite@8.0.5
 
 # Pin packages to exact versions to ensure that all developers use the same versions.
 savePrefix: ''
