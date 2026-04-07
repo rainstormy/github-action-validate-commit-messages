@@ -9,8 +9,7 @@ import { ruleContext } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const enabled = ruleContext("noRevertRevertCommits", {})
-const disabled = ruleContext("noRevertRevertCommits", null)
+const enabled = ruleContext("noRevertRevertCommits")
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
@@ -38,7 +37,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], disabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -70,7 +69,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], disabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -97,7 +96,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], disabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -139,7 +138,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], disabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -174,7 +173,7 @@ describe("when verifying a set of multiple commits and some commits have revert 
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRevertRevertCommits(commits, disabled.options)
+		const actualConcerns = noRevertRevertCommits(commits, null)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -201,7 +200,7 @@ describe("when verifying a set of multiple commits and no commits have revert ma
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRevertRevertCommits(commits, disabled.options)
+		const actualConcerns = noRevertRevertCommits(commits, null)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
