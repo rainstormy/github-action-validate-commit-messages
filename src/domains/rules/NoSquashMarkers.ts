@@ -7,11 +7,12 @@ import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
 export function noSquashMarkers(commits: Commits, options: EmptyObject | null): Concerns {
-	const rule = ruleContext("noSquashMarkers", options)
+	if (options === null) {
+		return []
+	}
 
-	return options !== null
-		? commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
-		: []
+	const rule = ruleContext("noSquashMarkers")
+	return commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
 }
 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {

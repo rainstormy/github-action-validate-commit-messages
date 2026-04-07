@@ -5,7 +5,7 @@ import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
-import { type RuleContext, type RuleKey, ruleContext } from "#rules/Rule.ts"
+import { ruleContext } from "#rules/Rule.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const configuration = fakeConfiguration()
@@ -26,7 +26,7 @@ describe("when 'noRevertRevertCommits' has a concern about characters 0-16", () 
 		sha: "d4e7a978cea34b727ea52f90c928fd535e4aee",
 		message: 'Revert "Revert "Make the program act like a clown""',
 	})
-	const concern = subjectLineConcern(inRule("noRevertRevertCommits"), commit.sha, {
+	const concern = subjectLineConcern(ruleContext("noRevertRevertCommits"), commit.sha, {
 		range: [0, 16],
 	})
 
@@ -48,7 +48,7 @@ describe("when 'noRevertRevertCommits' has a concern about characters 1-26", () 
 		sha: "34aa41b818c40682cabeecd5623dfe51df7a4a5",
 		message: ' revert "revert  "revert "repair the soft ice machine """',
 	})
-	const concern = subjectLineConcern(inRule("noRevertRevertCommits"), commit.sha, {
+	const concern = subjectLineConcern(ruleContext("noRevertRevertCommits"), commit.sha, {
 		range: [1, 26],
 	})
 
@@ -70,7 +70,7 @@ describe("when 'noSquashMarkers' has a concern about characters 0-6", () => {
 		sha: "ffebad193fe7d02aa9b19b70ee132a26f14f8caf",
 		message: "amend!Apply strawberry jam to make the code sweeter",
 	})
-	const concern = subjectLineConcern(inRule("noSquashMarkers"), commit.sha, { range: [0, 6] })
+	const concern = subjectLineConcern(ruleContext("noSquashMarkers"), commit.sha, { range: [0, 6] })
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([commit], [concern])
@@ -90,7 +90,9 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14", () => {
 		sha: "56c750b0811fbcad2b237b2b99fc7d3fc91b926",
 		message: " fixup! fixup! found a funny easter egg",
 	})
-	const concern = subjectLineConcern(inRule("noSquashMarkers"), commit.sha, { range: [1, 14] })
+	const concern = subjectLineConcern(ruleContext("noSquashMarkers"), commit.sha, {
+		range: [1, 14],
+	})
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([commit], [concern])
@@ -110,7 +112,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1",
 		sha: "497de39943643a56f7a69d3d19723e3035318644",
 		message: "release the robot butler",
 	})
-	const concern = subjectLineConcern(inRule("useCapitalisedSubjectLines"), commit.sha, {
+	const concern = subjectLineConcern(ruleContext("useCapitalisedSubjectLines"), commit.sha, {
 		range: [0, 1],
 	})
 
@@ -132,7 +134,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8",
 		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
 		message: "fixup! resolve a bug that thought it was a feature",
 	})
-	const concern = subjectLineConcern(inRule("useCapitalisedSubjectLines"), commit.sha, {
+	const concern = subjectLineConcern(ruleContext("useCapitalisedSubjectLines"), commit.sha, {
 		range: [7, 8],
 	})
 
@@ -158,7 +160,3 @@ describe.todo("when there are multiple concerns of different types", () => {
 		expect(actualOutput).toBe("TODO")
 	})
 })
-
-function inRule(key: RuleKey): RuleContext {
-	return ruleContext(key, configuration.rules[key])
-}

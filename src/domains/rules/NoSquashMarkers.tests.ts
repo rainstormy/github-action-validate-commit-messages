@@ -9,8 +9,7 @@ import { ruleContext } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const enabled = ruleContext("noSquashMarkers", {})
-const disabled = ruleContext("noSquashMarkers", null)
+const enabled = ruleContext("noSquashMarkers")
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
@@ -44,7 +43,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noSquashMarkers([commit], disabled.options)
+			const actualConcerns = noSquashMarkers([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -74,7 +73,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noSquashMarkers([commit], disabled.options)
+			const actualConcerns = noSquashMarkers([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -122,7 +121,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noSquashMarkers([commit], disabled.options)
+			const actualConcerns = noSquashMarkers([commit], null)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -155,7 +154,7 @@ describe("when verifying a set of multiple commits and some commits have squash 
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noSquashMarkers(commits, disabled.options)
+		const actualConcerns = noSquashMarkers(commits, null)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -181,7 +180,7 @@ describe("when verifying a set of multiple commits and no commits have squash ma
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noSquashMarkers(commits, disabled.options)
+		const actualConcerns = noSquashMarkers(commits, null)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

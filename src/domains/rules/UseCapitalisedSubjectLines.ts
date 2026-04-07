@@ -9,11 +9,12 @@ export function useCapitalisedSubjectLines(
 	commits: Commits,
 	options: EmptyObject | null,
 ): Concerns {
-	const rule = ruleContext("useCapitalisedSubjectLines", options)
+	if (options === null) {
+		return []
+	}
 
-	return options !== null
-		? commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
-		: []
+	const rule = ruleContext("useCapitalisedSubjectLines")
+	return commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
 }
 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
