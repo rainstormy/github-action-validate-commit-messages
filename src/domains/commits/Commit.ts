@@ -1,5 +1,6 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { tokeniseDependencyVersions } from "#commits/tokens/DependencyVersionToken.ts"
+import { tokeniseInlineCodePhrases } from "#commits/tokens/InlineCodeToken.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
@@ -48,7 +49,7 @@ function tokeniseSubjectLine(
 ): TokenisedLine {
 	return tokeniseDependencyVersions(
 		tokeniseIssueLinks(
-			tokeniseRevertMarkers(tokeniseSquashMarkers([crudeSubjectLine])),
+			tokeniseInlineCodePhrases(tokeniseRevertMarkers(tokeniseSquashMarkers([crudeSubjectLine]))),
 			tokenConfiguration,
 		),
 	)
