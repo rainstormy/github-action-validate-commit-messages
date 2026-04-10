@@ -16,8 +16,8 @@ importers:
         specifier: 1.1.0
         version: 1.1.0(typescript@6.0.2)
       '@types/node':
-        specifier: 24.12.0
-        version: 24.12.0
+        specifier: 24.12.2
+        version: 24.12.2
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260301.1
         version: 7.0.0-dev.20260301.1
@@ -41,10 +41,10 @@ importers:
         version: 6.0.2
       vite:
         specifier: 8.0.5
-        version: 8.0.5(@types/node@24.12.0)(esbuild@0.27.2)
+        version: 8.0.5(@types/node@24.12.2)(esbuild@0.27.2)
       vitest:
         specifier: 4.1.0
-        version: 4.1.0(@types/node@24.12.0)(@vitest/ui@4.1.0)(vite@8.0.5(@types/node@24.12.0)(esbuild@0.27.2))
+        version: 4.1.0(@types/node@24.12.2)(@vitest/ui@4.1.0)(vite@8.0.5(@types/node@24.12.2)(esbuild@0.27.2))
 
 packages:
 
@@ -588,8 +588,8 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/node@24.12.0':
-    resolution: {integrity: sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==}
+  '@types/node@24.12.2':
+    resolution: {integrity: sha512-A1sre26ke7HDIuY/M23nd9gfB+nrmhtYyMINbjI1zHJxYteKR6qSMX56FsmjMcDb3SMcjJg5BiRRgOCC/yBD0g==}
 
   '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260301.1':
     resolution: {integrity: sha512-z8Efrjf04XjwX3QsLJARUMNl0/Bhe2z3iBbLI1hPAvqvkRK9C6T0Fywup3rEqBpUXCWsVjOyCxJjmuDA/9vZ5g==}
@@ -1324,7 +1324,7 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/node@24.12.0':
+  '@types/node@24.12.2':
     dependencies:
       undici-types: 7.16.0
 
@@ -1368,13 +1368,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.1.0(vite@8.0.5(@types/node@24.12.0)(esbuild@0.27.2))':
+  '@vitest/mocker@4.1.0(vite@8.0.5(@types/node@24.12.2)(esbuild@0.27.2))':
     dependencies:
       '@vitest/spy': 4.1.0
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.0.5(@types/node@24.12.0)(esbuild@0.27.2)
+      vite: 8.0.5(@types/node@24.12.2)(esbuild@0.27.2)
 
   '@vitest/pretty-format@4.1.0':
     dependencies:
@@ -1403,7 +1403,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vitest: 4.1.0(@types/node@24.12.0)(@vitest/ui@4.1.0)(vite@8.0.5(@types/node@24.12.0)(esbuild@0.27.2))
+      vitest: 4.1.0(@types/node@24.12.2)(@vitest/ui@4.1.0)(vite@8.0.5(@types/node@24.12.2)(esbuild@0.27.2))
 
   '@vitest/utils@4.1.0':
     dependencies:
@@ -1688,7 +1688,7 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.2
 
-  vite@8.0.5(@types/node@24.12.0)(esbuild@0.27.2):
+  vite@8.0.5(@types/node@24.12.2)(esbuild@0.27.2):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -1696,14 +1696,14 @@ snapshots:
       rolldown: 1.0.0-rc.12
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 24.12.0
+      '@types/node': 24.12.2
       esbuild: 0.27.2
       fsevents: 2.3.3
 
-  vitest@4.1.0(@types/node@24.12.0)(@vitest/ui@4.1.0)(vite@8.0.5(@types/node@24.12.0)(esbuild@0.27.2)):
+  vitest@4.1.0(@types/node@24.12.2)(@vitest/ui@4.1.0)(vite@8.0.5(@types/node@24.12.2)(esbuild@0.27.2)):
     dependencies:
       '@vitest/expect': 4.1.0
-      '@vitest/mocker': 4.1.0(vite@8.0.5(@types/node@24.12.0)(esbuild@0.27.2))
+      '@vitest/mocker': 4.1.0(vite@8.0.5(@types/node@24.12.2)(esbuild@0.27.2))
       '@vitest/pretty-format': 4.1.0
       '@vitest/runner': 4.1.0
       '@vitest/snapshot': 4.1.0
@@ -1720,10 +1720,10 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 8.0.5(@types/node@24.12.0)(esbuild@0.27.2)
+      vite: 8.0.5(@types/node@24.12.2)(esbuild@0.27.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.12.0
+      '@types/node': 24.12.2
       '@vitest/ui': 4.1.0(vitest@4.1.0)
     transitivePeerDependencies:
       - msw
