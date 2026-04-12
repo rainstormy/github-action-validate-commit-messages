@@ -6,6 +6,14 @@ import { type RuleContext, ruleContext } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
+/**
+ * Verifies that the subject line starts with an uppercase letter.
+ *
+ * Standardising the commit message format helps to preserve the readability of the commit history.
+ *
+ * It ignores commits that do not start with a letter.
+ * It disregards issue links, inline code phrases, revert markers, and squash markers.
+ */
 export function useCapitalisedSubjectLines(
 	commits: Commits,
 	options: EmptyObject | null,

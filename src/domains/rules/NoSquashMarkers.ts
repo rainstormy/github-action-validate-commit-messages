@@ -6,6 +6,12 @@ import { type RuleContext, ruleContext } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
+/**
+ * Verifies that the subject line does not contain squash markers.
+ *
+ * Combining squash commits with their ancestors makes the commit history cleaner and easier to read,
+ * as it omits unnecessary diffs and increases the cohesion of commits. It also makes it easier to revert changes later.
+ */
 export function noSquashMarkers(commits: Commits, options: EmptyObject | null): Concerns {
 	if (options === null) {
 		return []

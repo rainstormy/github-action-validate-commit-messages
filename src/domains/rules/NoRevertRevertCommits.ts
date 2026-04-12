@@ -7,6 +7,14 @@ import { type RuleContext, ruleContext } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
+/**
+ * Verifies that the subject line contains at most one revert marker.
+ *
+ * Cherry-picking the original commit provides more context, such as the original commit message and authorship.
+ * This helps to preserve the traceability of the commit history.
+ *
+ * It ignores commits with squash markers.
+ */
 export function noRevertRevertCommits(commits: Commits, options: EmptyObject | null): Concerns {
 	if (options === null) {
 		return []

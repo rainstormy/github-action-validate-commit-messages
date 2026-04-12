@@ -65,7 +65,7 @@ function ruleMessage(rule: RuleContext): string {
 			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noSquashMarkers": {
-			return "Commits with squash markers must be combined with their ancestors."
+			return "Combine squash commits with their ancestors."
 		}
 		case "noUnexpectedPunctuation": {
 			throw new Error(`Not implemented yet: ${rule.key}`)

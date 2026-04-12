@@ -78,7 +78,7 @@ describe("when 'noSquashMarkers' has a concern about characters 0-6", () => {
 			`
 ffebad1 amend!Apply strawberry jam to make the code sweeter
         ──┬───
-          ╰─ Commits with squash markers must be combined with their ancestors.
+          ╰─ Combine squash commits with their ancestors.
              (noSquashMarkers)
 `.trim(),
 		)
@@ -100,7 +100,7 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14", () => {
 			`
 56c750b  fixup! fixup! found a funny easter egg
          ──────┬──────
-               ╰─ Commits with squash markers must be combined with their ancestors.
+               ╰─ Combine squash commits with their ancestors.
                   (noSquashMarkers)
 `.trim(),
 		)
