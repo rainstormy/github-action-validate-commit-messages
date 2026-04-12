@@ -31,7 +31,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useCapitalisedSubjectLines: {},
 			useCommitterEmailPatterns: {},
 			useCommitterNamePatterns: {},
-			useConciseSubjectLines: {},
+			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: {},
 			useIssueLinks: {},

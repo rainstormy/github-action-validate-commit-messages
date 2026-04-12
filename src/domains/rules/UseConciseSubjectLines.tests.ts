@@ -1,0 +1,375 @@
+import { describe, expect, it } from "vitest"
+import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
+import type { Commit } from "#commits/Commit.ts"
+import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import type { Concerns } from "#rules/concerns/Concern.ts"
+import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import { type RuleContext, ruleContext } from "#rules/Rule.ts"
+import { useConciseSubjectLines } from "#rules/UseConciseSubjectLines.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
+import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import type { CommitSha } from "#types/CommitSha.ts"
+import type { Vector } from "#types/Vector.ts"
+
+const enabled20 = ruleContext("useConciseSubjectLines", { maxLength: 20 })
+const enabled50 = ruleContext("useConciseSubjectLines", { maxLength: 50 })
+const enabled72 = ruleContext("useConciseSubjectLines", { maxLength: 72 })
+
+const fakeCommit = fakeCommitFactory(fakeConfiguration())
+
+describe.each`
+	subjectLine                                                                             | expectedRange20 | expectedRange50 | expectedRange72
+	${"Upgrade dependency @opentelemetry/exporter-metrics-otlp-http to the newest version"} | ${[20, 82]}     | ${[50, 82]}     | ${[72, 82]}
+	${"make a genuine attempt to fix the bugs that the users were complaining about"}       | ${[20, 76]}     | ${[50, 76]}     | ${[72, 76]}
+	${"shelve the broken cursor until the warm summer weather makes it shine again"}        | ${[20, 75]}     | ${[50, 75]}     | ${[72, 75]}
+`(
+	"when the subject line of $subjectLine exceeds 72 characters",
+	(props: {
+		subjectLine: string
+		expectedRange20: CharacterRange
+		expectedRange50: CharacterRange
+		expectedRange72: CharacterRange
+	}) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			it("raises a concern about the characters that exceed the limit", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			it("raises a concern about the characters that exceed the limit", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled50, commit.sha, { range: props.expectedRange50 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			it("raises a concern about the characters that exceed the limit", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled72, commit.sha, { range: props.expectedRange72 }),
+				])
+			})
+		})
+
+		describe("and the rule is disabled", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], null)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                                   | expectedRange20 | expectedRange50
+	${"retrieve data from the exclusive third-party service"}                     | ${[20, 52]}     | ${[50, 52]}
+	${"Forget to close the backtick section in `RapidTransportService"}           | ${[20, 62]}     | ${[50, 62]}
+	${"Compare the list of items to the objects downloaded from the server"}      | ${[20, 67]}     | ${[50, 67]}
+	${"Resolve memory issues to make the code work better than it did last year"} | ${[20, 72]}     | ${[50, 72]}
+`(
+	"when the subject line of $subjectLine exceeds 50 characters, but not 72 characters",
+	(props: {
+		subjectLine: string
+		expectedRange20: CharacterRange
+		expectedRange50: CharacterRange
+	}) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			it("raises a concern about the characters that exceed the limit", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			it("raises a concern about the characters that exceed the limit", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled50, commit.sha, { range: props.expectedRange50 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+
+		describe("and the rule is disabled", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], null)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                              | expectedRange20
+	${"Make the user interface less chaotic (GH-11) (GL-17)"}                | ${[20, 36]}
+	${"<#71238> free up unclaimed disk space"}                               | ${[29, 37]}
+	${"#1104: Upgrade rainstormy/updraft in GitHub Actions flows"}           | ${[27, 57]}
+	${"`pnpm dlx` is the preferred way now"}                                 | ${[30, 35]}
+	${"revisit the boolean properties in the `IceCreamMachine` constructor"} | ${[20, 67]}
+	${"Remove redundant call to `wrapper`"}                                  | ${[20, 25]}
+	${"Enable `firewall` protection again"}                                  | ${[30, 34]}
+	${"(GH-72): fix security vulnerability in `BridgeService`"}              | ${[29, 39]}
+	${"Make a smile to the `camera` again"}                                  | ${[28, 34]}
+	${"revisit the glorious `MaxDPS` algorithm"}                             | ${[20, 39]}
+`(
+	"when the subject line of $subjectLine contains tokens to be disregarded and still exceeds 20 characters, but not 50 characters",
+	(props: { subjectLine: string; expectedRange20: CharacterRange }) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			it("raises a concern about the characters that exceed the limit", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+
+		describe("and the rule is disabled", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], null)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
+	subjectLine
+	${'Revert "retrieve data from the exclusive third-party service"'}
+	${'Revert "Revert "Revert "Fix the nasty bug from yesterday"""'}
+	${"fixup! Resolve memory issues to make the code work better than it did last year"}
+	${"Squash! Make the program act like a clown"}
+`(
+	"when the subject line of $subjectLine makes the commit disregardable",
+	(props: { subjectLine: string }) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe.each`
+			options
+			${enabled20.options}
+			${enabled50.options}
+			${enabled72.options}
+		`(
+			"and the rule is enabled with a maximum length of $options.maxLength characters",
+			(context: RuleContext<"useConciseSubjectLines">) => {
+				it("does not raise any concerns", () => {
+					const actualConcerns = useConciseSubjectLines([commit], context.options)
+					expect(actualConcerns).toEqual<Concerns>([])
+				})
+			},
+		)
+
+		describe("and the rule is disabled", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], null)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
+	parents                                                | subjectLine
+	${[fakeCommitSha(), fakeCommitSha()]}                  | ${"Merge branch 'main' into bugfix/dance-party-playlist"}
+	${[fakeCommitSha(), fakeCommitSha(), fakeCommitSha()]} | ${"Keep my branch up to date"}
+`(
+	"when the commit is a merge commit with $parents.length parents",
+	(props: { parents: Array<CommitSha>; subjectLine: string }) => {
+		const commit = fakeCommit({ message: props.subjectLine, parents: props.parents })
+
+		describe.each`
+			options
+			${enabled20.options}
+			${enabled50.options}
+			${enabled72.options}
+		`(
+			"and the rule is enabled with a maximum length of $options.maxLength characters",
+			(context: RuleContext<"useConciseSubjectLines">) => {
+				it("does not raise any concerns", () => {
+					const actualConcerns = useConciseSubjectLines([commit], context.options)
+					expect(actualConcerns).toEqual<Concerns>([])
+				})
+			},
+		)
+
+		describe("and the rule is disabled", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], null)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
+	subjectLine
+	${""}
+	${" "}
+	${"\t\t"}
+	${"clean up"}
+	${"test"}
+	${"Refactor some stuff"}
+	${"Move `RapidTransportService` up"}
+	${"Upgrade React"}
+`(
+	"when the subject line of $subjectLine does not exceed 20 characters",
+	(props: { subjectLine: string }) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe.each`
+			options
+			${enabled20.options}
+			${enabled50.options}
+			${enabled72.options}
+		`(
+			"and the rule is enabled with a maximum length of $options.maxLength characters",
+			(context: RuleContext<"useConciseSubjectLines">) => {
+				it("does not raise any concerns", () => {
+					const actualConcerns = useConciseSubjectLines([commit], context.options)
+					expect(actualConcerns).toEqual<Concerns>([])
+				})
+			},
+		)
+
+		describe("and the rule is disabled", () => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines([commit], null)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe("when verifying a set of multiple commits and some commits have long subject lines", () => {
+	const commits: Vector<Commit, 12> = [
+		fakeCommit({ message: "Retrieve data from the exclusive third-party service" }),
+		fakeCommit({ message: "Refactor the taxi module" }),
+		fakeCommit({
+			message: "Downgrade dependency @opentelemetry/exporter-metrics-otlp-http to 0.100.5-beta.3",
+		}),
+		fakeCommit({ message: "revisit the boolean properties in the `IceCreamMachine` constructor" }),
+		fakeCommit({ message: "test" }),
+		fakeCommit({ message: "#728 free up unclaimed disk space" }),
+		fakeCommit({ message: "Fix the bug" }),
+		fakeCommit({
+			message: "Compare the list of items to the objects downloaded from the premium server",
+		}),
+		fakeCommit({ message: "Unsubscribe from the service" }),
+		fakeCommit({ message: "fixup! Unsubscribe from the service" }),
+		fakeCommit({
+			message:
+				"Upgrade `rainstormy/github-action-validate-commit-messages in GitHub Actions` to the newest version",
+		}),
+		fakeCommit({
+			message: "make a genuine attempt to fix the bugs that the users were complaining about",
+		}),
+	]
+
+	describe("and the rule is enabled with a maximum length of 20 characters", () => {
+		it("raises concerns about the commits whose subject lines exceed 20 characters", () => {
+			const actualConcerns = useConciseSubjectLines(commits, enabled20.options)
+			expect(actualConcerns).toEqual<Concerns>([
+				subjectLineConcern(enabled20, commits[0].sha, { range: [20, 52] }),
+				subjectLineConcern(enabled20, commits[1].sha, { range: [20, 24] }),
+				subjectLineConcern(enabled20, commits[3].sha, { range: [20, 67] }),
+				subjectLineConcern(enabled20, commits[5].sha, { range: [25, 33] }),
+				subjectLineConcern(enabled20, commits[7].sha, { range: [20, 75] }),
+				subjectLineConcern(enabled20, commits[8].sha, { range: [20, 28] }),
+				subjectLineConcern(enabled20, commits[10].sha, { range: [89, 99] }),
+				subjectLineConcern(enabled20, commits[11].sha, { range: [20, 76] }),
+			])
+		})
+	})
+
+	describe("and the rule is enabled with a maximum length of 50 characters", () => {
+		it("raises concerns about the commits whose subject lines exceed 50 characters", () => {
+			const actualConcerns = useConciseSubjectLines(commits, enabled50.options)
+			expect(actualConcerns).toEqual<Concerns>([
+				subjectLineConcern(enabled50, commits[0].sha, { range: [50, 52] }),
+				subjectLineConcern(enabled50, commits[7].sha, { range: [50, 75] }),
+				subjectLineConcern(enabled50, commits[11].sha, { range: [50, 76] }),
+			])
+		})
+	})
+
+	describe("and the rule is enabled with a maximum length of 72 characters", () => {
+		it("raises concerns about the commits whose subject lines exceed 72 characters", () => {
+			const actualConcerns = useConciseSubjectLines(commits, enabled72.options)
+			expect(actualConcerns).toEqual<Concerns>([
+				subjectLineConcern(enabled72, commits[7].sha, { range: [72, 75] }),
+				subjectLineConcern(enabled72, commits[11].sha, { range: [72, 76] }),
+			])
+		})
+	})
+
+	describe("and the rule is disabled", () => {
+		it("does not raise any concerns", () => {
+			const actualConcerns = useConciseSubjectLines(commits, null)
+			expect(actualConcerns).toEqual<Concerns>([])
+		})
+	})
+})
+
+describe("when verifying a set of multiple commits and all commits have concise subject lines", () => {
+	const commits: Vector<Commit, 4> = [
+		fakeCommit({ message: "Fix the bug (GH-27)" }),
+		fakeCommit({ message: "#41: Refactor the factory" }),
+		fakeCommit({ message: "Upgrade Vitest to 4.1.2" }),
+		fakeCommit({ message: "Subscribe to the `RapidTransportService`" }),
+	]
+
+	describe.each`
+		options
+		${enabled20.options}
+		${enabled50.options}
+		${enabled72.options}
+	`(
+		"and the rule is enabled with a maximum length of $options.maxLength characters",
+		(context: RuleContext<"useConciseSubjectLines">) => {
+			it("does not raise any concerns", () => {
+				const actualConcerns = useConciseSubjectLines(commits, context.options)
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		},
+	)
+
+	describe("and the rule is disabled", () => {
+		it("does not raise any concerns", () => {
+			const actualConcerns = useConciseSubjectLines(commits, null)
+			expect(actualConcerns).toEqual<Concerns>([])
+		})
+	})
+})
