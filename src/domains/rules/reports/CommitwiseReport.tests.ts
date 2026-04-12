@@ -192,8 +192,8 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-67", (
 			`
 9bed522 revisit the boolean properties in the \`IceCreamMachine\` constructor
                             ───────────────────────┬───────────────────────
-                                                   ╰─ Subject lines must not exceed 20 characters.
-                                                      (useConciseSubjectLines)
+     Subject lines must not exceed 20 characters. ─╯
+     (useConciseSubjectLines)
 `.trim(),
 		)
 	})
@@ -215,9 +215,9 @@ describe("when 'useConciseSubjectLines' has a concern about characters 50-52", (
 		expect(actualOutput).toBe(
 			`
 e8c95d6 Retrieve data from the exclusive third-party service
-                                                          ┬─
-                                                          ╰─ Subject lines must not exceed 50 characters.
-                                                             (useConciseSubjectLines)
+                                                          ─┬
+             Subject lines must not exceed 50 characters. ─╯
+             (useConciseSubjectLines)
 `.trim(),
 		)
 	})
@@ -239,9 +239,9 @@ describe("when 'useConciseSubjectLines' has a concern about characters 72-76", (
 		expect(actualOutput).toBe(
 			`
 be86674 make a genuine attempt to fix the bugs that the users were complaining about
-                                                                                ─┬──
-                                                                                 ╰─ Subject lines must not exceed 72 characters.
-                                                                                    (useConciseSubjectLines)
+                                                                                ──┬─
+                                    Subject lines must not exceed 72 characters. ─╯
+                                    (useConciseSubjectLines)
 `.trim(),
 		)
 	})

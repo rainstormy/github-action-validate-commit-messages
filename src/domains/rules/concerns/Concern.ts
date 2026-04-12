@@ -1,4 +1,4 @@
-import type { Commits } from "#commits/Commit.ts"
+import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import type { AuthorEmailAddressConcern } from "#rules/concerns/AuthorEmailAddressConcern.ts"
 import type { AuthorNameConcern } from "#rules/concerns/AuthorNameConcern.ts"
@@ -26,6 +26,7 @@ import { useImperativeSubjectLines } from "#rules/UseImperativeSubjectLines.ts"
 import { useIssueLinks } from "#rules/UseIssueLinks.ts"
 import { useLineWrapping } from "#rules/UseLineWrapping.ts"
 import { useSignedCommits } from "#rules/UseSignedCommits.ts"
+import { requireNotNullish } from "#utilities/Assertions.ts"
 
 export type Concern =
 	| AuthorEmailAddressConcern
@@ -36,6 +37,13 @@ export type Concern =
 	| SubjectLineConcern
 
 export type Concerns = Array<Concern>
+
+export function concernedCommit(concern: Concern, commits: Commits): Commit {
+	return requireNotNullish(
+		commits.find(({ sha }) => sha === concern.commitSha),
+		() => `Concerned commit ${concern.commitSha} not found`,
+	)
+}
 
 export function mapCommitsToConcerns(commits: Commits, configuration: Configuration): Concerns {
 	const rules = configuration.rules

@@ -1,64 +1,50 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { formatTokenisedLine } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { RuleContext } from "#rules/Rule.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
-import { requireNotNullish } from "#utilities/Assertions.ts"
+import { formatCharacterRange } from "#types/CharacterRange.ts"
 import { indentString } from "#utilities/Strings.ts"
 
 export function commitwiseReport(commits: Commits, concerns: Concerns): string {
-	return concerns.map((concern) => formatConcern(commits, concern)).join("\n\n")
+	return concerns
+		.map((concern) => formatConcern(concern, concernedCommit(concern, commits)))
+		.join("\n\n")
 }
 
 const SHORT_SHA_LENGTH = 7
 
-function formatConcern(commits: Commits, concern: Concern): string {
-	return `${formatCommit(commits, concern)}\n${formatMessage(concern)}`
+const MESSAGE_PREFIX = "╰─"
+const MESSAGE_SUFFIX = "─╯"
+
+function formatConcern(concern: Concern, commit: Commit): string {
+	const commitLine = `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatTokenisedLine(commit.subjectLine)}`
+
+	const [rangeStart, rangeEnd] = concern.range
+	const length = rangeEnd - rangeStart
+
+	const offset = SHORT_SHA_LENGTH + " ".length + rangeStart
+	const longHalfLength = Math.trunc(length / 2)
+	const shortHalfLength = length - longHalfLength - 1
+
+	const message = ruleMessage(concern.rule)
+	const anchoredRight = message.length + MESSAGE_SUFFIX.length < offset + longHalfLength
+
+	const rangeLine = indentString(formatCharacterRange(concern.range, anchoredRight), offset)
+
+	const messageLine = anchoredRight
+		? indentString(
+				`${message} ${MESSAGE_SUFFIX}\n(${concern.rule.key})`,
+				offset + longHalfLength - message.length - MESSAGE_SUFFIX.length,
+			)
+		: indentString(
+				`${MESSAGE_PREFIX} ${message}\n   (${concern.rule.key})`,
+				offset + shortHalfLength,
+			)
+
+	return `${commitLine}\n${rangeLine}\n${messageLine}`
 }
 
-function formatCommit(commits: Commits, concern: Concern): string {
-	const commit = requireNotNullish(
-		commits.find(({ sha }) => sha === concern.commitSha),
-		() => `Concerned commit ${concern.commitSha} not found`,
-	)
-
-	return `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatSubjectLine(commit)}`
-}
-
-function formatSubjectLine(commit: Commit): string {
-	return formatTokenisedLine(commit.subjectLine)
-}
-
-function formatMessage(concern: Concern): string {
-	const [start] = concern.range
-
-	const ruleMessage = formatRule(concern.rule)
-
-	const [rangeMarker, rangeOffset] = formatRangeMarker(concern.range)
-	const message = `${ruleMessage}\n ${" ".repeat(rangeOffset)}(${concern.rule.key})`
-
-	const messageOffset = SHORT_SHA_LENGTH + " ".length + start
-	return indentString(`${rangeMarker} ${message}`, messageOffset)
-}
-
-function formatRangeMarker(range: CharacterRange): [string, offset: number] {
-	const [start, end] = range
-	const length = end - start
-
-	if (length === 1) {
-		return ["┬\n╰─", 2]
-	}
-
-	const firstHalfLength = Math.trunc((length - "┬".length) / 2)
-	const secondHalfLength = length - firstHalfLength - "┬".length
-
-	return [
-		`${"─".repeat(firstHalfLength)}┬${"─".repeat(secondHalfLength)}\n${indentString("╰─", firstHalfLength)}`,
-		firstHalfLength + 2,
-	]
-}
-
-function formatRule(rule: RuleContext): string {
+function ruleMessage(rule: RuleContext): string {
 	switch (rule.key) {
 		case "noExcessiveCommitsPerBranch": {
 			throw new Error(`Not implemented yet: ${rule.key}`)
