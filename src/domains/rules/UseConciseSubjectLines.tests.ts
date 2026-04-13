@@ -33,8 +33,9 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+
 			it("raises a concern about the characters that exceed the limit", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
 				])
@@ -42,8 +43,9 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+
 			it("raises a concern about the characters that exceed the limit", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled50, commit.sha, { range: props.expectedRange50 }),
 				])
@@ -51,8 +53,9 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+
 			it("raises a concern about the characters that exceed the limit", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled72, commit.sha, { range: props.expectedRange72 }),
 				])
@@ -60,8 +63,9 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], null)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -84,8 +88,9 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+
 			it("raises a concern about the characters that exceed the limit", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
 				])
@@ -93,8 +98,9 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+
 			it("raises a concern about the characters that exceed the limit", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled50, commit.sha, { range: props.expectedRange50 }),
 				])
@@ -102,15 +108,17 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
 
 		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], null)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -135,8 +143,9 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+
 			it("raises a concern about the characters that exceed the limit", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
 				])
@@ -144,22 +153,25 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
 
 		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
 
 		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], null)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -185,16 +197,18 @@ describe.each`
 		`(
 			"and the rule is enabled with a maximum length of $options.maxLength characters",
 			(context: RuleContext<"useConciseSubjectLines">) => {
+				const actualConcerns = useConciseSubjectLines([commit], context.options)
+
 				it("does not raise any concerns", () => {
-					const actualConcerns = useConciseSubjectLines([commit], context.options)
 					expect(actualConcerns).toEqual<Concerns>([])
 				})
 			},
 		)
 
 		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], null)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -218,16 +232,18 @@ describe.each`
 		`(
 			"and the rule is enabled with a maximum length of $options.maxLength characters",
 			(context: RuleContext<"useConciseSubjectLines">) => {
+				const actualConcerns = useConciseSubjectLines([commit], context.options)
+
 				it("does not raise any concerns", () => {
-					const actualConcerns = useConciseSubjectLines([commit], context.options)
 					expect(actualConcerns).toEqual<Concerns>([])
 				})
 			},
 		)
 
 		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], null)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -257,16 +273,18 @@ describe.each`
 		`(
 			"and the rule is enabled with a maximum length of $options.maxLength characters",
 			(context: RuleContext<"useConciseSubjectLines">) => {
+				const actualConcerns = useConciseSubjectLines([commit], context.options)
+
 				it("does not raise any concerns", () => {
-					const actualConcerns = useConciseSubjectLines([commit], context.options)
 					expect(actualConcerns).toEqual<Concerns>([])
 				})
 			},
 		)
 
 		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines([commit], null)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
@@ -299,8 +317,9 @@ describe("when verifying a set of multiple commits and some commits have long su
 	]
 
 	describe("and the rule is enabled with a maximum length of 20 characters", () => {
+		const actualConcerns = useConciseSubjectLines(commits, enabled20.options)
+
 		it("raises concerns about the commits whose subject lines exceed 20 characters", () => {
-			const actualConcerns = useConciseSubjectLines(commits, enabled20.options)
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(enabled20, commits[0].sha, { range: [20, 52] }),
 				subjectLineConcern(enabled20, commits[1].sha, { range: [20, 24] }),
@@ -315,8 +334,9 @@ describe("when verifying a set of multiple commits and some commits have long su
 	})
 
 	describe("and the rule is enabled with a maximum length of 50 characters", () => {
+		const actualConcerns = useConciseSubjectLines(commits, enabled50.options)
+
 		it("raises concerns about the commits whose subject lines exceed 50 characters", () => {
-			const actualConcerns = useConciseSubjectLines(commits, enabled50.options)
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(enabled50, commits[0].sha, { range: [50, 52] }),
 				subjectLineConcern(enabled50, commits[7].sha, { range: [50, 75] }),
@@ -326,8 +346,9 @@ describe("when verifying a set of multiple commits and some commits have long su
 	})
 
 	describe("and the rule is enabled with a maximum length of 72 characters", () => {
+		const actualConcerns = useConciseSubjectLines(commits, enabled72.options)
+
 		it("raises concerns about the commits whose subject lines exceed 72 characters", () => {
-			const actualConcerns = useConciseSubjectLines(commits, enabled72.options)
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(enabled72, commits[7].sha, { range: [72, 75] }),
 				subjectLineConcern(enabled72, commits[11].sha, { range: [72, 76] }),
@@ -336,8 +357,9 @@ describe("when verifying a set of multiple commits and some commits have long su
 	})
 
 	describe("and the rule is disabled", () => {
+		const actualConcerns = useConciseSubjectLines(commits, null)
+
 		it("does not raise any concerns", () => {
-			const actualConcerns = useConciseSubjectLines(commits, null)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})
@@ -359,16 +381,18 @@ describe("when verifying a set of multiple commits and all commits have concise 
 	`(
 		"and the rule is enabled with a maximum length of $options.maxLength characters",
 		(context: RuleContext<"useConciseSubjectLines">) => {
+			const actualConcerns = useConciseSubjectLines(commits, context.options)
+
 			it("does not raise any concerns", () => {
-				const actualConcerns = useConciseSubjectLines(commits, context.options)
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		},
 	)
 
 	describe("and the rule is disabled", () => {
+		const actualConcerns = useConciseSubjectLines(commits, null)
+
 		it("does not raise any concerns", () => {
-			const actualConcerns = useConciseSubjectLines(commits, null)
 			expect(actualConcerns).toEqual<Concerns>([])
 		})
 	})
