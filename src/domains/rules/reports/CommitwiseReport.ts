@@ -1,6 +1,8 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { formatTokenisedLine } from "#commits/tokens/Token.ts"
+import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
+import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleContext } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
 import { indentString } from "#utilities/Strings.ts"
@@ -11,12 +13,57 @@ export function commitwiseReport(commits: Commits, concerns: Concerns): string {
 		.join("\n\n")
 }
 
+function formatConcern(concern: Concern, commit: Commit): string {
+	switch (concern.location) {
+		case "author-email-address": {
+			throw new Error(`Not implemented yet: ${concern.location}`)
+		}
+		case "author-name": {
+			throw new Error(`Not implemented yet: ${concern.location}`)
+		}
+		case "body-line": {
+			throw new Error(`Not implemented yet: ${concern.location}`)
+		}
+		case "commit": {
+			return formatCommitConcern(concern, commit)
+		}
+		case "committer-email-address": {
+			throw new Error(`Not implemented yet: ${concern.location}`)
+		}
+		case "committer-name": {
+			throw new Error(`Not implemented yet: ${concern.location}`)
+		}
+		case "subject-line": {
+			return formatSubjectLineConcern(concern, commit)
+		}
+	}
+}
+
 const SHORT_SHA_LENGTH = 7
 
+const RANGE_PREFIX = "╭─"
 const MESSAGE_PREFIX = "╰─"
 const MESSAGE_SUFFIX = "─╯"
 
-function formatConcern(concern: Concern, commit: Commit): string {
+function formatCommitConcern(concern: CommitConcern, commit: Commit): string {
+	const formattedSubjectLine = formatTokenisedLine(commit.subjectLine)
+	const commitLine = `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formattedSubjectLine}`
+	const message = ruleMessage(concern.rule)
+
+	const rangeLine = indentString(
+		RANGE_PREFIX + "─".repeat(formattedSubjectLine.length),
+		SHORT_SHA_LENGTH - RANGE_PREFIX.length + 1,
+	)
+
+	const messageLine = indentString(
+		`${MESSAGE_PREFIX} ${message}\n   (${concern.rule.key})`,
+		SHORT_SHA_LENGTH - MESSAGE_PREFIX.length + 1,
+	)
+
+	return `${commitLine}\n${rangeLine}\n${messageLine}`
+}
+
+function formatSubjectLineConcern(concern: SubjectLineConcern, commit: Commit): string {
 	const commitLine = `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatTokenisedLine(commit.subjectLine)}`
 
 	const [rangeStart, rangeEnd] = concern.range
@@ -50,7 +97,7 @@ function ruleMessage(rule: RuleContext): string {
 			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
 		case "noMergeCommits": {
-			throw new Error(`Not implemented yet: ${rule.key}`)
+			return "Merge commits are not allowed."
 		}
 		case "noRepeatedSubjectLines": {
 			throw new Error(`Not implemented yet: ${rule.key}`)

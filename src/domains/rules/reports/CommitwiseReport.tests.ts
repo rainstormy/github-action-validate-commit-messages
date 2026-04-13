@@ -2,14 +2,15 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
 import { ruleContext } from "#rules/Rule.ts"
+import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const configuration = fakeConfiguration()
-const fakeCommit = fakeCommitFactory(configuration)
+const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
 describe("when there are no concerns", () => {
 	const commits: Commits = []
@@ -21,7 +22,49 @@ describe("when there are no concerns", () => {
 	})
 })
 
-describe("when 'noRevertRevertCommits' has a concern about characters 0-16", () => {
+describe("when 'noMergeCommits' has a concern about the commit", () => {
+	const commit = fakeCommit({
+		sha: "507c835ff93e38ed1540ff58fb72f7837f9af13",
+		parents: [fakeCommitSha(), fakeCommitSha()],
+		message: "Merge branch 'main' into bugfix/dance-party-playlist",
+	})
+	const concern = commitConcern(ruleContext("noMergeCommits"), commit.sha)
+
+	it("describes the rule violation", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+507c835 Merge branch 'main' into bugfix/dance-party-playlist
+      ╭─────────────────────────────────────────────────────
+      ╰─ Merge commits are not allowed.
+         (noMergeCommits)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noMergeCommits' has a concern about the commit", () => {
+	const commit = fakeCommit({
+		sha: "71516e17c94c69de4eeafff60fac072764d2",
+		parents: [fakeCommitSha(), fakeCommitSha(), fakeCommitSha()],
+		message: "amend! Merge branch 'feature/new-coffee-machine' into feature/office-overhaul",
+	})
+	const concern = commitConcern(ruleContext("noMergeCommits"), commit.sha)
+
+	it("describes the rule violation", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+71516e1 amend! Merge branch 'feature/new-coffee-machine' into feature/office-overhaul
+      ╭──────────────────────────────────────────────────────────────────────────────
+      ╰─ Merge commits are not allowed.
+         (noMergeCommits)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "d4e7a978cea34b727ea52f90c928fd535e4aee",
 		message: 'Revert "Revert "Make the program act like a clown""',
@@ -43,7 +86,7 @@ d4e7a97 Revert "Revert "Make the program act like a clown""
 	})
 })
 
-describe("when 'noRevertRevertCommits' has a concern about characters 1-26", () => {
+describe("when 'noRevertRevertCommits' has a concern about characters 1-26 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "34aa41b818c40682cabeecd5623dfe51df7a4a5",
 		message: ' revert "revert  "revert "repair the soft ice machine """',
@@ -65,7 +108,7 @@ describe("when 'noRevertRevertCommits' has a concern about characters 1-26", () 
 	})
 })
 
-describe("when 'noSquashMarkers' has a concern about characters 0-6", () => {
+describe("when 'noSquashMarkers' has a concern about characters 0-6 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "ffebad193fe7d02aa9b19b70ee132a26f14f8caf",
 		message: "amend!Apply strawberry jam to make the code sweeter",
@@ -85,7 +128,7 @@ ffebad1 amend!Apply strawberry jam to make the code sweeter
 	})
 })
 
-describe("when 'noSquashMarkers' has a concern about characters 1-14", () => {
+describe("when 'noSquashMarkers' has a concern about characters 1-14 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "56c750b0811fbcad2b237b2b99fc7d3fc91b926",
 		message: " fixup! fixup! found a funny easter egg",
@@ -107,7 +150,7 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14", () => {
 	})
 })
 
-describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1", () => {
+describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "497de39943643a56f7a69d3d19723e3035318644",
 		message: "release the robot butler",
@@ -129,7 +172,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1",
 	})
 })
 
-describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8", () => {
+describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
 		message: "fixup! resolve a bug that thought it was a feature",
@@ -151,7 +194,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8",
 	})
 })
 
-describe("when 'useConciseSubjectLines' has a concern about characters 20-25", () => {
+describe("when 'useConciseSubjectLines' has a concern about characters 20-25 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "68e921648c4a19e93d72f42a5d39c3eba704e41",
 		message: "Remove redundant call to `wrapper`",
@@ -175,7 +218,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-25", (
 	})
 })
 
-describe("when 'useConciseSubjectLines' has a concern about characters 20-67", () => {
+describe("when 'useConciseSubjectLines' has a concern about characters 20-67 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "9bed522bd48f0aee7574635bb23f5decdc4999",
 		message: "revisit the boolean properties in the `IceCreamMachine` constructor",
@@ -199,7 +242,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-67", (
 	})
 })
 
-describe("when 'useConciseSubjectLines' has a concern about characters 50-52", () => {
+describe("when 'useConciseSubjectLines' has a concern about characters 50-52 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "e8c95d69587a51685070837aaf3a8746e3cbba8",
 		message: "Retrieve data from the exclusive third-party service",
@@ -223,7 +266,7 @@ e8c95d6 Retrieve data from the exclusive third-party service
 	})
 })
 
-describe("when 'useConciseSubjectLines' has a concern about characters 72-76", () => {
+describe("when 'useConciseSubjectLines' has a concern about characters 72-76 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "be86674322213fb408d176589fadbcd44a2df",
 		message: "make a genuine attempt to fix the bugs that the users were complaining about",

@@ -7,7 +7,7 @@ import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
 /**
- * Verifies that the subject line does not contain squash markers.
+ * Verifies that the subject line does not contain any squash marker.
  *
  * Combining squash commits with their ancestors makes the commit history cleaner and easier to read,
  * as it omits unnecessary diffs and increases the cohesion of commits. It also makes it easier to revert changes later.
