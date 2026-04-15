@@ -15,7 +15,7 @@
 	"devDependencies": {
 		"@rainstormy/presets-typescript": "1.1.0",
 		"@types/node": "24.12.2",
-		"@typescript/native-preview": "7.0.0-dev.20260301.1",
+		"@typescript/native-preview": "7.0.0-dev.20260401.1",
 		"@vitest/ui": "4.1.0",
 		"lefthook": "2.1.4",
 		"oxfmt": "0.40.0",
