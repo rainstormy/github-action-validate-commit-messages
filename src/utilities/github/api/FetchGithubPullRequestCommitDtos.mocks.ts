@@ -4,12 +4,11 @@ import {
 	type GithubCommitDtoTemplate,
 	fakeGithubCommitDto,
 } from "#utilities/github/api/dtos/GithubCommitDto.fixtures.ts"
-import type { GithubCommitDto } from "#utilities/github/api/dtos/GithubCommitDto.ts"
 
 export function mockGithubPullRequestCommitDtos(
 	dtos: Array<GithubCommitDtoTemplate>,
 	options: { pageSize?: number } = {},
 ): void {
 	const resourceUrl = mockGithubPullRequestEventDto()
-	mockGithubResourceDto<GithubCommitDto>(resourceUrl, dtos.map(fakeGithubCommitDto), options)
+	mockGithubResourceDto(resourceUrl, dtos.map(fakeGithubCommitDto), options)
 }

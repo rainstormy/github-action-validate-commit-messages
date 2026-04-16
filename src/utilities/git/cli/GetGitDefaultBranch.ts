@@ -42,7 +42,7 @@ async function hasLocalBranch(branchName: string): Promise<boolean> {
 		await runGitCommand(["rev-parse", "--verify", "--quiet", branchName])
 		return true
 	} catch (error) {
-		if (error instanceof GitCommandError && error.exitCode) {
+		if (error instanceof GitCommandError && error.exitCode !== 0) {
 			return false
 		}
 		throw error

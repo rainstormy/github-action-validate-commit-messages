@@ -104,7 +104,7 @@ function assertCommitLine(
 	line: string | undefined,
 	logRange: string,
 ): asserts line is `commit ${string}` {
-	if (!line?.startsWith("commit ")) {
+	if (line === undefined || !line.startsWith("commit ")) {
 		throw new Error(`Unexpected line in the Git log of ${logRange}: ${line}`)
 	}
 }

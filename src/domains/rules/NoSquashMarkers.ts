@@ -24,7 +24,7 @@ export function noSquashMarkers(commits: Commits, options: EmptyObject | null): 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	const [firstToken] = commit.subjectLine
 
-	if (firstToken && isSquashMarker(firstToken)) {
+	if (firstToken !== undefined && isSquashMarker(firstToken)) {
 		const leadingWhitespaceOffset = firstToken.value.length - firstToken.value.trimStart().length
 		const trimmedTokenLength = firstToken.value.trim().length
 

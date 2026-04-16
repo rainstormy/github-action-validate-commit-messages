@@ -4,5 +4,5 @@ import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
 export async function fetchGithubEventDto(): Promise<JsonValue> {
 	const env = githubEnv()
-	return await readJsonFile(env.eventPath)
+	return readJsonFile(env.eventPath)
 }

@@ -40,8 +40,8 @@ export function requireNoUnknownValues<Value extends string>(
 		values.every((value) => isKnownValue(value, knownValues))
 }
 
-export function getUnknownValues<Value extends string>(
-	knownValues: ReadonlyArray<Value>,
+export function getUnknownValues(
+	knownValues: ReadonlyArray<string>,
 	values: Array<string>,
 ): Array<string> {
 	return [...new Set(values.filter((value) => !isKnownValue(value, knownValues)))]

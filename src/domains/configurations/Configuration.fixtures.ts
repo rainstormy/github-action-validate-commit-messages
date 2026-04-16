@@ -14,7 +14,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 	return {
 		tokens: {
 			...getDefaultTokenConfiguration(),
-			...overrides?.tokens,
+			...overrides.tokens,
 		},
 		rules: {
 			noExcessiveCommitsPerBranch: {},
@@ -37,7 +37,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useIssueLinks: {},
 			useLineWrapping: {},
 			useSignedCommits: {},
-			...overrides?.rules,
+			...overrides.rules,
 		},
 	}
 }
