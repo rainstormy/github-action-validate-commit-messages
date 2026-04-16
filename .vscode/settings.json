@@ -2,6 +2,7 @@
 	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"git.allowNoVerifyCommit": true,
 	"javascript.preferences.importModuleSpecifier": "relative",
+	"oxc.typeAware": true,
 	"search.exclude": {
 		"dist/": true,
 		"node_modules/": true,
