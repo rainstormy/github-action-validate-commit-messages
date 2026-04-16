@@ -83,9 +83,9 @@ alias = ["cr"]
 [tasks.check-types]
 # language=sh
 run = """
-  tsgo
+  oxlint --type-aware --type-check --deny-warnings
 """
-description = "Verifies that the source code is type-safe with TypeScript."
+description = "Verifies that the source code is type-safe with Oxlint and TypeScript."
 alias = ["ct"]
 
 [tasks.format]

@@ -2,7 +2,7 @@ export type HttpUrlString = `https://${string}`
 
 export function requireHttpUrlString(
 	value: unknown,
-	errorMessage?: (invalidValue: unknown) => string,
+	errorMessage: (invalidValue: unknown) => string,
 ): HttpUrlString {
 	assertHttpUrlString(value, errorMessage)
 	return value
@@ -10,8 +10,7 @@ export function requireHttpUrlString(
 
 export function assertHttpUrlString(
 	value: unknown,
-	errorMessage: (invalidValue: unknown) => string = (invalidValue: unknown) =>
-		`Expected a non-blank URL string, but got ${invalidValue}`,
+	errorMessage: (invalidValue: unknown) => string,
 ): asserts value is HttpUrlString {
 	if (
 		typeof value !== "string" ||

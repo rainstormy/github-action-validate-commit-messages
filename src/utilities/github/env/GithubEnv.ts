@@ -30,15 +30,16 @@ export function githubEnv(): GithubEnv {
 }
 
 function envHttpUrlString(key: EnvKey): HttpUrlString {
+	const value = process.env[key]
 	return requireHttpUrlString(
-		process.env[key],
-		(invalidValue) =>
-			`Expected the environment variable '${key}' to be a URL string, but got '${invalidValue}'`,
+		value,
+		() => `Expected the environment variable '${key}' to be a URL string, but got '${value}'`,
 	)
 }
 
 function envString(key: EnvKey): string {
-	return requireNotBlankString(process.env[key], () =>
+	const value = process.env[key]
+	return requireNotBlankString(value, () =>
 		isInputParameter(key)
 			? `The 'rainstormy/comet' action expects the '${nameOfInputParameter(key)}' input parameter to be set`
 			: `Expected the environment variable '${key}' to be set`,

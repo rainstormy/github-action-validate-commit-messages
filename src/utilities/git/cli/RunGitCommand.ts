@@ -26,13 +26,13 @@ export async function runGitCommand(args: GitCommand): Promise<string> {
 				resolve(stdout.trim())
 			} else {
 				// This case occurs when Git raises an error with a non-zero exit code.
-				reject(new GitCommandError({ args, exitCode, stderr }))
+				reject(new GitCommandError({ args, exitCode: exitCode ?? -1, stderr }))
 			}
 		})
 
-		git.on("error", (error) =>
+		git.on("error", (error) => {
 			// This case occurs when the Git process cannot be spawned, e.g. if Git is not installed.
-			reject(new GitCommandError({ args, cause: error })),
-		)
+			reject(new GitCommandError({ args, exitCode: -1, cause: error }))
+		})
 	})
 }

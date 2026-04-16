@@ -18,7 +18,7 @@ export function notNullishValue<Item>(
 	return value !== null && value !== undefined
 }
 
-export function notEmptyString<Item>(item: Item): boolean {
+export function notEmptyString(item: unknown): boolean {
 	return item !== ""
 }
 

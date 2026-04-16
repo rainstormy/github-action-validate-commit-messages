@@ -13,7 +13,7 @@ export async function fetchGithubPullRequestCommitDtos(
 ): Promise<Array<GithubCommitDto>> {
 	const env = githubEnv()
 
-	return await fetchGithubResourceDto(
+	return fetchGithubResourceDto(
 		`${env.apiBaseUrl}/pulls/${pullRequestNumber}/commits`,
 		githubCommitDto(),
 	)

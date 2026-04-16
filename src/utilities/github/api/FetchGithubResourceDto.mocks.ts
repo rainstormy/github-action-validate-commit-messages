@@ -4,9 +4,9 @@ import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
-export function mockGithubResourceDto<Dto extends JsonValue>(
+export function mockGithubResourceDto(
 	url: `${GithubUrlString}/${string}`,
-	items: Array<Dto>,
+	items: Array<JsonValue>,
 	options: { pageSize?: number } = {},
 ): void {
 	const { pageSize = 30 } = options

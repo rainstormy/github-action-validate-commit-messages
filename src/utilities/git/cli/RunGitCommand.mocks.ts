@@ -10,7 +10,7 @@ vi.mock(import("#utilities/git/cli/RunGitCommand.ts"), () => ({
 				`Unexpected Git command: ${args.join(" ")}\n\nExpected Git commands in the scope of this test case:\n${getExpectedCommands()}\n\n`,
 			)
 		}
-		if (result.exitCode) {
+		if (result.exitCode !== undefined && result.exitCode !== 0) {
 			throw new GitCommandError({ args, exitCode: result.exitCode })
 		}
 

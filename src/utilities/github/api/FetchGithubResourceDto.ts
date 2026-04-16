@@ -39,7 +39,7 @@ export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 		deferredCheckedPages.push(response.json().then((data: unknown) => parse(arraySchema, data)))
 
 		const link = response.headers.get("link")
-		const nextPageMatch = link ? nextPageRegex.exec(link) : null
+		const nextPageMatch = link !== null ? nextPageRegex.exec(link) : null
 
 		nextResourceUrl = nextPageMatch?.groups?.nextResourceUrl ?? null
 	}

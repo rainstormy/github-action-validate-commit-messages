@@ -18,7 +18,7 @@ export function assertNotNullish<Value extends NonNullable<unknown>>(
 
 export function requireNotBlankString(
 	value: unknown,
-	errorMessage?: (invalidValue: unknown) => string,
+	errorMessage: (invalidValue: unknown) => string,
 ): string {
 	assertNotBlankString(value, errorMessage)
 	return value
@@ -26,8 +26,7 @@ export function requireNotBlankString(
 
 export function assertNotBlankString(
 	value: unknown,
-	errorMessage: (invalidValue: unknown) => string = (invalidValue: unknown) =>
-		`Expected a non-blank string, but got ${invalidValue}`,
+	errorMessage: (invalidValue: unknown) => string,
 ): asserts value is string {
 	if (typeof value !== "string" || value.trim().length === 0) {
 		throw new Error(errorMessage(value))

@@ -10,7 +10,7 @@ export default {
 		reportCompressedSize: false,
 		rollupOptions: {
 			output: {
-				entryFileNames: env.COMET_PLATFORM ? "index.js" : "main.mjs",
+				entryFileNames: env.COMET_PLATFORM !== undefined ? "index.js" : "main.mjs",
 			},
 		},
 		target: "es2022",

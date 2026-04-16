@@ -18,6 +18,15 @@ minimumReleaseAgeExclude:
   # https://github.com/vitejs/vite/security/advisories/GHSA-v2wj-q39q-566r
   - 'vite@8.0.5'
 
+  # https://github.com/oxc-project/oxc/issues/21429
+  - '@oxlint-tsgolint/darwin-arm64@0.21.1'
+  - '@oxlint-tsgolint/darwin-x64@0.21.1'
+  - '@oxlint-tsgolint/linux-arm64@0.21.1'
+  - '@oxlint-tsgolint/linux-x64@0.21.1'
+  - '@oxlint-tsgolint/win32-arm64@0.21.1'
+  - '@oxlint-tsgolint/win32-x64@0.21.1'
+  - 'oxlint-tsgolint@0.21.1'
+
 # Pin packages to exact versions to ensure that all developers use the same versions.
 savePrefix: ''
 
