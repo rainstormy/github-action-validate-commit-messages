@@ -112,7 +112,7 @@ function ruleMessage(rule: RuleContext): string {
 			return "Cherry-pick the original commit instead of reverting it over."
 		}
 		case "noSingleWordSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule.key}`)
+			return "Subject lines must contain at least two words."
 		}
 		case "noSquashMarkers": {
 			return "Combine squash commits with their ancestors."

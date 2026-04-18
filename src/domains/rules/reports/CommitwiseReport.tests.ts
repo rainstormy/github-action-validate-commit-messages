@@ -152,6 +152,50 @@ describe("when 'noRevertRevertCommits' has a concern about characters 1-26 of th
 	})
 })
 
+describe("when 'noSingleWordSubjectLines' has a concern about characters 0-3 of the subject line", () => {
+	const commit = fakeCommit({
+		sha: "964bce7ef85bb4347a0882c5d43c8cece4938f",
+		message: "WIP",
+	})
+	const concern = subjectLineConcern(ruleContext("noSingleWordSubjectLines"), commit.sha, {
+		range: [0, 3],
+	})
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+964bce7 WIP
+        ─┬─
+         ╰─ Subject lines must contain at least two words.
+            (noSingleWordSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noSingleWordSubjectLines' has a concern about characters 11-17 of the subject line", () => {
+	const commit = fakeCommit({
+		sha: "a4b6d0e1aee11f7bc39dfd68858257e236256fbf",
+		message: "fixup! #17 bugfix",
+	})
+	const concern = subjectLineConcern(ruleContext("noSingleWordSubjectLines"), commit.sha, {
+		range: [11, 17],
+	})
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+a4b6d0e fixup! #17 bugfix
+                   ──┬───
+                     ╰─ Subject lines must contain at least two words.
+                        (noSingleWordSubjectLines)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'noSquashMarkers' has a concern about characters 0-6 of the subject line", () => {
 	const commit = fakeCommit({
 		sha: "ffebad193fe7d02aa9b19b70ee132a26f14f8caf",
