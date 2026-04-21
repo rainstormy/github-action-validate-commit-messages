@@ -1,13 +1,15 @@
 import { slicedText } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type SquashMarkerToken = {
 	type: "squash-marker"
 	value: string
+	range: CharacterRange
 }
 
-export function squashMarker(value: string): SquashMarkerToken {
-	return { type: "squash-marker", value }
+export function squashMarker(value: string, range: CharacterRange): SquashMarkerToken {
+	return { type: "squash-marker", value, range }
 }
 
 const regex = /^\s*(?:amend!+\s*|fixup!+\s*|squash!+\s*|!amend\b\s*|!fixup\b\s*|!squash\b\s*)+/iu
@@ -23,7 +25,11 @@ export function tokeniseSquashMarkers(initialTokens: TokenisedLine): TokenisedLi
 			return initialTokens
 		}
 
-		return [squashMarker(match), slicedText(firstToken, match.length), ...remainingTokens]
+		return [
+			squashMarker(match, [0, match.length]),
+			slicedText(firstToken, match.length),
+			...remainingTokens,
+		]
 	}
 
 	return initialTokens

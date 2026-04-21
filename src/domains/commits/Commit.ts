@@ -39,13 +39,15 @@ export function mapCrudeCommitToCommit(
 		committerName: crudeCommit.committerName,
 		committerEmail: crudeCommit.committerEmail,
 		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens),
-		bodyLines: crudeBodyLines.map((crudeBodyLine) => [text(crudeBodyLine)].filter(notEmptyToken)),
+		bodyLines: crudeBodyLines.map((crudeBodyLine) =>
+			tokeniseBodyLine(crudeBodyLine, configuration.tokens),
+		),
 	}
 }
 
 function tokeniseSubjectLine(
 	crudeSubjectLine: string,
-	tokenConfiguration: TokenConfiguration,
+	configuration: TokenConfiguration,
 ): TokenisedLine {
 	// oxfmt-ignore
 	return (
@@ -54,13 +56,23 @@ function tokeniseSubjectLine(
 				tokeniseInlineCodePhrases(
 					tokeniseRevertMarkers(
 						tokeniseSquashMarkers(
-							[text(crudeSubjectLine)],
+							[text(crudeSubjectLine, [0, crudeSubjectLine.length])],
 						)
 					),
 				),
-				tokenConfiguration,
+				configuration,
 			),
 		)
+	).filter(notEmptyToken)
+}
+
+function tokeniseBodyLine(
+	crudeBodyLine: string,
+	_configuration: TokenConfiguration,
+): TokenisedLine {
+	// oxfmt-ignore
+	return (
+		[text(crudeBodyLine, [0, crudeBodyLine.length])]
 	).filter(notEmptyToken)
 }
 
