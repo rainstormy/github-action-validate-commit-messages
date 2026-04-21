@@ -1,4 +1,5 @@
-import type { Token, TokenisedLine } from "#commits/tokens/Token.ts"
+import { slicedText } from "#commits/tokens/TextToken.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 
 export type SquashMarkerToken = {
 	type: "squash-marker"
@@ -9,25 +10,21 @@ export function squashMarker(value: string): SquashMarkerToken {
 	return { type: "squash-marker", value }
 }
 
-export function isSquashMarker(token: Token): token is SquashMarkerToken {
-	return typeof token === "object" && token.type === "squash-marker"
-}
-
 const regex = /^\s*(?:amend!+\s*|fixup!+\s*|squash!+\s*|!amend\b\s*|!fixup\b\s*|!squash\b\s*)+/iu
 
 export function tokeniseSquashMarkers(initialTokens: TokenisedLine): TokenisedLine {
 	const [firstToken, ...remainingTokens] = initialTokens
 
 	// Squash markers must appear at the beginning of the line.
-	if (typeof firstToken !== "string") {
-		return initialTokens
+	if (firstToken?.type === "text") {
+		const match = regex.exec(firstToken.value)?.[0] ?? null
+
+		if (match === null) {
+			return initialTokens
+		}
+
+		return [squashMarker(match), slicedText(firstToken, match.length), ...remainingTokens]
 	}
 
-	const match = regex.exec(firstToken)?.[0] ?? null
-
-	if (match === null) {
-		return initialTokens
-	}
-
-	return [squashMarker(match), firstToken.slice(match.length), ...remainingTokens]
+	return initialTokens
 }

@@ -6,9 +6,9 @@ import type { InlineCodeToken } from "#commits/tokens/InlineCodeToken.ts"
 import type { IssueLinkToken } from "#commits/tokens/IssueLinkToken.ts"
 import type { RevertMarkerToken } from "#commits/tokens/RevertMarkerToken.ts"
 import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
+import type { TextToken } from "#commits/tokens/TextToken.ts"
 
 export type Token =
-	| string
 	| CoauthorToken
 	| DependencyVersionToken
 	| FencedCodeBlockToken
@@ -17,14 +17,11 @@ export type Token =
 	| IssueLinkToken
 	| RevertMarkerToken
 	| SquashMarkerToken
+	| TextToken
 
 export type TokenisedLine = Array<Token>
 export type TokenisedLines = Array<TokenisedLine>
 
 export function formatTokenisedLine(tokens: TokenisedLine): string {
-	return tokens.map((token) => (typeof token === "string" ? token : token.value)).join("")
-}
-
-export function isText(token: Token): token is string {
-	return typeof token === "string"
+	return tokens.map((token) => token.value).join("")
 }

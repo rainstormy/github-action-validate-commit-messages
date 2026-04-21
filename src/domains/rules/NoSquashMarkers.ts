@@ -1,5 +1,4 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { isSquashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { type RuleContext, ruleContext } from "#rules/Rule.ts"
@@ -24,7 +23,7 @@ export function noSquashMarkers(commits: Commits, options: EmptyObject | null): 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	const [firstToken] = commit.subjectLine
 
-	if (firstToken !== undefined && isSquashMarker(firstToken)) {
+	if (firstToken?.type === "squash-marker") {
 		const leadingWhitespaceOffset = firstToken.value.length - firstToken.value.trimStart().length
 		const trimmedTokenLength = firstToken.value.trim().length
 

@@ -1,5 +1,4 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { isText } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { type RuleContext, ruleContext } from "#rules/Rule.ts"
@@ -30,11 +29,11 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	let index = 0
 
 	for (const token of commit.subjectLine) {
-		if (isText(token)) {
-			const trimmedToken = token.trimStart()
+		if (token.type === "text") {
+			const trimmedToken = token.value.trimStart()
 
 			if (startsWithLowercaseLetter(trimmedToken)) {
-				const leadingWhitespaceOffset = token.length - trimmedToken.length
+				const leadingWhitespaceOffset = token.value.length - trimmedToken.length
 				const startIndex = index + leadingWhitespaceOffset
 
 				return subjectLineConcern(rule, commit.sha, {
