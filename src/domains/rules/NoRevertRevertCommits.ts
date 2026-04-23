@@ -1,4 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
+import { trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { type RuleContext, ruleContext } from "#rules/Rule.ts"
@@ -31,11 +32,8 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 			const revertOccurrences = (token.value.match(/revert/giu) ?? []).length
 
 			if (revertOccurrences > 1) {
-				const leadingWhitespaceOffset = token.value.length - token.value.trimStart().length
-				const trimmedTokenLength = token.value.trim().length
-
 				return subjectLineConcern(rule, commit.sha, {
-					range: [leadingWhitespaceOffset, leadingWhitespaceOffset + trimmedTokenLength],
+					range: trimmedTokenRange(token),
 				})
 			}
 		}

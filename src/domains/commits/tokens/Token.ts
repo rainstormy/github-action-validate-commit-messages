@@ -55,3 +55,10 @@ export function splitTextTokens(
 
 	return result
 }
+
+export function trimmedTokenRange(token: Token): CharacterRange {
+	const [start, end] = token.range
+	const leadingOffset = token.value.length - token.value.trimStart().length
+	const trailingOffset = token.value.length - token.value.trimEnd().length
+	return [start + leadingOffset, end - trailingOffset]
+}

@@ -1,4 +1,6 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
+import type { TextToken } from "#commits/tokens/TextToken.ts"
+import { trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { type RuleContext, ruleContext } from "#rules/Rule.ts"
@@ -26,15 +28,10 @@ export function useCapitalisedSubjectLines(
 }
 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
-	let index = 0
-
 	for (const token of commit.subjectLine) {
 		if (token.type === "text") {
-			const trimmedToken = token.value.trimStart()
-
-			if (startsWithLowercaseLetter(trimmedToken)) {
-				const leadingWhitespaceOffset = token.value.length - trimmedToken.length
-				const startIndex = index + leadingWhitespaceOffset
+			if (startsWithLowercaseLetter(token)) {
+				const [startIndex] = trimmedTokenRange(token)
 
 				return subjectLineConcern(rule, commit.sha, {
 					range: [startIndex, startIndex + 1],
@@ -43,14 +40,12 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 
 			return null
 		}
-
-		index += token.value.length
 	}
 
 	return null
 }
 
-function startsWithLowercaseLetter(token: string): boolean {
-	const firstCharacter = token[0] ?? ""
+function startsWithLowercaseLetter(token: TextToken): boolean {
+	const firstCharacter = token.value.trimStart()[0] ?? ""
 	return firstCharacter !== firstCharacter.toUpperCase()
 }
