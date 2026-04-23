@@ -1,6 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { isRevertMarker } from "#commits/tokens/RevertMarkerToken.ts"
-import { isSquashMarker } from "#commits/tokens/SquashMarkerToken.ts"
+import { trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { type RuleContext, ruleContext } from "#rules/Rule.ts"
@@ -26,18 +25,15 @@ export function noRevertRevertCommits(commits: Commits, options: EmptyObject | n
 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	for (const token of commit.subjectLine) {
-		if (isSquashMarker(token)) {
+		if (token.type === "squash-marker") {
 			return null
 		}
-		if (isRevertMarker(token)) {
+		if (token.type === "revert-marker") {
 			const revertOccurrences = (token.value.match(/revert/giu) ?? []).length
 
 			if (revertOccurrences > 1) {
-				const leadingWhitespaceOffset = token.value.length - token.value.trimStart().length
-				const trimmedTokenLength = token.value.trim().length
-
 				return subjectLineConcern(rule, commit.sha, {
-					range: [leadingWhitespaceOffset, leadingWhitespaceOffset + trimmedTokenLength],
+					range: trimmedTokenRange(token),
 				})
 			}
 		}

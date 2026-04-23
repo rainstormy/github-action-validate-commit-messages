@@ -1,14 +1,11 @@
-import type { Token } from "#commits/tokens/Token.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type FencedCodeBlockToken = {
 	type: "fenced-code-block"
 	value: string
+	range: CharacterRange
 }
 
-export function fencedCodeBlock(value: string): FencedCodeBlockToken {
-	return { type: "fenced-code-block", value }
-}
-
-export function isFencedCodeBlock(token: Token): token is FencedCodeBlockToken {
-	return typeof token === "object" && token.type === "fenced-code-block"
+export function fencedCodeBlock(value: string, range: CharacterRange): FencedCodeBlockToken {
+	return { type: "fenced-code-block", value, range }
 }

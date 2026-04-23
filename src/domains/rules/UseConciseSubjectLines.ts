@@ -1,8 +1,4 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { isDependencyVersion } from "#commits/tokens/DependencyVersionToken.ts"
-import { isRevertMarker } from "#commits/tokens/RevertMarkerToken.ts"
-import { isSquashMarker } from "#commits/tokens/SquashMarkerToken.ts"
-import { isText } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { type RuleContext, ruleContext } from "#rules/Rule.ts"
@@ -36,28 +32,33 @@ function verifyCommit(commit: Commit, rule: RuleContext<"useConciseSubjectLines"
 	const maxLength = rule.options.maxLength
 
 	let textLength = 0
-	let startOffset = 0
-	let endOffset = 0
-	let endOffsetPotential = 0
+	let overflowStartIndex = 0
+	let overflowEndIndex = 0
 
 	for (const token of commit.subjectLine) {
-		if (isDependencyVersion(token) || isRevertMarker(token) || isSquashMarker(token)) {
+		if (
+			token.type === "dependency-version" ||
+			token.type === "revert-marker" ||
+			token.type === "squash-marker"
+		) {
 			return null
 		}
-		if (isText(token)) {
-			textLength += token.length
-			endOffset += endOffsetPotential
-			endOffsetPotential = 0
-		} else if (textLength <= maxLength) {
-			startOffset += token.value.length
-		} else {
-			endOffsetPotential += token.value.length
+		if (token.type === "text") {
+			textLength += token.value.length
+
+			if (textLength > maxLength) {
+				if (overflowStartIndex === 0) {
+					const offset = maxLength - textLength + token.value.length
+					overflowStartIndex = token.range[0] + offset
+				}
+				overflowEndIndex = token.range[1]
+			}
 		}
 	}
 
-	if (textLength > maxLength) {
+	if (overflowEndIndex !== overflowStartIndex) {
 		return subjectLineConcern(rule, commit.sha, {
-			range: [startOffset + maxLength, startOffset + textLength + endOffset],
+			range: [overflowStartIndex, overflowEndIndex],
 		})
 	}
 

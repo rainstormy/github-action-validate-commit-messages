@@ -1,14 +1,11 @@
-import type { Token } from "#commits/tokens/Token.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type CoauthorToken = {
 	type: "coauthor"
 	value: string
+	range: CharacterRange
 }
 
-export function coauthor(value: string): CoauthorToken {
-	return { type: "coauthor", value }
-}
-
-export function isCoauthor(token: Token): token is CoauthorToken {
-	return typeof token === "object" && token.type === "coauthor"
+export function coauthor(value: string, range: CharacterRange): CoauthorToken {
+	return { type: "coauthor", value, range }
 }
