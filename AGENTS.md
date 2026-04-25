@@ -64,7 +64,8 @@ Always use mise to install dependencies and run tasks. Never use pnpm, npm, npx,
 ### Add a new rule
 - Implement the rule logic in the appropriate file in `src/domains/rules/`
 - For each commit to verify, return the appropriate concern when the rule is violated and return null when all is good
-- Write unit tests for the rule in isolation, including multiple positive and negative cases, covering edge cases and different configurations if applicable
+- If it is a brand-new rule, add it to `Rule.ts` and default configurations with meaningful options and write unit tests
+- Write unit tests for the rule logic in isolation, including multiple positive and negative cases, covering edge cases and different configurations if applicable
 - Support the new rule in reports in `src/domains/rules/reports/`
 - Write unit tests for the reports
 

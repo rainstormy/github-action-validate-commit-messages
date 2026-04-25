@@ -18,6 +18,7 @@ describe("the default configuration in the command-line", () => {
 
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
+		${"noBlankSubjectLines"}         | ${{}}
 		${"noExcessiveCommitsPerBranch"} | ${{}}
 		${"noMergeCommits"}              | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
@@ -68,6 +69,7 @@ describe("the default configuration in GitHub Actions", () => {
 
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
+		${"noBlankSubjectLines"}         | ${{}}
 		${"noExcessiveCommitsPerBranch"} | ${{}}
 		${"noMergeCommits"}              | ${{}}
 		${"noRepeatedSubjectLines"}      | ${{}}

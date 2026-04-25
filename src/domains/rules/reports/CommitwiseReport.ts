@@ -93,6 +93,9 @@ function formatSubjectLineConcern(concern: SubjectLineConcern, commit: Commit): 
 
 function ruleMessage(rule: RuleContext): string {
 	switch (rule.key) {
+		case "noBlankSubjectLines": {
+			return "Subject lines must contain at least one non-whitespace character."
+		}
 		case "noExcessiveCommitsPerBranch": {
 			throw new Error(`Not implemented yet: ${rule.key}`)
 		}
