@@ -17,43 +17,21 @@ node = "24.14.1"
 pnpm = "10.30.3"
 
 [tasks.build]
-depends = ["build-cli", "build-gha", "build-legacy-v1"]
-description = "Runs `build-cli`, `build-gha`, and `build-legacy-v1`."
-alias = ["b"]
-
-[tasks.build-cli]
 # language=sh
 run = """
-  vite build --ssr src/main-cli.ts --outDir dist/cli/
-"""
-env = { COMET_PLATFORM = "cli" }
-description = "Generates production-grade build artefacts of the v2 command-line entrypoint with Vite."
-alias = ["bc"]
-
-[tasks.build-gha]
-# language=sh
-run = """
-  vite build --ssr src/main-gha.ts --outDir dist/gha/
-"""
-env = { COMET_PLATFORM = "gha" }
-description = "Generates production-grade build artefacts of the v2 GitHub Actions entrypoint with Vite."
-alias = ["bg"]
-
-[tasks.build-legacy-v1]
-# language=sh
-run = """
+  COMET_PLATFORM='cli' vite build --ssr src/main-cli.ts --outDir dist/cli/ && \
+  COMET_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/ && \
   vite build --ssr src/legacy-v1-main.ts --outDir dist/
 """
-description = "Generates production-grade build artefacts of the legacy v1 GitHub Actions entrypoint with Vite."
+description = "Generates production-grade build artefacts of all entrypoints with Vite."
+alias = ["b"]
 
 [tasks.check]
-depends = [
-  "check-actions",
-  "check-format",
-  # "check-renovate", # Skipped because it is often quite slow.
-  "check-types",
-]
-description = "Runs `check-actions`, `check-format`, and `check-types`."
+run = """
+  oxlint --type-aware --type-check --deny-warnings && \
+  oxfmt --check
+"""
+description = "Verifies that the source code is clean, type-safe, and well-formatted with Oxlint, TypeScript, and Oxfmt."
 alias = ["c"]
 
 [tasks.check-actions]
@@ -62,15 +40,6 @@ run = """
   actionlint
 """
 description = "Verifies that the GitHub Actions workflows are valid with actionlint."
-alias = ["ca"]
-
-[tasks.check-format]
-# language=sh
-run = """
-  oxlint --deny-warnings && oxfmt --check
-"""
-description = "Verifies that the source code is clean and well-formatted with Oxlint and Oxfmt."
-alias = ["cf"]
 
 [tasks.check-renovate]
 # language=sh
@@ -78,20 +47,12 @@ run = """
   pnpm dlx --package renovate renovate-config-validator
 """
 description = "Verifies that the Renovate configuration file (`.github/renovate.json`) is valid."
-alias = ["cr"]
-
-[tasks.check-types]
-# language=sh
-run = """
-  oxlint --type-aware --type-check --deny-warnings
-"""
-description = "Verifies that the source code is type-safe with Oxlint and TypeScript."
-alias = ["ct"]
 
 [tasks.format]
 # language=sh
 run = """
-  oxlint --fix-dangerously && oxfmt
+  oxlint --fix-dangerously && \
+  oxfmt
 """
 description = "Applies linting suggestions with Oxlint and reformats the source code with Oxfmt."
 alias = ["f"]
@@ -107,21 +68,19 @@ alias = ["i"]
 [tasks.test]
 # language=sh
 run = """
-  vitest run
+  CI=1 COMET_PLATFORM='cli' vitest run
 """
-env = { CI = 1, COMET_PLATFORM = "cli" }
 description = "Runs the entire unit test suite once with Vitest."
 alias = ["t"]
 
 [tasks.vitest]
 # language=sh
 run = """
-  vitest watch \
+  CI=1 COMET_PLATFORM='cli' vitest watch \
     --ui \
     --api.port "$LOCALHOST_VITEST_PORT" \
     --open "$LOCALHOST_VITEST_OPENS_AUTOMATICALLY"
 """
-env = { CI = 1, COMET_PLATFORM = "cli" }
 description = "Starts the Vitest UI test explorer for continuous unit testing."
 alias = ["v"]
 

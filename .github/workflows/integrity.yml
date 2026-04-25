@@ -91,20 +91,21 @@ jobs:
           # language=sh
           task: check-actions
         #
-      - name: Verify the code style (Oxlint and Oxfmt)
+      - name: Verify the code style (Oxlint, TypeScript, Oxfmt)
         uses: ./.github/actions/task
         with:
           # The cache key includes:
-          # - Files covered by Oxlint and Oxfmt, as defined in `.oxlintrc.jsonc` and `.oxfmtrc.jsonc`.
+          # - Files covered by Oxlint, TypeScript, and Oxfmt, as defined by `.oxlintrc.jsonc`, `tsconfig.json`, and `.oxfmtrc.jsonc`.
           # - The Oxlint configuration file (`.oxlintrc.jsonc`).
+          # - The TypeScript configuration file (`tsconfig.json`).
           # - The Oxfmt configuration file (`.oxfmtrc.jsonc`).
-          # - The EditorConfig file respected by Oxfmt (`.editorconfig`).
+          # - The EditorConfig file which is respected by Oxfmt (`.editorconfig`).
           # - Tool versions and mise task definitions (`mise.toml`).
           # - Node.js package versions (`pnpm-lock.yaml`).
-          cache-key: check-format:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.toml', '*.ts', '*.yaml', '*.yml', '.editorconfig') }}
-          cache-path: node_modules/.cache/oxc/
+          cache-key: check:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.toml', '*.ts', '*.yaml', '*.yml', '.editorconfig') }}
+          cache-path: node_modules/.cache/typescript/
           # language=sh
-          task: check-format
+          task: check
         #
       - name: Verify the Renovate configuration
         uses: ./.github/actions/task
@@ -116,19 +117,6 @@ jobs:
           cache-path: node_modules/.cache/renovate/
           # language=sh
           task: check-renovate
-        #
-      - name: Verify the type safety (TypeScript)
-        uses: ./.github/actions/task
-        with:
-          # The cache key includes:
-          # - Files covered by TypeScript, as defined in `tsconfig.json`.
-          # - The TypeScript configuration file (`tsconfig.json`).
-          # - Tool versions and mise task definitions (`mise.toml`).
-          # - Node.js package versions (`pnpm-lock.yaml`).
-          cache-key: check-types:${{ hashFiles('src/**/*', '*.ts', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json') }}
-          cache-path: node_modules/.cache/typescript/
-          # language=sh
-          task: check-types
 
   test:
     name: Unit tests
