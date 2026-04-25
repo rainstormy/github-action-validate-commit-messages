@@ -13,39 +13,6 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "build-cli",
-			"command": "mise run build-cli",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "build-gha",
-			"command": "mise run build-gha",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "build-legacy-v1",
-			"command": "mise run build-legacy-v1",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
 			"label": "check",
 			"command": "mise run check",
 			"type": "shell",
@@ -68,30 +35,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "check-format",
-			"command": "mise run check-format",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
 			"label": "check-renovate",
 			"command": "mise run check-renovate",
-			"type": "shell",
-			"presentation": {
-				"clear": true,
-				"panel": "shared",
-				"reveal": "always"
-			},
-			"problemMatcher": []
-		},
-		{
-			"label": "check-types",
-			"command": "mise run check-types",
 			"type": "shell",
 			"presentation": {
 				"clear": true,

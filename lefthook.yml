@@ -43,4 +43,4 @@ pre-push:
     mise:
       # Runs `check` and `test` before allowing commits to be pushed.
       # language=sh
-      run: mise run check && mise run test
+      run: mise run check && mise run check-actions && mise run test

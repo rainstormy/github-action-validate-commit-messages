@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="build-legacy-v1" type="MiseTomlTaskRunConfigurationType" factoryName="MiseTomlTask">
-    <mise configEnvironment="" taskName="build-legacy-v1" workingDirectory="$PROJECT_DIR$" taskParams="">
-      <envs />
-    </mise>
-    <method v="2" />
-  </configuration>
-</component>
