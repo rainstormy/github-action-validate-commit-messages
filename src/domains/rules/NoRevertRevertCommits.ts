@@ -28,14 +28,10 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 		if (token.type === "squash-marker") {
 			return null
 		}
-		if (token.type === "revert-marker") {
-			const revertOccurrences = (token.value.match(/revert/giu) ?? []).length
-
-			if (revertOccurrences > 1) {
-				return subjectLineConcern(rule, commit.sha, {
-					range: trimmedTokenRange(token),
-				})
-			}
+		if (token.type === "revert-marker" && token.occurrences > 1) {
+			return subjectLineConcern(rule, commit.sha, {
+				range: trimmedTokenRange(token),
+			})
 		}
 	}
 

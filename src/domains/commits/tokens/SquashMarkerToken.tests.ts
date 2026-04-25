@@ -46,7 +46,7 @@ describe.each`
 	subjectLine                                                    | expectedTokens
 	${"#1 fixup! Apply some magic"}                                | ${[issueLink("#1 ", [0, 3]), text("fixup! Apply some magic", [3, 26])]}
 	${"GH-45 GL-193 squash! amend! redo the artistic performance"} | ${[issueLink("GH-45 ", [0, 6]), issueLink("GL-193 ", [6, 13]), text("squash! amend! redo the artistic performance", [13, 57])]}
-	${'Revert "fixup! Apply some magic"'}                          | ${[revertMarker('Revert "', [0, 8]), text('fixup! Apply some magic"', [8, 32])]}
+	${'Revert "fixup! Apply some magic"'}                          | ${[revertMarker('Revert "', 1, [0, 8]), text("fixup! Apply some magic", [8, 31]), revertMarker('"', 0, [31, 32])]}
 `(
 	"when the subject line of $subjectLine has other tokens before potential squash markers",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {

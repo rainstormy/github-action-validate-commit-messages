@@ -23,7 +23,7 @@ describe.each`
 	${"Replace `a`, `b`, and `c`"}                      | ${[text("Replace ", [0, 8]), inlineCode("`a`", [8, 11]), text(", ", [11, 13]), inlineCode("`b`", [13, 16]), text(", and ", [16, 22]), inlineCode("`c`", [22, 25])]}
 	${"`1``23``456`"}                                   | ${[inlineCode("`1`", [0, 3]), inlineCode("`23`", [3, 7]), inlineCode("`456`", [7, 12])]}
 	${"fixup! Use `pnpm install` to get started"}       | ${[squashMarker("fixup! ", [0, 7]), text("Use ", [7, 11]), inlineCode("`pnpm install`", [11, 25]), text(" to get started", [25, 40])]}
-	${'Revert "Use `pnpm install` to get started"'}     | ${[revertMarker('Revert "', [0, 8]), text("Use ", [8, 12]), inlineCode("`pnpm install`", [12, 26]), text(' to get started"', [26, 42])]}
+	${'Revert "Use `pnpm install` to get started"'}     | ${[revertMarker('Revert "', 1, [0, 8]), text("Use ", [8, 12]), inlineCode("`pnpm install`", [12, 26]), text(" to get started", [26, 41]), revertMarker('"', 0, [41, 42])]}
 	${"Upgrade `react` from 18.3.1 to 19.2.0"}          | ${[text("Upgrade ", [0, 8]), inlineCode("`react`", [8, 15]), text(" from ", [15, 21]), dependencyVersion("18.3.1", [21, 27]), text(" to ", [27, 31]), dependencyVersion("19.2.0", [31, 37])]}
 	${"#42: Replace `<a>` with new `<Link>` component"} | ${[issueLink("#42: ", [0, 5]), text("Replace ", [5, 13]), inlineCode("`<a>`", [13, 18]), text(" with new ", [18, 28]), inlineCode("`<Link>`", [28, 36]), text(" component", [36, 46])]}
 `(
@@ -46,7 +46,7 @@ describe.each`
 	${"`fixup!` is the correct syntax"}                        | ${[inlineCode("`fixup!`", [0, 8]), text(" is the correct syntax", [8, 30])]}
 	${"squash! `fixup!` is the correct syntax"}                | ${[squashMarker("squash! ", [0, 8]), inlineCode("`fixup!`", [8, 16]), text(" is the correct syntax", [16, 38])]}
 	${"#440: Codename `GH-32`"}                                | ${[issueLink("#440: ", [0, 6]), text("Codename ", [6, 15]), inlineCode("`GH-32`", [15, 22])]}
-	${'Revert "`Revert` "the malfunctioning coffee machine""'} | ${[revertMarker('Revert "', [0, 8]), inlineCode("`Revert`", [8, 16]), text(' "the malfunctioning coffee machine""', [16, 53])]}
+	${'Revert "`Revert` "the malfunctioning coffee machine""'} | ${[revertMarker('Revert "', 1, [0, 8]), inlineCode("`Revert`", [8, 16]), text(' "the malfunctioning coffee machine"', [16, 52]), revertMarker('"', 0, [52, 53])]}
 `(
 	"when the subject line of $subjectLine contains inline code phrases that resemble other kinds of tokens",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
