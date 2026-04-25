@@ -46,6 +46,7 @@ describe.each`
 	${"`fixup!` is the correct syntax"}                        | ${[inlineCode("`fixup!`", [0, 8]), text(" is the correct syntax", [8, 30])]}
 	${"squash! `fixup!` is the correct syntax"}                | ${[squashMarker("squash! ", [0, 8]), inlineCode("`fixup!`", [8, 16]), text(" is the correct syntax", [16, 38])]}
 	${"#440: Codename `GH-32`"}                                | ${[issueLink("#440: ", [0, 6]), text("Codename ", [6, 15]), inlineCode("`GH-32`", [15, 22])]}
+	${"this looks related to `#92`"}                           | ${[text("this looks related to ", [0, 22]), inlineCode("`#92`", [22, 27])]}
 	${'Revert "`Revert` "the malfunctioning coffee machine""'} | ${[revertMarker('Revert "', 1, [0, 8]), inlineCode("`Revert`", [8, 16]), text(' "the malfunctioning coffee machine"', [16, 52]), revertMarker('"', 0, [52, 53])]}
 `(
 	"when the subject line of $subjectLine contains inline code phrases that resemble other kinds of tokens",

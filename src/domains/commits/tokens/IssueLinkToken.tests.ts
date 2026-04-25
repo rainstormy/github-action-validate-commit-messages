@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
+import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
@@ -31,6 +32,7 @@ describe.each`
 	${"squash! #12 Throw a tantrum (#34) #56 {GH-78} #90"}             | ${[squashMarker("squash! ", [0, 8]), issueLink("#12 ", [8, 12]), text("Throw a tantrum", [12, 27]), issueLink(" (#34) ", [27, 34]), issueLink("#56 ", [34, 38]), issueLink("{GH-78} ", [38, 46]), issueLink("#90", [46, 49])]}
 	${"fixup! Close #1337 by fixing the bug"}                          | ${[squashMarker("fixup! ", [0, 7]), text("Close", [7, 12]), issueLink(" #1337 ", [12, 19]), text("by fixing the bug", [19, 36])]}
 	${"<#71238> loosen the bolts"}                                     | ${[issueLink("<#71238> ", [0, 9]), text("loosen the bolts", [9, 25])]}
+	${'Revert "[GH-39] This should fix it. Famous last words"'}        | ${[revertMarker('Revert "', 1, [0, 8]), issueLink("[GH-39] ", [8, 16]), text("This should fix it. Famous last words", [16, 53]), revertMarker('"', 0, [53, 54])]}
 `(
 	"when the subject line of $subjectLine contains GitHub-/GitLab-style issue links",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
@@ -82,6 +84,7 @@ describe.each`
 	${"squash! UNICORN-12 Throw a tantrum (UNICORN-34) UNICORN-56 {UNICORN-78} UNICORN-90"}  | ${[squashMarker("squash! ", [0, 8]), issueLink("UNICORN-12 ", [8, 19]), text("Throw a tantrum", [19, 34]), issueLink(" (UNICORN-34) ", [34, 48]), issueLink("UNICORN-56 ", [48, 59]), issueLink("{UNICORN-78} ", [59, 72]), issueLink("UNICORN-90", [72, 82])]}
 	${"fixup! Close UNICORN-1337 by fixing the bug"}                                         | ${[squashMarker("fixup! ", [0, 7]), text("Close", [7, 12]), issueLink(" UNICORN-1337 ", [12, 26]), text("by fixing the bug", [26, 43])]}
 	${"<UNICORN-71238> loosen the bolts"}                                                    | ${[issueLink("<UNICORN-71238> ", [0, 16]), text("loosen the bolts", [16, 32])]}
+	${'Revert "[UNICORN-39] This should fix it. Famous last words"'}                         | ${[revertMarker('Revert "', 1, [0, 8]), issueLink("[UNICORN-39] ", [8, 21]), text("This should fix it. Famous last words", [21, 58]), revertMarker('"', 0, [58, 59])]}
 `(
 	"when the subject line of $subjectLine contains Jira-style issue links",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
