@@ -23,7 +23,7 @@ describe.each`
 	${"Release v0.1.0-next"}                                         | ${[text("Release ", [0, 8]), dependencyVersion("v0.1.0-next", [8, 19])]}
 	${"Pin the Node.js image to 4af617c"}                            | ${[text("Pin the Node.js image to ", [0, 25]), dependencyVersion("4af617c", [25, 32])]}
 	${"Upgrade nginx image digest to 9d739ff1ada6"}                  | ${[text("Upgrade nginx image digest to ", [0, 30]), dependencyVersion("9d739ff1ada6", [30, 42])]}
-	${'Revert "Upgrade nginx image digest to 9d739ff1ada6"'}         | ${[revertMarker('Revert "', [0, 8]), text("Upgrade nginx image digest to ", [8, 38]), dependencyVersion("9d739ff1ada6", [38, 50]), text('"', [50, 51])]}
+	${'Revert "Upgrade nginx image digest to 9d739ff1ada6"'}         | ${[revertMarker('Revert "', 1, [0, 8]), text("Upgrade nginx image digest to ", [8, 38]), dependencyVersion("9d739ff1ada6", [38, 50]), revertMarker('"', 0, [50, 51])]}
 	${"#2: Refresh master to commit dfbc095"}                        | ${[issueLink("#2: ", [0, 4]), text("Refresh master to commit ", [4, 29]), dependencyVersion("dfbc095", [29, 36])]}
 	${"fixup! Bump @typescript-eslint/parser from 5.52.0 to 5.59.1"} | ${[squashMarker("fixup! ", [0, 7]), text("Bump @typescript-eslint/parser from ", [7, 43]), dependencyVersion("5.52.0", [43, 49]), text(" to ", [49, 53]), dependencyVersion("5.59.1", [53, 59])]}
 	${"amend! Upgrade React to 19.2.0 (#52)"}                        | ${[squashMarker("amend! ", [0, 7]), text("Upgrade React to ", [7, 24]), dependencyVersion("19.2.0", [24, 30]), issueLink(" (#52)", [30, 36])]}
