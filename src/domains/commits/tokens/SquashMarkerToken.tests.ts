@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
+import { inlineCode } from "#commits/tokens/InlineCodeToken.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
 import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
@@ -30,6 +31,9 @@ describe.each`
 	${" amend!squash!!   fixup!!amend Mess up the squash! markers"}                    | ${[squashMarker(" amend!squash!!   fixup!!", [0, 25]), text("amend Mess up the squash! markers", [25, 58])]}
 	${"!amend!fixup!SQUASH fixup! Every bus optimised"}                                | ${[squashMarker("!amend!fixup!SQUASH fixup! ", [0, 27]), text("Every bus optimised", [27, 46])]}
 	${"!squash#6 !fixup! carry on then #11"}                                           | ${[squashMarker("!squash", [0, 7]), issueLink("#6 ", [7, 10]), text("!fixup! carry on then", [10, 31]), issueLink(" #11", [31, 35])]}
+	${'fixup! Revert "Add an amazing feature"'}                                        | ${[squashMarker("fixup! ", [0, 7]), revertMarker('Revert "', 1, [7, 15]), text("Add an amazing feature", [15, 37]), revertMarker('"', 0, [37, 38])]}
+	${'squash!Revert "Revert "Refactor the authentication module""'}                   | ${[squashMarker("squash!", [0, 7]), revertMarker('Revert "Revert "', 2, [7, 23]), text("Refactor the authentication module", [23, 57]), revertMarker('""', 0, [57, 59])]}
+	${'amend! Revert "fixup!"'}                                                        | ${[squashMarker("amend! ", [0, 7]), revertMarker('Revert "', 1, [7, 15]), text("fixup!", [15, 21]), revertMarker('"', 0, [21, 22])]}
 `(
 	"when the subject line of $subjectLine contains squash markers",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
@@ -46,7 +50,9 @@ describe.each`
 	subjectLine                                                    | expectedTokens
 	${"#1 fixup! Apply some magic"}                                | ${[issueLink("#1 ", [0, 3]), text("fixup! Apply some magic", [3, 26])]}
 	${"GH-45 GL-193 squash! amend! redo the artistic performance"} | ${[issueLink("GH-45 ", [0, 6]), issueLink("GL-193 ", [6, 13]), text("squash! amend! redo the artistic performance", [13, 57])]}
-	${'Revert "fixup! Apply some magic"'}                          | ${[revertMarker('Revert "', 1, [0, 8]), text("fixup! Apply some magic", [8, 31]), revertMarker('"', 0, [31, 32])]}
+	${"`Token`squash! need more tokens"}                           | ${[inlineCode("`Token`", [0, 7]), text("squash! need more tokens", [7, 31])]}
+	${"[fixup!] #37: fixed it"}                                    | ${[text("[fixup!]", [0, 8]), issueLink(" #37: ", [8, 14]), text("fixed it", [14, 22])]}
+	${'revert "fixup! add a semicolon for good luck"'}             | ${[revertMarker('revert "', 1, [0, 8]), text("fixup! add a semicolon for good luck", [8, 44]), revertMarker('"', 0, [44, 45])]}
 `(
 	"when the subject line of $subjectLine has other tokens before potential squash markers",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
