@@ -13,6 +13,9 @@ const configuration = fakeConfiguration()
 
 describe.each`
 	subjectLine                                                      | expectedTokens
+	${'Revert ""'}                                                   | ${[revertMarker('Revert "', 1, [0, 8]), revertMarker('"', 0, [8, 9])]}
+	${'Revert " "'}                                                  | ${[revertMarker('Revert "', 1, [0, 8]), text(" ", [8, 9]), revertMarker('"', 0, [9, 10])]}
+	${'Revert "Revert """'}                                          | ${[revertMarker('Revert "Revert "', 2, [0, 16]), revertMarker('""', 0, [16, 18])]}
 	${'Revert "Repair the soft ice machine"'}                        | ${[revertMarker('Revert "', 1, [0, 8]), text("Repair the soft ice machine", [8, 35]), revertMarker('"', 0, [35, 36])]}
 	${'Revert "Revert "Repair the soft ice machine""'}               | ${[revertMarker('Revert "Revert "', 2, [0, 16]), text("Repair the soft ice machine", [16, 43]), revertMarker('""', 0, [43, 45])]}
 	${'Revert "Revert "Revert "Repair the soft ice machine"""'}      | ${[revertMarker('Revert "Revert "Revert "', 3, [0, 24]), text("Repair the soft ice machine", [24, 51]), revertMarker('"""', 0, [51, 54])]}
@@ -38,10 +41,13 @@ describe.each`
 
 describe.each`
 	subjectLine                                                   | expectedTokens
+	${'Revert "'}                                                 | ${[revertMarker('Revert "', 1, [0, 8])]}
+	${'Revert "  '}                                               | ${[revertMarker('Revert "', 1, [0, 8]), text("  ", [8, 10])]}
 	${'Revert "Repair the soft ice machine'}                      | ${[revertMarker('Revert "', 1, [0, 8]), text("Repair the soft ice machine", [8, 35])]}
 	${'Revert "Revert "Repair the soft ice machine"'}             | ${[revertMarker('Revert "Revert "', 2, [0, 16]), text("Repair the soft ice machine", [16, 43]), revertMarker('"', 0, [43, 44])]}
 	${'Revert "Revert "Revert "Repair the soft ice machine'}      | ${[revertMarker('Revert "Revert "Revert "', 3, [0, 24]), text("Repair the soft ice machine", [24, 51])]}
 	${'  revert " revert "Find a new "court jester" to blame " '} | ${[revertMarker('  revert " revert "', 2, [0, 19]), text('Find a new "court jester" to blame ', [19, 54]), revertMarker('" ', 0, [54, 56])]}
+	${'Revert ""weirdly quoted message'}                          | ${[revertMarker('Revert "', 1, [0, 8]), text('"weirdly quoted message', [8, 31])]}
 	${'fixup! Revert "Add an amazing feature'}                    | ${[squashMarker("fixup! ", [0, 7]), revertMarker('Revert "', 1, [7, 15]), text("Add an amazing feature", [15, 37])]}
 	${'revert "a mere bugfix attempt"""'}                         | ${[revertMarker('revert "', 1, [0, 8]), text('a mere bugfix attempt""', [8, 31]), revertMarker('"', 0, [31, 32])]}
 `(
@@ -77,12 +83,9 @@ describe.each`
 	${"Add a boring feature"}
 	${'Not a Revert "thing"'}
 	${"revert"}
-	${'Revert "'}
-	${'Revert ""'}
 	${"Revert 'the next big thing'"}
 	${'revert more stuff"'}
 	${"Reverted some secret stuff"}
-	${'Revert ""weirdly quoted message'}
 	${'"Revert "Make the formatter happy again""'}
 	${'Revert"without-space"'}
 	${'fix: Revert "something"'}

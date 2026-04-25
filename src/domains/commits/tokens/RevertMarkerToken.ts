@@ -18,8 +18,8 @@ export function revertMarker(
 	return { type: "revert-marker", value, occurrences, range }
 }
 
-// Assume all revert markers to contain a double quote `"` followed by a non-quote character (quote pair consistency not enforced for simplicity).
-const regex = /^(?:\s*revert\s+")+(?=[^"])/iu
+// Assume all revert markers to contain an opening double quote `"` (quote pair consistency not enforced for simplicity).
+const regex = /^(?:\s*revert\s+")+/iu
 
 export function tokeniseRevertMarkers(initialTokens: TokenisedLine): TokenisedLine {
 	const result: TokenisedLine = []
@@ -39,7 +39,7 @@ export function tokeniseRevertMarkers(initialTokens: TokenisedLine): TokenisedLi
 
 			// Extract no more trailing double quotes than there are 'revert' occurrences.
 			const trailerRegex = new RegExp(String.raw`("\s*){1,${occurrences}}$`, "gu")
-			const trailer = trailerRegex.exec(token.value)?.[0] ?? null
+			const trailer = trailerRegex.exec(token.value.slice(match.length))?.[0] ?? null
 
 			const [oldStartIndex, oldEndIndex] = token.range
 
