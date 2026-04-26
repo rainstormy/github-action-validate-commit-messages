@@ -11,8 +11,6 @@ import { notNullish } from "#utilities/Arrays.ts"
  *
  * Cherry-picking the original commit provides more context, such as the original commit message and authorship.
  * This helps to preserve the traceability of the commit history.
- *
- * It ignores commits with squash markers.
  */
 export function noRevertRevertCommits(commits: Commits, options: EmptyObject | null): Concerns {
 	if (options === null) {
@@ -25,9 +23,6 @@ export function noRevertRevertCommits(commits: Commits, options: EmptyObject | n
 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	for (const token of commit.subjectLine) {
-		if (token.type === "squash-marker") {
-			return null
-		}
 		if (token.type === "revert-marker" && token.occurrences > 1) {
 			return subjectLineConcern(rule, commit.sha, {
 				range: trimmedTokenRange(token),

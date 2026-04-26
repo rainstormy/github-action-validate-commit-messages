@@ -126,6 +126,59 @@ describe.each`
 )
 
 describe.each`
+	subjectLine                                                                                 | expectedRange20 | expectedRange50
+	${"#510 Fixed a bug, but have probably introduced another one"}                             | ${[25, 58]}     | ${[55, 58]}
+	${"fixup! forgot to save my changes before entering the merge chaos"}                       | ${[27, 64]}     | ${[57, 64]}
+	${'Revert "retrieve data from the exclusive third-party service"'}                          | ${[28, 60]}     | ${[58, 60]}
+	${"fixup! GH-291 Resolve memory issues to make the code work better than it did last year"} | ${[34, 86]}     | ${[64, 86]}
+`(
+	"when the subject line of $subjectLine contains ignorable tokens and still exceeds 50 characters, but not 72 characters",
+	(props: {
+		subjectLine: string
+		expectedRange20: CharacterRange
+		expectedRange50: CharacterRange
+	}) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe("and the rule is enabled with a maximum length of 20 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled20.options)
+
+			it("raises a concern about the characters that exceed the limit", () => {
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled20, commit.sha, { range: props.expectedRange20 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 50 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled50.options)
+
+			it("raises a concern about the characters that exceed the limit", () => {
+				expect(actualConcerns).toEqual<Concerns>([
+					subjectLineConcern(enabled50, commit.sha, { range: props.expectedRange50 }),
+				])
+			})
+		})
+
+		describe("and the rule is enabled with a maximum length of 72 characters", () => {
+			const actualConcerns = useConciseSubjectLines([commit], enabled72.options)
+
+			it("does not raise any concerns", () => {
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+
+		describe("and the rule is disabled", () => {
+			const actualConcerns = useConciseSubjectLines([commit], null)
+
+			it("does not raise any concerns", () => {
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
 	subjectLine                                                              | expectedRange20
 	${"Make the user interface less chaotic (GH-11) (GL-17)"}                | ${[20, 36]}
 	${"<#71238> free up unclaimed disk space"}                               | ${[29, 37]}
@@ -137,8 +190,10 @@ describe.each`
 	${"(GH-72): fix security vulnerability in `BridgeService`"}              | ${[29, 39]}
 	${"Make a smile to the `camera` again"}                                  | ${[28, 34]}
 	${"revisit the glorious `MaxDPS` algorithm"}                             | ${[20, 39]}
+	${'Revert "Revert "Revert "Fix the nasty bug from yesterday"""'}         | ${[44, 56]}
+	${"Squash! Make the program act like a clown"}                           | ${[28, 41]}
 `(
-	"when the subject line of $subjectLine contains tokens to be disregarded and still exceeds 20 characters, but not 50 characters",
+	"when the subject line of $subjectLine contains ignorable tokens and still exceeds 20 characters, but not 50 characters",
 	(props: { subjectLine: string; expectedRange20: CharacterRange }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
@@ -167,43 +222,6 @@ describe.each`
 				expect(actualConcerns).toEqual<Concerns>([])
 			})
 		})
-
-		describe("and the rule is disabled", () => {
-			const actualConcerns = useConciseSubjectLines([commit], null)
-
-			it("does not raise any concerns", () => {
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
-		})
-	},
-)
-
-describe.each`
-	subjectLine
-	${'Revert "retrieve data from the exclusive third-party service"'}
-	${'Revert "Revert "Revert "Fix the nasty bug from yesterday"""'}
-	${"fixup! Resolve memory issues to make the code work better than it did last year"}
-	${"Squash! Make the program act like a clown"}
-`(
-	"when the subject line of $subjectLine makes the commit disregardable",
-	(props: { subjectLine: string }) => {
-		const commit = fakeCommit({ message: props.subjectLine })
-
-		describe.each`
-			options
-			${enabled20.options}
-			${enabled50.options}
-			${enabled72.options}
-		`(
-			"and the rule is enabled with a maximum length of $options.maxLength characters",
-			(context: RuleContext<"useConciseSubjectLines">) => {
-				const actualConcerns = useConciseSubjectLines([commit], context.options)
-
-				it("does not raise any concerns", () => {
-					expect(actualConcerns).toEqual<Concerns>([])
-				})
-			},
-		)
 
 		describe("and the rule is disabled", () => {
 			const actualConcerns = useConciseSubjectLines([commit], null)
@@ -327,6 +345,7 @@ describe("when verifying a set of multiple commits and some commits have long su
 				subjectLineConcern(enabled20, commits[5].sha, { range: [25, 33] }),
 				subjectLineConcern(enabled20, commits[7].sha, { range: [20, 75] }),
 				subjectLineConcern(enabled20, commits[8].sha, { range: [20, 28] }),
+				subjectLineConcern(enabled20, commits[9].sha, { range: [27, 35] }),
 				subjectLineConcern(enabled20, commits[10].sha, { range: [89, 99] }),
 				subjectLineConcern(enabled20, commits[11].sha, { range: [20, 76] }),
 			])

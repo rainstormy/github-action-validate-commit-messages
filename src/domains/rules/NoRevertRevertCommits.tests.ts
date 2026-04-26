@@ -14,13 +14,15 @@ const enabled = ruleContext("noRevertRevertCommits")
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
 describe.each`
-	subjectLine                                                               | expectedRange
-	${'Revert "Revert "Fix the bug""'}                                        | ${[0, 16]}
-	${'Revert  "revert "Repair the soft ice machine""'}                       | ${[0, 17]}
-	${' revert " revert "Apply strawberry jam to make the code sweeter " " '} | ${[1, 18]}
-	${'  rEvErT "REVERT   "Refactor the authentication module""'}             | ${[2, 20]}
-	${'Revert "Revert "Revert "Fix the nasty bug"""'}                         | ${[0, 24]}
-	${' revert "revert  "revert "revert "Repair the soft ice machine """"'}   | ${[1, 34]}
+	subjectLine                                                                                   | expectedRange
+	${'Revert "Revert "Fix the bug""'}                                                            | ${[0, 16]}
+	${'Revert  "revert "Repair the soft ice machine""'}                                           | ${[0, 17]}
+	${' revert " revert "Apply strawberry jam to make the code sweeter " " '}                     | ${[1, 18]}
+	${'  rEvErT "REVERT   "Refactor the authentication module""'}                                 | ${[2, 20]}
+	${'Revert "Revert "Revert "Fix the nasty bug"""'}                                             | ${[0, 24]}
+	${' revert "revert  "revert "revert "Repair the soft ice machine """"'}                       | ${[1, 34]}
+	${'fixup! Revert "Revert "Add an amazing feature""'}                                          | ${[7, 23]}
+	${' squash!amend!  revert  "revert  "retrieve data from the exclusive third-party service""'} | ${[16, 34]}
 `(
 	"when the subject line of $subjectLine contains a revert marker with 2 or more 'revert' occurrences",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
@@ -57,33 +59,6 @@ describe.each`
 	${'fixup! Revert "Add an amazing feature"'}
 `(
 	"when the subject line of $subjectLine contains a revert marker with 1 'revert' occurrence",
-	(props: { subjectLine: string }) => {
-		const commit = fakeCommit({ message: props.subjectLine })
-
-		describe("and the rule is enabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], enabled.options)
-
-			it("does not raise any concerns", () => {
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
-		})
-
-		describe("and the rule is disabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], null)
-
-			it("does not raise any concerns", () => {
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
-		})
-	},
-)
-
-describe.each`
-	subjectLine
-	${'fixup! Revert "Revert "Add an amazing feature""'}
-	${' squash!amend!  revert  "revert  "retrieve data from the exclusive third-party service""'}
-`(
-	"when the subject line of $subjectLine contains a squash marker and a revert marker with 2 or more 'revert' occurrences",
 	(props: { subjectLine: string }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
@@ -166,6 +141,7 @@ describe("when verifying a set of multiple commits and some commits have revert 
 		it("raises concerns about the commits with double revert markers", () => {
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(enabled, commits[0].sha, { range: [0, 16] }),
+				subjectLineConcern(enabled, commits[3].sha, { range: [8, 24] }),
 				subjectLineConcern(enabled, commits[5].sha, { range: [1, 17] }),
 				subjectLineConcern(enabled, commits[6].sha, { range: [0, 24] }),
 			])
