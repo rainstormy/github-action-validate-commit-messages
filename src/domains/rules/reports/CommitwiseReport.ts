@@ -7,7 +7,7 @@ import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
-import { indentString } from "#utilities/Strings.ts"
+import { formatCount, indentString } from "#utilities/Strings.ts"
 
 export function commitwiseReport(
 	concerns: Concerns,
@@ -151,7 +151,8 @@ function ruleMessage(rule: RuleKey, configuration: Configuration): string {
 		}
 		case "useConciseSubjectLines": {
 			const options = getRuleOptions(rule, configuration)
-			return `Subject lines must not exceed ${options.maxLength} characters.`
+			const characterPhrase = formatCount(options.maxLength, "character", "characters")
+			return `Subject lines must not exceed ${characterPhrase}.`
 		}
 		case "useEmptyLineBeforeBodyLines": {
 			throw new Error(`Not implemented yet: ${rule}`)
