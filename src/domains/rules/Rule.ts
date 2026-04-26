@@ -1,3 +1,4 @@
+import type { noBlankSubjectLines } from "#rules/NoBlankSubjectLines.ts"
 import type { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import type { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import type { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
@@ -21,6 +22,7 @@ import type { useSignedCommits } from "#rules/UseSignedCommits.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
 export type RulesByKey = {
+	noBlankSubjectLines: typeof noBlankSubjectLines
 	noExcessiveCommitsPerBranch: typeof noExcessiveCommitsPerBranch
 	noMergeCommits: typeof noMergeCommits
 	noRepeatedSubjectLines: typeof noRepeatedSubjectLines

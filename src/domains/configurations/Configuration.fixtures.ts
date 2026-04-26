@@ -17,6 +17,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			...overrides.tokens,
 		},
 		rules: {
+			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},

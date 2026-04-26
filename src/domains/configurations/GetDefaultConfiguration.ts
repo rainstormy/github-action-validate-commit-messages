@@ -21,6 +21,7 @@ function getDefaultCliConfiguration(): Configuration {
 	return {
 		tokens: getDefaultTokenConfiguration(),
 		rules: {
+			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: null,
@@ -49,6 +50,7 @@ function getDefaultGhaConfiguration(): Configuration {
 	return {
 		tokens: getDefaultTokenConfiguration(),
 		rules: {
+			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},

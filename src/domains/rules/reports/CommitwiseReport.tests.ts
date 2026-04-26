@@ -22,6 +22,50 @@ describe("when there are no concerns", () => {
 	})
 })
 
+describe("when 'noBlankSubjectLines' has a concern about characters 0-1 of the subject line", () => {
+	const commit = fakeCommit({
+		sha: "52f07a2d665e6d3b3b50b8fca2af298c100ac804c",
+		message: "",
+	})
+	const concern = subjectLineConcern(ruleContext("noBlankSubjectLines"), commit.sha, {
+		range: [0, 1],
+	})
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+52f07a2 
+        ┬
+        ╰─ Subject lines must contain at least one non-whitespace character.
+           (noBlankSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noBlankSubjectLines' has a concern about characters 15-16 of the subject line", () => {
+	const commit = fakeCommit({
+		sha: "2ba57d6e3490324db1bacf22ae288481357ef5c",
+		message: 'amend! Revert " "',
+	})
+	const concern = subjectLineConcern(ruleContext("noBlankSubjectLines"), commit.sha, {
+		range: [15, 16],
+	})
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([commit], [concern])
+		expect(actualOutput).toBe(
+			`
+2ba57d6 amend! Revert " "
+                       ┬
+                       ╰─ Subject lines must contain at least one non-whitespace character.
+                          (noBlankSubjectLines)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'noMergeCommits' has a concern about the commit", () => {
 	const commit = fakeCommit({
 		sha: "507c835ff93e38ed1540ff58fb72f7837f9af13",
