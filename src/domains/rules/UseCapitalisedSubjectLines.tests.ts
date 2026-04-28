@@ -14,21 +14,23 @@ const enabled = ruleContext("useCapitalisedSubjectLines")
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
 describe.each`
-	subjectLine                                             | expectedRange
-	${"test"}                                               | ${[0, 1]}
-	${"release the robot butler"}                           | ${[0, 1]}
-	${"  some refactoring "}                                | ${[2, 3]}
-	${"fix this confusing plate of spaghetti"}              | ${[0, 1]}
-	${"never give up!!"}                                    | ${[0, 1]}
-	${"fixup! resolve a bug that thought it was a feature"} | ${[7, 8]}
-	${"squash! make the program act like a clown"}          | ${[8, 9]}
-	${"GH-12 organise the bookshelf."}                      | ${[6, 7]}
-	${"amend! solve the problem!"}                          | ${[7, 8]}
-	${" fix it"}                                            | ${[1, 2]}
-	${"#7 #8 resolve a bug that thought it was a feature"}  | ${[6, 7]}
-	${"amend! GH-55: make the program act like a clown"}    | ${[14, 15]}
-	${"i thought this was a good idea"}                     | ${[0, 1]}
-	${"   wip"}                                             | ${[3, 4]}
+	subjectLine                                                      | expectedRange
+	${"test"}                                                        | ${[0, 1]}
+	${"release the robot butler"}                                    | ${[0, 1]}
+	${"  some refactoring "}                                         | ${[2, 3]}
+	${"fix this confusing plate of spaghetti"}                       | ${[0, 1]}
+	${"never give up!!"}                                             | ${[0, 1]}
+	${"fixup! resolve a bug that thought it was a feature"}          | ${[7, 8]}
+	${"squash! make the program act like a clown"}                   | ${[8, 9]}
+	${"GH-12 organise the bookshelf."}                               | ${[6, 7]}
+	${"amend! solve the problem!"}                                   | ${[7, 8]}
+	${" fix it"}                                                     | ${[1, 2]}
+	${"#7 #8 resolve a bug that thought it was a feature"}           | ${[6, 7]}
+	${"amend! GH-55: make the program act like a clown"}             | ${[14, 15]}
+	${"i thought this was a good idea"}                              | ${[0, 1]}
+	${"   wip"}                                                      | ${[3, 4]}
+	${'revert "fix a nasty bug"'}                                    | ${[0, 1]}
+	${'squash!fixup! revert "Revert "Repair the soft ice machine""'} | ${[14, 15]}
 `(
 	"when the subject line of $subjectLine starts with a lowercase letter",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
@@ -70,6 +72,8 @@ describe.each`
 	${"Resolve issues in #21 to make the code work better"}
 	${"Finally..."}
 	${"Let `SoftIceMachineAdapter` produce the goods that we need"}
+	${'Revert "release the robot butler"'}
+	${'fixup! Revert "Resolve a bug that thought it was a feature"'}
 `(
 	"when the subject line of $subjectLine starts with an uppercase letter",
 	(props: { subjectLine: string }) => {
