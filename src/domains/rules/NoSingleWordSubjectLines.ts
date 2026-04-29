@@ -12,7 +12,8 @@ import { notEmptyString, notNullish } from "#utilities/Arrays.ts"
  * Providing more context in the commit message (such as a thorough description) helps to preserve
  * the traceability of the commit history.
  *
- * Leading issue links, revert markers, and squash markers do not count as words.
+ * It ignores commits with revert markers.
+ * Leading issue links and squash markers do not count as words.
  */
 export function noSingleWordSubjectLines(commits: Commits, options: EmptyObject | null): Concerns {
 	if (options === null) {
@@ -28,7 +29,7 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	let firstWordToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
-		if (words > 1 || (token.type === "issue-link" && words > 0)) {
+		if (words > 1 || (token.type === "issue-link" && words > 0) || token.type === "revert-marker") {
 			return null
 		}
 		if (

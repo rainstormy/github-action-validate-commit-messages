@@ -9,8 +9,8 @@ import { notNullish } from "#utilities/Arrays.ts"
  *
  * Keeping the subject line short helps to preserve the readability of the commit history in various Git clients.
  *
- * It ignores merge commits and commits with dependency versions.
- * Issue links, inline code phrases, revert markers, and squash markers do not count towards the limit.
+ * It ignores merge commits, revert commits, and dependency upgrade commits.
+ * Issue links, inline code phrases, and squash markers do not count towards the limit.
  */
 export function useConciseSubjectLines(
 	commits: Commits,
@@ -36,7 +36,7 @@ function verifyCommit(commit: Commit, rule: RuleContext<"useConciseSubjectLines"
 	let overflowEndIndex = 0
 
 	for (const token of commit.subjectLine) {
-		if (token.type === "dependency-version") {
+		if (token.type === "dependency-version" || token.type === "revert-marker") {
 			return null
 		}
 		if (token.type === "text") {

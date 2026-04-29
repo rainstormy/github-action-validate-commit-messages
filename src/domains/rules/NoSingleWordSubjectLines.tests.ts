@@ -14,63 +14,33 @@ const enabled = ruleContext("noSingleWordSubjectLines")
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
 describe.each`
-	subjectLine           | expectedRange
-	${"-"}                | ${[0, 1]}
-	${".."}               | ${[0, 2]}
-	${"WIP"}              | ${[0, 3]}
-	${"wip!"}             | ${[0, 4]}
-	${"init"}             | ${[0, 4]}
-	${"test"}             | ${[0, 4]}
-	${"bugfix "}          | ${[0, 6]}
-	${"Unsubscribe"}      | ${[0, 11]}
-	${"#flabbergastered"} | ${[0, 16]}
-	${"HOTFIX"}           | ${[0, 6]}
-	${" Refactor"}        | ${[1, 9]}
-	${"  oops "}          | ${[2, 6]}
-	${"strategy-pattern"} | ${[0, 16]}
-	${"`Bingo`"}          | ${[0, 7]}
-	${"`EternalWealth`"}  | ${[0, 15]}
+	subjectLine                         | expectedRange
+	${"-"}                              | ${[0, 1]}
+	${".."}                             | ${[0, 2]}
+	${"WIP"}                            | ${[0, 3]}
+	${"wip!"}                           | ${[0, 4]}
+	${"init"}                           | ${[0, 4]}
+	${"test"}                           | ${[0, 4]}
+	${"bugfix "}                        | ${[0, 6]}
+	${"Unsubscribe"}                    | ${[0, 11]}
+	${"#flabbergastered"}               | ${[0, 16]}
+	${"HOTFIX"}                         | ${[0, 6]}
+	${" Refactor"}                      | ${[1, 9]}
+	${"  oops "}                        | ${[2, 6]}
+	${"strategy-pattern"}               | ${[0, 16]}
+	${"`Bingo`"}                        | ${[0, 7]}
+	${"`EternalWealth`"}                | ${[0, 15]}
+	${"Revert"}                         | ${[0, 6]}
+	${"#1 fix"}                         | ${[3, 6]}
+	${"(GH-31)   test"}                 | ${[10, 14]}
+	${"GL-7 `Unscheduled-Maintenance`"} | ${[5, 30]}
+	${"#2 #3 (GL-1) init"}              | ${[13, 17]}
+	${"fixup! WIP"}                     | ${[7, 10]}
+	${"squash!  bad"}                   | ${[9, 12]}
+	${"  amend!Hotfix"}                 | ${[8, 14]}
+	${"fixup! fixup! Restored"}         | ${[14, 22]}
 `(
-	"when the subject line of $subjectLine contains exactly one word",
-	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
-		const commit = fakeCommit({ message: props.subjectLine })
-
-		describe("and the rule is enabled", () => {
-			const actualConcerns = noSingleWordSubjectLines([commit], enabled.options)
-
-			it("raises a concern about the single word", () => {
-				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(enabled, commit.sha, { range: props.expectedRange }),
-				])
-			})
-		})
-
-		describe("and the rule is disabled", () => {
-			const actualConcerns = noSingleWordSubjectLines([commit], null)
-
-			it("does not raise any concerns", () => {
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
-		})
-	},
-)
-
-describe.each`
-	subjectLine                                         | expectedRange
-	${"#1 fix"}                                         | ${[3, 6]}
-	${"(GH-31)   test"}                                 | ${[10, 14]}
-	${"GL-7 `Unscheduled-Maintenance`"}                 | ${[5, 30]}
-	${"#2 #3 (GL-1) init"}                              | ${[13, 17]}
-	${"fixup! WIP"}                                     | ${[7, 10]}
-	${"squash!  bad"}                                   | ${[9, 12]}
-	${"  amend!Hotfix"}                                 | ${[8, 14]}
-	${'Revert "dadada"'}                                | ${[8, 14]}
-	${'Revert "Revert "release""'}                      | ${[16, 23]}
-	${"fixup! fixup! Restored"}                         | ${[14, 22]}
-	${'amend! Revert " redacted"'}                      | ${[16, 24]}
-	${'squash!fixup! revert " revert " GH-67 cleanup"'} | ${[38, 45]}
-`(
-	"when the subject line of $subjectLine starts with ignorable tokens and has exactly one word otherwise",
+	"when the subject line of $subjectLine contains exactly one significant word",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
@@ -99,38 +69,44 @@ describe.each`
 	${""}
 	${" "}
 	${"\t\t"}
-`("when the subject line of $subjectLine is blank", (props: { subjectLine: string }) => {
-	const commit = fakeCommit({ message: props.subjectLine })
-
-	describe("and the rule is enabled", () => {
-		const actualConcerns = noSingleWordSubjectLines([commit], enabled.options)
-
-		it("does not raise any concerns", () => {
-			expect(actualConcerns).toEqual<Concerns>([])
-		})
-	})
-
-	describe("and the rule is disabled", () => {
-		const actualConcerns = noSingleWordSubjectLines([commit], null)
-
-		it("does not raise any concerns", () => {
-			expect(actualConcerns).toEqual<Concerns>([])
-		})
-	})
-})
-
-describe.each`
-	subjectLine
 	${"#1"}
 	${"(GH-31)   "}
 	${"#2 #3 (GL-1) "}
 	${"  amend!"}
 	${"fixup! fixup! "}
-	${'Revert ""'}
-	${'squash!fixup! revert " revert " GH-67 "'}
 `(
-	"when the subject line of $subjectLine only contains ignorable tokens",
-	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
+	"when the subject line of $subjectLine is blank or contains only insignificant tokens",
+	(props: { subjectLine: string }) => {
+		const commit = fakeCommit({ message: props.subjectLine })
+
+		describe("and the rule is enabled", () => {
+			const actualConcerns = noSingleWordSubjectLines([commit], enabled.options)
+
+			it("does not raise any concerns", () => {
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+
+		describe("and the rule is disabled", () => {
+			const actualConcerns = noSingleWordSubjectLines([commit], null)
+
+			it("does not raise any concerns", () => {
+				expect(actualConcerns).toEqual<Concerns>([])
+			})
+		})
+	},
+)
+
+describe.each`
+	subjectLine
+	${'revert ""'}
+	${'Revert "dadada"'}
+	${'Revert "Revert "release""'}
+	${'amend! Revert " redacted"'}
+	${'squash!fixup! revert " revert " GH-67 cleanup"'}
+`(
+	"when the subject line of $subjectLine contains a revert marker",
+	(props: { subjectLine: string }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {

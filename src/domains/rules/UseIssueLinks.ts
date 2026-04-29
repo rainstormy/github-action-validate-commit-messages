@@ -4,6 +4,9 @@ import { type RuleContext, ruleContext } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
+/**
+ * It ignores revert commits.
+ */
 export function useIssueLinks(commits: Commits, options: EmptyObject | null): Concerns {
 	if (options === null) {
 		return []

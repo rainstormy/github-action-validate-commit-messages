@@ -24,7 +24,7 @@ export function noBlankSubjectLines(commits: Commits, options: EmptyObject | nul
 }
 
 function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
-	let lastIgnorableToken: Token | null = null
+	let lastInsignificantToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
 		if (
@@ -39,13 +39,13 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 			(token.type === "revert-marker" && token.occurrences > 0) ||
 			token.type === "squash-marker"
 		) {
-			lastIgnorableToken = token
+			lastInsignificantToken = token
 		}
 	}
 
 	const firstBlankIndex =
-		lastIgnorableToken !== null
-			? lastIgnorableToken.range[0] + lastIgnorableToken.value.trimEnd().length
+		lastInsignificantToken !== null
+			? lastInsignificantToken.range[0] + lastInsignificantToken.value.trimEnd().length
 			: 0
 
 	return subjectLineConcern(rule, commit.sha, {

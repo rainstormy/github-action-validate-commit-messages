@@ -61,14 +61,14 @@ describe.each`
 	${'amend! Revert " "'}                       | ${[15, 16]}
 	${'squash!fixup! revert " revert " GH-67 "'} | ${[37, 38]}
 `(
-	"when the subject line of $subjectLine starts with ignorable tokens and is blank otherwise",
+	"when the subject line of $subjectLine starts with insignificant tokens and is blank otherwise",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
 			const actualConcerns = noBlankSubjectLines([commit], enabled.options)
 
-			it("raises a concern about the first character after the ignorable tokens", () => {
+			it("raises a concern about the first character after the insignificant tokens", () => {
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(enabled, commit.sha, {
 						range: props.expectedRange,
