@@ -4,11 +4,12 @@ import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
-import { ruleContext } from "#rules/Rule.ts"
+import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
-const enabled = ruleContext("noMergeCommits")
+const rule = "noMergeCommits" satisfies RuleKey
+const enabled: RuleOptions<typeof rule> = {}
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
@@ -24,10 +25,10 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine, parents: props.parents })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noMergeCommits([commit], enabled.options)
+			const actualConcerns = noMergeCommits([commit], enabled)
 
 			it("raises a concern about the entire commit", () => {
-				expect(actualConcerns).toEqual<Concerns>([commitConcern(enabled, commit.sha)])
+				expect(actualConcerns).toEqual<Concerns>([commitConcern(rule, commit.sha)])
 			})
 		})
 
@@ -53,7 +54,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine, parents: props.parents })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noMergeCommits([commit], enabled.options)
+			const actualConcerns = noMergeCommits([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])

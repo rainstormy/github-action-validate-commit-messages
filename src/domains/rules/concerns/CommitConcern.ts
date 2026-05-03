@@ -1,12 +1,12 @@
-import type { RuleContext } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
 export type CommitConcern = {
 	location: "commit"
-	rule: RuleContext
+	rule: RuleKey
 	commitSha: CommitSha
 }
 
-export function commitConcern(rule: RuleContext, commitSha: CommitSha): CommitConcern {
+export function commitConcern(rule: RuleKey, commitSha: CommitSha): CommitConcern {
 	return { location: "commit", rule, commitSha }
 }

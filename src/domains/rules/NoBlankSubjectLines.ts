@@ -2,9 +2,11 @@ import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Token } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import { type RuleContext, ruleContext } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
+
+const rule = "noBlankSubjectLines" satisfies RuleKey
 
 /**
  * Verifies that the subject line contains at least one non-whitespace character.
@@ -15,15 +17,10 @@ import { notNullish } from "#utilities/Arrays.ts"
  * Issue links, revert markers, and squash markers do not count as non-whitespace characters.
  */
 export function noBlankSubjectLines(commits: Commits, options: EmptyObject | null): Concerns {
-	if (options === null) {
-		return []
-	}
-
-	const rule = ruleContext("noBlankSubjectLines")
-	return commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
+	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
 
-function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
+function verifyCommit(commit: Commit): Concern | null {
 	let lastInsignificantToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
@@ -48,7 +45,5 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 			? lastInsignificantToken.range[0] + lastInsignificantToken.value.trimEnd().length
 			: 0
 
-	return subjectLineConcern(rule, commit.sha, {
-		range: [firstBlankIndex, firstBlankIndex + 1],
-	})
+	return subjectLineConcern(rule, commit.sha, { range: [firstBlankIndex, firstBlankIndex + 1] })
 }
