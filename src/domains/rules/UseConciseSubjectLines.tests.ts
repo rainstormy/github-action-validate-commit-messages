@@ -234,12 +234,19 @@ describe.each`
 
 describe.each`
 	subjectLine
+	${"Bump vite from 4.1.1-beta.0 to 4.3.2"}
+	${"Upgrade tsgo to 7.0.0-dev.20260131.1"}
+	${"squash! Downgrade the grumpy cat module from 3.1.4 to 3.0.0"}
+	${"Pre-release v10.12.22-next"}
+	${"Pin the Node.js image to 4af617c"}
 	${'Revert "bugfix"'}
-	${'Revert "retrieve data from the exclusive third-party service"'}
+	${'revert "Organise the quarterly chaos into a spreadsheet"'}
+	${'amend! Revert "retrieve data from the exclusive third-party service"'}
 	${'Revert "Revert "Revert "Fix the nasty bug from yesterday"""'}
-	${'fixup! Revert "keep the lowercase story around long enough to exceed the limit"'}
+	${'fixup! revert "keep the lowercase story around long enough to exceed the limit"'}
+	${'Revert "Upgrade nginx image digest to 9d739ff1ada6"'}
 `(
-	"when the subject line of $subjectLine contains a revert marker",
+	"when the subject line of $subjectLine contains a dependency version or a revert marker",
 	(props: { subjectLine: string }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 

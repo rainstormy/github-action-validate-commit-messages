@@ -35,7 +35,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: {},
-			useIssueLinks: {},
+			useIssueLinks: { position: "anywhere" },
 			useLineWrapping: {},
 			useSignedCommits: {},
 			...overrides.rules,
