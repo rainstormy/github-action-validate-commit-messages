@@ -161,7 +161,15 @@ function ruleMessage(rule: RuleKey, configuration: Configuration): string {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useIssueLinks": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			const positionPhrase =
+				options.position === "prefix"
+					? "start with"
+					: options.position === "suffix"
+						? "end with"
+						: "include"
+
+			return `Subject lines must ${positionPhrase} an issue link.`
 		}
 		case "useLineWrapping": {
 			throw new Error(`Not implemented yet: ${rule}`)

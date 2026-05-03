@@ -399,6 +399,81 @@ be86674 make a genuine attempt to fix the bugs that the users were complaining a
 	})
 })
 
+describe("when 'useIssueLinks' with position 'anywhere' has a concern about characters 0-1 of the subject line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useIssueLinks: { position: "anywhere" } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "c861aeae9dcdea99776d1e56c4de100ba29effb",
+		message: "Organise the robot uprising without a ticket",
+	})
+	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [0, 1] })
+
+	it("describes the rule violation", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+c861aea Organise the robot uprising without a ticket
+        ┬
+        ╰─ Subject lines must include an issue link.
+           (useIssueLinks)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useIssueLinks' with position 'prefix' has a concern about characters 7-8 of the subject line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useIssueLinks: { position: "prefix" } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "fb100238cf55fdcc7c48044df4b5922c0886f5c2d",
+		message: "amend! Teach the unit tests to write themselves",
+	})
+	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [7, 8] })
+
+	it("describes the rule violation", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+fb10023 amend! Teach the unit tests to write themselves
+               ┬
+               ╰─ Subject lines must start with an issue link.
+                  (useIssueLinks)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useIssueLinks' with position 'suffix' has a concern about characters 49-50 of the subject line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useIssueLinks: { position: "suffix" } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "d9a30bb22c78cf24fc6a79a3131a33829792bd4",
+		message: "make the automated tests question their existence",
+	})
+	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [49, 50] })
+
+	it("describes the rule violation", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+d9a30bb make the automated tests question their existence
+                                                         ┬
+             Subject lines must end with an issue link. ─╯
+             (useIssueLinks)
+`.trim(),
+		)
+	})
+})
+
 describe.todo("when there are multiple concerns of different types", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)
