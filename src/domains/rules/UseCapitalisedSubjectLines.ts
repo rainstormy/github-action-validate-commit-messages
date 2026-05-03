@@ -2,9 +2,11 @@ import type { Commit, Commits } from "#commits/Commit.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import { type RuleContext, ruleContext } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
+
+const rule = "useCapitalisedSubjectLines" satisfies RuleKey
 
 /**
  * Verifies that the subject line starts with an uppercase letter.
@@ -18,23 +20,15 @@ export function useCapitalisedSubjectLines(
 	commits: Commits,
 	options: EmptyObject | null,
 ): Concerns {
-	if (options === null) {
-		return []
-	}
-
-	const rule = ruleContext("useCapitalisedSubjectLines")
-	return commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
+	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
 
-function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
+function verifyCommit(commit: Commit): Concern | null {
 	for (const token of commit.subjectLine) {
 		if (token.type === "text" || token.type === "revert-marker") {
 			if (startsWithLowercaseLetter(token)) {
 				const [startIndex] = trimmedTokenRange(token)
-
-				return subjectLineConcern(rule, commit.sha, {
-					range: [startIndex, startIndex + 1],
-				})
+				return subjectLineConcern(rule, commit.sha, { range: [startIndex, startIndex + 1] })
 			}
 
 			return null

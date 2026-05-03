@@ -357,11 +357,7 @@ describe.each`
 		const committerEmail = props.committerEmail
 
 		beforeEach(() => {
-			mockGitLog([
-				{
-					committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
-				},
-			])
+			mockGitLog([{ committer: [`${committerName} <${committerEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the committer's name", async () => {
@@ -387,11 +383,7 @@ describe.each`
 		const committerEmail = "25199993+noname@users.noreply.github.com"
 
 		beforeEach(() => {
-			mockGitLog([
-				{
-					committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
-				},
-			])
+			mockGitLog([{ committer: [`${committerName} <${committerEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the committer's name as is", async () => {
@@ -410,11 +402,7 @@ describe.each`
 	const committerEmail = "25199993+noname@users.noreply.github.com"
 
 	beforeEach(() => {
-		mockGitLog([
-			{
-				committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
-			},
-		])
+		mockGitLog([{ committer: [`${committerName} <${committerEmail}> 1769801867 -0500`] }])
 	})
 
 	it("preserves the committer's name as is", async () => {
@@ -452,11 +440,7 @@ describe.each`
 		const committerEmail = props.committerEmail
 
 		beforeEach(() => {
-			mockGitLog([
-				{
-					committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
-				},
-			])
+			mockGitLog([{ committer: [`${committerName} <${committerEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the committer's email address as is", async () => {
@@ -477,11 +461,7 @@ describe.each`
 		const committerEmail = props.committerEmail
 
 		beforeEach(() => {
-			mockGitLog([
-				{
-					committer: [`${committerName} <${committerEmail}> 1769801867 -0500`],
-				},
-			])
+			mockGitLog([{ committer: [`${committerName} <${committerEmail}> 1769801867 -0500`] }])
 		})
 
 		it("preserves the committer's email address as is", async () => {

@@ -19,7 +19,6 @@ import type { useImperativeSubjectLines } from "#rules/UseImperativeSubjectLines
 import type { useIssueLinks } from "#rules/UseIssueLinks.ts"
 import type { useLineWrapping } from "#rules/UseLineWrapping.ts"
 import type { useSignedCommits } from "#rules/UseSignedCommits.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
 
 export type RulesByKey = {
 	noBlankSubjectLines: typeof noBlankSubjectLines
@@ -47,19 +46,4 @@ export type RulesByKey = {
 
 export type RuleKey = keyof RulesByKey
 
-export type RuleContext<Key extends RuleKey = RuleKey> = {
-	[K in RuleKey]: {
-		key: K
-		options: NonNullable<RuleOptions<K>>
-	}
-}[Key]
-
-export function ruleContext<Key extends RuleKey>(
-	key: Key,
-	// Disallow the `options` parameter if the rule does not take any options.
-	...options: NonNullable<RuleOptions<Key>> extends EmptyObject ? [never?] : [RuleOptions<Key>]
-): { key: Key; options: NonNullable<RuleOptions<Key>> } {
-	return { key, options: options[0] ?? {} }
-}
-
-export type RuleOptions<Key extends RuleKey> = Parameters<RulesByKey[Key]>[1]
+export type RuleOptions<Key extends RuleKey> = NonNullable<Parameters<RulesByKey[Key]>[1]>

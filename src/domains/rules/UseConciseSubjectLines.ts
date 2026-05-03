@@ -1,8 +1,10 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import { type RuleContext, ruleContext } from "#rules/Rule.ts"
+import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { notNullish } from "#utilities/Arrays.ts"
+
+const rule = "useConciseSubjectLines" satisfies RuleKey
 
 /**
  * Verifies that the subject line does not exceed a given number of characters (default: 50 characters).
@@ -16,20 +18,17 @@ export function useConciseSubjectLines(
 	commits: Commits,
 	options: { maxLength: number } | null,
 ): Concerns {
-	if (options === null) {
-		return []
-	}
-
-	const rule = ruleContext("useConciseSubjectLines", options)
-	return commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
+	return options !== null
+		? commits.map((commit) => verifyCommit(commit, options)).filter(notNullish)
+		: []
 }
 
-function verifyCommit(commit: Commit, rule: RuleContext<"useConciseSubjectLines">): Concern | null {
+function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concern | null {
 	if (commit.isMergeCommit) {
 		return null
 	}
 
-	const maxLength = rule.options.maxLength
+	const maxLength = options.maxLength
 
 	let textLength = 0
 	let overflowStartIndex = 0
@@ -52,11 +51,7 @@ function verifyCommit(commit: Commit, rule: RuleContext<"useConciseSubjectLines"
 		}
 	}
 
-	if (overflowEndIndex !== overflowStartIndex) {
-		return subjectLineConcern(rule, commit.sha, {
-			range: [overflowStartIndex, overflowEndIndex],
-		})
-	}
-
-	return null
+	return overflowEndIndex !== overflowStartIndex
+		? subjectLineConcern(rule, commit.sha, { range: [overflowStartIndex, overflowEndIndex] })
+		: null
 }

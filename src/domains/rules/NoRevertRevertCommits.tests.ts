@@ -5,11 +5,12 @@ import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
-import { ruleContext } from "#rules/Rule.ts"
+import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const enabled = ruleContext("noRevertRevertCommits")
+const rule = "noRevertRevertCommits" satisfies RuleKey
+const enabled: RuleOptions<typeof rule> = {}
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
@@ -29,11 +30,11 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], enabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], enabled)
 
 			it("raises a concern about the revert marker", () => {
 				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(enabled, commit.sha, { range: props.expectedRange }),
+					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
 				])
 			})
 		})
@@ -63,7 +64,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], enabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -105,7 +106,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noRevertRevertCommits([commit], enabled.options)
+			const actualConcerns = noRevertRevertCommits([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -136,14 +137,14 @@ describe("when verifying a set of multiple commits and some commits have revert 
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRevertRevertCommits(commits, enabled.options)
+		const actualConcerns = noRevertRevertCommits(commits, enabled)
 
 		it("raises concerns about the commits with double revert markers", () => {
 			expect(actualConcerns).toEqual<Concerns>([
-				subjectLineConcern(enabled, commits[0].sha, { range: [0, 16] }),
-				subjectLineConcern(enabled, commits[3].sha, { range: [8, 24] }),
-				subjectLineConcern(enabled, commits[5].sha, { range: [1, 17] }),
-				subjectLineConcern(enabled, commits[6].sha, { range: [0, 24] }),
+				subjectLineConcern(rule, commits[0].sha, { range: [0, 16] }),
+				subjectLineConcern(rule, commits[3].sha, { range: [8, 24] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [1, 17] }),
+				subjectLineConcern(rule, commits[6].sha, { range: [0, 24] }),
 			])
 		})
 	})
@@ -168,7 +169,7 @@ describe("when verifying a set of multiple commits and no commits have revert ma
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRevertRevertCommits(commits, enabled.options)
+		const actualConcerns = noRevertRevertCommits(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

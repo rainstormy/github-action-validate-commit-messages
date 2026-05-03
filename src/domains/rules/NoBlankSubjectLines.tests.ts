@@ -5,11 +5,12 @@ import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { noBlankSubjectLines } from "#rules/NoBlankSubjectLines.ts"
-import { ruleContext } from "#rules/Rule.ts"
+import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const enabled = ruleContext("noBlankSubjectLines")
+const rule = "noBlankSubjectLines" satisfies RuleKey
+const enabled: RuleOptions<typeof rule> = {}
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
@@ -25,13 +26,11 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noBlankSubjectLines([commit], enabled.options)
+			const actualConcerns = noBlankSubjectLines([commit], enabled)
 
 			it("raises a concern about the first character in the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(enabled, commit.sha, {
-						range: props.expectedRange,
-					}),
+					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
 				])
 			})
 		})
@@ -66,13 +65,11 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noBlankSubjectLines([commit], enabled.options)
+			const actualConcerns = noBlankSubjectLines([commit], enabled)
 
 			it("raises a concern about the first character after the insignificant tokens", () => {
 				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(enabled, commit.sha, {
-						range: props.expectedRange,
-					}),
+					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
 				])
 			})
 		})
@@ -106,7 +103,7 @@ describe.each`
 	const commit = fakeCommit({ message: props.subjectLine })
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noBlankSubjectLines([commit], enabled.options)
+		const actualConcerns = noBlankSubjectLines([commit], enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -133,13 +130,13 @@ describe("when verifying a set of multiple commits and some commits have blank s
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noBlankSubjectLines(commits, enabled.options)
+		const actualConcerns = noBlankSubjectLines(commits, enabled)
 
 		it("raises concerns about the commits with blank subject lines", () => {
 			expect(actualConcerns).toEqual<Concerns>([
-				subjectLineConcern(enabled, commits[0].sha, { range: [0, 1] }),
-				subjectLineConcern(enabled, commits[1].sha, { range: [3, 4] }),
-				subjectLineConcern(enabled, commits[4].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[0].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[1].sha, { range: [3, 4] }),
+				subjectLineConcern(rule, commits[4].sha, { range: [0, 1] }),
 			])
 		})
 	})
@@ -162,7 +159,7 @@ describe("when verifying a set of multiple commits and no commits have blank sub
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noBlankSubjectLines(commits, enabled.options)
+		const actualConcerns = noBlankSubjectLines(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

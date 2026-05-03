@@ -1,16 +1,16 @@
-import type { RuleContext } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
 export type AuthorNameConcern = {
 	location: "author-name"
-	rule: RuleContext
+	rule: RuleKey
 	commitSha: CommitSha
 	range: CharacterRange
 }
 
 export function authorNameConcern(
-	rule: RuleContext,
+	rule: RuleKey,
 	commitSha: CommitSha,
 	props: Pick<AuthorNameConcern, "range">,
 ): AuthorNameConcern {

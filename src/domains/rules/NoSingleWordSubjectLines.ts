@@ -2,9 +2,11 @@ import type { Commit, Commits } from "#commits/Commit.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import { type RuleContext, ruleContext } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notEmptyString, notNullish } from "#utilities/Arrays.ts"
+
+const rule = "noSingleWordSubjectLines" satisfies RuleKey
 
 /**
  * Verifies that the subject line contains at least two words.
@@ -16,15 +18,10 @@ import { notEmptyString, notNullish } from "#utilities/Arrays.ts"
  * Leading issue links and squash markers do not count as words.
  */
 export function noSingleWordSubjectLines(commits: Commits, options: EmptyObject | null): Concerns {
-	if (options === null) {
-		return []
-	}
-
-	const rule = ruleContext("noSingleWordSubjectLines")
-	return commits.map((commit) => verifyCommit(commit, rule)).filter(notNullish)
+	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
 
-function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
+function verifyCommit(commit: Commit): Concern | null {
 	let words = 0
 	let firstWordToken: Token | null = null
 
@@ -43,9 +40,7 @@ function verifyCommit(commit: Commit, rule: RuleContext): Concern | null {
 	}
 
 	if (words === 1 && firstWordToken !== null) {
-		return subjectLineConcern(rule, commit.sha, {
-			range: trimmedTokenRange(firstWordToken),
-		})
+		return subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
 	}
 
 	return null
