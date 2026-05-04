@@ -18,7 +18,7 @@
 		"@typescript/native-preview": "7.0.0-dev.20260401.1",
 		"@vitest/ui": "4.1.0",
 		"lefthook": "2.1.4",
-		"oxfmt": "0.40.0",
+		"oxfmt": "0.47.0",
 		"oxlint": "1.55.0",
 		"oxlint-tsgolint": "0.21.1",
 		"tslib": "2.8.1",
