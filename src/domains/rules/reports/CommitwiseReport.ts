@@ -165,7 +165,7 @@ function ruleMessage(
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useImperativeSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return ["Subject lines must start with a verb in the imperative mood."]
 		}
 		case "useIssueLinks": {
 			const options = getRuleOptions(rule, configuration)

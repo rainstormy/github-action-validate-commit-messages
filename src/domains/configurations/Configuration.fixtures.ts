@@ -34,7 +34,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useCommitterNamePatterns: {},
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
-			useImperativeSubjectLines: {},
+			useImperativeSubjectLines: { whitelist: new Set() },
 			useIssueLinks: { position: "anywhere" },
 			useLineWrapping: {},
 			useSignedCommits: {},
