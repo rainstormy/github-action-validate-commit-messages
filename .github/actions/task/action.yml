@@ -26,7 +26,7 @@ runs:
   steps:
     - name: Skip if already done
       id: skip-if-already-done
-      uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
       with:
         # If an exact cache hit occurs, another workflow run has already run the task in the same context, and we can skip the remaining steps.
         # This is especially useful upon squashing commits where the source code itself does not change.
