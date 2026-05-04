@@ -1,12 +1,9 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
-import type { AuthorEmailAddressConcern } from "#rules/concerns/AuthorEmailAddressConcern.ts"
-import type { AuthorNameConcern } from "#rules/concerns/AuthorNameConcern.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
-import type { CommitterEmailAddressConcern } from "#rules/concerns/CommitterEmailAddressConcern.ts"
-import type { CommitterNameConcern } from "#rules/concerns/CommitterNameConcern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
@@ -29,15 +26,7 @@ import { useLineWrapping } from "#rules/UseLineWrapping.ts"
 import { useSignedCommits } from "#rules/UseSignedCommits.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 
-export type Concern =
-	| AuthorEmailAddressConcern
-	| AuthorNameConcern
-	| BodyLineConcern
-	| CommitConcern
-	| CommitterEmailAddressConcern
-	| CommitterNameConcern
-	| SubjectLineConcern
-
+export type Concern = BodyLineConcern | CommitConcern | SubjectLineConcern | UserIdentityConcern
 export type Concerns = Array<Concern>
 
 export function concernedCommit(concern: Concern, commits: Commits): Commit {

@@ -22,26 +22,17 @@ export function commitwiseReport(
 
 function formatConcern(concern: Concern, commit: Commit, configuration: Configuration): string {
 	switch (concern.location) {
-		case "author-email-address": {
-			throw new Error(`Not implemented yet: ${concern.location}`)
-		}
-		case "author-name": {
-			throw new Error(`Not implemented yet: ${concern.location}`)
-		}
 		case "body-line": {
 			throw new Error(`Not implemented yet: ${concern.location}`)
 		}
 		case "commit": {
 			return formatCommitConcern(concern, commit, configuration)
 		}
-		case "committer-email-address": {
-			throw new Error(`Not implemented yet: ${concern.location}`)
-		}
-		case "committer-name": {
-			throw new Error(`Not implemented yet: ${concern.location}`)
-		}
 		case "subject-line": {
 			return formatSubjectLineConcern(concern, commit, configuration)
+		}
+		case "user-identity": {
+			throw new Error(`Not implemented yet: ${concern.location}`)
 		}
 	}
 }
