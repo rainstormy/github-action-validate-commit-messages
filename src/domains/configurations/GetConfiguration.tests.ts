@@ -28,7 +28,7 @@ describe("the default configuration in the command-line", () => {
 		${"useCapitalisedSubjectLines"}  | ${{}}
 		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
-		${"useImperativeSubjectLines"}   | ${{}}
+		${"useImperativeSubjectLines"}   | ${{ whitelist: new Set() }}
 		${"useLineWrapping"}             | ${{}}
 		${"useSignedCommits"}            | ${{}}
 	`(
@@ -82,7 +82,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useCapitalisedSubjectLines"}  | ${{}}
 		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
-		${"useImperativeSubjectLines"}   | ${{}}
+		${"useImperativeSubjectLines"}   | ${{ whitelist: new Set() }}
 		${"useLineWrapping"}             | ${{}}
 		${"useSignedCommits"}            | ${{}}
 	`(

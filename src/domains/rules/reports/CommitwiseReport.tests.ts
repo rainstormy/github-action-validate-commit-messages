@@ -299,6 +299,52 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 o
 	})
 })
 
+describe("when 'useImperativeSubjectLines' has a concern about characters 0-5 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "9e45e097a594deaf39b360fb285be38b5b68a2",
+		message: "Added a feature that should have stayed on the whiteboard",
+	})
+	const concern = subjectLineConcern("useImperativeSubjectLines", commit.sha, { range: [0, 5] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+9e45e09 Added a feature that should have stayed on the whiteboard
+        ──┬──
+          ╰─ Subject lines must start with a verb in the imperative mood.
+             (useImperativeSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useImperativeSubjectLines' has a concern about characters 14-18 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "339b6fcb8aedbe7b19443e39be24f615287a7",
+		message: "amend! GH-55: made the console less dramatic",
+	})
+	const concern = subjectLineConcern("useImperativeSubjectLines", commit.sha, { range: [14, 18] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+339b6fc amend! GH-55: made the console less dramatic
+                      ─┬──
+                       ╰─ Subject lines must start with a verb in the imperative mood.
+                          (useImperativeSubjectLines)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'useConciseSubjectLines' has a concern about characters 20-25 of the subject line", () => {
 	const configuration = fakeConfiguration({
 		rules: { useConciseSubjectLines: { maxLength: 20 } },
