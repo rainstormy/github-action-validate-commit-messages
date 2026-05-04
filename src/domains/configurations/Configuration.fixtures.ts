@@ -27,7 +27,9 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			noSquashMarkers: {},
 			noUnexpectedPunctuation: {},
 			noUnexpectedWhitespace: {},
-			useAuthorEmailPatterns: {},
+			useAuthorEmailPatterns: {
+				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
+			},
 			useAuthorNamePatterns: {},
 			useCapitalisedSubjectLines: {},
 			useCommitterEmailPatterns: {},

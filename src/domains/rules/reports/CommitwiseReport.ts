@@ -178,7 +178,12 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useAuthorEmailPatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
+			return ruleMessage(
+				"Email addresses of commit authors must match an accepted pattern.",
+				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+			)
 		}
 		case "useAuthorNamePatterns": {
 			throw new Error(`Not implemented yet: ${rule}`)

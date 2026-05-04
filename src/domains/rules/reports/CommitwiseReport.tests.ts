@@ -5,6 +5,7 @@ import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { Vector } from "#types/Vector.ts"
@@ -294,6 +295,82 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 o
                ┬
                ╰─ The first letter in subject lines must be in uppercase.
                   (useCapitalisedSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorEmailPatterns' has a concern about a missing author email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorEmailPatterns: {
+				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "87c2ab2dff91967340adee6a79d40f4fd6b781b",
+		authorEmail: "",
+		message: "Upgrade the workshop espresso workflow",
+	})
+	const concern = userIdentityConcern("useAuthorEmailPatterns", commit.sha, {
+		field: "author:email",
+	})
+
+	it("describes the rule violation with the accepted pattern", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+87c2ab2 Upgrade the workshop espresso workflow
+╰─ authored by: 
+              ╭─
+              ╰─ Email addresses of commit authors must match an accepted pattern.
+                 (useAuthorEmailPatterns)
+                 
+                 Accepted pattern:
+                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorEmailPatterns' has a concern about the author's email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorEmailPatterns: {
+				patterns: [
+					String.raw`\d+\+.+@users\.noreply\.github\.com`,
+					String.raw`.+@fictivecompany\.com`,
+				],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "4014427db76e7f114209216c738649e9e1505f",
+		authorEmail: "claus@santasworkshop.com",
+		message: "Teach the sleigh to parallel park",
+	})
+	const concern = userIdentityConcern("useAuthorEmailPatterns", commit.sha, {
+		field: "author:email",
+	})
+
+	it("describes the rule violation with the accepted patterns", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+4014427 Teach the sleigh to parallel park
+╰─ authored by: claus@santasworkshop.com
+              ╭─────────────────────────
+              ╰─ Email addresses of commit authors must match an accepted pattern.
+                 (useAuthorEmailPatterns)
+                 
+                 Accepted patterns:
+                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                   - ${String.raw`.+@fictivecompany\.com`}
 `.trim(),
 		)
 	})
