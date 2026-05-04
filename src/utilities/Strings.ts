@@ -1,6 +1,9 @@
-export function indentString(value: string, offset: number): string {
-	const indent = " ".repeat(offset)
-	return indent + value.replaceAll("\n", `\n${indent}`)
+/**
+ * Replaces each block of one of more whitespace characters with a single regular space character.
+ * Hence, it collapses multiple spaces to a single space, and it replaces newlines with spaces.
+ */
+export function collapseWhitespace(value: string): string {
+	return value.replaceAll(/\s+/g, " ")
 }
 
 export function countOccurrences(
@@ -16,4 +19,9 @@ export function countOccurrences(
 
 export function formatCount(count: number, singular: string, plural: string): string {
 	return `${count} ${count === 1 ? singular : plural}`
+}
+
+export function indentString(value: string, offset: number): string {
+	const indent = " ".repeat(offset)
+	return indent + value.replaceAll("\n", `\n${indent}`)
 }

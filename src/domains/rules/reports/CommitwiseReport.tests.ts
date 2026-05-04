@@ -116,6 +116,53 @@ describe("when 'noMergeCommits' has a concern about the commit with a long subje
 	})
 })
 
+describe("when 'noRepeatedSubjectLines' has a concern about the commit", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "8c1fbd48d21686c574a01fd2db4be1c991d897",
+		message: "test",
+	})
+	const concern = commitConcern("noRepeatedSubjectLines", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+8c1fbd4 test
+      ╭─────
+      ╰─ Commits must have unique subject lines within a branch.
+         (noRepeatedSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noRepeatedSubjectLines' has a concern about the commit with a long subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "f3359c9a89b46736a36fa2117515af2f5c93",
+		message:
+			"GH-246 Replace guesswork with a tiny chart and upgrade the `ButterflyService` to 8.0.31",
+	})
+	const concern = commitConcern("noRepeatedSubjectLines", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+f3359c9 GH-246 Replace guesswork with a tiny chart and upgrade the \`ButterflyService\` to 8.0.31
+      ╭────────────────────────────────────────────────────────────────────────────────────────
+      ╰─ Commits must have unique subject lines within a branch.
+         (noRepeatedSubjectLines)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)
