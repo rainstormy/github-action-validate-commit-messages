@@ -30,7 +30,13 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useAuthorEmailPatterns: {
 				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
 			},
-			useAuthorNamePatterns: {},
+			useAuthorNamePatterns: {
+				patterns: [
+					String.raw`\p{Lu}.*\s.+`,
+					String.raw`dependabot\[bot\]`,
+					String.raw`renovate\[bot\]`,
+				],
+			},
 			useCapitalisedSubjectLines: {},
 			useCommitterEmailPatterns: {},
 			useCommitterNamePatterns: {},

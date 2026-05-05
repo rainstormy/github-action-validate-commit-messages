@@ -376,6 +376,79 @@ describe("when 'useAuthorEmailPatterns' has a concern about the author's email a
 	})
 })
 
+describe("when 'useAuthorNamePatterns' has a concern about a missing author name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorNamePatterns: {
+				patterns: [String.raw`\p{Lu}.*\s.+`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "f16fc9f48c40829a87cbc36f42aa6578834ed0c6",
+		authorName: "",
+		message: "overpowered code",
+	})
+	const concern = userIdentityConcern("useAuthorNamePatterns", commit.sha, {
+		field: "author:name",
+	})
+
+	it("describes the rule violation with the accepted pattern", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+f16fc9f overpowered code
+╰─ authored by: 
+              ╭─
+              ╰─ Names of commit authors must match an accepted pattern.
+                 (useAuthorNamePatterns)
+                 
+                 Accepted pattern:
+                   - ${String.raw`\p{Lu}.*\s.+`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorNamePatterns' has a concern about the author's name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorNamePatterns: {
+				patterns: [String.raw`\p{Lu}.*\s.+`, String.raw`dependabot\[bot\]`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "e4236bf51670f99f245f3a5552fa2b7e6bd8c1",
+		authorName: "santa.claus",
+		message: "I’m not lazy, I’m on energy-saving mode",
+	})
+	const concern = userIdentityConcern("useAuthorNamePatterns", commit.sha, {
+		field: "author:name",
+	})
+
+	it("describes the rule violation with the accepted patterns", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+e4236bf I’m not lazy, I’m on energy-saving mode
+╰─ authored by: santa.claus
+              ╭────────────
+              ╰─ Names of commit authors must match an accepted pattern.
+                 (useAuthorNamePatterns)
+                 
+                 Accepted patterns:
+                   - ${String.raw`\p{Lu}.*\s.+`}
+                   - ${String.raw`dependabot\[bot\]`}
+`.trim(),
+		)
+	})
+})
+
 describe("when 'useImperativeSubjectLines' has a concern about characters 0-5 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)
