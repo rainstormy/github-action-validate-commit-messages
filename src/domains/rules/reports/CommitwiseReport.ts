@@ -5,6 +5,7 @@ import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
@@ -32,7 +33,7 @@ function formatConcern(concern: Concern, commit: Commit, configuration: Configur
 			return formatSubjectLineConcern(concern, commit, configuration)
 		}
 		case "user-identity": {
-			throw new Error(`Not implemented yet: ${concern.location}`)
+			return formatUserIdentityConcern(concern, commit, configuration)
 		}
 	}
 }
@@ -48,21 +49,16 @@ function formatCommitConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const formattedSubjectLine = formatTokenisedLine(commit.subjectLine)
-	const commitLine = `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formattedSubjectLine}`
-	const [message, sidenote = null] = ruleMessage(concern.rule, configuration)
+	const message = getRuleMessage(concern.rule, configuration)
 
+	const commitLine = getCommitLine(commit)
 	const rangeLine = indentString(
-		RANGE_PREFIX + "─".repeat(formattedSubjectLine.length),
+		RANGE_PREFIX + "─".repeat(commitLine.length - SHORT_SHA_LENGTH - 1),
 		SHORT_SHA_LENGTH - RANGE_PREFIX.length + 1,
 	)
+	const messageLines = getMessageLines(message, SHORT_SHA_LENGTH - MESSAGE_PREFIX.length + 1)
 
-	const messageLine = indentString(
-		`${MESSAGE_PREFIX} ${message}\n   (${concern.rule})${sidenote !== null ? `\n   \n   ${sidenote}` : ""}`,
-		SHORT_SHA_LENGTH - MESSAGE_PREFIX.length + 1,
-	)
-
-	return `${commitLine}\n${rangeLine}\n${messageLine}`
+	return `${commitLine}\n${rangeLine}\n${messageLines}`
 }
 
 function formatSubjectLineConcern(
@@ -70,7 +66,7 @@ function formatSubjectLineConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const commitLine = `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatTokenisedLine(commit.subjectLine)}`
+	const message = getRuleMessage(concern.rule, configuration)
 
 	const [rangeStart, rangeEnd] = concern.range
 	const length = rangeEnd - rangeStart
@@ -79,37 +75,86 @@ function formatSubjectLineConcern(
 	const longHalfLength = Math.trunc(length / 2)
 	const shortHalfLength = length - longHalfLength - 1
 
-	const [message, sidenote = null] = ruleMessage(concern.rule, configuration)
-	const anchoredRight = message.length + MESSAGE_SUFFIX.length < offset + longHalfLength
+	const violationLength = message.violation.length + MESSAGE_SUFFIX.length
+	const anchoredRight = violationLength < offset + longHalfLength
 
+	const commitLine = getCommitLine(commit)
 	const rangeLine = indentString(formatCharacterRange(concern.range, anchoredRight), offset)
+	const messageLines = anchoredRight
+		? getMessageLines(message, offset + longHalfLength - violationLength, true)
+		: getMessageLines(message, offset + shortHalfLength)
 
-	const messageLine = anchoredRight
-		? indentString(
-				`${message} ${MESSAGE_SUFFIX}\n(${concern.rule})${sidenote !== null ? `\n\n${sidenote}` : ""}`,
-				offset + longHalfLength - message.length - MESSAGE_SUFFIX.length,
-			)
-		: indentString(
-				`${MESSAGE_PREFIX} ${message}\n   (${concern.rule})${sidenote !== null ? `\n   \n   ${sidenote}` : ""}`,
-				offset + shortHalfLength,
-			)
-
-	return `${commitLine}\n${rangeLine}\n${messageLine}`
+	return `${commitLine}\n${rangeLine}\n${messageLines}`
 }
 
-function ruleMessage(
-	rule: RuleKey,
+function formatUserIdentityConcern(
+	concern: UserIdentityConcern,
+	commit: Commit,
 	configuration: Configuration,
-): [main: string, sidenote?: string] {
+): string {
+	const message = getRuleMessage(concern.rule, configuration)
+
+	const identityLine = `╰─ ${getIdentityLine(concern, commit)}`
+
+	const identityOffset = identityLine.indexOf(":")
+	const identityLength = identityLine.length - identityOffset - 2
+
+	const commitLine = getCommitLine(commit)
+	const rangeLine = indentString(RANGE_PREFIX + "─".repeat(identityLength), identityOffset)
+	const messageLines = getMessageLines(message, identityOffset)
+
+	return `${commitLine}\n${identityLine}\n${rangeLine}\n${messageLines}`
+}
+
+function getCommitLine(commit: Commit): string {
+	return `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatTokenisedLine(commit.subjectLine)}`
+}
+
+function getIdentityLine(concern: UserIdentityConcern, commit: Commit): string {
+	switch (concern.field) {
+		case "author:email": {
+			return `authored by: ${commit.authorEmail}`
+		}
+		case "author:name": {
+			return `authored by: ${commit.authorName}`
+		}
+		case "committer:email": {
+			return `committed by: ${commit.committerEmail}`
+		}
+		case "committer:name": {
+			return `committed by: ${commit.committerName}`
+		}
+	}
+}
+
+function getMessageLines(message: RuleMessage, offset: number, anchoredRight = false): string {
+	const sidenotes = `(${message.rule})${message.sidenote ? `\n\n${message.sidenote}` : ""}`
+
+	return anchoredRight
+		? indentString(`${message.violation} ${MESSAGE_SUFFIX}\n${sidenotes}`, offset)
+		: indentString(`${MESSAGE_PREFIX} ${message.violation}\n${indentString(sidenotes, 3)}`, offset)
+}
+
+type RuleMessage = {
+	rule: RuleKey
+	violation: string
+	sidenote: string
+}
+
+function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessage {
+	function ruleMessage(violation: string, sidenote = ""): RuleMessage {
+		return { rule, violation, sidenote }
+	}
+
 	switch (rule) {
 		case "noBlankSubjectLines": {
-			return ["Subject lines must contain at least one non-whitespace character."]
+			return ruleMessage("Subject lines must contain at least one non-whitespace character.")
 		}
 		case "noExcessiveCommitsPerBranch": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "noMergeCommits": {
-			return ["Merge commits are not allowed."]
+			return ruleMessage("Merge commits are not allowed.")
 		}
 		case "noRepeatedSubjectLines": {
 			throw new Error(`Not implemented yet: ${rule}`)
@@ -118,13 +163,13 @@ function ruleMessage(
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "noRevertRevertCommits": {
-			return ["Cherry-pick the original commit instead of reverting it over."]
+			return ruleMessage("Cherry-pick the original commit instead of reverting it over.")
 		}
 		case "noSingleWordSubjectLines": {
-			return ["Subject lines must contain at least two words."]
+			return ruleMessage("Subject lines must contain at least two words.")
 		}
 		case "noSquashMarkers": {
-			return ["Combine squash commits with their ancestors."]
+			return ruleMessage("Combine squash commits with their ancestors.")
 		}
 		case "noUnexpectedPunctuation": {
 			throw new Error(`Not implemented yet: ${rule}`)
@@ -139,7 +184,7 @@ function ruleMessage(
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useCapitalisedSubjectLines": {
-			return ["The first letter in subject lines must be in uppercase."]
+			return ruleMessage("The first letter in subject lines must be in uppercase.")
 		}
 		case "useCommitterEmailPatterns": {
 			throw new Error(`Not implemented yet: ${rule}`)
@@ -150,13 +195,13 @@ function ruleMessage(
 		case "useConciseSubjectLines": {
 			const options = getRuleOptions(rule, configuration)
 			const characterPhrase = formatCount(options.maxLength, "character", "characters")
-			return [`Subject lines must not exceed ${characterPhrase}.`]
+			return ruleMessage(`Subject lines must not exceed ${characterPhrase}.`)
 		}
 		case "useEmptyLineBeforeBodyLines": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useImperativeSubjectLines": {
-			return ["Subject lines must start with a verb in the imperative mood."]
+			return ruleMessage("Subject lines must start with a verb in the imperative mood.")
 		}
 		case "useIssueLinks": {
 			const options = getRuleOptions(rule, configuration)
@@ -170,10 +215,10 @@ function ruleMessage(
 			const examples = configuration.tokens.issueLinkPrefixes.map((prefix) => `${prefix}123`)
 			const examplePhrase = pluralise(examples.length, "Example", "Examples")
 
-			return [
+			return ruleMessage(
 				`Subject lines must ${positionPhrase} an issue link.`,
 				`${examplePhrase}: ${examples.join(", ")}`,
-			]
+			)
 		}
 		case "useLineWrapping": {
 			throw new Error(`Not implemented yet: ${rule}`)
