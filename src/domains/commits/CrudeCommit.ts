@@ -9,10 +9,10 @@ import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 export type CrudeCommit = {
 	sha: CommitSha
 	parents: Array<CommitSha>
-	authorName: string | null
-	authorEmail: string | null
-	committerName: string | null
-	committerEmail: string | null
+	authorName: string
+	authorEmail: string
+	committerName: string
+	committerEmail: string
 	message: string
 }
 

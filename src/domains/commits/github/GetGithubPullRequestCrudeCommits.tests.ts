@@ -298,7 +298,7 @@ describe("when the author's name is absent", () => {
 
 	it("omits the author's name", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.authorName).toBeNull()
+		expect(commit?.authorName).toBe("")
 	})
 
 	it("preserves the author's email address", async () => {
@@ -374,7 +374,7 @@ describe("when the author's email address is absent", () => {
 
 	it("omits the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.authorEmail).toBeNull()
+		expect(commit?.authorEmail).toBe("")
 	})
 })
 
@@ -385,12 +385,12 @@ describe("when the author is absent", () => {
 
 	it("omits the author's name", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.authorName).toBeNull()
+		expect(commit?.authorName).toBe("")
 	})
 
 	it("omits the author's email address", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.authorEmail).toBeNull()
+		expect(commit?.authorEmail).toBe("")
 	})
 })
 
@@ -488,7 +488,7 @@ describe("when the committer's name is absent", () => {
 
 	it("omits the committer's name", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.committerName).toBeNull()
+		expect(commit?.committerName).toBe("")
 	})
 
 	it("preserves the committer's email address", async () => {
@@ -567,7 +567,7 @@ describe("when the committer's email address is absent", () => {
 
 	it("omits the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.committerEmail).toBeNull()
+		expect(commit?.committerEmail).toBe("")
 	})
 })
 
@@ -578,12 +578,12 @@ describe("when the committer is absent", () => {
 
 	it("omits the committer's name", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.committerName).toBeNull()
+		expect(commit?.committerName).toBe("")
 	})
 
 	it("omits the committer's email address", async () => {
 		const [commit] = await getGithubPullRequestCrudeCommits()
-		expect(commit?.committerEmail).toBeNull()
+		expect(commit?.committerEmail).toBe("")
 	})
 })
 

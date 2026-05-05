@@ -33,16 +33,16 @@ function mapDtoToCrudeCommit(dto: GitLogCommitDto): CrudeCommit {
 /**
  * Parses a string on the form `name <email> timestamp timezone` into a pair of name and email.
  */
-function parseUser(line: string | undefined): [name: string | null, email: string | null] {
+function parseUser(line: string | undefined): [name: string, email: string] {
 	if (line === undefined) {
-		return [null, null]
+		return ["", ""]
 	}
 
 	const timezoneStartIndex = line.lastIndexOf(" ")
 	const timestampStartIndex = line.lastIndexOf(" ", timezoneStartIndex - 1)
 
 	if (timestampStartIndex === -1) {
-		return [null, null]
+		return ["", ""]
 	}
 
 	const userLine = line.slice(0, timestampStartIndex)
@@ -53,10 +53,10 @@ function parseUser(line: string | undefined): [name: string | null, email: strin
 	if (emailStartIndex !== -1 && emailEndIndex > emailStartIndex) {
 		const name = userLine.slice(0, emailStartIndex)
 		const email = userLine.slice(emailStartIndex + "<".length, emailEndIndex)
-		return [emailStartIndex > 0 ? trimTrailingSpace(name) : null, email]
+		return [emailStartIndex > 0 ? trimTrailingSpace(name) : "", email]
 	}
 
-	return [trimTrailingSpace(userLine), null]
+	return [trimTrailingSpace(userLine), ""]
 }
 
 function trimTrailingSpace(value: string): string {

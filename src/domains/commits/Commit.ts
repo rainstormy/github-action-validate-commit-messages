@@ -14,10 +14,10 @@ import type { CommitSha } from "#types/CommitSha.ts"
  */
 export type Commit = {
 	sha: CommitSha
-	authorName: string | null
-	authorEmail: string | null
-	committerName: string | null
-	committerEmail: string | null
+	authorName: string
+	authorEmail: string
+	committerName: string
+	committerEmail: string
 	isMergeCommit: boolean
 	subjectLine: TokenisedLine
 	bodyLines: TokenisedLines
