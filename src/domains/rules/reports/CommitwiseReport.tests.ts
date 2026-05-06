@@ -449,6 +449,82 @@ e4236bf I’m not lazy, I’m on energy-saving mode
 	})
 })
 
+describe("when 'useCommitterEmailPatterns' has a concern about a missing committer email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterEmailPatterns: {
+				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "28a5bed21c189fc505af3696c7ff7a3a79524e",
+		committerEmail: "",
+		message: "Remove stale confetti from the deployment logs",
+	})
+	const concern = userIdentityConcern("useCommitterEmailPatterns", commit.sha, {
+		field: "committer:email",
+	})
+
+	it("describes the rule violation with the accepted pattern", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+28a5bed Remove stale confetti from the deployment logs
+╰─ committed by: 
+               ╭─
+               ╰─ Email addresses of committers must match an accepted pattern.
+                  (useCommitterEmailPatterns)
+                  
+                  Accepted pattern:
+                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterEmailPatterns' has a concern about the committer's email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterEmailPatterns: {
+				patterns: [
+					String.raw`\d+\+.+@users\.noreply\.github\.com`,
+					String.raw`noreply@github\.com`,
+				],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "55ef98aa89887ba6937a616b6044c7da57f7a",
+		committerEmail: "noreply@tmnt.com",
+		message: "Teach the release notes to speak plainly",
+	})
+	const concern = userIdentityConcern("useCommitterEmailPatterns", commit.sha, {
+		field: "committer:email",
+	})
+
+	it("describes the rule violation with the accepted patterns", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+55ef98a Teach the release notes to speak plainly
+╰─ committed by: noreply@tmnt.com
+               ╭─────────────────
+               ╰─ Email addresses of committers must match an accepted pattern.
+                  (useCommitterEmailPatterns)
+                  
+                  Accepted patterns:
+                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                    - ${String.raw`noreply@github\.com`}
+`.trim(),
+		)
+	})
+})
+
 describe("when 'useImperativeSubjectLines' has a concern about characters 0-5 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)

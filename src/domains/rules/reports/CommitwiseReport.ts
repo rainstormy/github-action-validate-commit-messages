@@ -197,7 +197,12 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			return ruleMessage("The first letter in subject lines must be in uppercase.")
 		}
 		case "useCommitterEmailPatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
+			return ruleMessage(
+				"Email addresses of committers must match an accepted pattern.",
+				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+			)
 		}
 		case "useCommitterNamePatterns": {
 			throw new Error(`Not implemented yet: ${rule}`)

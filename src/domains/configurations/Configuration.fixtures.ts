@@ -38,7 +38,12 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 				],
 			},
 			useCapitalisedSubjectLines: {},
-			useCommitterEmailPatterns: {},
+			useCommitterEmailPatterns: {
+				patterns: [
+					String.raw`\d+\+.+@users\.noreply\.github\.com`,
+					String.raw`noreply@github\.com`,
+				],
+			},
 			useCommitterNamePatterns: {},
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
