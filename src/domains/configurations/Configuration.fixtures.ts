@@ -44,7 +44,14 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 					String.raw`noreply@github\.com`,
 				],
 			},
-			useCommitterNamePatterns: {},
+			useCommitterNamePatterns: {
+				patterns: [
+					String.raw`\p{Lu}.*\s.+`,
+					String.raw`dependabot\[bot\]`,
+					String.raw`renovate\[bot\]`,
+					String.raw`GitHub`,
+				],
+			},
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: { whitelist: new Set() },

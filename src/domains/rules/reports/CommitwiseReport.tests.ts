@@ -319,7 +319,7 @@ describe("when 'useAuthorEmailPatterns' has a concern about a missing author ema
 		field: "author:email",
 	})
 
-	it("describes the rule violation with the accepted pattern", () => {
+	it("describes the rule violation in the author's email address", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -358,7 +358,7 @@ describe("when 'useAuthorEmailPatterns' has a concern about the author's email a
 		field: "author:email",
 	})
 
-	it("describes the rule violation with the accepted patterns", () => {
+	it("describes the rule violation in the author's email address", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -395,7 +395,7 @@ describe("when 'useAuthorNamePatterns' has a concern about a missing author name
 		field: "author:name",
 	})
 
-	it("describes the rule violation with the accepted pattern", () => {
+	it("describes the rule violation in the author's name", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -431,7 +431,7 @@ describe("when 'useAuthorNamePatterns' has a concern about the author's name", (
 		field: "author:name",
 	})
 
-	it("describes the rule violation with the accepted patterns", () => {
+	it("describes the rule violation in the author's name", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -468,7 +468,7 @@ describe("when 'useCommitterEmailPatterns' has a concern about a missing committ
 		field: "committer:email",
 	})
 
-	it("describes the rule violation with the accepted pattern", () => {
+	it("describes the rule violation in the committer's email address", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -507,7 +507,7 @@ describe("when 'useCommitterEmailPatterns' has a concern about the committer's e
 		field: "committer:email",
 	})
 
-	it("describes the rule violation with the accepted patterns", () => {
+	it("describes the rule violation in the committer's email address", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -520,6 +520,86 @@ describe("when 'useCommitterEmailPatterns' has a concern about the committer's e
                   Accepted patterns:
                     - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
                     - ${String.raw`noreply@github\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterNamePatterns' has a concern about a missing committer name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterNamePatterns: {
+				patterns: [String.raw`\p{Lu}.*\s.+`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "307ce5e6cfe9fbb67f62ca3d40447e9143fb8d38",
+		committerName: "",
+		message: "retune the tiny deployment bell",
+	})
+	const concern = userIdentityConcern("useCommitterNamePatterns", commit.sha, {
+		field: "committer:name",
+	})
+
+	it("describes the rule violation in the committer's name", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+307ce5e retune the tiny deployment bell
+╰─ committed by: 
+               ╭─
+               ╰─ Names of committers must match an accepted pattern.
+                  (useCommitterNamePatterns)
+                  
+                  Accepted pattern:
+                    - ${String.raw`\p{Lu}.*\s.+`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterNamePatterns' has a concern about the committer's name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterNamePatterns: {
+				patterns: [
+					String.raw`\p{Lu}.*\s.+`,
+					String.raw`dependabot\[bot\]`,
+					String.raw`renovate\[bot\]`,
+					String.raw`GitHub`,
+				],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "61a6e5334d93126cec5c594bd75a3c7fee7ec",
+		committerName: "master splinter",
+		message: "Make the changelog less mysterious",
+	})
+	const concern = userIdentityConcern("useCommitterNamePatterns", commit.sha, {
+		field: "committer:name",
+	})
+
+	it("describes the rule violation in the committer's name", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+61a6e53 Make the changelog less mysterious
+╰─ committed by: master splinter
+               ╭────────────────
+               ╰─ Names of committers must match an accepted pattern.
+                  (useCommitterNamePatterns)
+                  
+                  Accepted patterns:
+                    - ${String.raw`\p{Lu}.*\s.+`}
+                    - ${String.raw`dependabot\[bot\]`}
+                    - ${String.raw`renovate\[bot\]`}
+                    - ${String.raw`GitHub`}
 `.trim(),
 		)
 	})

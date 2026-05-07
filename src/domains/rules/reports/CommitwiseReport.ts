@@ -205,7 +205,12 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			)
 		}
 		case "useCommitterNamePatterns": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
+			return ruleMessage(
+				"Names of committers must match an accepted pattern.",
+				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+			)
 		}
 		case "useConciseSubjectLines": {
 			const options = getRuleOptions(rule, configuration)
