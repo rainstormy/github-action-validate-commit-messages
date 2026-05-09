@@ -79,7 +79,7 @@ describe("when 'noMergeCommits' has a concern about the commit", () => {
 	})
 	const concern = commitConcern("noMergeCommits", commit.sha)
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the commit", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -92,7 +92,7 @@ describe("when 'noMergeCommits' has a concern about the commit", () => {
 	})
 })
 
-describe("when 'noMergeCommits' has a concern about the commit", () => {
+describe("when 'noMergeCommits' has a concern about the commit with a long subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)
 
@@ -103,7 +103,7 @@ describe("when 'noMergeCommits' has a concern about the commit", () => {
 	})
 	const concern = commitConcern("noMergeCommits", commit.sha)
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the commit", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -111,6 +111,54 @@ describe("when 'noMergeCommits' has a concern about the commit", () => {
       ╭──────────────────────────────────────────────────────────────────────────────
       ╰─ Merge commits are not allowed.
          (noMergeCommits)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useSignedCommits' has a concern about the commit", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "9b9e2ab8f3248152474f41f728f1221d5bf55a16",
+		message: "Sign the pantry inventory app",
+		signature: "",
+	})
+	const concern = commitConcern("useSignedCommits", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+9b9e2ab Sign the pantry inventory app
+      ╭──────────────────────────────
+      ╰─ Commits must be signed with a signing key.
+         (useSignedCommits)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useSignedCommits' has a concern about the commit with a long subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "42cefd126a47bfd368d774047a711519eadc2d5",
+		message: "fixup! GH-692 it's raining gold everywhere we go",
+		signature: "",
+	})
+	const concern = commitConcern("useSignedCommits", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+42cefd1 fixup! GH-692 it's raining gold everywhere we go
+      ╭─────────────────────────────────────────────────
+      ╰─ Commits must be signed with a signing key.
+         (useSignedCommits)
 `.trim(),
 		)
 	})
@@ -763,7 +811,7 @@ describe("when 'useIssueLinks' with position 'anywhere' has a concern about char
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [0, 1] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -790,7 +838,7 @@ describe("when 'useIssueLinks' with position 'prefix' has a concern about charac
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [7, 8] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -817,7 +865,7 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [49, 50] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -844,7 +892,7 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [26, 27] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -872,7 +920,7 @@ describe("when 'useIssueLinks' with position 'anywhere' and Jira-style issue lin
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [10, 11] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -900,7 +948,7 @@ describe("when 'useIssueLinks' with position 'prefix' and custom-style issue lin
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [0, 1] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
@@ -928,7 +976,7 @@ describe("when 'useIssueLinks' with position 'suffix' and Jira-style issue links
 	})
 	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [41, 42] })
 
-	it("describes the rule violation", () => {
+	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
