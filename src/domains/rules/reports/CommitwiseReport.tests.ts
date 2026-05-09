@@ -5,6 +5,7 @@ import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { Vector } from "#types/Vector.ts"
@@ -294,6 +295,311 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 o
                ┬
                ╰─ The first letter in subject lines must be in uppercase.
                   (useCapitalisedSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorEmailPatterns' has a concern about a missing author email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorEmailPatterns: {
+				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "87c2ab2dff91967340adee6a79d40f4fd6b781b",
+		authorEmail: "",
+		message: "Upgrade the workshop espresso workflow",
+	})
+	const concern = userIdentityConcern("useAuthorEmailPatterns", commit.sha, {
+		field: "author:email",
+	})
+
+	it("describes the rule violation in the author's email address", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+87c2ab2 Upgrade the workshop espresso workflow
+╰─ authored by: 
+              ╭─
+              ╰─ Email addresses of commit authors must match an accepted pattern.
+                 (useAuthorEmailPatterns)
+                 
+                 Accepted pattern:
+                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorEmailPatterns' has a concern about the author's email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorEmailPatterns: {
+				patterns: [
+					String.raw`\d+\+.+@users\.noreply\.github\.com`,
+					String.raw`.+@fictivecompany\.com`,
+				],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "4014427db76e7f114209216c738649e9e1505f",
+		authorEmail: "claus@santasworkshop.com",
+		message: "Teach the sleigh to parallel park",
+	})
+	const concern = userIdentityConcern("useAuthorEmailPatterns", commit.sha, {
+		field: "author:email",
+	})
+
+	it("describes the rule violation in the author's email address", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+4014427 Teach the sleigh to parallel park
+╰─ authored by: claus@santasworkshop.com
+              ╭─────────────────────────
+              ╰─ Email addresses of commit authors must match an accepted pattern.
+                 (useAuthorEmailPatterns)
+                 
+                 Accepted patterns:
+                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                   - ${String.raw`.+@fictivecompany\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorNamePatterns' has a concern about a missing author name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorNamePatterns: {
+				patterns: [String.raw`\p{Lu}.*\s.+`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "f16fc9f48c40829a87cbc36f42aa6578834ed0c6",
+		authorName: "",
+		message: "overpowered code",
+	})
+	const concern = userIdentityConcern("useAuthorNamePatterns", commit.sha, {
+		field: "author:name",
+	})
+
+	it("describes the rule violation in the author's name", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+f16fc9f overpowered code
+╰─ authored by: 
+              ╭─
+              ╰─ Names of commit authors must match an accepted pattern.
+                 (useAuthorNamePatterns)
+                 
+                 Accepted pattern:
+                   - ${String.raw`\p{Lu}.*\s.+`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useAuthorNamePatterns' has a concern about the author's name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useAuthorNamePatterns: {
+				patterns: [String.raw`\p{Lu}.*\s.+`, String.raw`dependabot\[bot\]`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "e4236bf51670f99f245f3a5552fa2b7e6bd8c1",
+		authorName: "santa.claus",
+		message: "I’m not lazy, I’m on energy-saving mode",
+	})
+	const concern = userIdentityConcern("useAuthorNamePatterns", commit.sha, {
+		field: "author:name",
+	})
+
+	it("describes the rule violation in the author's name", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+e4236bf I’m not lazy, I’m on energy-saving mode
+╰─ authored by: santa.claus
+              ╭────────────
+              ╰─ Names of commit authors must match an accepted pattern.
+                 (useAuthorNamePatterns)
+                 
+                 Accepted patterns:
+                   - ${String.raw`\p{Lu}.*\s.+`}
+                   - ${String.raw`dependabot\[bot\]`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterEmailPatterns' has a concern about a missing committer email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterEmailPatterns: {
+				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "28a5bed21c189fc505af3696c7ff7a3a79524e",
+		committerEmail: "",
+		message: "Remove stale confetti from the deployment logs",
+	})
+	const concern = userIdentityConcern("useCommitterEmailPatterns", commit.sha, {
+		field: "committer:email",
+	})
+
+	it("describes the rule violation in the committer's email address", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+28a5bed Remove stale confetti from the deployment logs
+╰─ committed by: 
+               ╭─
+               ╰─ Email addresses of committers must match an accepted pattern.
+                  (useCommitterEmailPatterns)
+                  
+                  Accepted pattern:
+                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterEmailPatterns' has a concern about the committer's email address", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterEmailPatterns: {
+				patterns: [
+					String.raw`\d+\+.+@users\.noreply\.github\.com`,
+					String.raw`noreply@github\.com`,
+				],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "55ef98aa89887ba6937a616b6044c7da57f7a",
+		committerEmail: "noreply@tmnt.com",
+		message: "Teach the release notes to speak plainly",
+	})
+	const concern = userIdentityConcern("useCommitterEmailPatterns", commit.sha, {
+		field: "committer:email",
+	})
+
+	it("describes the rule violation in the committer's email address", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+55ef98a Teach the release notes to speak plainly
+╰─ committed by: noreply@tmnt.com
+               ╭─────────────────
+               ╰─ Email addresses of committers must match an accepted pattern.
+                  (useCommitterEmailPatterns)
+                  
+                  Accepted patterns:
+                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                    - ${String.raw`noreply@github\.com`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterNamePatterns' has a concern about a missing committer name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterNamePatterns: {
+				patterns: [String.raw`\p{Lu}.*\s.+`],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "307ce5e6cfe9fbb67f62ca3d40447e9143fb8d38",
+		committerName: "",
+		message: "retune the tiny deployment bell",
+	})
+	const concern = userIdentityConcern("useCommitterNamePatterns", commit.sha, {
+		field: "committer:name",
+	})
+
+	it("describes the rule violation in the committer's name", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+307ce5e retune the tiny deployment bell
+╰─ committed by: 
+               ╭─
+               ╰─ Names of committers must match an accepted pattern.
+                  (useCommitterNamePatterns)
+                  
+                  Accepted pattern:
+                    - ${String.raw`\p{Lu}.*\s.+`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCommitterNamePatterns' has a concern about the committer's name", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			useCommitterNamePatterns: {
+				patterns: [
+					String.raw`\p{Lu}.*\s.+`,
+					String.raw`dependabot\[bot\]`,
+					String.raw`renovate\[bot\]`,
+					String.raw`GitHub`,
+				],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "61a6e5334d93126cec5c594bd75a3c7fee7ec",
+		committerName: "master splinter",
+		message: "Make the changelog less mysterious",
+	})
+	const concern = userIdentityConcern("useCommitterNamePatterns", commit.sha, {
+		field: "committer:name",
+	})
+
+	it("describes the rule violation in the committer's name", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+61a6e53 Make the changelog less mysterious
+╰─ committed by: master splinter
+               ╭────────────────
+               ╰─ Names of committers must match an accepted pattern.
+                  (useCommitterNamePatterns)
+                  
+                  Accepted patterns:
+                    - ${String.raw`\p{Lu}.*\s.+`}
+                    - ${String.raw`dependabot\[bot\]`}
+                    - ${String.raw`renovate\[bot\]`}
+                    - ${String.raw`GitHub`}
 `.trim(),
 		)
 	})

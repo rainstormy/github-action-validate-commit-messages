@@ -27,11 +27,31 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			noSquashMarkers: {},
 			noUnexpectedPunctuation: {},
 			noUnexpectedWhitespace: {},
-			useAuthorEmailPatterns: {},
-			useAuthorNamePatterns: {},
+			useAuthorEmailPatterns: {
+				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
+			},
+			useAuthorNamePatterns: {
+				patterns: [
+					String.raw`\p{Lu}.*\s.+`,
+					String.raw`dependabot\[bot\]`,
+					String.raw`renovate\[bot\]`,
+				],
+			},
 			useCapitalisedSubjectLines: {},
-			useCommitterEmailPatterns: {},
-			useCommitterNamePatterns: {},
+			useCommitterEmailPatterns: {
+				patterns: [
+					String.raw`\d+\+.+@users\.noreply\.github\.com`,
+					String.raw`noreply@github\.com`,
+				],
+			},
+			useCommitterNamePatterns: {
+				patterns: [
+					String.raw`\p{Lu}.*\s.+`,
+					String.raw`dependabot\[bot\]`,
+					String.raw`renovate\[bot\]`,
+					String.raw`GitHub`,
+				],
+			},
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: { whitelist: new Set() },

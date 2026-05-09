@@ -19,10 +19,10 @@ export async function getGithubPullRequestCrudeCommits(): Promise<CrudeCommits> 
 function mapDtoToCrudeCommit(dto: GithubCommitDto): CrudeCommit {
 	return {
 		sha: dto.sha,
-		authorName: dto.commit.author?.name ?? null,
-		authorEmail: dto.commit.author?.email ?? null,
-		committerName: dto.commit.committer?.name ?? null,
-		committerEmail: dto.commit.committer?.email ?? null,
+		authorName: dto.commit.author?.name ?? "",
+		authorEmail: dto.commit.author?.email ?? "",
+		committerName: dto.commit.committer?.name ?? "",
+		committerEmail: dto.commit.committer?.email ?? "",
 		parents: dto.parents.map((parentDto) => parentDto.sha),
 		message: dto.commit.message,
 	}
