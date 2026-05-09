@@ -27,6 +27,7 @@ function mapDtoToCrudeCommit(dto: GitLogCommitDto): CrudeCommit {
 		committerName,
 		committerEmail,
 		message: dto.message[0],
+		signature: dto.gpgsig[0] ?? "",
 	}
 }
 

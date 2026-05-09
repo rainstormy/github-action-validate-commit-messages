@@ -587,6 +587,45 @@ describe("when the committer is absent", () => {
 	})
 })
 
+describe.each`
+	signature
+	${"-----BEGIN SSH SIGNATURE-----\nN2ViNGVjNmYtMzk2NC00YjUxLTg5ZTItZmJmYmQ2M2YyZGZk\n-----END SSH SIGNATURE-----"}
+	${"-----BEGIN PGP SIGNATURE-----\n\nMmE2NDljNTctZTJkNi00YTg2LTllOGMtMjkyYjc3YjlhOGJiYzc3NGRiZGMtNjcxNC00NjI5LWI1ODMtNDFlMGI3YTI2ZmYw\n-----END PGP SIGNATURE-----"}
+`("when the commit has a signature of $signature", (props: { signature: string }) => {
+	const signature = props.signature
+
+	beforeEach(() => {
+		mockGithubPullRequestCommitDtos([{ commit: { verification: { signature } } }])
+	})
+
+	it("preserves the signature", async () => {
+		const [commit] = await getGithubPullRequestCrudeCommits()
+		expect(commit?.signature).toBe(signature)
+	})
+})
+
+describe("when the commit does not have a signature", () => {
+	beforeEach(() => {
+		mockGithubPullRequestCommitDtos([{ commit: { verification: { signature: null } } }])
+	})
+
+	it("omits the signature", async () => {
+		const [commit] = await getGithubPullRequestCrudeCommits()
+		expect(commit?.signature).toBe("")
+	})
+})
+
+describe("when the commit verification object is absent", () => {
+	beforeEach(() => {
+		mockGithubPullRequestCommitDtos([{ commit: {} }])
+	})
+
+	it("omits the signature", async () => {
+		const [commit] = await getGithubPullRequestCrudeCommits()
+		expect(commit?.signature).toBe("")
+	})
+})
+
 describe("when the pull request does not have any commits", () => {
 	const commitDtos = fakeGithubCommitDtos(0)
 

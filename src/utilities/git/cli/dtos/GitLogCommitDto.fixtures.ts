@@ -9,6 +9,7 @@ export function fakeGitLogCommitDto(overrides: GitLogCommitDtoTemplate = {}): Gi
 		author: ["Master Splinter <sensei@ninja-academy.com> 1769801867 -0500"],
 		commit: [fakeCommitSha()],
 		committer: ["Master Splinter <sensei@ninja-academy.com> 1769801867 -0500"],
+		gpgsig: [],
 		message: ["Introduce a cool feature\n\nIt is really awesome!"],
 		parent: [fakeCommitSha()],
 		...overrides,

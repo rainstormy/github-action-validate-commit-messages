@@ -505,6 +505,34 @@ describe("when the committer is absent", () => {
 	})
 })
 
+describe.each`
+	signature
+	${"-----BEGIN SSH SIGNATURE-----\nNjI1ZTMxMzctODU1ZS00YmVmLWI0MTMtY2Q4MmI4YjZlYzE0\n-----END SSH SIGNATURE-----"}
+	${"-----BEGIN PGP SIGNATURE-----\n\nNGU2NWQ0YzctN2I0OC00YWExLWE2NmUtZjg3MTZmNGY2MWJhODM4NTI1ZTEtZWY4OS00YjVjLTgwMWItOTgxNTBmOGJiOTZk\n-----END PGP SIGNATURE-----"}
+`("when the commit has a signature of $signature", (props: { signature: string }) => {
+	const signature = props.signature
+
+	beforeEach(() => {
+		mockGitLog([{ gpgsig: [signature] }])
+	})
+
+	it("preserves the signature", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.signature).toBe(signature)
+	})
+})
+
+describe("when the commit does not have a signature", () => {
+	beforeEach(() => {
+		mockGitLog([{}])
+	})
+
+	it("omits the signature", async () => {
+		const [commit] = await getGitBranchCrudeCommits()
+		expect(commit?.signature).toBe("")
+	})
+})
+
 describe("when the Git log does not have any commits", () => {
 	const commitDtos = fakeGitLogCommitDtos(0)
 

@@ -19,6 +19,7 @@ export type Commit = {
 	committerName: string
 	committerEmail: string
 	isMergeCommit: boolean
+	hasSignature: boolean
 	subjectLine: TokenisedLine
 	bodyLines: TokenisedLines
 }
@@ -34,6 +35,7 @@ export function mapCrudeCommitToCommit(
 	return {
 		sha: crudeCommit.sha,
 		isMergeCommit: crudeCommit.parents.length > 1,
+		hasSignature: crudeCommit.signature !== "",
 		authorName: crudeCommit.authorName,
 		authorEmail: crudeCommit.authorEmail,
 		committerName: crudeCommit.committerName,

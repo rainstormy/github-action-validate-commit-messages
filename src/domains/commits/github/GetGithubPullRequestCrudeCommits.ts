@@ -25,5 +25,6 @@ function mapDtoToCrudeCommit(dto: GithubCommitDto): CrudeCommit {
 		committerEmail: dto.commit.committer?.email ?? "",
 		parents: dto.parents.map((parentDto) => parentDto.sha),
 		message: dto.commit.message,
+		signature: dto.commit.verification?.signature ?? "",
 	}
 }
