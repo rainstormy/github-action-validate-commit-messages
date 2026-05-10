@@ -84,6 +84,7 @@ function gitLogCommitDto(commitSha: string): GitLogCommitDto {
 		author: [],
 		commit: [`${commitSha}\n`],
 		committer: [],
+		gpgsig: [],
 		message: [""],
 		parent: [],
 	}

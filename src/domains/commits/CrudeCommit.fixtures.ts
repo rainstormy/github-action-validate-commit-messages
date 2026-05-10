@@ -12,6 +12,7 @@ export function fakeCrudeCommit(overrides: CrudeCommitTemplate = {}): CrudeCommi
 		committerName: "Leonardo da Vinci",
 		committerEmail: "71091436+katanaturtle@users.noreply.github.com",
 		message: "Introduce a cool feature\n\nIt is really awesome!",
+		signature: "",
 		...overrides,
 	}
 }

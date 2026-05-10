@@ -14,6 +14,7 @@ export type CrudeCommit = {
 	committerName: string
 	committerEmail: string
 	message: string
+	signature: string
 }
 
 export type CrudeCommits = Array<CrudeCommit>

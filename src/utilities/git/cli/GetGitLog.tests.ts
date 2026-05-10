@@ -50,6 +50,7 @@ committer Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 176
 				committer: [
 					"Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 1766222736 -0500",
 				],
+				gpgsig: [],
 				message: ["init"],
 			},
 		])
@@ -80,6 +81,7 @@ committer Master Splinter <sensei@ninja-academy.com> 1769801867 -0500
 				parent: ["b34f54dae2045478f57846dfdd5762f4afb721"],
 				author: ["Raph <theraffaelloexperience@tmnt.com> 1769800893 -0500"],
 				committer: ["Master Splinter <sensei@ninja-academy.com> 1769801867 -0500"],
+				gpgsig: [],
 				message: ["fixup! fighting the foot clan"],
 			},
 		])
@@ -114,6 +116,7 @@ committer Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0
 				],
 				author: ["April O'Neil <april@secondtimearound.com> 1771411236 -0500"],
 				committer: ["Donatello <42069849+gogogadget@users.noreply.github.com> 1771411407 -0500"],
+				gpgsig: [],
 				message: ["Deliver unlimited power with technological genius"],
 			},
 		])
@@ -154,6 +157,7 @@ committer Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500
 					"Michelangelo di Lodovico Buonarroti Simoni <cowabunga@pizza-party.com> 1784831778 -0500",
 				],
 				committer: ['Casey "Goongala" Jones <case@pizza-party.com> 1784831778 -0500'],
+				gpgsig: [],
 				message: [
 					"Let's gather all mutants for a massive pizza party!!\n\nUnder parental supervision, of course ;)",
 				],
@@ -438,6 +442,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 					"Leonardo da Vinci <71091436+katanaturtle@users.noreply.github.com> 1809064863 -0500",
 				],
 				committer: ["Donatello <42069849+gogogadget@users.noreply.github.com> 1809068484 -0500"],
+				gpgsig: [],
 				message: ["stealth: be one with the shadows\n\nmutant chain reaction\nin the underground"],
 			},
 			{
@@ -446,6 +451,7 @@ gpgsig -----BEGIN SSH SIGNATURE-----
 				parent: ["26ecb332bc4787332cc9bb5fff90c8100225a69ff"],
 				author: ["Oroku Saki <shredderhimself@thefoot.com> 1723364474 -0400"],
 				committer: ["Karai <02968712+misssaki@users.noreply.github.com> 1723469209 -0400"],
+				gpgsig: [],
 				message: ["squash! the defects"],
 			},
 			{

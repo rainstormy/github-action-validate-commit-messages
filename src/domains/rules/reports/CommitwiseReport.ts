@@ -244,7 +244,7 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useSignedCommits": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return ruleMessage("Commits must be signed with a signing key.")
 		}
 	}
 }

@@ -116,6 +116,30 @@ describe.each`
 	})
 })
 
+describe("when the commit signature is non-empty", () => {
+	const crudeCommit = fakeCrudeCommit({
+		signature:
+			"-----BEGIN SSH SIGNATURE-----\n" +
+			"MzEwM2JkMTMtNmJiMy00N2YxLWEyNTUtOWMxZmFmYTAyMGZlNDI3MWYyMmEtMjU4MS00YTky\n" +
+			"LWFhNTEtMjI5YjRiZWIxYzMxNTZiMzAwYmMtYmU5ZC00NjUxLWFmODAtY2U3N2I2NmZmNDIy\n" +
+			"-----END SSH SIGNATURE-----",
+	})
+
+	it("has a signature", () => {
+		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+		expect(commit.hasSignature).toBe(true)
+	})
+})
+
+describe("when the commit signature is empty", () => {
+	const crudeCommit = fakeCrudeCommit({ signature: "" })
+
+	it("does not have a signature", () => {
+		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+		expect(commit.hasSignature).toBe(false)
+	})
+})
+
 describe("when the commit message is empty", () => {
 	const crudeCommit = fakeCrudeCommit({ message: "" })
 
