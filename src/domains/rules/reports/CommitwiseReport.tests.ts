@@ -116,54 +116,6 @@ describe("when 'noMergeCommits' has a concern about the commit with a long subje
 	})
 })
 
-describe("when 'useSignedCommits' has a concern about the commit", () => {
-	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
-
-	const commit = fakeCommit({
-		sha: "9b9e2ab8f3248152474f41f728f1221d5bf55a16",
-		message: "Sign the pantry inventory app",
-		signature: "",
-	})
-	const concern = commitConcern("useSignedCommits", commit.sha)
-
-	it("describes the rule violation in the commit", () => {
-		const actualOutput = commitwiseReport([concern], [commit], configuration)
-		expect(actualOutput).toBe(
-			`
-9b9e2ab Sign the pantry inventory app
-      ╭──────────────────────────────
-      ╰─ Commits must be signed with a signing key.
-         (useSignedCommits)
-`.trim(),
-		)
-	})
-})
-
-describe("when 'useSignedCommits' has a concern about the commit with a long subject line", () => {
-	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
-
-	const commit = fakeCommit({
-		sha: "42cefd126a47bfd368d774047a711519eadc2d5",
-		message: "fixup! GH-692 it's raining gold everywhere we go",
-		signature: "",
-	})
-	const concern = commitConcern("useSignedCommits", commit.sha)
-
-	it("describes the rule violation in the commit", () => {
-		const actualOutput = commitwiseReport([concern], [commit], configuration)
-		expect(actualOutput).toBe(
-			`
-42cefd1 fixup! GH-692 it's raining gold everywhere we go
-      ╭─────────────────────────────────────────────────
-      ╰─ Commits must be signed with a signing key.
-         (useSignedCommits)
-`.trim(),
-		)
-	})
-})
-
 describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)
@@ -986,6 +938,54 @@ cccee2c Fixed a bad typo in comment (yes, really)
      (useIssueLinks)
      
      Examples: AWESOME-123, UNICORN-123, PROJECT-123
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useSignedCommits' has a concern about the commit", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "9b9e2ab8f3248152474f41f728f1221d5bf55a16",
+		message: "Sign the pantry inventory app",
+		signature: "",
+	})
+	const concern = commitConcern("useSignedCommits", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+9b9e2ab Sign the pantry inventory app
+      ╭──────────────────────────────
+      ╰─ Commits must be signed cryptographically with a signing key.
+         (useSignedCommits)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useSignedCommits' has a concern about the commit with a long subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "42cefd126a47bfd368d774047a711519eadc2d5",
+		message: "fixup! GH-692 it's raining gold everywhere we go",
+		signature: "",
+	})
+	const concern = commitConcern("useSignedCommits", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+42cefd1 fixup! GH-692 it's raining gold everywhere we go
+      ╭─────────────────────────────────────────────────
+      ╰─ Commits must be signed cryptographically with a signing key.
+         (useSignedCommits)
 `.trim(),
 		)
 	})
