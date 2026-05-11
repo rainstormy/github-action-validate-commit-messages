@@ -7,6 +7,11 @@ import { notNullish } from "#utilities/Arrays.ts"
 
 const rule = "useSignedCommits" satisfies RuleKey
 
+/**
+ * Verifies that the commit has been signed cryptographically with a signing key.
+ *
+ * Signing commits protects authors from impersonation and helps to keep the commit history attributable.
+ */
 export function useSignedCommits(commits: Commits, options: EmptyObject | null): Concerns {
 	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
 }
