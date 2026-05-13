@@ -157,7 +157,7 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			return ruleMessage("Merge commits are not allowed.")
 		}
 		case "noRepeatedSubjectLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return ruleMessage("Commits must have unique subject lines within a branch.")
 		}
 		case "noRestrictedFooterLines": {
 			throw new Error(`Not implemented yet: ${rule}`)
