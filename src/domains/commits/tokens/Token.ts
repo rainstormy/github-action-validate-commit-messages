@@ -27,6 +27,10 @@ export function formatTokenisedLine(tokens: TokenisedLine): string {
 	return tokens.map((token) => token.value).join("")
 }
 
+export function isNonBlankTokenisedLine(tokens: TokenisedLine): boolean {
+	return tokens.some((token) => token.type === "text" && token.value.trim() !== "")
+}
+
 export function splitTextTokens(
 	tokens: TokenisedLine,
 	regex: RegExp,

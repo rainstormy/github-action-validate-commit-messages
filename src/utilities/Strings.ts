@@ -22,6 +22,9 @@ export function formatCount(count: number, singular: string, plural: string): st
 }
 
 export function indentString(value: string, offset: number): string {
-	const indent = " ".repeat(offset)
-	return indent + value.replaceAll("\n", `\n${indent}`)
+	return prefixStringLines(value, " ".repeat(offset))
+}
+
+export function prefixStringLines(value: string, prefix: string): string {
+	return prefix + value.replaceAll("\n", `\n${prefix}`)
 }

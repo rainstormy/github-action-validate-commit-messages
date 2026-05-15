@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -793,6 +794,66 @@ be86674 make a genuine attempt to fix the bugs that the users were complaining a
                                                                                 ──┬─
                                     Subject lines must not exceed 72 characters. ─╯
                                     (useConciseSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useEmptyLineBeforeBodyLines' has a concern about the first body line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "f163851c187a568acc631fff402fcca43f41968d",
+		message: "Install a quieter keyboard\nThe old one sounded like hail.",
+	})
+	const concern = bodyLineConcern("useEmptyLineBeforeBodyLines", commit.sha, {
+		line: 0,
+		range: [0, 1],
+	})
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+f163851 Install a quieter keyboard
+    ╭──
+∙ 1 │ The old one sounded like hail.
+    · ┬
+    · ╰─ Subject lines and message bodies must be separated by exactly one empty line.
+    ·    (useEmptyLineBeforeBodyLines)
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useEmptyLineBeforeBodyLines' has a concern about an extra empty body line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "30fd57b19c55b3746a157f5981838e26865637f2",
+		message: "Clean the tiny dashboard\n\n\nThe widgets sparkle.\nAnd the birds are joyful.",
+	})
+	const concern = bodyLineConcern("useEmptyLineBeforeBodyLines", commit.sha, {
+		line: 1,
+		range: [0, 1],
+	})
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+30fd57b Clean the tiny dashboard
+    ╭──
+  1 │ 
+∙ 2 │ 
+    · ┬
+    · ╰─ Subject lines and message bodies must be separated by exactly one empty line.
+    ·    (useEmptyLineBeforeBodyLines)
+  3 │ The widgets sparkle.
+    ╰──
 `.trim(),
 		)
 	})
