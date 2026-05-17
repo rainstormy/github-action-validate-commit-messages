@@ -1,7 +1,8 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { formatTokenisedLine } from "#commits/tokens/Token.ts"
+import { type TokenisedLines, formatTokenisedLine } from "#commits/tokens/Token.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
+import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -9,7 +10,7 @@ import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
-import { formatCount, indentString } from "#utilities/Strings.ts"
+import { formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
 
 export function commitwiseReport(
 	concerns: Concerns,
@@ -24,7 +25,7 @@ export function commitwiseReport(
 function formatConcern(concern: Concern, commit: Commit, configuration: Configuration): string {
 	switch (concern.location) {
 		case "body-line": {
-			throw new Error(`Not implemented yet: ${concern.location}`)
+			return formatBodyLineConcern(concern, commit, configuration)
 		}
 		case "commit": {
 			return formatCommitConcern(concern, commit, configuration)
@@ -85,6 +86,64 @@ function formatSubjectLineConcern(
 		: getMessageLines(message, offset + shortHalfLength)
 
 	return `${commitLine}\n${rangeLine}\n${messageLines}`
+}
+
+function formatBodyLineConcern(
+	concern: BodyLineConcern,
+	commit: Commit,
+	configuration: Configuration,
+): string {
+	const message = getRuleMessage(concern.rule, configuration)
+
+	const [rangeStart, rangeEnd] = concern.range
+	const length = rangeEnd - rangeStart
+
+	const gutterWidth = Math.ceil(Math.log10(concern.line + 2)) + 3
+	const concernGutter = indentString("· ", gutterWidth)
+
+	const offset = gutterWidth + 2 + rangeStart
+	const longHalfLength = Math.trunc(length / 2)
+	const shortHalfLength = length - longHalfLength - 1
+
+	const violationLength = message.violation.length + MESSAGE_SUFFIX.length
+	const anchoredRight = violationLength < offset + longHalfLength
+
+	const commitLine = getCommitLine(commit)
+
+	const precedingBodyLine = getBodyLine(commit.bodyLines, concern.line - 1, gutterWidth)
+	const blockHeadLines = `${indentString("╭──", gutterWidth)}\n${precedingBodyLine}`
+
+	const concernedBodyLine = getBodyLine(commit.bodyLines, concern.line, gutterWidth, true)
+
+	const rangeLine = `${concernGutter}${indentString(
+		formatCharacterRange(concern.range, anchoredRight),
+		rangeStart,
+	)}`
+
+	const messageLines = anchoredRight
+		? getMessageLines(message, rangeStart + longHalfLength - violationLength, true)
+		: getMessageLines(message, rangeStart + shortHalfLength)
+
+	const succeedingBodyLine = getBodyLine(commit.bodyLines, concern.line + 1, gutterWidth)
+	const blockTailLines = `${succeedingBodyLine}${indentString("╰──", gutterWidth)}`
+
+	return `${commitLine}\n${blockHeadLines}${concernedBodyLine}${rangeLine}\n${prefixStringLines(messageLines, concernGutter)}\n${blockTailLines}`
+}
+
+function getBodyLine(
+	bodyLines: TokenisedLines,
+	lineNumber: number,
+	gutterWidth: number,
+	isConcernedLine = false,
+): string {
+	const bodyLine = bodyLines[lineNumber] ?? null
+
+	if (bodyLine === null) {
+		return ""
+	}
+
+	const formattedLineNumber = (lineNumber + 1).toString().padStart(gutterWidth - 3, " ")
+	return `${isConcernedLine ? "∙" : " "} ${formattedLineNumber} │ ${formatTokenisedLine(bodyLine)}\n`
 }
 
 function formatUserIdentityConcern(
@@ -218,7 +277,9 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			return ruleMessage(`Subject lines must not exceed ${characterPhrase}.`)
 		}
 		case "useEmptyLineBeforeBodyLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return ruleMessage(
+				"Subject lines and message bodies must be separated by exactly one empty line.",
+			)
 		}
 		case "useImperativeSubjectLines": {
 			return ruleMessage("Subject lines must start with a verb in the imperative mood.")
