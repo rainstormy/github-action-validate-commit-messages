@@ -1,21 +1,19 @@
-import { join as joinPath, resolve as resolvePath } from "node:path"
 import { env } from "node:process"
-import { fileURLToPath } from "node:url"
-import type { ViteUserConfig as ViteConfig } from "vitest/config"
+import { defineConfig } from "vitest/config"
 
-export default {
+export default defineConfig({
 	build: {
 		emptyOutDir: Boolean(env.COMET_PLATFORM), // Prevent the `build-legacy-v1` task from deleting the `dist/cli` and `dist/gha` directories.
 		minify: "oxc",
 		reportCompressedSize: false,
-		rollupOptions: {
+		rolldownOptions: {
 			output: {
 				entryFileNames: env.COMET_PLATFORM !== undefined ? "index.js" : "main.mjs",
 			},
 		},
 		target: "es2022",
 	},
-	cacheDir: path("node_modules/.cache/"),
+	cacheDir: "node_modules/.cache/",
 	envPrefix: "COMET_",
 	plugins: [],
 	ssr: {
@@ -29,12 +27,4 @@ export default {
 		unstubEnvs: true,
 		unstubGlobals: true,
 	},
-} satisfies ViteConfig
-
-/**
- * Resolves a path relative to the project directory.
- */
-function path(pathname: string): string {
-	const projectDirectory = joinPath(fileURLToPath(import.meta.url), "..")
-	return resolvePath(projectDirectory, pathname)
-}
+})
