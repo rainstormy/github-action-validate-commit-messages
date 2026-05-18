@@ -69,6 +69,81 @@ describe("when 'noBlankSubjectLines' has a concern about characters 15-16 of the
 	})
 })
 
+describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive commit when the limit is 1", () => {
+	const configuration = fakeConfiguration({
+		rules: { noExcessiveCommitsPerBranch: { maxCommits: 1 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "9a7e6aa14b8c6e5dd49d7a6a18443bf1f67c520",
+		message: "invite the parser to brunch",
+	})
+	const concern = commitConcern("noExcessiveCommitsPerBranch", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+9a7e6aa invite the parser to brunch
+      ╭────────────────────────────
+      ╰─ Branches must not contain more than 1 commit.
+         (noExcessiveCommitsPerBranch)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive commit when the limit is 3", () => {
+	const configuration = fakeConfiguration({
+		rules: { noExcessiveCommitsPerBranch: { maxCommits: 3 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "75bedf83e2b573dc812eba9f14f2b7c6741e670",
+		message: "Refactor the jam queue",
+	})
+	const concern = commitConcern("noExcessiveCommitsPerBranch", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+75bedf8 Refactor the jam queue
+      ╭───────────────────────
+      ╰─ Branches must not contain more than 3 commits.
+         (noExcessiveCommitsPerBranch)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive commit when the limit is 10", () => {
+	const configuration = fakeConfiguration({
+		rules: { noExcessiveCommitsPerBranch: { maxCommits: 10 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "f753a247a54bb4c20e9968dca75ef915f2b1ca",
+		message: "last minute fix",
+	})
+	const concern = commitConcern("noExcessiveCommitsPerBranch", commit.sha)
+
+	it("describes the rule violation in the commit", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+f753a24 last minute fix
+      ╭────────────────
+      ╰─ Branches must not contain more than 10 commits.
+         (noExcessiveCommitsPerBranch)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'noMergeCommits' has a concern about the commit", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)

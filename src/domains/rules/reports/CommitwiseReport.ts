@@ -210,7 +210,9 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			return ruleMessage("Subject lines must contain at least one non-whitespace character.")
 		}
 		case "noExcessiveCommitsPerBranch": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			const commitPhrase = formatCount(options.maxCommits, "commit", "commits")
+			return ruleMessage(`Branches must not contain more than ${commitPhrase}.`)
 		}
 		case "noMergeCommits": {
 			return ruleMessage("Merge commits are not allowed.")

@@ -18,7 +18,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 		},
 		rules: {
 			noBlankSubjectLines: {},
-			noExcessiveCommitsPerBranch: {},
+			noExcessiveCommitsPerBranch: { maxCommits: 10 },
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
 			noRestrictedFooterLines: {},
