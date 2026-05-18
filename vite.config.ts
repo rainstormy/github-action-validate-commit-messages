@@ -18,15 +18,6 @@ export default {
 	cacheDir: path("node_modules/.cache/"),
 	envPrefix: "COMET_",
 	plugins: [],
-	resolve: {
-		alias: [
-			{
-				find: /^#(legacy-v1|types|utilities)\/(.+)/,
-				replacement: path("src/$1/$2"),
-			},
-			{ find: /^#(.+)/, replacement: path("src/domains/$1") },
-		],
-	},
 	ssr: {
 		noExternal: ["valibot"], // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
 	},
