@@ -19,7 +19,7 @@ describe("the default configuration in the command-line", () => {
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
 		${"noBlankSubjectLines"}         | ${{}}
-		${"noExcessiveCommitsPerBranch"} | ${{}}
+		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 		${"noMergeCommits"}              | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
 		${"noRestrictedFooterLines"}     | ${{}}
@@ -70,7 +70,7 @@ describe("the default configuration in GitHub Actions", () => {
 	it.each`
 		enabledRuleKey                   | expectedRuleOptions
 		${"noBlankSubjectLines"}         | ${{}}
-		${"noExcessiveCommitsPerBranch"} | ${{}}
+		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 		${"noMergeCommits"}              | ${{}}
 		${"noRepeatedSubjectLines"}      | ${{}}
 		${"noRestrictedFooterLines"}     | ${{}}

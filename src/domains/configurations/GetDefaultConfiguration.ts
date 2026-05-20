@@ -22,7 +22,7 @@ function getDefaultCliConfiguration(): Configuration {
 		tokens: getDefaultTokenConfiguration(),
 		rules: {
 			noBlankSubjectLines: {},
-			noExcessiveCommitsPerBranch: {},
+			noExcessiveCommitsPerBranch: { maxCommits: 10 },
 			noMergeCommits: {},
 			noRepeatedSubjectLines: null,
 			noRestrictedFooterLines: {},
@@ -51,7 +51,7 @@ function getDefaultGhaConfiguration(): Configuration {
 		tokens: getDefaultTokenConfiguration(),
 		rules: {
 			noBlankSubjectLines: {},
-			noExcessiveCommitsPerBranch: {},
+			noExcessiveCommitsPerBranch: { maxCommits: 10 },
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
 			noRestrictedFooterLines: {},
