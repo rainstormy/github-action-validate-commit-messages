@@ -28,13 +28,13 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 
 	for (let i = initialBodyLines.length - 1; i >= 0; i -= 1) {
 		const bodyLine = initialBodyLines[i] ?? []
-		const bodyLineValue = formatTokenisedLine(bodyLine)
+		const bodyLineString = formatTokenisedLine(bodyLine)
 
-		const [, key = null, value = null] = regex.exec(bodyLineValue) ?? []
+		const [, key = null, value = null] = regex.exec(bodyLineString) ?? []
 
 		if (key !== null && value !== null) {
-			trailersAndBlankLines.push([trailer(key, value, [0, bodyLineValue.length])])
-		} else if (bodyLineValue.trim() === "") {
+			trailersAndBlankLines.push([trailer(key, value, [0, bodyLineString.length])])
+		} else if (bodyLineString.trim() === "") {
 			trailersAndBlankLines.push(bodyLine)
 		} else {
 			break

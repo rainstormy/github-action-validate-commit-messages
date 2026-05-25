@@ -24,11 +24,11 @@ export type TokenisedLine = Array<Token>
 export type TokenisedLines = Array<TokenisedLine>
 
 export function formatTokenisedLine(tokens: TokenisedLine): string {
-	return tokens.map((token) => token.value).join("")
+	return tokens.map(formatToken).join("")
 }
 
-export function isNonBlankTokenisedLine(tokens: TokenisedLine): boolean {
-	return tokens.some((token) => token.type === "text" && token.value.trim() !== "")
+function formatToken(token: Token): string {
+	return token.type === "trailer" ? `${token.key}${token.value}` : token.value
 }
 
 export function splitTextTokens(
