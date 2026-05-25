@@ -2,7 +2,7 @@ import type { noBlankSubjectLines } from "#rules/NoBlankSubjectLines.ts"
 import type { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import type { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import type { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
-import type { noRestrictedFooterLines } from "#rules/NoRestrictedFooterLines.ts"
+import type { noRestrictedTrailers } from "#rules/NoRestrictedTrailers.ts"
 import type { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
 import type { noSingleWordSubjectLines } from "#rules/NoSingleWordSubjectLines.ts"
 import type { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
@@ -25,7 +25,7 @@ export type RulesByKey = {
 	noExcessiveCommitsPerBranch: typeof noExcessiveCommitsPerBranch
 	noMergeCommits: typeof noMergeCommits
 	noRepeatedSubjectLines: typeof noRepeatedSubjectLines
-	noRestrictedFooterLines: typeof noRestrictedFooterLines
+	noRestrictedTrailers: typeof noRestrictedTrailers
 	noRevertRevertCommits: typeof noRevertRevertCommits
 	noSingleWordSubjectLines: typeof noSingleWordSubjectLines
 	noSquashMarkers: typeof noSquashMarkers

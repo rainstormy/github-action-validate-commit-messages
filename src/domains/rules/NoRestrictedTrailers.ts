@@ -4,14 +4,14 @@ import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 
-const _rule = "noRestrictedFooterLines" satisfies RuleKey
+const _rule = "noRestrictedTrailers" satisfies RuleKey
 
-export function noRestrictedFooterLines(commits: Commits, options: EmptyObject | null): Concerns {
+export function noRestrictedTrailers(commits: Commits, options: EmptyObject | null): Concerns {
 	return options !== null
 		? commits.map((commit) => verifyCommit(commit, options)).filter(notNullish)
 		: []
 }
 
 function verifyCommit(_commit: Commit, _options: RuleOptions<typeof _rule>): Concern | null {
-	throw new Error("The `noRestrictedFooterLines` rule has not been implemented yet") // TODO: To be implemented.
+	throw new Error("The `noRestrictedTrailers` rule has not been implemented yet") // TODO: To be implemented.
 }

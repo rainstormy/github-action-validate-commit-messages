@@ -22,7 +22,7 @@ describe("the default configuration in the command-line", () => {
 		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 		${"noMergeCommits"}              | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
-		${"noRestrictedFooterLines"}     | ${{}}
+		${"noRestrictedTrailers"}        | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
@@ -73,7 +73,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 		${"noMergeCommits"}              | ${{}}
 		${"noRepeatedSubjectLines"}      | ${{}}
-		${"noRestrictedFooterLines"}     | ${{}}
+		${"noRestrictedTrailers"}        | ${{}}
 		${"noRevertRevertCommits"}       | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
 		${"noSquashMarkers"}             | ${{}}

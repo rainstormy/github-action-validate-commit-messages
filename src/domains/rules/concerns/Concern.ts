@@ -7,7 +7,7 @@ import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts
 import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
-import { noRestrictedFooterLines } from "#rules/NoRestrictedFooterLines.ts"
+import { noRestrictedTrailers } from "#rules/NoRestrictedTrailers.ts"
 import { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
 import { noSingleWordSubjectLines } from "#rules/NoSingleWordSubjectLines.ts"
 import { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
@@ -42,7 +42,7 @@ export function mapCommitsToConcerns(commits: Commits, configuration: Configurat
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),
 		...noMergeCommits(commits, rules.noMergeCommits),
 		...noRepeatedSubjectLines(commits, rules.noRepeatedSubjectLines),
-		...noRestrictedFooterLines(commits, rules.noRestrictedFooterLines),
+		...noRestrictedTrailers(commits, rules.noRestrictedTrailers),
 		...noRevertRevertCommits(commits, rules.noRevertRevertCommits),
 		...noSingleWordSubjectLines(commits, rules.noSingleWordSubjectLines),
 		...noSquashMarkers(commits, rules.noSquashMarkers),

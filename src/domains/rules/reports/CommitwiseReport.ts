@@ -220,7 +220,7 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 		case "noRepeatedSubjectLines": {
 			return ruleMessage("Commits must have unique subject lines within a branch.")
 		}
-		case "noRestrictedFooterLines": {
+		case "noRestrictedTrailers": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "noRevertRevertCommits": {
