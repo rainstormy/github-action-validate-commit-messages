@@ -22,7 +22,6 @@ describe("the default configuration in the command-line", () => {
 		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 		${"noMergeCommits"}              | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
-		${"noRestrictedTrailers"}        | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
 		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
@@ -42,6 +41,7 @@ describe("the default configuration in the command-line", () => {
 	it.each`
 		disabledRuleKey
 		${"noRepeatedSubjectLines"}
+		${"noRestrictedTrailers"}
 		${"noRevertRevertCommits"}
 		${"noSquashMarkers"}
 		${"useAuthorEmailPatterns"}
@@ -73,7 +73,6 @@ describe("the default configuration in GitHub Actions", () => {
 		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 		${"noMergeCommits"}              | ${{}}
 		${"noRepeatedSubjectLines"}      | ${{}}
-		${"noRestrictedTrailers"}        | ${{}}
 		${"noRevertRevertCommits"}       | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
 		${"noSquashMarkers"}             | ${{}}
@@ -95,6 +94,7 @@ describe("the default configuration in GitHub Actions", () => {
 
 	it.each`
 		disabledRuleKey
+		${"noRestrictedTrailers"}
 		${"useAuthorEmailPatterns"}
 		${"useAuthorNamePatterns"}
 		${"useCommitterEmailPatterns"}

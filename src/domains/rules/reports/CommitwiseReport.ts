@@ -7,10 +7,12 @@ import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
+import { normaliseTrailerKey } from "#rules/NoRestrictedTrailers.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
+import { ALPHABETICALLY } from "#utilities/Arrays.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
-import { formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
+import { capitalise, formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
 
 export function commitwiseReport(
 	concerns: Concerns,
@@ -127,7 +129,7 @@ function formatBodyLineConcern(
 	const succeedingBodyLine = getBodyLine(commit.bodyLines, concern.line + 1, gutterWidth)
 	const blockTailLines = `${succeedingBodyLine}${indentString("╰──", gutterWidth)}`
 
-	return `${commitLine}\n${blockHeadLines}${concernedBodyLine}${rangeLine}\n${prefixStringLines(messageLines, concernGutter)}\n${blockTailLines}`
+	return `${commitLine}\n${blockHeadLines}${concernedBodyLine}${rangeLine}\n${prefixStringLines(succeedingBodyLine === "" ? messageLines.trimEnd() : messageLines, concernGutter)}\n${blockTailLines}`
 }
 
 function getBodyLine(
@@ -221,7 +223,17 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 			return ruleMessage("Commits must have unique subject lines within a branch.")
 		}
 		case "noRestrictedTrailers": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Message bodies must not contain disallowed trailers.",
+				formatList(
+					"Disallowed trailers:",
+					[...options.restrictedKeys]
+						.map((key) => capitalise(normaliseTrailerKey(key)))
+						.toSorted(ALPHABETICALLY),
+					"\n",
+				),
+			)
 		}
 		case "noRevertRevertCommits": {
 			return ruleMessage("Cherry-pick the original commit instead of reverting it over.")
@@ -318,6 +330,8 @@ function getRuleOptions<Key extends RuleKey>(
 	)
 }
 
-function formatList(heading: string, items: Array<string>): string {
-	return items.length > 0 ? `${heading}${items.map((item) => `\n  ∙ ${item}`).join("")}` : ""
+function formatList(heading: string, items: Array<string>, trailer = ""): string {
+	return items.length > 0
+		? `${heading}${items.map((item) => `\n  ∙ ${item}`).join("")}${trailer}`
+		: ""
 }

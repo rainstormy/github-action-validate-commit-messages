@@ -48,3 +48,9 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 	trailersAndBlankLines.reverse()
 	return [...initialBodyLines.slice(0, -trailersAndBlankLines.length), ...trailersAndBlankLines]
 }
+
+export function trimmedTrailerTokenKeyRange(token: TrailerToken): CharacterRange {
+	const [untrimmedStart] = token.range
+	const leadingOffset = token.key.length - token.key.trimStart().length
+	return [untrimmedStart + leadingOffset, untrimmedStart + token.key.trimEnd().length]
+}
