@@ -1,4 +1,3 @@
-import type { CoauthorToken } from "#commits/tokens/CoauthorToken.ts"
 import type { DependencyVersionToken } from "#commits/tokens/DependencyVersionToken.ts"
 import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.ts"
 import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
@@ -7,10 +6,10 @@ import type { IssueLinkToken } from "#commits/tokens/IssueLinkToken.ts"
 import type { RevertMarkerToken } from "#commits/tokens/RevertMarkerToken.ts"
 import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
 import { type TextToken, text } from "#commits/tokens/TextToken.ts"
+import type { TrailerToken } from "#commits/tokens/TrailerToken.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type Token =
-	| CoauthorToken
 	| DependencyVersionToken
 	| FencedCodeBlockToken
 	| HyperlinkToken
@@ -19,6 +18,7 @@ export type Token =
 	| RevertMarkerToken
 	| SquashMarkerToken
 	| TextToken
+	| TrailerToken
 
 export type TokenisedLine = Array<Token>
 export type TokenisedLines = Array<TokenisedLine>
