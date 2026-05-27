@@ -240,18 +240,16 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 		}
 		case "useAuthorEmailPatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Email addresses of commit authors must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useAuthorNamePatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Names of commit authors must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useCapitalisedSubjectLines": {
@@ -259,18 +257,16 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 		}
 		case "useCommitterEmailPatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Email addresses of committers must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useCommitterNamePatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Names of committers must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useConciseSubjectLines": {
@@ -320,4 +316,8 @@ function getRuleOptions<Key extends RuleKey>(
 		configuration.rules[rule],
 		() => `Concern raised for disabled rule '${rule}'`,
 	)
+}
+
+function formatList(heading: string, items: Array<string>): string {
+	return items.length > 0 ? `${heading}${items.map((item) => `\n  ∙ ${item}`).join("")}` : ""
 }

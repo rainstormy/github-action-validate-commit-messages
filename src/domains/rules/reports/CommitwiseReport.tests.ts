@@ -453,8 +453,8 @@ describe("when 'useAuthorEmailPatterns' has a concern about a missing author ema
               ╰─ Email addresses of commit authors must match an accepted pattern.
                  (useAuthorEmailPatterns)
                  
-                 Accepted pattern:
-                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                 Accepted patterns:
+                   ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
 `.trim(),
 		)
 	})
@@ -493,8 +493,8 @@ describe("when 'useAuthorEmailPatterns' has a concern about the author's email a
                  (useAuthorEmailPatterns)
                  
                  Accepted patterns:
-                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
-                   - ${String.raw`.+@fictivecompany\.com`}
+                   ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                   ∙ ${String.raw`.+@fictivecompany\.com`}
 `.trim(),
 		)
 	})
@@ -529,8 +529,8 @@ f16fc9f overpowered code
               ╰─ Names of commit authors must match an accepted pattern.
                  (useAuthorNamePatterns)
                  
-                 Accepted pattern:
-                   - ${String.raw`\p{Lu}.*\s.+`}
+                 Accepted patterns:
+                   ∙ ${String.raw`\p{Lu}.*\s.+`}
 `.trim(),
 		)
 	})
@@ -566,8 +566,8 @@ e4236bf I’m not lazy, I’m on energy-saving mode
                  (useAuthorNamePatterns)
                  
                  Accepted patterns:
-                   - ${String.raw`\p{Lu}.*\s.+`}
-                   - ${String.raw`dependabot\[bot\]`}
+                   ∙ ${String.raw`\p{Lu}.*\s.+`}
+                   ∙ ${String.raw`dependabot\[bot\]`}
 `.trim(),
 		)
 	})
@@ -602,8 +602,8 @@ describe("when 'useCommitterEmailPatterns' has a concern about a missing committ
                ╰─ Email addresses of committers must match an accepted pattern.
                   (useCommitterEmailPatterns)
                   
-                  Accepted pattern:
-                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                  Accepted patterns:
+                    ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
 `.trim(),
 		)
 	})
@@ -642,8 +642,8 @@ describe("when 'useCommitterEmailPatterns' has a concern about the committer's e
                   (useCommitterEmailPatterns)
                   
                   Accepted patterns:
-                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
-                    - ${String.raw`noreply@github\.com`}
+                    ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                    ∙ ${String.raw`noreply@github\.com`}
 `.trim(),
 		)
 	})
@@ -678,8 +678,8 @@ describe("when 'useCommitterNamePatterns' has a concern about a missing committe
                ╰─ Names of committers must match an accepted pattern.
                   (useCommitterNamePatterns)
                   
-                  Accepted pattern:
-                    - ${String.raw`\p{Lu}.*\s.+`}
+                  Accepted patterns:
+                    ∙ ${String.raw`\p{Lu}.*\s.+`}
 `.trim(),
 		)
 	})
@@ -720,10 +720,10 @@ describe("when 'useCommitterNamePatterns' has a concern about the committer's na
                   (useCommitterNamePatterns)
                   
                   Accepted patterns:
-                    - ${String.raw`\p{Lu}.*\s.+`}
-                    - ${String.raw`dependabot\[bot\]`}
-                    - ${String.raw`renovate\[bot\]`}
-                    - ${String.raw`GitHub`}
+                    ∙ ${String.raw`\p{Lu}.*\s.+`}
+                    ∙ ${String.raw`dependabot\[bot\]`}
+                    ∙ ${String.raw`renovate\[bot\]`}
+                    ∙ ${String.raw`GitHub`}
 `.trim(),
 		)
 	})
