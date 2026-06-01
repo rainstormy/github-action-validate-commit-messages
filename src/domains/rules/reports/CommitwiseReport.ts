@@ -295,7 +295,7 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 						? "end with"
 						: "include"
 
-			const examples = configuration.tokens.issueLinkPrefixes.map((prefix) => `${prefix}123`)
+			const examples = configuration.tokens.issueLinks.prefixes.map((prefix) => `${prefix}123`)
 			const examplePhrase = pluralise(examples.length, "Example", "Examples")
 
 			return ruleMessage(

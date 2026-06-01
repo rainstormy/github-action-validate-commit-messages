@@ -16,16 +16,5 @@ export function tokeniseIssueLinks(
 	initialTokens: TokenisedLine,
 	configuration: TokenConfiguration,
 ): TokenisedLine {
-	const combinedPrefixPattern = configuration.issueLinkPrefixes
-		.map((prefix) => RegExp.escape(prefix))
-		.join("|")
-
-	// Assume all issue links to have a numeric key after the string prefix.
-	// They can be surrounded by whitespace, enclosed in brackets (bracket pair consistency not enforced for simplicity), or followed by a colon.
-	const combinedRegex = new RegExp(
-		`(\\s*[([{<]*(?:${combinedPrefixPattern})\\d+[)\\]}>]*:?\\s*)`,
-		"giu",
-	)
-
-	return splitTextTokens(initialTokens, combinedRegex, issueLink)
+	return splitTextTokens(initialTokens, configuration.issueLinks.regex, issueLink)
 }

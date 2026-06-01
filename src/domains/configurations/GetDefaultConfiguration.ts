@@ -1,4 +1,5 @@
 import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
+import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import type { CometPlatform } from "#utilities/platform/CometPlatform.ts"
 
 export function getDefaultConfiguration(): Configuration {
@@ -38,7 +39,7 @@ function getDefaultCliConfiguration(): Configuration {
 			useCommitterNamePatterns: null,
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
-			useImperativeSubjectLines: { whitelist: new Set() },
+			useImperativeSubjectLines: { whitelist: [] },
 			useIssueLinks: null,
 			useLineWrapping: {},
 			useSignedCommits: {},
@@ -67,7 +68,7 @@ function getDefaultGhaConfiguration(): Configuration {
 			useCommitterNamePatterns: null,
 			useConciseSubjectLines: { maxLength: 50 },
 			useEmptyLineBeforeBodyLines: {},
-			useImperativeSubjectLines: { whitelist: new Set() },
+			useImperativeSubjectLines: { whitelist: [] },
 			useIssueLinks: null,
 			useLineWrapping: {},
 			useSignedCommits: {},
@@ -77,6 +78,6 @@ function getDefaultGhaConfiguration(): Configuration {
 
 export function getDefaultTokenConfiguration(): TokenConfiguration {
 	return {
-		issueLinkPrefixes: ["#", "GH-", "GL-"],
+		issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"]),
 	}
 }

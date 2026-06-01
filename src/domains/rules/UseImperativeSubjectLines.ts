@@ -3,7 +3,7 @@ import { text } from "#commits/tokens/TextToken.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import { notNullish } from "#utilities/Arrays.ts"
 import { isImperativeVerb } from "#utilities/Verbs.ts"
 
@@ -19,14 +19,17 @@ const rule = "useImperativeSubjectLines" satisfies RuleKey
  */
 export function useImperativeSubjectLines(
 	commits: Commits,
-	options: { whitelist: Set<string> } | null,
+	options: { whitelist: Array<string> } | null,
 ): Concerns {
-	return options !== null
-		? commits.map((commit) => verifyCommit(commit, options)).filter(notNullish)
-		: []
+	if (options === null) {
+		return []
+	}
+
+	const whitelist = new Set(options.whitelist.map(normaliseWord))
+	return commits.map((commit) => verifyCommit(commit, whitelist)).filter(notNullish)
 }
 
-function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concern | null {
+function verifyCommit(commit: Commit, whitelist: Set<string>): Concern | null {
 	let firstWordToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
@@ -42,9 +45,9 @@ function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concer
 		return null
 	}
 
-	const firstWord = firstWordToken.value.toLowerCase()
+	const firstWord = normaliseWord(firstWordToken.value)
 
-	if (options.whitelist.has(firstWord) || isImperativeVerb(firstWord)) {
+	if (whitelist.has(firstWord) || isImperativeVerb(firstWord)) {
 		return null
 	}
 
@@ -62,4 +65,8 @@ function getFirstWordToken(token: Token): Token | null {
 
 	const firstWordStartIndex = token.range[0] + token.value.indexOf(firstWord)
 	return text(firstWord, [firstWordStartIndex, firstWordStartIndex + firstWord.length])
+}
+
+function normaliseWord(word: string): string {
+	return word.trim().toLowerCase()
 }

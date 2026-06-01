@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
@@ -468,7 +469,7 @@ describe("when verifying a set of multiple commits and all commits end with an i
 
 const fakeJiraStyleCommit = fakeCommitFactory(
 	fakeConfiguration({
-		tokens: { issueLinkPrefixes: ["UNICORN-"] },
+		tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"]) },
 	}),
 )
 
