@@ -11,8 +11,8 @@ import type { Vector } from "#types/Vector.ts"
 
 const rule = "useImperativeSubjectLines" satisfies RuleKey
 
-const enabled: RuleOptions<typeof rule> = { whitelist: new Set() }
-const enabledWhitelist: RuleOptions<typeof rule> = { whitelist: new Set(["chatify", "deckenize"]) }
+const enabled: RuleOptions<typeof rule> = { whitelist: [] }
+const enabledWhitelist: RuleOptions<typeof rule> = { whitelist: ["chatify", "DECKENIZE"] }
 
 const fakeCommit = fakeCommitFactory(fakeConfiguration())
 
