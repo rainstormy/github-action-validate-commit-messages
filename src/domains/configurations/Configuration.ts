@@ -1,3 +1,4 @@
+import type { IssueLinkTokenConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 
 export type Configuration = {
@@ -13,5 +14,5 @@ export type RuleConfiguration = {
 }
 
 export type TokenConfiguration = {
-	issueLinkPrefixes: Array<string>
+	issueLinks: IssueLinkTokenConfiguration
 }

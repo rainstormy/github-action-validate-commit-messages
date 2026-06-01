@@ -7,9 +7,12 @@ import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
 const configurationGithubStyle = fakeConfiguration()
-const configurationJiraStyle = fakeConfiguration({ tokens: { issueLinkPrefixes: ["UNICORN-"] } })
+const configurationJiraStyle = fakeConfiguration({
+	tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"]) },
+})
 
 describe.each`
 	subjectLine                                                        | expectedTokens

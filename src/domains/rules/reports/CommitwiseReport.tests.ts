@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
@@ -1045,7 +1046,7 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 describe("when 'useIssueLinks' with position 'anywhere' and Jira-style issue links has a concern about characters 10-11 of the subject line", () => {
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "anywhere" } },
-		tokens: { issueLinkPrefixes: ["ABC-"] },
+		tokens: { issueLinks: issueLinkConfiguration(["ABC-"]) },
 	})
 	const fakeCommit = fakeCommitFactory(configuration)
 
@@ -1073,7 +1074,7 @@ d0709d2  squash!  made the code so clean that it sparkles
 describe("when 'useIssueLinks' with position 'prefix' and custom-style issue links has a concern about characters 0-1 of the subject line", () => {
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "prefix" } },
-		tokens: { issueLinkPrefixes: ["test#", "experiment#"] },
+		tokens: { issueLinks: issueLinkConfiguration(["test#", "experiment#"]) },
 	})
 	const fakeCommit = fakeCommitFactory(configuration)
 
@@ -1101,7 +1102,7 @@ f6fc239 Refactored code, now it’s overpowered
 describe("when 'useIssueLinks' with position 'suffix' and Jira-style issue links has a concern about characters 41-42 of the subject line", () => {
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "suffix" } },
-		tokens: { issueLinkPrefixes: ["AWESOME-", "UNICORN-", "PROJECT-"] },
+		tokens: { issueLinks: issueLinkConfiguration(["AWESOME-", "UNICORN-", "PROJECT-"]) },
 	})
 	const fakeCommit = fakeCommitFactory(configuration)
 
