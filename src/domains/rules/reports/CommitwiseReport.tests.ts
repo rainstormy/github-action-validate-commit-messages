@@ -240,6 +240,85 @@ f3359c9 GH-246 Replace guesswork with a tiny chart and upgrade the \`ButterflySe
 	})
 })
 
+describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Co-authored-by' trailer", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			noRestrictedTrailers: {
+				restrictedKeys: ["CO-AUTHORED-BY:"],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "a04ada44cc2d13336a7b28cfb7bd59649aa1bb",
+		message:
+			"Wire the release breadcrumb trail\n\nReviewed-By: April O'Neil <april.oneil@fastforward.com>\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>\nSigned-Off-By: Hamato Yoshi <hamato@nycsewers.com>\nRefs: #123",
+	})
+	const concern = bodyLineConcern("noRestrictedTrailers", commit.sha, { line: 2, range: [0, 15] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+a04ada4 Wire the release breadcrumb trail
+    ╭──
+  2 │ Reviewed-By: April O'Neil <april.oneil@fastforward.com>
+∙ 3 │ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
+    · ───────┬───────
+    ·        ╰─ Message bodies must not contain disallowed trailers.
+    ·           (noRestrictedTrailers)
+    ·           
+    ·           Disallowed trailers:
+    ·             ∙ Co-authored-by
+    ·           
+  4 │ Signed-Off-By: Hamato Yoshi <hamato@nycsewers.com>
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Refs' trailer", () => {
+	const configuration = fakeConfiguration({
+		rules: {
+			noRestrictedTrailers: {
+				restrictedKeys: ["signed-off-by", "co-authored-by", "refs", "reviewed-by"],
+			},
+		},
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "344eaa9c854379fbd1af020aaf093fbad974c3",
+		message:
+			"one link and two notes\nwith overpowered statements\nno one can beat us now hahaha\n\n  change-id: deadbeef\n  signed-off-by: baxter.stockman <baxter.stockman@fastforward.com>\n  refs: #668182",
+	})
+	const concern = bodyLineConcern("noRestrictedTrailers", commit.sha, { line: 5, range: [2, 7] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+344eaa9 one link and two notes
+    ╭──
+  5 │   signed-off-by: baxter.stockman <baxter.stockman@fastforward.com>
+∙ 6 │   refs: #668182
+    ·   ──┬──
+    ·     ╰─ Message bodies must not contain disallowed trailers.
+    ·        (noRestrictedTrailers)
+    ·        
+    ·        Disallowed trailers:
+    ·          ∙ Co-authored-by
+    ·          ∙ Refs
+    ·          ∙ Reviewed-by
+    ·          ∙ Signed-off-by
+    ╰──
+`.trim(),
+		)
+	})
+})
+
 describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration)
@@ -453,8 +532,8 @@ describe("when 'useAuthorEmailPatterns' has a concern about a missing author ema
               ╰─ Email addresses of commit authors must match an accepted pattern.
                  (useAuthorEmailPatterns)
                  
-                 Accepted pattern:
-                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                 Accepted patterns:
+                   ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
 `.trim(),
 		)
 	})
@@ -493,8 +572,8 @@ describe("when 'useAuthorEmailPatterns' has a concern about the author's email a
                  (useAuthorEmailPatterns)
                  
                  Accepted patterns:
-                   - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
-                   - ${String.raw`.+@fictivecompany\.com`}
+                   ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                   ∙ ${String.raw`.+@fictivecompany\.com`}
 `.trim(),
 		)
 	})
@@ -529,8 +608,8 @@ f16fc9f overpowered code
               ╰─ Names of commit authors must match an accepted pattern.
                  (useAuthorNamePatterns)
                  
-                 Accepted pattern:
-                   - ${String.raw`\p{Lu}.*\s.+`}
+                 Accepted patterns:
+                   ∙ ${String.raw`\p{Lu}.*\s.+`}
 `.trim(),
 		)
 	})
@@ -566,8 +645,8 @@ e4236bf I’m not lazy, I’m on energy-saving mode
                  (useAuthorNamePatterns)
                  
                  Accepted patterns:
-                   - ${String.raw`\p{Lu}.*\s.+`}
-                   - ${String.raw`dependabot\[bot\]`}
+                   ∙ ${String.raw`\p{Lu}.*\s.+`}
+                   ∙ ${String.raw`dependabot\[bot\]`}
 `.trim(),
 		)
 	})
@@ -602,8 +681,8 @@ describe("when 'useCommitterEmailPatterns' has a concern about a missing committ
                ╰─ Email addresses of committers must match an accepted pattern.
                   (useCommitterEmailPatterns)
                   
-                  Accepted pattern:
-                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                  Accepted patterns:
+                    ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
 `.trim(),
 		)
 	})
@@ -642,8 +721,8 @@ describe("when 'useCommitterEmailPatterns' has a concern about the committer's e
                   (useCommitterEmailPatterns)
                   
                   Accepted patterns:
-                    - ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
-                    - ${String.raw`noreply@github\.com`}
+                    ∙ ${String.raw`\d+\+.+@users\.noreply\.github\.com`}
+                    ∙ ${String.raw`noreply@github\.com`}
 `.trim(),
 		)
 	})
@@ -678,8 +757,8 @@ describe("when 'useCommitterNamePatterns' has a concern about a missing committe
                ╰─ Names of committers must match an accepted pattern.
                   (useCommitterNamePatterns)
                   
-                  Accepted pattern:
-                    - ${String.raw`\p{Lu}.*\s.+`}
+                  Accepted patterns:
+                    ∙ ${String.raw`\p{Lu}.*\s.+`}
 `.trim(),
 		)
 	})
@@ -720,10 +799,10 @@ describe("when 'useCommitterNamePatterns' has a concern about the committer's na
                   (useCommitterNamePatterns)
                   
                   Accepted patterns:
-                    - ${String.raw`\p{Lu}.*\s.+`}
-                    - ${String.raw`dependabot\[bot\]`}
-                    - ${String.raw`renovate\[bot\]`}
-                    - ${String.raw`GitHub`}
+                    ∙ ${String.raw`\p{Lu}.*\s.+`}
+                    ∙ ${String.raw`dependabot\[bot\]`}
+                    ∙ ${String.raw`renovate\[bot\]`}
+                    ∙ ${String.raw`GitHub`}
 `.trim(),
 		)
 	})

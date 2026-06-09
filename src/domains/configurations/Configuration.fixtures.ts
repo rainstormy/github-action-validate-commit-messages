@@ -21,7 +21,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			noExcessiveCommitsPerBranch: { maxCommits: 10 },
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
-			noRestrictedFooterLines: {},
+			noRestrictedTrailers: { restrictedKeys: ["Co-authored-by"] },
 			noRevertRevertCommits: {},
 			noSingleWordSubjectLines: {},
 			noSquashMarkers: {},

@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { isNonBlankTokenisedLine } from "#commits/tokens/Token.ts"
+import { formatTokenisedLine } from "#commits/tokens/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -25,7 +25,7 @@ function verifyCommit(commit: Commit): Concern | null {
 	let lineNumber = 0
 
 	for (const bodyLine of commit.bodyLines) {
-		if (isNonBlankTokenisedLine(bodyLine)) {
+		if (formatTokenisedLine(bodyLine).trim() !== "") {
 			firstNonBlankLineNumber = lineNumber
 			break
 		}

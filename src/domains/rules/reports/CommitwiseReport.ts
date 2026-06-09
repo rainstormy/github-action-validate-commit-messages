@@ -7,10 +7,12 @@ import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
+import { normaliseTrailerKey } from "#rules/NoRestrictedTrailers.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
+import { ALPHABETICALLY } from "#utilities/Arrays.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
-import { formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
+import { capitalise, formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
 
 export function commitwiseReport(
 	concerns: Concerns,
@@ -127,7 +129,7 @@ function formatBodyLineConcern(
 	const succeedingBodyLine = getBodyLine(commit.bodyLines, concern.line + 1, gutterWidth)
 	const blockTailLines = `${succeedingBodyLine}${indentString("╰──", gutterWidth)}`
 
-	return `${commitLine}\n${blockHeadLines}${concernedBodyLine}${rangeLine}\n${prefixStringLines(messageLines, concernGutter)}\n${blockTailLines}`
+	return `${commitLine}\n${blockHeadLines}${concernedBodyLine}${rangeLine}\n${prefixStringLines(succeedingBodyLine === "" ? messageLines.trimEnd() : messageLines, concernGutter)}\n${blockTailLines}`
 }
 
 function getBodyLine(
@@ -220,8 +222,18 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 		case "noRepeatedSubjectLines": {
 			return ruleMessage("Commits must have unique subject lines within a branch.")
 		}
-		case "noRestrictedFooterLines": {
-			throw new Error(`Not implemented yet: ${rule}`)
+		case "noRestrictedTrailers": {
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Message bodies must not contain disallowed trailers.",
+				formatList(
+					"Disallowed trailers:",
+					[...options.restrictedKeys]
+						.map((key) => capitalise(normaliseTrailerKey(key)))
+						.toSorted(ALPHABETICALLY),
+					"\n",
+				),
+			)
 		}
 		case "noRevertRevertCommits": {
 			return ruleMessage("Cherry-pick the original commit instead of reverting it over.")
@@ -240,18 +252,16 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 		}
 		case "useAuthorEmailPatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Email addresses of commit authors must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useAuthorNamePatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Names of commit authors must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useCapitalisedSubjectLines": {
@@ -259,18 +269,16 @@ function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessag
 		}
 		case "useCommitterEmailPatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Email addresses of committers must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useCommitterNamePatterns": {
 			const options = getRuleOptions(rule, configuration)
-			const patternPhrase = pluralise(options.patterns.length, "pattern", "patterns")
 			return ruleMessage(
 				"Names of committers must match an accepted pattern.",
-				`Accepted ${patternPhrase}:\n${options.patterns.map((pattern) => `  - ${pattern}`).join("\n")}`,
+				formatList("Accepted patterns:", options.patterns),
 			)
 		}
 		case "useConciseSubjectLines": {
@@ -320,4 +328,10 @@ function getRuleOptions<Key extends RuleKey>(
 		configuration.rules[rule],
 		() => `Concern raised for disabled rule '${rule}'`,
 	)
+}
+
+function formatList(heading: string, items: Array<string>, trailer = ""): string {
+	return items.length > 0
+		? `${heading}${items.map((item) => `\n  ∙ ${item}`).join("")}${trailer}`
+		: ""
 }

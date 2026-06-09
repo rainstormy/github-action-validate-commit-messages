@@ -6,6 +6,7 @@ import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { Token, TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
+import { tokeniseTrailers } from "#commits/tokens/TrailerToken.ts"
 import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
@@ -41,9 +42,7 @@ export function mapCrudeCommitToCommit(
 		committerName: crudeCommit.committerName,
 		committerEmail: crudeCommit.committerEmail,
 		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens),
-		bodyLines: crudeBodyLines.map((crudeBodyLine) =>
-			tokeniseBodyLine(crudeBodyLine, configuration.tokens),
-		),
+		bodyLines: tokeniseBodyLines(crudeBodyLines, configuration.tokens),
 	}
 }
 
@@ -66,6 +65,15 @@ function tokeniseSubjectLine(
 			),
 		)
 	).filter(notEmptyToken)
+}
+
+function tokeniseBodyLines(
+	crudeBodyLines: Array<string>,
+	configuration: TokenConfiguration,
+): TokenisedLines {
+	return tokeniseTrailers(
+		crudeBodyLines.map((crudeBodyLine) => tokeniseBodyLine(crudeBodyLine, configuration)),
+	)
 }
 
 function tokeniseBodyLine(
