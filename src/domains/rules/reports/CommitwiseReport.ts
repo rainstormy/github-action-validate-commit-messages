@@ -52,7 +52,7 @@ function formatCommitConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern.rule, configuration)
+	const message = getRuleMessage(concern, configuration)
 
 	const commitLine = getCommitLine(commit)
 	const rangeLine = indentString(
@@ -69,7 +69,7 @@ function formatSubjectLineConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern.rule, configuration)
+	const message = getRuleMessage(concern, configuration)
 
 	const [rangeStart, rangeEnd] = concern.range
 	const length = rangeEnd - rangeStart
@@ -95,7 +95,7 @@ function formatBodyLineConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern.rule, configuration)
+	const message = getRuleMessage(concern, configuration)
 
 	const [rangeStart, rangeEnd] = concern.range
 	const length = rangeEnd - rangeStart
@@ -153,7 +153,7 @@ function formatUserIdentityConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern.rule, configuration)
+	const message = getRuleMessage(concern, configuration)
 
 	const identityLine = `╰─ ${getIdentityLine(concern, commit)}`
 
@@ -202,7 +202,9 @@ type RuleMessage = {
 	sidenote: string
 }
 
-function getRuleMessage(rule: RuleKey, configuration: Configuration): RuleMessage {
+function getRuleMessage(concern: Concern, configuration: Configuration): RuleMessage {
+	const rule = concern.rule
+
 	function ruleMessage(violation: string, sidenote = ""): RuleMessage {
 		return { rule, violation, sidenote }
 	}

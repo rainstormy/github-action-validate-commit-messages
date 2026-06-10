@@ -66,6 +66,7 @@ Always use mise to install dependencies and run tasks. Never use pnpm, npm, npx,
 - Write a description of the rule and the motivation behind it in JSDoc
 - For each commit to verify, return the appropriate concern when the rule is violated and return null when all is good
 - If it is a brand-new rule, add it to `Rule.ts` and default configurations with meaningful options and write unit tests
+- Add the rule key to the relevant concern types in `src/domains/rules/concerns/`
 - Write unit tests for the rule logic in isolation, including multiple positive and negative cases, covering edge cases and different configurations if applicable
 - Support the new rule in reports in `src/domains/rules/reports/`
 - Write unit tests for the reports (preserve the alphabetical rule order)
