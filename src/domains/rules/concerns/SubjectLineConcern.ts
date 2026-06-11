@@ -1,16 +1,27 @@
-import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
 export type SubjectLineConcern = {
 	location: "subject-line"
-	rule: RuleKey
+	rule: SubjectLineConcernRuleKey
 	commitSha: CommitSha
 	range: CharacterRange
 }
 
+export type SubjectLineConcernRuleKey =
+	| "noBlankSubjectLines"
+	| "noRevertRevertCommits"
+	| "noSingleWordSubjectLines"
+	| "noSquashMarkers"
+	| "noUnexpectedPunctuation"
+	| "noUnexpectedWhitespace"
+	| "useCapitalisedSubjectLines"
+	| "useConciseSubjectLines"
+	| "useImperativeSubjectLines"
+	| "useIssueLinks"
+
 export function subjectLineConcern(
-	rule: RuleKey,
+	rule: SubjectLineConcernRuleKey,
 	commitSha: CommitSha,
 	props: Pick<SubjectLineConcern, "range">,
 ): SubjectLineConcern {

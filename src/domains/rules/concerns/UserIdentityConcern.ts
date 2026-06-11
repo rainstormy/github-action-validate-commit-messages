@@ -1,15 +1,20 @@
-import type { RuleKey } from "#rules/Rule.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
 export type UserIdentityConcern = {
 	location: "user-identity"
-	rule: RuleKey
+	rule: UserIdentityConcernRuleKey
 	commitSha: CommitSha
 	field: "author:email" | "author:name" | "committer:email" | "committer:name"
 }
 
+export type UserIdentityConcernRuleKey =
+	| "useAuthorEmailPatterns"
+	| "useAuthorNamePatterns"
+	| "useCommitterEmailPatterns"
+	| "useCommitterNamePatterns"
+
 export function userIdentityConcern(
-	rule: RuleKey,
+	rule: UserIdentityConcernRuleKey,
 	commitSha: CommitSha,
 	props: Pick<UserIdentityConcern, "field">,
 ): UserIdentityConcern {
