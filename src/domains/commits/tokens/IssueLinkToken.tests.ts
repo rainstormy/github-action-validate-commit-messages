@@ -9,10 +9,11 @@ import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
-const configurationGithubStyle = fakeConfiguration()
-const configurationJiraStyle = fakeConfiguration({
+const githubStyle = fakeConfiguration()
+const jiraStyle = fakeConfiguration({
 	tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"]) },
 })
+const none = fakeConfiguration({ tokens: { issueLinks: null } })
 
 describe.each`
 	subjectLine                                                        | expectedTokens
@@ -42,7 +43,7 @@ describe.each`
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
 		it("extracts issue link tokens", () => {
-			const commit = mapCrudeCommitToCommit(crudeCommit, configurationGithubStyle)
+			const commit = mapCrudeCommitToCommit(crudeCommit, githubStyle)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
 	},
@@ -67,7 +68,7 @@ describe.each`
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
 		it("leaves the subject line unchanged", () => {
-			const commit = mapCrudeCommitToCommit(crudeCommit, configurationGithubStyle)
+			const commit = mapCrudeCommitToCommit(crudeCommit, githubStyle)
 			expect(commit.subjectLine).toEqual([text(props.subjectLine, [0, props.subjectLine.length])])
 		})
 	},
@@ -94,7 +95,7 @@ describe.each`
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
 		it("extracts issue link tokens", () => {
-			const commit = mapCrudeCommitToCommit(crudeCommit, configurationJiraStyle)
+			const commit = mapCrudeCommitToCommit(crudeCommit, jiraStyle)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
 	},
@@ -115,8 +116,30 @@ describe.each`
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
 		it("leaves the subject line unchanged", () => {
-			const commit = mapCrudeCommitToCommit(crudeCommit, configurationJiraStyle)
+			const commit = mapCrudeCommitToCommit(crudeCommit, jiraStyle)
 			expect(commit.subjectLine).toEqual([text(props.subjectLine, [0, props.subjectLine.length])])
+		})
+	},
+)
+
+describe.each`
+	subjectLine
+	${"#1"}
+	${"GH-15 GL-392 extra spicy code detected"}
+	${"Add some extra love to the code #7"}
+	${"Make the user interface less chaotic [GL-11] #17 "}
+	${"(UNICORN-12) Fix this confusing plate of spaghetti"}
+	${"(UNICORN-15) UNICORN-30 [UNICORN-45]:  make the program act like a clown UNICORN-60"}
+`(
+	"when the subject line of $subjectLine contains potential issue links",
+	(props: { subjectLine: string }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		describe("and issue link tokenisation is disabled", () => {
+			it("leaves the subject line unchanged", () => {
+				const commit = mapCrudeCommitToCommit(crudeCommit, none)
+				expect(commit.subjectLine).toEqual([text(props.subjectLine, [0, props.subjectLine.length])])
+			})
 		})
 	},
 )

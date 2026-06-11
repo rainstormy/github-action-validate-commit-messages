@@ -14,5 +14,5 @@ export type RuleConfiguration = {
 }
 
 export type TokenConfiguration = {
-	issueLinks: IssueLinkTokenConfiguration
+	issueLinks: IssueLinkTokenConfiguration | null
 }
