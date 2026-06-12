@@ -3,6 +3,7 @@ import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import { type NonEmptyArray, notNullish } from "#utilities/Arrays.ts"
+import { regexUnion } from "#utilities/Regexes.ts"
 
 const rule = "useCommitterNamePatterns" satisfies RuleKey
 
@@ -20,9 +21,7 @@ export function useCommitterNamePatterns(
 		return []
 	}
 
-	const combinedPatterns = options.patterns.map((pattern) => `(?:${pattern})`).join("|")
-	const combinedRegex = new RegExp(`^${combinedPatterns}$`, "u")
-
+	const combinedRegex = new RegExp(`^${regexUnion(options.patterns)}$`, "u")
 	return commits.map((commit) => verifyCommit(commit, combinedRegex)).filter(notNullish)
 }
 
