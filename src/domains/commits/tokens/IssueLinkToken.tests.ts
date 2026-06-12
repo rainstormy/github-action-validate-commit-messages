@@ -9,9 +9,11 @@ import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
-const githubStyle = fakeConfiguration()
+const githubStyle = fakeConfiguration({
+	tokens: { issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]) },
+})
 const jiraStyle = fakeConfiguration({
-	tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"]) },
+	tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"], ["#SECURITY"]) },
 })
 const none = fakeConfiguration({ tokens: { issueLinks: null } })
 
@@ -37,8 +39,14 @@ describe.each`
 	${"fixup! Close #1337 by fixing the bug"}                          | ${[squashMarker("fixup! ", [0, 7]), text("Close", [7, 12]), issueLink(" #1337 ", [12, 19]), text("by fixing the bug", [19, 36])]}
 	${"<#71238> loosen the bolts"}                                     | ${[issueLink("<#71238> ", [0, 9]), text("loosen the bolts", [9, 25])]}
 	${'Revert "[GH-39] This should fix it. Famous last words"'}        | ${[revertMarker('Revert "', 1, [0, 8]), issueLink("[GH-39] ", [8, 16]), text("This should fix it. Famous last words", [16, 53]), revertMarker('"', 0, [53, 54])]}
+	${"(no-issue) Polish the moon laser"}                              | ${[issueLink("(no-issue) ", [0, 11]), text("Polish the moon laser", [11, 32])]}
+	${"Add safety rails (no-issue)"}                                   | ${[text("Add safety rails", [0, 16]), issueLink(" (no-issue)", [16, 27])]}
+	${"squash! [incident] Teach the logs to use their inside voice"}   | ${[squashMarker("squash! ", [0, 8]), issueLink("[incident] ", [8, 19]), text("Teach the logs to use their inside voice", [19, 59])]}
+	${"(no-issue) #1107 Stop the toaster from joining standup"}        | ${[issueLink("(no-issue) ", [0, 11]), issueLink("#1107 ", [11, 17]), text("Stop the toaster from joining standup", [17, 54])]}
+	${"[incident] Skip #42 and UNICORN-8"}                             | ${[issueLink("[incident] ", [0, 11]), text("Skip", [11, 15]), issueLink(" #42 ", [15, 20]), text("and UNICORN-8", [20, 33])]}
+	${"fixup![incident](no-issue){#621}secure the rail signals"}       | ${[squashMarker("fixup!", [0, 6]), issueLink("[incident]", [6, 16]), issueLink("(no-issue)", [16, 26]), issueLink("{#621}", [26, 32]), text("secure the rail signals", [32, 55])]}
 `(
-	"when the subject line of $subjectLine contains GitHub-/GitLab-style issue links",
+	"when the subject line of $subjectLine contains GitHub-/GitLab-style issue links or wildcards",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
@@ -53,17 +61,22 @@ describe.each`
 	subjectLine
 	${"#"}
 	${"#MAIN"}
+	${"gh-40 Gl-41 have wrong casing"}
 	${"Add #fluent and #api as relevant tags"}
 	${"the syntax is #(42)"}
 	${"add the GH-cli"}
 	${"GL--"}
 	${"undo gh-view"}
+	${"(NO-ISSUE) Polish the moon laser"}
 	${"Sprinkles gl-amour on the buggy code"}
 	${"GL-gh"}
 	${"-468"}
 	${"use line comments with 0#"}
+	${"Add safety rails no-issue"}
+	${"[Incident] Teach the logs to use their inside voice"}
+	${"just like the outer space incident"}
 `(
-	"when the subject line of $subjectLine does not contain any GitHub-/GitLab-style issue links",
+	"when the subject line of $subjectLine does not contain any GitHub-/GitLab-style issue links or wildcards",
 	(props: { subjectLine: string }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
@@ -89,8 +102,10 @@ describe.each`
 	${"fixup! Close UNICORN-1337 by fixing the bug"}                                         | ${[squashMarker("fixup! ", [0, 7]), text("Close", [7, 12]), issueLink(" UNICORN-1337 ", [12, 26]), text("by fixing the bug", [26, 43])]}
 	${"<UNICORN-71238> loosen the bolts"}                                                    | ${[issueLink("<UNICORN-71238> ", [0, 16]), text("loosen the bolts", [16, 32])]}
 	${'Revert "[UNICORN-39] This should fix it. Famous last words"'}                         | ${[revertMarker('Revert "', 1, [0, 8]), issueLink("[UNICORN-39] ", [8, 21]), text("This should fix it. Famous last words", [21, 58]), revertMarker('"', 0, [58, 59])]}
+	${"#SECURITY bricked the wifi circuits"}                                                 | ${[issueLink("#SECURITY ", [0, 10]), text("bricked the wifi circuits", [10, 35])]}
+	${"UNICORN-880 stop mixing the toxic chemicals #SECURITY"}                               | ${[issueLink("UNICORN-880 ", [0, 12]), text("stop mixing the toxic chemicals", [12, 43]), issueLink(" #SECURITY", [43, 53])]}
 `(
-	"when the subject line of $subjectLine contains Jira-style issue links",
+	"when the subject line of $subjectLine contains Jira-style issue links or wildcards",
 	(props: { subjectLine: string; expectedTokens: TokenisedLine }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
@@ -104,14 +119,17 @@ describe.each`
 describe.each`
 	subjectLine
 	${"UNICORN-"}
+	${"unicorn-40 UnIcOrN-41 have wrong casing"}
 	${"UNICORN-MAIN"}
 	${"Add unicorn-specialities to the masses"}
 	${"the syntax is UNICORN-(42)"}
 	${"#1"}
 	${"UNICORNS ASSEMBLE"}
 	${"GH-15 GL-392 extra spicy code detected"}
+	${"needs a bit more #security"}
+	${"[SECURITY] Upgrade the Unicorn-1337 tech stack to the latest and greatest"}
 `(
-	"when the subject line of $subjectLine does not contain any Jira-style issue links",
+	"when the subject line of $subjectLine does not contain any Jira-style issue links or wildcards",
 	(props: { subjectLine: string }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
@@ -127,9 +145,11 @@ describe.each`
 	${"#1"}
 	${"GH-15 GL-392 extra spicy code detected"}
 	${"Add some extra love to the code #7"}
+	${"(no-issue) #1107 Stop the toaster from joining standup"}
 	${"Make the user interface less chaotic [GL-11] #17 "}
 	${"(UNICORN-12) Fix this confusing plate of spaghetti"}
 	${"(UNICORN-15) UNICORN-30 [UNICORN-45]:  make the program act like a clown UNICORN-60"}
+	${"#SECURITY bricked the wifi circuits"}
 `(
 	"when the subject line of $subjectLine contains potential issue links",
 	(props: { subjectLine: string }) => {

@@ -305,12 +305,14 @@ function getRuleMessage(concern: Concern, configuration: Configuration): RuleMes
 						? "end with"
 						: "include"
 
-			const examples = configuration.tokens.issueLinks.prefixes.map((prefix) => `${prefix}123`)
+			const prefixes = configuration.tokens.issueLinks?.prefixes ?? []
+			const wildcards = configuration.tokens.issueLinks?.wildcards ?? []
+			const examples = [...prefixes.map((prefix) => `${prefix}123`), ...wildcards]
 			const examplePhrase = pluralise(examples.length, "Example", "Examples")
 
 			return ruleMessage(
 				`Subject lines must ${positionPhrase} an issue link.`,
-				`${examplePhrase}: ${examples.join(", ")}`,
+				examples.length > 0 ? `${examplePhrase}: ${examples.join(", ")}` : "",
 			)
 		}
 		case "useLineWrapping": {

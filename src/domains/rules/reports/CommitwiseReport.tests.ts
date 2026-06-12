@@ -1122,6 +1122,34 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 	})
 })
 
+describe("when 'useIssueLinks' with position 'anywhere' and a wildcard has a concern about characters 0-1 of the subject line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useIssueLinks: { position: "anywhere" } },
+		tokens: { issueLinks: issueLinkConfiguration(["#"], ["(no-issue)"]) },
+	})
+	const fakeCommit = fakeCommitFactory(configuration)
+
+	const commit = fakeCommit({
+		sha: "ca745a72a024df3e612faeb3dc10090eb367c18a9",
+		message: "attend the acoustic show",
+	})
+	const concern = subjectLineConcern("useIssueLinks", commit.sha, { range: [0, 1] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+ca745a7 attend the acoustic show
+        ┬
+        ╰─ Subject lines must include an issue link.
+           (useIssueLinks)
+           
+           Examples: #123, (no-issue)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'useIssueLinks' with position 'anywhere' and Jira-style issue links has a concern about characters 10-11 of the subject line", () => {
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "anywhere" } },
@@ -1153,7 +1181,7 @@ d0709d2  squash!  made the code so clean that it sparkles
 describe("when 'useIssueLinks' with position 'prefix' and custom-style issue links has a concern about characters 0-1 of the subject line", () => {
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "prefix" } },
-		tokens: { issueLinks: issueLinkConfiguration(["test#", "experiment#"]) },
+		tokens: { issueLinks: issueLinkConfiguration(["test#", "experiment#"], ["[incident]"]) },
 	})
 	const fakeCommit = fakeCommitFactory(configuration)
 
@@ -1172,7 +1200,7 @@ f6fc239 Refactored code, now it’s overpowered
         ╰─ Subject lines must start with an issue link.
            (useIssueLinks)
            
-           Examples: test#123, experiment#123
+           Examples: test#123, experiment#123, [incident]
 `.trim(),
 		)
 	})
