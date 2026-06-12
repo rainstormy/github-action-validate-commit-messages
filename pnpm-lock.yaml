@@ -16,8 +16,8 @@ importers:
         specifier: 1.1.0
         version: 1.1.0(typescript@6.0.3)
       '@types/node':
-        specifier: 24.12.2
-        version: 24.12.2
+        specifier: 24.13.1
+        version: 24.13.1
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260501.1
         version: 7.0.0-dev.20260501.1
@@ -44,10 +44,10 @@ importers:
         version: 6.0.3
       vite:
         specifier: 8.0.10
-        version: 8.0.10(@types/node@24.12.2)
+        version: 8.0.10(@types/node@24.13.1)
       vitest:
         specifier: 4.1.5
-        version: 4.1.5(@types/node@24.12.2)(@vitest/ui@4.1.5)(vite@8.0.10(@types/node@24.12.2))
+        version: 4.1.5(@types/node@24.13.1)(@vitest/ui@4.1.5)(vite@8.0.10(@types/node@24.13.1))
 
 packages:
 
@@ -468,8 +468,8 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/node@24.12.2':
-    resolution: {integrity: sha512-A1sre26ke7HDIuY/M23nd9gfB+nrmhtYyMINbjI1zHJxYteKR6qSMX56FsmjMcDb3SMcjJg5BiRRgOCC/yBD0g==}
+  '@types/node@24.13.1':
+    resolution: {integrity: sha512-RSpUJGmvsJ1ZeBehQZFhIdpsz+bIpES0nIQXko4Ybq+N+kX6XvOq3Jo+iJ82FWLdblFq85AsMikd3m35jgezYg==}
 
   '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260501.1':
     resolution: {integrity: sha512-OIYsqKouI2U7W5Q6VgUz7+t9FpIXNFk30xSUG7gGlN1bdDniWfW7t5n6mzEtiHUVTxRgJQBjXGAlhVa6A9h+pg==}
@@ -822,8 +822,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici-types@7.16.0:
-    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
   valibot@1.4.1:
     resolution: {integrity: sha512-klCmFTz2jeDluy9RwX+F884TCiogtdBJ/YaxSx1EOBYXa3NXNWj8kR1jjN8rzluwojJVWWaHJ4r1U5LfICnM3g==}
@@ -1155,9 +1155,9 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/node@24.12.2':
+  '@types/node@24.13.1':
     dependencies:
-      undici-types: 7.16.0
+      undici-types: 7.18.2
 
   '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260501.1':
     optional: true
@@ -1199,13 +1199,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@24.12.2))':
+  '@vitest/mocker@4.1.5(vite@8.0.10(@types/node@24.13.1))':
     dependencies:
       '@vitest/spy': 4.1.5
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.0.10(@types/node@24.12.2)
+      vite: 8.0.10(@types/node@24.13.1)
 
   '@vitest/pretty-format@4.1.5':
     dependencies:
@@ -1234,7 +1234,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vitest: 4.1.5(@types/node@24.12.2)(@vitest/ui@4.1.5)(vite@8.0.10(@types/node@24.12.2))
+      vitest: 4.1.5(@types/node@24.13.1)(@vitest/ui@4.1.5)(vite@8.0.10(@types/node@24.13.1))
 
   '@vitest/utils@4.1.5':
     dependencies:
@@ -1491,13 +1491,13 @@ snapshots:
 
   typescript@6.0.3: {}
 
-  undici-types@7.16.0: {}
+  undici-types@7.18.2: {}
 
   valibot@1.4.1(typescript@6.0.3):
     optionalDependencies:
       typescript: 6.0.3
 
-  vite@8.0.10(@types/node@24.12.2):
+  vite@8.0.10(@types/node@24.13.1):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -1505,13 +1505,13 @@ snapshots:
       rolldown: 1.0.0-rc.17
       tinyglobby: 0.2.16
     optionalDependencies:
-      '@types/node': 24.12.2
+      '@types/node': 24.13.1
       fsevents: 2.3.3
 
-  vitest@4.1.5(@types/node@24.12.2)(@vitest/ui@4.1.5)(vite@8.0.10(@types/node@24.12.2)):
+  vitest@4.1.5(@types/node@24.13.1)(@vitest/ui@4.1.5)(vite@8.0.10(@types/node@24.13.1)):
     dependencies:
       '@vitest/expect': 4.1.5
-      '@vitest/mocker': 4.1.5(vite@8.0.10(@types/node@24.12.2))
+      '@vitest/mocker': 4.1.5(vite@8.0.10(@types/node@24.13.1))
       '@vitest/pretty-format': 4.1.5
       '@vitest/runner': 4.1.5
       '@vitest/snapshot': 4.1.5
@@ -1528,10 +1528,10 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.16
       tinyrainbow: 3.1.0
-      vite: 8.0.10(@types/node@24.12.2)
+      vite: 8.0.10(@types/node@24.13.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 24.12.2
+      '@types/node': 24.13.1
       '@vitest/ui': 4.1.5(vitest@4.1.5)
     transitivePeerDependencies:
       - msw
