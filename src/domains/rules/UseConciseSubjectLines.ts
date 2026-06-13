@@ -1,8 +1,7 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { notNullish } from "#utilities/Arrays.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 
 const rule = "useConciseSubjectLines" satisfies RuleKey
 
@@ -14,21 +13,23 @@ const rule = "useConciseSubjectLines" satisfies RuleKey
  * It ignores merge commits, revert commits, and dependency upgrade commits.
  * Issue links, inline code phrases, and squash markers do not count towards the limit.
  */
-export function useConciseSubjectLines(
+export function* useConciseSubjectLines(
 	commits: Commits,
 	options: { maxLength: number } | null,
-): Concerns {
-	return options !== null
-		? commits.map((commit) => verifyCommit(commit, options)).filter(notNullish)
-		: []
-}
-
-function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concern | null {
-	if (commit.isMergeCommit) {
-		return null
+): Generator<Concern> {
+	if (options === null) {
+		return
 	}
 
-	const maxLength = options.maxLength
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit, options.maxLength)
+	}
+}
+
+function* getCommitConcerns(commit: Commit, maxLength: number): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
 
 	let textLength = 0
 	let overflowStartIndex = 0
@@ -36,7 +37,7 @@ function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concer
 
 	for (const token of commit.subjectLine) {
 		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return null
+			return
 		}
 		if (token.type === "text") {
 			textLength += token.value.length
@@ -51,7 +52,7 @@ function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concer
 		}
 	}
 
-	return overflowEndIndex !== overflowStartIndex
-		? subjectLineConcern(rule, commit.sha, { range: [overflowStartIndex, overflowEndIndex] })
-		: null
+	if (overflowEndIndex !== overflowStartIndex) {
+		yield subjectLineConcern(rule, commit.sha, { range: [overflowStartIndex, overflowEndIndex] })
+	}
 }

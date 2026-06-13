@@ -1,10 +1,9 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notNullish } from "#utilities/Arrays.ts"
 
 const rule = "useCapitalisedSubjectLines" satisfies RuleKey
 
@@ -16,26 +15,30 @@ const rule = "useCapitalisedSubjectLines" satisfies RuleKey
  * It ignores commits that do not start with a letter.
  * It disregards issue links, inline code phrases, and squash markers.
  */
-export function useCapitalisedSubjectLines(
+export function* useCapitalisedSubjectLines(
 	commits: Commits,
 	options: EmptyObject | null,
-): Concerns {
-	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
+
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit)
+	}
 }
 
-function verifyCommit(commit: Commit): Concern | null {
+function* getCommitConcerns(commit: Commit): Generator<Concern> {
 	for (const token of commit.subjectLine) {
 		if (token.type === "text" || token.type === "revert-marker") {
 			if (startsWithLowercaseLetter(token)) {
 				const [startIndex] = trimmedTokenRange(token)
-				return subjectLineConcern(rule, commit.sha, { range: [startIndex, startIndex + 1] })
+				yield subjectLineConcern(rule, commit.sha, { range: [startIndex, startIndex + 1] })
 			}
 
-			return null
+			return
 		}
 	}
-
-	return null
 }
 
 function startsWithLowercaseLetter(token: Token): boolean {

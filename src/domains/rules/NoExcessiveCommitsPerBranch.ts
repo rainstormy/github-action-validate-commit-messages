@@ -1,7 +1,7 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 
 const rule = "noExcessiveCommitsPerBranch" satisfies RuleKey
 
@@ -13,14 +13,14 @@ const rule = "noExcessiveCommitsPerBranch" satisfies RuleKey
  *
  * It ignores merge commits and commits with squash markers.
  */
-export function noExcessiveCommitsPerBranch(
+export function* noExcessiveCommitsPerBranch(
 	commits: Commits,
 	options: { maxCommits: number } | null,
-): Concerns {
-	return options !== null ? [...verifyCommits(commits, options)] : []
-}
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
 
-function* verifyCommits(commits: Commits, options: RuleOptions<typeof rule>): Generator<Concern> {
 	let commitCount = 0
 
 	for (const commit of commits) {

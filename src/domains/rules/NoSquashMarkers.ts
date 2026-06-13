@@ -1,10 +1,9 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
+import type { Commits } from "#commits/Commit.ts"
 import { trimmedTokenRange } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notNullish } from "#utilities/Arrays.ts"
 
 const rule = "noSquashMarkers" satisfies RuleKey
 
@@ -14,14 +13,19 @@ const rule = "noSquashMarkers" satisfies RuleKey
  * Combining squash commits with their ancestors makes the commit history cleaner and easier to read,
  * as it omits unnecessary diffs and increases the cohesion of commits. It also makes it easier to revert changes later.
  */
-export function noSquashMarkers(commits: Commits, options: EmptyObject | null): Concerns {
-	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
-}
+export function* noSquashMarkers(
+	commits: Commits,
+	options: EmptyObject | null,
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
 
-function verifyCommit(commit: Commit): Concern | null {
-	const [firstToken] = commit.subjectLine
+	for (const commit of commits) {
+		const [firstToken] = commit.subjectLine
 
-	return firstToken?.type === "squash-marker"
-		? subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstToken) })
-		: null
+		if (firstToken?.type === "squash-marker") {
+			yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstToken) })
+		}
+	}
 }

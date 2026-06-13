@@ -1,7 +1,7 @@
 import type { Commits } from "#commits/Commit.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 import { collapseWhitespace } from "#utilities/Strings.ts"
@@ -17,11 +17,14 @@ const rule = "noRepeatedSubjectLines" satisfies RuleKey
  * It is whitespace- and case-insensitive.
  * It ignores merge commits, revert commits, and commits with squash markers.
  */
-export function noRepeatedSubjectLines(commits: Commits, options: EmptyObject | null): Concerns {
-	return options !== null ? [...verifyCommits(commits)] : []
-}
+export function* noRepeatedSubjectLines(
+	commits: Commits,
+	options: EmptyObject | null,
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
 
-function* verifyCommits(commits: Commits): Generator<Concern> {
 	const previousSubjectLines = new Set<string>()
 
 	for (const commit of commits) {
