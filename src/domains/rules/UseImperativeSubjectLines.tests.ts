@@ -1,20 +1,20 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { useImperativeSubjectLines } from "#rules/UseImperativeSubjectLines.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "useImperativeSubjectLines" satisfies RuleKey
 
-const enabled: RuleOptions<typeof rule> = { whitelist: [] }
-const enabledWhitelist: RuleOptions<typeof rule> = { whitelist: ["chatify", "DECKENIZE"] }
+const disabled = emptyRuleConfiguration()
+const enabled = emptyRuleConfiguration({ [rule]: { whitelist: [] } })
+const enabledWhitelist = emptyRuleConfiguration({ [rule]: { whitelist: ["chatify", "DECKENIZE"] } })
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	subjectLine                                       | expectedRange
@@ -45,7 +45,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about the first word", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -55,7 +55,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a custom whitelist", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabledWhitelist)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledWhitelist)
 
 			it("raises a concern about the first word", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -65,7 +65,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -96,7 +96,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -104,7 +104,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a custom whitelist", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabledWhitelist)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledWhitelist)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -112,7 +112,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -133,7 +133,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled without a custom whitelist", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about the first word", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -143,7 +143,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a custom whitelist", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabledWhitelist)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledWhitelist)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -151,7 +151,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -174,7 +174,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -182,7 +182,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -204,7 +204,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -212,7 +212,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with a custom whitelist", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], enabledWhitelist)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledWhitelist)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -220,7 +220,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useImperativeSubjectLines([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -241,7 +241,7 @@ describe("when verifying a set of multiple commits and some commits do not start
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = useImperativeSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with non-imperative subject lines", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -254,7 +254,7 @@ describe("when verifying a set of multiple commits and some commits do not start
 	})
 
 	describe("and the rule is enabled with a custom whitelist", () => {
-		const actualConcerns = useImperativeSubjectLines(commits, enabledWhitelist)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledWhitelist)
 
 		it("raises concerns about the commits with non-imperative and non-whitelisted subject lines", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -266,7 +266,7 @@ describe("when verifying a set of multiple commits and some commits do not start
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useImperativeSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -285,7 +285,7 @@ describe("when verifying a set of multiple commits and all commits start with an
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = useImperativeSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -293,7 +293,7 @@ describe("when verifying a set of multiple commits and all commits start with an
 	})
 
 	describe("and the rule is enabled with a custom whitelist", () => {
-		const actualConcerns = useImperativeSubjectLines(commits, enabledWhitelist)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledWhitelist)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -301,7 +301,7 @@ describe("when verifying a set of multiple commits and all commits start with an
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useImperativeSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

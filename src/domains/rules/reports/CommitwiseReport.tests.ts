@@ -26,7 +26,7 @@ describe("when there are no concerns", () => {
 
 describe("when 'noBlankSubjectLines' has a concern about characters 0-1 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "52f07a2d665e6d3b3b50b8fca2af298c100ac804c",
@@ -49,7 +49,7 @@ describe("when 'noBlankSubjectLines' has a concern about characters 0-1 of the s
 
 describe("when 'noBlankSubjectLines' has a concern about characters 15-16 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "2ba57d6e3490324db1bacf22ae288481357ef5c",
@@ -74,7 +74,7 @@ describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive co
 	const configuration = fakeConfiguration({
 		rules: { noExcessiveCommitsPerBranch: { maxCommits: 1 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "9a7e6aa14b8c6e5dd49d7a6a18443bf1f67c520",
@@ -99,7 +99,7 @@ describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive co
 	const configuration = fakeConfiguration({
 		rules: { noExcessiveCommitsPerBranch: { maxCommits: 3 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "75bedf83e2b573dc812eba9f14f2b7c6741e670",
@@ -124,7 +124,7 @@ describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive co
 	const configuration = fakeConfiguration({
 		rules: { noExcessiveCommitsPerBranch: { maxCommits: 10 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "f753a247a54bb4c20e9968dca75ef915f2b1ca",
@@ -147,7 +147,7 @@ f753a24 last minute fix
 
 describe("when 'noMergeCommits' has a concern about the commit", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "507c835ff93e38ed1540ff58fb72f7837f9af13",
@@ -171,7 +171,7 @@ describe("when 'noMergeCommits' has a concern about the commit", () => {
 
 describe("when 'noMergeCommits' has a concern about the commit with a long subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "71516e17c94c69de4eeafff60fac072764d2",
@@ -195,7 +195,7 @@ describe("when 'noMergeCommits' has a concern about the commit with a long subje
 
 describe("when 'noRepeatedSubjectLines' has a concern about the commit", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "8c1fbd48d21686c574a01fd2db4be1c991d897",
@@ -218,7 +218,7 @@ describe("when 'noRepeatedSubjectLines' has a concern about the commit", () => {
 
 describe("when 'noRepeatedSubjectLines' has a concern about the commit with a long subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "f3359c9a89b46736a36fa2117515af2f5c93",
@@ -248,7 +248,7 @@ describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Co
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "a04ada44cc2d13336a7b28cfb7bd59649aa1bb",
@@ -287,7 +287,7 @@ describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Re
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "344eaa9c854379fbd1af020aaf093fbad974c3",
@@ -321,7 +321,7 @@ describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Re
 
 describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "d4e7a978cea34b727ea52f90c928fd535e4aee",
@@ -344,7 +344,7 @@ d4e7a97 Revert "Revert "Make the program act like a clown""
 
 describe("when 'noRevertRevertCommits' has a concern about characters 1-26 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "34aa41b818c40682cabeecd5623dfe51df7a4a5",
@@ -367,7 +367,7 @@ describe("when 'noRevertRevertCommits' has a concern about characters 1-26 of th
 
 describe("when 'noSingleWordSubjectLines' has a concern about characters 0-3 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "964bce7ef85bb4347a0882c5d43c8cece4938f",
@@ -390,7 +390,7 @@ describe("when 'noSingleWordSubjectLines' has a concern about characters 0-3 of 
 
 describe("when 'noSingleWordSubjectLines' has a concern about characters 11-17 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "a4b6d0e1aee11f7bc39dfd68858257e236256fbf",
@@ -413,7 +413,7 @@ a4b6d0e fixup! #17 bugfix
 
 describe("when 'noSquashMarkers' has a concern about characters 0-6 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "ffebad193fe7d02aa9b19b70ee132a26f14f8caf",
@@ -436,7 +436,7 @@ ffebad1 amend!Apply strawberry jam to make the code sweeter
 
 describe("when 'noSquashMarkers' has a concern about characters 1-14 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "56c750b0811fbcad2b237b2b99fc7d3fc91b926",
@@ -459,7 +459,7 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14 of the subj
 
 describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "497de39943643a56f7a69d3d19723e3035318644",
@@ -482,7 +482,7 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1 o
 
 describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
@@ -511,7 +511,7 @@ describe("when 'useAuthorEmailPatterns' has a concern about a missing author ema
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "87c2ab2dff91967340adee6a79d40f4fd6b781b",
@@ -550,7 +550,7 @@ describe("when 'useAuthorEmailPatterns' has a concern about the author's email a
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "4014427db76e7f114209216c738649e9e1505f",
@@ -587,7 +587,7 @@ describe("when 'useAuthorNamePatterns' has a concern about a missing author name
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "f16fc9f48c40829a87cbc36f42aa6578834ed0c6",
@@ -623,7 +623,7 @@ describe("when 'useAuthorNamePatterns' has a concern about the author's name", (
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "e4236bf51670f99f245f3a5552fa2b7e6bd8c1",
@@ -660,7 +660,7 @@ describe("when 'useCommitterEmailPatterns' has a concern about a missing committ
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "28a5bed21c189fc505af3696c7ff7a3a79524e",
@@ -699,7 +699,7 @@ describe("when 'useCommitterEmailPatterns' has a concern about the committer's e
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "55ef98aa89887ba6937a616b6044c7da57f7a",
@@ -736,7 +736,7 @@ describe("when 'useCommitterNamePatterns' has a concern about a missing committe
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "307ce5e6cfe9fbb67f62ca3d40447e9143fb8d38",
@@ -777,7 +777,7 @@ describe("when 'useCommitterNamePatterns' has a concern about the committer's na
 			},
 		},
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "61a6e5334d93126cec5c594bd75a3c7fee7ec",
@@ -810,7 +810,7 @@ describe("when 'useCommitterNamePatterns' has a concern about the committer's na
 
 describe("when 'useImperativeSubjectLines' has a concern about characters 0-5 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "9e45e097a594deaf39b360fb285be38b5b68a2",
@@ -833,7 +833,7 @@ describe("when 'useImperativeSubjectLines' has a concern about characters 0-5 of
 
 describe("when 'useImperativeSubjectLines' has a concern about characters 14-18 of the subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "339b6fcb8aedbe7b19443e39be24f615287a7",
@@ -858,7 +858,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-25 of 
 	const configuration = fakeConfiguration({
 		rules: { useConciseSubjectLines: { maxLength: 20 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "68e921648c4a19e93d72f42a5d39c3eba704e41",
@@ -883,7 +883,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-67 of 
 	const configuration = fakeConfiguration({
 		rules: { useConciseSubjectLines: { maxLength: 20 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "9bed522bd48f0aee7574635bb23f5decdc4999",
@@ -908,7 +908,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 50-52 of 
 	const configuration = fakeConfiguration({
 		rules: { useConciseSubjectLines: { maxLength: 50 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "e8c95d69587a51685070837aaf3a8746e3cbba8",
@@ -933,7 +933,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 72-76 of 
 	const configuration = fakeConfiguration({
 		rules: { useConciseSubjectLines: { maxLength: 72 } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "be86674322213fb408d176589fadbcd44a2df",
@@ -956,7 +956,7 @@ be86674 make a genuine attempt to fix the bugs that the users were complaining a
 
 describe("when 'useEmptyLineBeforeBodyLines' has a concern about the first body line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "f163851c187a568acc631fff402fcca43f41968d",
@@ -985,7 +985,7 @@ f163851 Install a quieter keyboard
 
 describe("when 'useEmptyLineBeforeBodyLines' has a concern about an extra empty body line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "30fd57b19c55b3746a157f5981838e26865637f2",
@@ -1018,7 +1018,7 @@ describe("when 'useIssueLinks' with position 'anywhere' has a concern about char
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "anywhere" } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "c861aeae9dcdea99776d1e56c4de100ba29effb",
@@ -1045,7 +1045,7 @@ describe("when 'useIssueLinks' with position 'prefix' has a concern about charac
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "prefix" } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "fb100238cf55fdcc7c48044df4b5922c0886f5c2d",
@@ -1072,7 +1072,7 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "suffix" } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "d9a30bb22c78cf24fc6a79a3131a33829792bd4",
@@ -1099,7 +1099,7 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 	const configuration = fakeConfiguration({
 		rules: { useIssueLinks: { position: "suffix" } },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "5761bad8f4bbdd9f22eac552ca15a42dd547692",
@@ -1127,7 +1127,7 @@ describe("when 'useIssueLinks' with position 'anywhere' and a wildcard has a con
 		rules: { useIssueLinks: { position: "anywhere" } },
 		tokens: { issueLinks: issueLinkConfiguration(["#"], ["(no-issue)"]) },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "ca745a72a024df3e612faeb3dc10090eb367c18a9",
@@ -1155,7 +1155,7 @@ describe("when 'useIssueLinks' with position 'anywhere' and Jira-style issue lin
 		rules: { useIssueLinks: { position: "anywhere" } },
 		tokens: { issueLinks: issueLinkConfiguration(["ABC-"]) },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "d0709d2e4d2c55bf37ec7e7632f655e8e9b3eb",
@@ -1183,7 +1183,7 @@ describe("when 'useIssueLinks' with position 'prefix' and custom-style issue lin
 		rules: { useIssueLinks: { position: "prefix" } },
 		tokens: { issueLinks: issueLinkConfiguration(["test#", "experiment#"], ["[incident]"]) },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "f6fc2399d62caefc3e4bfd8bf2a8da28fffafe",
@@ -1211,7 +1211,7 @@ describe("when 'useIssueLinks' with position 'suffix' and Jira-style issue links
 		rules: { useIssueLinks: { position: "suffix" } },
 		tokens: { issueLinks: issueLinkConfiguration(["AWESOME-", "UNICORN-", "PROJECT-"]) },
 	})
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "cccee2c633f0e65d939df7d9953f59ee9322c323",
@@ -1236,7 +1236,7 @@ cccee2c Fixed a bad typo in comment (yes, really)
 
 describe("when 'useSignedCommits' has a concern about the commit", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "9b9e2ab8f3248152474f41f728f1221d5bf55a16",
@@ -1260,7 +1260,7 @@ describe("when 'useSignedCommits' has a concern about the commit", () => {
 
 describe("when 'useSignedCommits' has a concern about the commit with a long subject line", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
 		sha: "42cefd126a47bfd368d774047a711519eadc2d5",
@@ -1284,7 +1284,7 @@ describe("when 'useSignedCommits' has a concern about the commit with a long sub
 
 describe.todo("when there are multiple concerns of different types", () => {
 	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration)
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commits: Vector<Commit, 3> = [fakeCommit(), fakeCommit(), fakeCommit()]
 	const concerns: Concerns = []

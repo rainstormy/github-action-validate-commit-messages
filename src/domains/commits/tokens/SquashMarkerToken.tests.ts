@@ -7,9 +7,9 @@ import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 
-const configuration = fakeConfiguration()
+const configuration = fakeTokenConfiguration()
 
 describe.each`
 	subjectLine                                                                        | expectedTokens

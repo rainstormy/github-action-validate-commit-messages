@@ -7,7 +7,7 @@ import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { Token, TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
 import { tokeniseTrailers } from "#commits/tokens/TrailerToken.ts"
-import type { Configuration, TokenConfiguration } from "#configurations/Configuration.ts"
+import type { TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
 /**
@@ -29,7 +29,7 @@ export type Commits = Array<Commit>
 
 export function mapCrudeCommitToCommit(
 	crudeCommit: CrudeCommit,
-	configuration: Configuration,
+	configuration: TokenConfiguration,
 ): Commit {
 	const [crudeSubjectLine = "", ...crudeBodyLines] = crudeCommit.message.split("\n")
 
@@ -41,8 +41,8 @@ export function mapCrudeCommitToCommit(
 		authorEmail: crudeCommit.authorEmail,
 		committerName: crudeCommit.committerName,
 		committerEmail: crudeCommit.committerEmail,
-		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration.tokens),
-		bodyLines: tokeniseBodyLines(crudeBodyLines, configuration.tokens),
+		subjectLine: tokeniseSubjectLine(crudeSubjectLine, configuration),
+		bodyLines: tokeniseBodyLines(crudeBodyLines, configuration),
 	}
 }
 

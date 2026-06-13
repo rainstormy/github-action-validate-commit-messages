@@ -2,8 +2,8 @@ import type { IssueLinkTokenConfiguration } from "#configurations/IssueLinkToken
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 
 export type Configuration = {
-	tokens: TokenConfiguration
 	rules: RuleConfiguration
+	tokens: TokenConfiguration
 }
 
 /**
