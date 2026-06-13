@@ -16,5 +16,9 @@ export function tokeniseIssueLinks(
 	initialTokens: TokenisedLine,
 	configuration: TokenConfiguration,
 ): TokenisedLine {
+	if (configuration.issueLinks === null) {
+		return initialTokens
+	}
+
 	return splitTextTokens(initialTokens, configuration.issueLinks.regex, issueLink)
 }

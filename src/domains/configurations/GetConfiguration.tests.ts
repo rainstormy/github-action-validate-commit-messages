@@ -13,7 +13,11 @@ describe("the default configuration in the command-line", () => {
 	})
 
 	it("recognises GitHub- and GitLab-style issue links", () => {
-		expect(configuration.tokens.issueLinks.prefixes).toEqual(["#", "GH-", "GL-"])
+		expect(configuration.tokens.issueLinks?.prefixes).toEqual(["#", "GH-", "GL-"])
+	})
+
+	it("has no issue link wildcards", () => {
+		expect(configuration.tokens.issueLinks?.wildcards).toEqual([])
 	})
 
 	it.each`
@@ -64,7 +68,11 @@ describe("the default configuration in GitHub Actions", () => {
 	})
 
 	it("recognises GitHub- and GitLab-style issue links", () => {
-		expect(configuration.tokens.issueLinks.prefixes).toEqual(["#", "GH-", "GL-"])
+		expect(configuration.tokens.issueLinks?.prefixes).toEqual(["#", "GH-", "GL-"])
+	})
+
+	it("has no issue link wildcards", () => {
+		expect(configuration.tokens.issueLinks?.wildcards).toEqual([])
 	})
 
 	it.each`

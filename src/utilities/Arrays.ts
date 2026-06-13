@@ -76,3 +76,7 @@ export function binarySearchIndexOf(sortedValues: Array<string>, target: string)
 
 	return binarySearch(0, sortedValues.length - 1)
 }
+
+export function uniqueItems<Item>(items: Array<Item>): Array<Item> {
+	return [...new Set(items)]
+}
