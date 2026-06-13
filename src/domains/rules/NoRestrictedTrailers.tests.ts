@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { noRestrictedTrailers } from "#rules/NoRestrictedTrailers.ts"
@@ -18,7 +17,7 @@ const enabled3: RuleOptions<typeof rule> = {
 	restrictedKeys: ["co-authored-by", "refs", "reviewed-by"],
 }
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	message                                                                                                                                                                                                                                                        | expectedRanges1                                                                            | expectedRanges2                                               | expectedRanges3

@@ -11,10 +11,10 @@ export async function program(_args: Array<string>): Promise<ExitCode> {
 		const [crudeCommits, configuration] = await Promise.all([getCrudeCommits(), getConfiguration()])
 
 		const commits = crudeCommits.map((crudeCommit) =>
-			mapCrudeCommitToCommit(crudeCommit, configuration),
+			mapCrudeCommitToCommit(crudeCommit, configuration.tokens),
 		)
 
-		const concerns = mapCommitsToConcerns(commits, configuration)
+		const concerns = mapCommitsToConcerns(commits, configuration.rules)
 
 		printMessage(JSON.stringify(concerns))
 		printMessage("Not implemented yet")

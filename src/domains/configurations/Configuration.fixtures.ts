@@ -3,19 +3,15 @@ import type {
 	RuleConfiguration,
 	TokenConfiguration,
 } from "#configurations/Configuration.ts"
-import { getDefaultTokenConfiguration } from "#configurations/GetDefaultConfiguration.ts"
+import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
 export type ConfigurationTemplate = {
-	tokens?: Partial<TokenConfiguration>
 	rules?: Partial<RuleConfiguration>
+	tokens?: Partial<TokenConfiguration>
 }
 
 export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Configuration {
 	return {
-		tokens: {
-			...getDefaultTokenConfiguration(),
-			...overrides.tokens,
-		},
 		rules: {
 			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: { maxCommits: 10 },
@@ -60,5 +56,15 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useSignedCommits: {},
 			...overrides.rules,
 		},
+		tokens: fakeTokenConfiguration(overrides.tokens),
+	}
+}
+
+export function fakeTokenConfiguration(
+	overrides: Partial<TokenConfiguration> = {},
+): TokenConfiguration {
+	return {
+		issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"]),
+		...overrides,
 	}
 }

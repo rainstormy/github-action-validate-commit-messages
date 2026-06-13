@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
@@ -16,7 +15,7 @@ const enabled20: RuleOptions<typeof rule> = { maxLength: 20 }
 const enabled50: RuleOptions<typeof rule> = { maxLength: 50 }
 const enabled72: RuleOptions<typeof rule> = { maxLength: 72 }
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	subjectLine                                                                             | expectedRange20 | expectedRange50 | expectedRange72

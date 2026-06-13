@@ -6,16 +6,16 @@ import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
-const githubStyle = fakeConfiguration({
-	tokens: { issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]) },
+const githubStyle = fakeTokenConfiguration({
+	issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]),
 })
-const jiraStyle = fakeConfiguration({
-	tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"], ["#SECURITY"]) },
+const jiraStyle = fakeTokenConfiguration({
+	issueLinks: issueLinkConfiguration(["UNICORN-"], ["#SECURITY"]),
 })
-const none = fakeConfiguration({ tokens: { issueLinks: null } })
+const none = fakeTokenConfiguration({ issueLinks: null })
 
 describe.each`
 	subjectLine                                                        | expectedTokens

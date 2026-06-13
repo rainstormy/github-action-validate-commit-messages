@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
@@ -14,7 +13,7 @@ const rule = "useImperativeSubjectLines" satisfies RuleKey
 const enabled: RuleOptions<typeof rule> = { whitelist: [] }
 const enabledWhitelist: RuleOptions<typeof rule> = { whitelist: ["chatify", "DECKENIZE"] }
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	subjectLine                                       | expectedRange

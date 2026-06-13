@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
@@ -12,7 +11,7 @@ import type { Vector } from "#types/Vector.ts"
 const rule = "useEmptyLineBeforeBodyLines" satisfies RuleKey
 const enabled: RuleOptions<typeof rule> = {}
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	message

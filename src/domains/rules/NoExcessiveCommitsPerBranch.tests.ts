@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
@@ -13,7 +12,7 @@ const rule = "noExcessiveCommitsPerBranch" satisfies RuleKey
 const enabled3: RuleOptions<typeof rule> = { maxCommits: 3 }
 const enabled10: RuleOptions<typeof rule> = { maxCommits: 10 }
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe("when verifying a set of 6 commits when up to 3 commits are allowed", () => {
 	const commits: Vector<Commit, 6> = [

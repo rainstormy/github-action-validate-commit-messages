@@ -3,11 +3,11 @@ import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
-const configuration = fakeConfiguration()
+const configuration = fakeTokenConfiguration()
 
 describe.each`
 	sha

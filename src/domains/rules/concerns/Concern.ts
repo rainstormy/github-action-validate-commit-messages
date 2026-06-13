@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Configuration } from "#configurations/Configuration.ts"
+import type { RuleConfiguration } from "#configurations/Configuration.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -36,8 +36,7 @@ export function concernedCommit(concern: Concern, commits: Commits): Commit {
 	)
 }
 
-export function mapCommitsToConcerns(commits: Commits, configuration: Configuration): Concerns {
-	const rules = configuration.rules
+export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration): Concerns {
 	return [
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),
 		...noMergeCommits(commits, rules.noMergeCommits),

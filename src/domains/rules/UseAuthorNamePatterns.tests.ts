@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
@@ -13,7 +12,7 @@ const enabled: RuleOptions<typeof rule> = {
 	patterns: [String.raw`\p{Lu}.*\s.+`, String.raw`dependabot\[bot\]`, String.raw`renovate\[bot\]`],
 }
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	authorName

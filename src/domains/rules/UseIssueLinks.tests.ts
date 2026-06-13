@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -18,7 +18,7 @@ const enabledAnywhere: RuleOptions<typeof rule> = { position: "anywhere" }
 const enabledPrefix: RuleOptions<typeof rule> = { position: "prefix" }
 const enabledSuffix: RuleOptions<typeof rule> = { position: "suffix" }
 
-const fakeCommit = fakeCommitFactory(fakeConfiguration())
+const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	subjectLine                                                  | expectedRangeAnywhere | expectedRangePrefix | expectedRangeSuffix
@@ -468,9 +468,7 @@ describe("when verifying a set of multiple commits and all commits end with an i
 })
 
 const fakeJiraStyleCommit = fakeCommitFactory(
-	fakeConfiguration({
-		tokens: { issueLinks: issueLinkConfiguration(["UNICORN-"]) },
-	}),
+	fakeTokenConfiguration({ issueLinks: issueLinkConfiguration(["UNICORN-"]) }),
 )
 
 describe.each`
