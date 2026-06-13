@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { useSignedCommits } from "#rules/UseSignedCommits.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "useSignedCommits" satisfies RuleKey
-const enabled: RuleOptions<typeof rule> = {}
+
+const disabled = emptyRuleConfiguration()
+const enabled = emptyRuleConfiguration({ [rule]: {} })
 
 const fakeCommit = fakeCommitFactory()
 
@@ -22,7 +24,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine, signature: "" })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useSignedCommits([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about the entire commit", () => {
 				expect(actualConcerns).toEqual<Concerns>([commitConcern(rule, commit.sha)])
@@ -30,7 +32,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useSignedCommits([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -49,7 +51,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine, signature: props.signature })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useSignedCommits([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -57,7 +59,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useSignedCommits([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -87,7 +89,7 @@ describe("when verifying a set of multiple commits and some commits lack a signa
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = useSignedCommits(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits without a signature", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -100,7 +102,7 @@ describe("when verifying a set of multiple commits and some commits lack a signa
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useSignedCommits(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -129,7 +131,7 @@ describe("when verifying a set of multiple commits and all commits have signatur
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = useSignedCommits(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -137,7 +139,7 @@ describe("when verifying a set of multiple commits and all commits have signatur
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useSignedCommits(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

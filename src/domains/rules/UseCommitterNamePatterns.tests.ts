@@ -1,21 +1,25 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { useCommitterNamePatterns } from "#rules/UseCommitterNamePatterns.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "useCommitterNamePatterns" satisfies RuleKey
-const enabled: RuleOptions<typeof rule> = {
-	patterns: [
-		String.raw`\p{Lu}.*\s.+`,
-		String.raw`dependabot\[bot\]`,
-		String.raw`renovate\[bot\]`,
-		String.raw`GitHub`,
-	],
-}
+
+const disabled = emptyRuleConfiguration()
+const enabled = emptyRuleConfiguration({
+	[rule]: {
+		patterns: [
+			String.raw`\p{Lu}.*\s.+`,
+			String.raw`dependabot\[bot\]`,
+			String.raw`renovate\[bot\]`,
+			String.raw`GitHub`,
+		],
+	},
+})
 
 const fakeCommit = fakeCommitFactory()
 
@@ -37,7 +41,7 @@ describe.each`
 		const commit = fakeCommit({ committerName: props.committerName })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useCommitterNamePatterns([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about the committer's name", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -47,7 +51,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useCommitterNamePatterns([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -72,7 +76,7 @@ describe.each`
 		const commit = fakeCommit({ committerName: props.committerName })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = useCommitterNamePatterns([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -80,7 +84,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useCommitterNamePatterns([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -101,7 +105,7 @@ describe("when verifying a set of multiple commits and some commits have committ
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = useCommitterNamePatterns(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with invalid committer names", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -113,7 +117,7 @@ describe("when verifying a set of multiple commits and some commits have committ
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useCommitterNamePatterns(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -131,7 +135,7 @@ describe("when verifying a set of multiple commits and all commits have committe
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = useCommitterNamePatterns(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -139,7 +143,7 @@ describe("when verifying a set of multiple commits and all commits have committe
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useCommitterNamePatterns(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

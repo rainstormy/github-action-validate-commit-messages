@@ -1,15 +1,17 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
-import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "noRepeatedSubjectLines" satisfies RuleKey
-const enabled: RuleOptions<typeof rule> = {}
+
+const disabled = emptyRuleConfiguration()
+const enabled = emptyRuleConfiguration({ [rule]: {} })
 
 const fakeCommit = fakeCommitFactory()
 
@@ -28,7 +30,7 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with repeated subject lines", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -41,7 +43,7 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -66,7 +68,7 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with repeated subject lines being whitespace- and case-insensitive", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -81,7 +83,7 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -115,7 +117,7 @@ describe("when verifying a set of multiple commits and merge commits have repeat
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with repeated subject lines, but ignores merge commits", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -127,7 +129,7 @@ describe("when verifying a set of multiple commits and merge commits have repeat
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -148,7 +150,7 @@ describe("when verifying a set of multiple commits and revert commits have repea
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with repeated subject lines, but ignores commits with revert markers", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -160,7 +162,7 @@ describe("when verifying a set of multiple commits and revert commits have repea
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -185,7 +187,7 @@ describe("when verifying a set of multiple commits and squash commits have repea
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with repeated subject lines, but ignores commits with squash markers", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -197,7 +199,7 @@ describe("when verifying a set of multiple commits and squash commits have repea
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -214,7 +216,7 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with repeated subject lines, but ignores commits with different issue links", () => {
 			expect(actualConcerns).toEqual<Concerns>([commitConcern(rule, commits[2].sha)])
@@ -222,7 +224,7 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -245,7 +247,7 @@ describe("when verifying a set of multiple commits and no commits have repeated 
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -253,7 +255,7 @@ describe("when verifying a set of multiple commits and no commits have repeated 
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRepeatedSubjectLines(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

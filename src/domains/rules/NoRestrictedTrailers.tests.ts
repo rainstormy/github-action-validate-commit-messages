@@ -1,21 +1,29 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
+import type { RuleConfiguration } from "#configurations/Configuration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
-import { noRestrictedTrailers } from "#rules/NoRestrictedTrailers.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "noRestrictedTrailers" satisfies RuleKey
 
-const enabledNone: RuleOptions<typeof rule> = { restrictedKeys: [] }
-const enabled1: RuleOptions<typeof rule> = { restrictedKeys: ["signed-off-by"] }
-const enabled2: RuleOptions<typeof rule> = { restrictedKeys: ["co-authored-by", "breaking change"] }
-const enabled3: RuleOptions<typeof rule> = {
-	restrictedKeys: ["co-authored-by", "refs", "reviewed-by"],
-}
+const disabled = emptyRuleConfiguration()
+const enabledNone = emptyRuleConfiguration({
+	[rule]: { restrictedKeys: [] },
+})
+const enabled1 = emptyRuleConfiguration({
+	[rule]: { restrictedKeys: ["signed-off-by"] },
+})
+const enabled2 = emptyRuleConfiguration({
+	[rule]: { restrictedKeys: ["co-authored-by", "breaking change"] },
+})
+const enabled3 = emptyRuleConfiguration({
+	[rule]: { restrictedKeys: ["co-authored-by", "refs", "reviewed-by"] },
+})
 
 const fakeCommit = fakeCommitFactory()
 
@@ -51,25 +59,25 @@ describe.each`
 		const commit = fakeCommit({ message: props.message })
 
 		describe.each`
-			options     | expectedRanges
+			rules       | expectedRanges
 			${enabled1} | ${props.expectedRanges1}
 			${enabled2} | ${props.expectedRanges2}
 			${enabled3} | ${props.expectedRanges3}
 		`(
-			"and the rule is enabled with restrictions on $options.restrictedKeys",
-			(optionProps: {
-				options: RuleOptions<typeof rule>
+			"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
+			(configProps: {
+				rules: RuleConfiguration
 				expectedRanges: Array<{ line: number; range: CharacterRange }>
 			}) => {
-				const actualConcerns = noRestrictedTrailers([commit], optionProps.options)
+				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it(
 					// oxlint-disable-next-line jest/no-conditional-in-test -- The conditional expression only affects the test name.
-					optionProps.expectedRanges.length > 0
+					configProps.expectedRanges.length > 0
 						? "raises concerns about the disallowed trailer keys"
 						: "does not raise any concerns",
 					() => {
-						const expectedConcerns: Concerns = optionProps.expectedRanges.map((range) =>
+						const expectedConcerns: Concerns = configProps.expectedRanges.map((range) =>
 							bodyLineConcern(rule, commit.sha, range),
 						)
 						expect(actualConcerns).toEqual<Concerns>(expectedConcerns)
@@ -79,7 +87,7 @@ describe.each`
 		)
 
 		describe("and the rule is enabled with no restricted trailers", () => {
-			const actualConcerns = noRestrictedTrailers([commit], enabledNone)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledNone)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -87,7 +95,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noRestrictedTrailers([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -112,14 +120,14 @@ describe.each`
 		const commit = fakeCommit({ message: props.message })
 
 		describe.each`
-			options
+			rules
 			${enabled1}
 			${enabled2}
 			${enabled3}
 		`(
-			"and the rule is enabled with restrictions on $options.restrictedKeys",
-			(optionProps: { options: RuleOptions<typeof rule> }) => {
-				const actualConcerns = noRestrictedTrailers([commit], optionProps.options)
+			"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
+			(configProps: { rules: RuleConfiguration }) => {
+				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
 					expect(actualConcerns).toEqual<Concerns>([])
@@ -128,7 +136,7 @@ describe.each`
 		)
 
 		describe("and the rule is enabled with no restricted trailers", () => {
-			const actualConcerns = noRestrictedTrailers([commit], enabledNone)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledNone)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -136,7 +144,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noRestrictedTrailers([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -168,29 +176,29 @@ describe("when verifying a set of multiple commits and some commits contain rest
 	]
 
 	describe.each`
-		options     | expectedConcerns
+		rules       | expectedConcerns
 		${enabled1} | ${[]}
 		${enabled2} | ${[bodyLineConcern(rule, commits[1].sha, { line: 1, range: [0, 15] }), bodyLineConcern(rule, commits[5].sha, { line: 1, range: [0, 16] })]}
 		${enabled3} | ${[bodyLineConcern(rule, commits[1].sha, { line: 1, range: [0, 15] }), bodyLineConcern(rule, commits[1].sha, { line: 2, range: [1, 13] }), bodyLineConcern(rule, commits[2].sha, { line: 1, range: [0, 12] })]}
 	`(
-		"and the rule is enabled with $options.restrictedKeys restricted",
-		(props: { options: RuleOptions<typeof rule>; expectedConcerns: Concerns }) => {
-			const actualConcerns = noRestrictedTrailers(commits, props.options)
+		"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
+		(configProps: { rules: RuleConfiguration; expectedConcerns: Concerns }) => {
+			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it(
 				// oxlint-disable-next-line jest/no-conditional-in-test -- The conditional expression only affects the test name.
-				props.expectedConcerns.length > 0
+				configProps.expectedConcerns.length > 0
 					? "raises concerns about the disallowed trailer keys"
 					: "does not raise any concerns",
 				() => {
-					expect(actualConcerns).toEqual(props.expectedConcerns)
+					expect(actualConcerns).toEqual(configProps.expectedConcerns)
 				},
 			)
 		},
 	)
 
 	describe("and the rule is enabled with no restricted trailers", () => {
-		const actualConcerns = noRestrictedTrailers(commits, enabledNone)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledNone)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -198,7 +206,7 @@ describe("when verifying a set of multiple commits and some commits contain rest
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRestrictedTrailers(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -231,14 +239,14 @@ describe("when verifying a set of multiple commits and no commits contain restri
 	]
 
 	describe.each`
-		options
+		rules
 		${enabled1}
 		${enabled2}
 		${enabled3}
 	`(
-		"and the rule is enabled with restrictions on $options.restrictedKeys",
-		(optionProps: { options: RuleOptions<typeof rule> }) => {
-			const actualConcerns = noRestrictedTrailers(commits, optionProps.options)
+		"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
+		(configProps: { rules: RuleConfiguration }) => {
+			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -247,7 +255,7 @@ describe("when verifying a set of multiple commits and no commits contain restri
 	)
 
 	describe("and the rule is enabled with no restricted trailers", () => {
-		const actualConcerns = noRestrictedTrailers(commits, enabledNone)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledNone)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -255,7 +263,7 @@ describe("when verifying a set of multiple commits and no commits contain restri
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noRestrictedTrailers(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

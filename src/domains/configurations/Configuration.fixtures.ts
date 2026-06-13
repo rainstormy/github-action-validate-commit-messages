@@ -60,6 +60,35 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 	}
 }
 
+export function emptyRuleConfiguration(
+	overrides: Partial<RuleConfiguration> = {},
+): RuleConfiguration {
+	return {
+		noBlankSubjectLines: null,
+		noExcessiveCommitsPerBranch: null,
+		noMergeCommits: null,
+		noRepeatedSubjectLines: null,
+		noRestrictedTrailers: null,
+		noRevertRevertCommits: null,
+		noSingleWordSubjectLines: null,
+		noSquashMarkers: null,
+		noUnexpectedPunctuation: null,
+		noUnexpectedWhitespace: null,
+		useAuthorEmailPatterns: null,
+		useAuthorNamePatterns: null,
+		useCapitalisedSubjectLines: null,
+		useCommitterEmailPatterns: null,
+		useCommitterNamePatterns: null,
+		useConciseSubjectLines: null,
+		useEmptyLineBeforeBodyLines: null,
+		useImperativeSubjectLines: null,
+		useIssueLinks: null,
+		useLineWrapping: null,
+		useSignedCommits: null,
+		...overrides,
+	}
+}
+
 export function fakeTokenConfiguration(
 	overrides: Partial<TokenConfiguration> = {},
 ): TokenConfiguration {

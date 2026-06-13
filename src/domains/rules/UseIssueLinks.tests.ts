@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
+import {
+	emptyRuleConfiguration,
+	fakeTokenConfiguration,
+} from "#configurations/Configuration.fixtures.ts"
+import type { RuleConfiguration } from "#configurations/Configuration.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { useIssueLinks } from "#rules/UseIssueLinks.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
@@ -14,9 +17,10 @@ import type { Vector } from "#types/Vector.ts"
 
 const rule = "useIssueLinks" satisfies RuleKey
 
-const enabledAnywhere: RuleOptions<typeof rule> = { position: "anywhere" }
-const enabledPrefix: RuleOptions<typeof rule> = { position: "prefix" }
-const enabledSuffix: RuleOptions<typeof rule> = { position: "suffix" }
+const disabled = emptyRuleConfiguration()
+const enabledAnywhere = emptyRuleConfiguration({ [rule]: { position: "anywhere" } })
+const enabledPrefix = emptyRuleConfiguration({ [rule]: { position: "prefix" } })
+const enabledSuffix = emptyRuleConfiguration({ [rule]: { position: "suffix" } })
 
 const fakeCommit = fakeCommitFactory()
 
@@ -38,7 +42,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("raises a concern about the beginning of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -48,7 +52,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("raises a concern about the beginning of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -58,7 +62,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("raises a concern about the end of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -68,7 +72,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -90,7 +94,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -98,7 +102,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -106,7 +110,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("raises a concern about the end of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -116,7 +120,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -138,7 +142,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -146,7 +150,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("raises a concern about the start of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -156,7 +160,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -164,7 +168,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -188,7 +192,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -196,7 +200,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("raises a concern about the start of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -206,7 +210,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("raises a concern about the end of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -216,7 +220,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -236,14 +240,14 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe.each`
-			options
+			rules
 			${enabledAnywhere}
 			${enabledPrefix}
 			${enabledSuffix}
 		`(
-			"and the rule is enabled with position '$options.position'",
-			(options: RuleOptions<typeof rule>) => {
-				const actualConcerns = useIssueLinks([commit], options)
+			"and the rule is enabled with position $rules.useIssueLinks.position",
+			(configProps: { rules: RuleConfiguration }) => {
+				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
 					expect(actualConcerns).toEqual<Concerns>([])
@@ -252,7 +256,7 @@ describe.each`
 		)
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -280,14 +284,14 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe.each`
-			options
+			rules
 			${enabledAnywhere}
 			${enabledPrefix}
 			${enabledSuffix}
 		`(
-			"and the rule is enabled with position '$options.position'",
-			(options: RuleOptions<typeof rule>) => {
-				const actualConcerns = useIssueLinks([commit], options)
+			"and the rule is enabled with position $rules.useIssueLinks.position",
+			(configProps: { rules: RuleConfiguration }) => {
+				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
 					expect(actualConcerns).toEqual<Concerns>([])
@@ -296,7 +300,7 @@ describe.each`
 		)
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -316,14 +320,14 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine, parents: props.parents })
 
 		describe.each`
-			options
+			rules
 			${enabledAnywhere}
 			${enabledPrefix}
 			${enabledSuffix}
 		`(
-			"and the rule is enabled with position '$options.position'",
-			(options: RuleOptions<typeof rule>) => {
-				const actualConcerns = useIssueLinks([commit], options)
+			"and the rule is enabled with position $rules.useIssueLinks.position",
+			(configProps: { rules: RuleConfiguration }) => {
+				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
 					expect(actualConcerns).toEqual<Concerns>([])
@@ -332,7 +336,7 @@ describe.each`
 		)
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -354,7 +358,7 @@ describe("when verifying a set of multiple commits and some commits are missing 
 	]
 
 	describe("and the rule is enabled with position 'anywhere'", () => {
-		const actualConcerns = useIssueLinks(commits, enabledAnywhere)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledAnywhere)
 
 		it("raises concerns about commits without an issue link", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -365,7 +369,7 @@ describe("when verifying a set of multiple commits and some commits are missing 
 	})
 
 	describe("and the rule is enabled with position 'prefix'", () => {
-		const actualConcerns = useIssueLinks(commits, enabledPrefix)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledPrefix)
 
 		it("raises concerns about commits whose issue link is not at the prefix", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -378,7 +382,7 @@ describe("when verifying a set of multiple commits and some commits are missing 
 	})
 
 	describe("and the rule is enabled with position 'suffix'", () => {
-		const actualConcerns = useIssueLinks(commits, enabledSuffix)
+		const actualConcerns = mapCommitsToConcerns(commits, enabledSuffix)
 
 		it("raises concerns about commits whose issue link is not at the suffix", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -393,7 +397,7 @@ describe("when verifying a set of multiple commits and some commits are missing 
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useIssueLinks(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -411,13 +415,13 @@ describe("when verifying a set of multiple commits and all commits start with an
 	]
 
 	describe.each`
-		options
+		rules
 		${enabledAnywhere}
 		${enabledPrefix}
 	`(
-		"and the rule is enabled with position '$options.position'",
-		(options: RuleOptions<typeof rule>) => {
-			const actualConcerns = useIssueLinks(commits, options)
+		"and the rule is enabled with position $rules.useIssueLinks.position",
+		(configProps: { rules: RuleConfiguration }) => {
+			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -426,7 +430,7 @@ describe("when verifying a set of multiple commits and all commits start with an
 	)
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useIssueLinks(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -444,13 +448,13 @@ describe("when verifying a set of multiple commits and all commits end with an i
 	]
 
 	describe.each`
-		options
+		rules
 		${enabledAnywhere}
 		${enabledSuffix}
 	`(
-		"and the rule is enabled with position '$options.position'",
-		(options: RuleOptions<typeof rule>) => {
-			const actualConcerns = useIssueLinks(commits, options)
+		"and the rule is enabled with position $rules.useIssueLinks.position",
+		(configProps: { rules: RuleConfiguration }) => {
+			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -459,7 +463,7 @@ describe("when verifying a set of multiple commits and all commits end with an i
 	)
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = useIssueLinks(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -489,7 +493,7 @@ describe.each`
 		const commit = fakeJiraStyleCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("raises a concern about the beginning of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -499,7 +503,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("raises a concern about the beginning of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -509,7 +513,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("raises a concern about the end of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -519,7 +523,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -541,7 +545,7 @@ describe.each`
 		const commit = fakeJiraStyleCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -549,7 +553,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -557,7 +561,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("raises a concern about the end of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -567,7 +571,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -589,7 +593,7 @@ describe.each`
 		const commit = fakeJiraStyleCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled with position 'anywhere'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledAnywhere)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledAnywhere)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -597,7 +601,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'prefix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledPrefix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledPrefix)
 
 			it("raises a concern about the start of the subject line", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -607,7 +611,7 @@ describe.each`
 		})
 
 		describe("and the rule is enabled with position 'suffix'", () => {
-			const actualConcerns = useIssueLinks([commit], enabledSuffix)
+			const actualConcerns = mapCommitsToConcerns([commit], enabledSuffix)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -615,7 +619,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = useIssueLinks([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])

@@ -4,6 +4,7 @@ import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
+import { noBlankSubjectLines } from "#rules/NoBlankSubjectLines.ts"
 import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
@@ -38,6 +39,7 @@ export function concernedCommit(concern: Concern, commits: Commits): Commit {
 
 export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration): Concerns {
 	return [
+		...noBlankSubjectLines(commits, rules.noBlankSubjectLines),
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),
 		...noMergeCommits(commits, rules.noMergeCommits),
 		...noRepeatedSubjectLines(commits, rules.noRepeatedSubjectLines),

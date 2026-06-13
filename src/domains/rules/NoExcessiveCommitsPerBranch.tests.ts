@@ -1,16 +1,18 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
-import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "noExcessiveCommitsPerBranch" satisfies RuleKey
-const enabled3: RuleOptions<typeof rule> = { maxCommits: 3 }
-const enabled10: RuleOptions<typeof rule> = { maxCommits: 10 }
+
+const disabled = emptyRuleConfiguration()
+const enabled3 = emptyRuleConfiguration({ [rule]: { maxCommits: 3 } })
+const enabled10 = emptyRuleConfiguration({ [rule]: { maxCommits: 10 } })
 
 const fakeCommit = fakeCommitFactory()
 
@@ -25,7 +27,7 @@ describe("when verifying a set of 6 commits when up to 3 commits are allowed", (
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled3)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled3)
 
 		it("raises concerns about commits 4-6", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -37,7 +39,7 @@ describe("when verifying a set of 6 commits when up to 3 commits are allowed", (
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -53,7 +55,7 @@ describe("when verifying a set of 3 commits when up to 3 commits are allowed", (
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled3)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled3)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -61,7 +63,7 @@ describe("when verifying a set of 3 commits when up to 3 commits are allowed", (
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -73,7 +75,7 @@ describe("when verifying a set of 1 commit when up to 3 commits are allowed", ()
 	const commits: Vector<Commit, 1> = [fakeCommit({ message: "label the mystery switch" })]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled3)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled3)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -81,7 +83,7 @@ describe("when verifying a set of 1 commit when up to 3 commits are allowed", ()
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -106,7 +108,7 @@ describe("when verifying a set of 12 commits when up to 10 commits are allowed",
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled10)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled10)
 
 		it("raises concerns about commits 11-12", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -117,7 +119,7 @@ describe("when verifying a set of 12 commits when up to 10 commits are allowed",
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -140,7 +142,7 @@ describe("when verifying a set of 10 commits when up to 10 commits are allowed",
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled10)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled10)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -148,7 +150,7 @@ describe("when verifying a set of 10 commits when up to 10 commits are allowed",
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -165,7 +167,7 @@ describe("when verifying a set of 4 commits when up to 10 commits are allowed", 
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled10)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled10)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -173,7 +175,7 @@ describe("when verifying a set of 4 commits when up to 10 commits are allowed", 
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -198,7 +200,7 @@ describe("when verifying a set of 6 commits when up to 3 commits are allowed and
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled3)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled3)
 
 		it("ignores merge commits when determining excessive commits", () => {
 			expect(actualConcerns).toEqual<Concerns>([commitConcern(rule, commits[5].sha)])
@@ -206,7 +208,7 @@ describe("when verifying a set of 6 commits when up to 3 commits are allowed and
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -227,7 +229,7 @@ describe("when verifying a set of 8 commits when up to 3 commits are allowed and
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, enabled3)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled3)
 
 		it("ignores commits with squash markers when determining excessive commits", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -239,7 +241,7 @@ describe("when verifying a set of 8 commits when up to 3 commits are allowed and
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noExcessiveCommitsPerBranch(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])

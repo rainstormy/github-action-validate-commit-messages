@@ -1,15 +1,17 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
 import type { Commit } from "#commits/Commit.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
 const rule = "noSquashMarkers" satisfies RuleKey
-const enabled: RuleOptions<typeof rule> = {}
+
+const disabled = emptyRuleConfiguration()
+const enabled = emptyRuleConfiguration({ [rule]: {} })
 
 const fakeCommit = fakeCommitFactory()
 
@@ -33,7 +35,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noSquashMarkers([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about the squash marker", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -43,7 +45,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noSquashMarkers([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -63,7 +65,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noSquashMarkers([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about all squash markers", () => {
 				expect(actualConcerns).toEqual<Concerns>([
@@ -73,7 +75,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noSquashMarkers([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -113,7 +115,7 @@ describe.each`
 		const commit = fakeCommit({ message: props.subjectLine })
 
 		describe("and the rule is enabled", () => {
-			const actualConcerns = noSquashMarkers([commit], enabled)
+			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -121,7 +123,7 @@ describe.each`
 		})
 
 		describe("and the rule is disabled", () => {
-			const actualConcerns = noSquashMarkers([commit], null)
+			const actualConcerns = mapCommitsToConcerns([commit], disabled)
 
 			it("does not raise any concerns", () => {
 				expect(actualConcerns).toEqual<Concerns>([])
@@ -142,7 +144,7 @@ describe("when verifying a set of multiple commits and some commits have squash 
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noSquashMarkers(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("raises concerns about the commits with squash markers", () => {
 			expect(actualConcerns).toEqual<Concerns>([
@@ -154,7 +156,7 @@ describe("when verifying a set of multiple commits and some commits have squash 
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noSquashMarkers(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -172,7 +174,7 @@ describe("when verifying a set of multiple commits and no commits have squash ma
 	]
 
 	describe("and the rule is enabled", () => {
-		const actualConcerns = noSquashMarkers(commits, enabled)
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
@@ -180,7 +182,7 @@ describe("when verifying a set of multiple commits and no commits have squash ma
 	})
 
 	describe("and the rule is disabled", () => {
-		const actualConcerns = noSquashMarkers(commits, null)
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
 		it("does not raise any concerns", () => {
 			expect(actualConcerns).toEqual<Concerns>([])
