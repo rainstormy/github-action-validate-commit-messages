@@ -22,7 +22,11 @@ const enabledAnywhere = emptyRuleConfiguration({ [rule]: { position: "anywhere" 
 const enabledPrefix = emptyRuleConfiguration({ [rule]: { position: "prefix" } })
 const enabledSuffix = emptyRuleConfiguration({ [rule]: { position: "suffix" } })
 
-const fakeCommit = fakeCommitFactory()
+const fakeCommit = fakeCommitFactory(
+	fakeTokenConfiguration({
+		issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]),
+	}),
+)
 
 describe.each`
 	subjectLine                                                  | expectedRangeAnywhere | expectedRangePrefix | expectedRangeSuffix
@@ -86,6 +90,8 @@ describe.each`
 	${"(GH-7) hotfix"}                                                | ${[13, 14]}
 	${"#42 Convince the office printer to print in colour"}           | ${[50, 51]}
 	${"GL-1024 keep the hamsters on the wheel"}                       | ${[38, 39]}
+	${"(no-issue) you must construct additional pylons!"}             | ${[48, 49]}
+	${"[incident] Unable to comply, building in progress"}            | ${[49, 50]}
 	${"#1 #2 three go"}                                               | ${[14, 15]}
 	${"fixup! GH-88 is the issue that explains why this code exists"} | ${[60, 61]}
 `(
@@ -135,6 +141,8 @@ describe.each`
 	${"Convince the office printer to print in colour #42"}            | ${[0, 1]}
 	${"keep the hamsters on the wheel GL-1024"}                        | ${[0, 1]}
 	${"one two #3 #4"}                                                 | ${[0, 1]}
+	${"construction complete (no-issue)"}                              | ${[0, 1]}
+	${"insufficient funds [incident]"}                                 | ${[0, 1]}
 	${"squash! the issue that explains why this code exists is GH-88"} | ${[8, 9]}
 `(
 	"when the subject line of $subjectLine ends with an issue link",
@@ -178,10 +186,12 @@ describe.each`
 )
 
 describe.each`
-	subjectLine                                            | expectedRangePrefix | expectedRangeSuffix
-	${"Replace GH-42 the hamster wheel with a turbine"}    | ${[0, 1]}           | ${[46, 47]}
-	${"promote #7 from staging to production on a friday"} | ${[0, 1]}           | ${[49, 50]}
-	${"fixup! Override GL-88 by shouting at the monitor"}  | ${[7, 8]}           | ${[48, 49]}
+	subjectLine                                              | expectedRangePrefix | expectedRangeSuffix
+	${"Replace GH-42 the hamster wheel with a turbine"}      | ${[0, 1]}           | ${[46, 47]}
+	${"promote #7 from staging to production on a friday"}   | ${[0, 1]}           | ${[49, 50]}
+	${"fixup! Override GL-88 by shouting at the monitor"}    | ${[7, 8]}           | ${[48, 49]}
+	${"there is (no-issue) here"}                            | ${[0, 1]}           | ${[24, 25]}
+	${"squash! Fixed the [incident] in a matter of seconds"} | ${[8, 9]}           | ${[51, 52]}
 `(
 	"when the subject line of $subjectLine has an issue link in the middle",
 	(props: {
@@ -234,6 +244,7 @@ describe.each`
 	${"#7 polish the rough edges off the api GH-7"}
 	${"(GH-42) Admit that the bug was intentional all along [#50]"}
 	${"amend! GL-9 Deploy to production on a wing and a prayer GL-9"}
+	${"[incident] resolved #58"}
 `(
 	"when the subject line of $subjectLine starts and ends with an issue link",
 	(props: { subjectLine: string }) => {
@@ -346,9 +357,13 @@ describe.each`
 )
 
 describe("when verifying a set of multiple commits and some commits are missing issue links", () => {
-	const commits: Vector<Commit, 8> = [
+	const commits: Vector<Commit, 9> = [
 		fakeCommit({ message: "#42 Convince the office printer to print in colour" }),
 		fakeCommit({ message: "Organise the quarterly chaos into a spreadsheet" }),
+		fakeCommit({
+			message: "Merge branch 'main' into feature/time-machine",
+			parents: [fakeCommitSha(), fakeCommitSha()],
+		}),
 		fakeCommit({ message: "fixup! GL-3 Polish the rough edges off the API" }),
 		fakeCommit({ message: "GH-88 is the issue that explains why this code exists" }),
 		fakeCommit({ message: "squash! accept `pseudocode:` as a valid keyword in the compiler" }),
@@ -363,7 +378,7 @@ describe("when verifying a set of multiple commits and some commits are missing 
 		it("raises concerns about commits without an issue link", () => {
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(rule, commits[1].sha, { range: [0, 1] }),
-				subjectLineConcern(rule, commits[4].sha, { range: [8, 9] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [8, 9] }),
 			])
 		})
 	})
@@ -374,9 +389,9 @@ describe("when verifying a set of multiple commits and some commits are missing 
 		it("raises concerns about commits whose issue link is not at the prefix", () => {
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(rule, commits[1].sha, { range: [0, 1] }),
-				subjectLineConcern(rule, commits[4].sha, { range: [8, 9] }),
-				subjectLineConcern(rule, commits[5].sha, { range: [0, 1] }),
-				subjectLineConcern(rule, commits[7].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [8, 9] }),
+				subjectLineConcern(rule, commits[6].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[8].sha, { range: [0, 1] }),
 			])
 		})
 	})
@@ -388,10 +403,10 @@ describe("when verifying a set of multiple commits and some commits are missing 
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(rule, commits[0].sha, { range: [50, 51] }),
 				subjectLineConcern(rule, commits[1].sha, { range: [47, 48] }),
-				subjectLineConcern(rule, commits[2].sha, { range: [46, 47] }),
-				subjectLineConcern(rule, commits[3].sha, { range: [53, 54] }),
-				subjectLineConcern(rule, commits[4].sha, { range: [63, 64] }),
-				subjectLineConcern(rule, commits[7].sha, { range: [44, 45] }),
+				subjectLineConcern(rule, commits[3].sha, { range: [46, 47] }),
+				subjectLineConcern(rule, commits[4].sha, { range: [53, 54] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [63, 64] }),
+				subjectLineConcern(rule, commits[8].sha, { range: [44, 45] }),
 			])
 		})
 	})
@@ -406,10 +421,15 @@ describe("when verifying a set of multiple commits and some commits are missing 
 })
 
 describe("when verifying a set of multiple commits and all commits start with an issue link", () => {
-	const commits: Vector<Commit, 5> = [
+	const commits: Vector<Commit, 7> = [
 		fakeCommit({ message: "#1 Convince the office printer to print in colour" }),
 		fakeCommit({ message: "(GH-2) Organise the quarterly chaos into a spreadsheet" }),
 		fakeCommit({ message: "fixup! GL-3 Polish the rough edges off the API" }),
+		fakeCommit({
+			message: "Merge branch 'feature/robot-butler' into feature/office-overhaul",
+			parents: [fakeCommitSha(), fakeCommitSha()],
+		}),
+		fakeCommit({ message: "(no-issue) Refactor the spacious modules" }),
 		fakeCommit({ message: 'revert "Add an emergency eject button to the legacy module"' }),
 		fakeCommit({ message: "GH-4 is the issue that explains why this code exists" }),
 	]
@@ -429,6 +449,20 @@ describe("when verifying a set of multiple commits and all commits start with an
 		},
 	)
 
+	describe("and the rule is enabled with position 'suffix'", () => {
+		const actualConcerns = mapCommitsToConcerns(commits, enabledSuffix)
+
+		it("raises concerns about commits whose issue link is not at the suffix", () => {
+			expect(actualConcerns).toEqual<Concerns>([
+				subjectLineConcern(rule, commits[0].sha, { range: [49, 50] }),
+				subjectLineConcern(rule, commits[1].sha, { range: [54, 55] }),
+				subjectLineConcern(rule, commits[2].sha, { range: [46, 47] }),
+				subjectLineConcern(rule, commits[4].sha, { range: [40, 41] }),
+				subjectLineConcern(rule, commits[6].sha, { range: [52, 53] }),
+			])
+		})
+	})
+
 	describe("and the rule is disabled", () => {
 		const actualConcerns = mapCommitsToConcerns(commits, disabled)
 
@@ -439,11 +473,16 @@ describe("when verifying a set of multiple commits and all commits start with an
 })
 
 describe("when verifying a set of multiple commits and all commits end with an issue link", () => {
-	const commits: Vector<Commit, 5> = [
+	const commits: Vector<Commit, 7> = [
+		fakeCommit({
+			message: "Keep the branch up to date (no ticket required)",
+			parents: [fakeCommitSha(), fakeCommitSha()],
+		}),
 		fakeCommit({ message: "Convince the office printer to print in colour #1" }),
 		fakeCommit({ message: "Organise the quarterly chaos into a spreadsheet (GH-2)" }),
 		fakeCommit({ message: "fixup! Polish the rough edges off the API GL-3" }),
 		fakeCommit({ message: 'revert "Add an emergency eject button to the legacy module"' }),
+		fakeCommit({ message: "Activate the grand beacons [incident]" }),
 		fakeCommit({ message: "the issue that explains why this code exists is GH-4" }),
 	]
 
@@ -461,6 +500,20 @@ describe("when verifying a set of multiple commits and all commits end with an i
 			})
 		},
 	)
+
+	describe("and the rule is enabled with position 'prefix'", () => {
+		const actualConcerns = mapCommitsToConcerns(commits, enabledPrefix)
+
+		it("raises concerns about commits whose issue link is not at the prefix", () => {
+			expect(actualConcerns).toEqual<Concerns>([
+				subjectLineConcern(rule, commits[1].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[2].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[3].sha, { range: [7, 8] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [0, 1] }),
+				subjectLineConcern(rule, commits[6].sha, { range: [0, 1] }),
+			])
+		})
+	})
 
 	describe("and the rule is disabled", () => {
 		const actualConcerns = mapCommitsToConcerns(commits, disabled)

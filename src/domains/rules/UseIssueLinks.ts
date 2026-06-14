@@ -24,29 +24,33 @@ export function* useIssueLinks(
 		return
 	}
 
-	for (const commit of commits) {
-		if (commit.isMergeCommit) {
-			return
-		}
-
-		switch (options.position) {
-			case "anywhere": {
+	switch (options.position) {
+		case "anywhere": {
+			for (const commit of commits) {
 				yield* getCommitConcernsAnywhere(commit)
-				break
 			}
-			case "prefix": {
+			break
+		}
+		case "prefix": {
+			for (const commit of commits) {
 				yield* getCommitConcernsPrefix(commit)
-				break
 			}
-			case "suffix": {
+			break
+		}
+		case "suffix": {
+			for (const commit of commits) {
 				yield* getCommitConcernsSuffix(commit)
-				break
 			}
+			break
 		}
 	}
 }
 
 function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
+
 	let lastInsignificantToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
@@ -70,6 +74,10 @@ function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
 }
 
 function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
+
 	let firstSignificantToken: Token | null = null
 	let lastInsignificantToken: Token | null = null
 
@@ -97,6 +105,10 @@ function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
 }
 
 function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
+
 	for (const token of commit.subjectLine) {
 		if (token.type === "dependency-version" || token.type === "revert-marker") {
 			return
