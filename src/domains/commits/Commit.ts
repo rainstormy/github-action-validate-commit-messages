@@ -1,5 +1,6 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { tokeniseDependencyVersions } from "#commits/tokens/DependencyVersionToken.ts"
+import { tokeniseFencedCodeBlocks } from "#commits/tokens/FencedCodeBlockToken.ts"
 import { tokeniseInlineCodePhrases } from "#commits/tokens/InlineCodeToken.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
@@ -65,7 +66,9 @@ function tokeniseBodyLines(
 	configuration: TokenConfiguration,
 ): TokenisedLines {
 	return tokeniseTrailers(
-		crudeBodyLines.map((crudeBodyLine) => tokeniseBodyLine(crudeBodyLine, configuration)),
+		tokeniseFencedCodeBlocks(
+			crudeBodyLines.map((crudeBodyLine) => tokeniseBodyLine(crudeBodyLine, configuration)),
+		),
 	)
 }
 
