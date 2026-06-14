@@ -24,10 +24,10 @@ describe("the default configuration in the command-line", () => {
 		enabledRuleKey                   | expectedRuleOptions
 		${"noBlankSubjectLines"}         | ${{}}
 		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
+		${"noExcessiveWhitespace"}       | ${{}}
 		${"noMergeCommits"}              | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
-		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
 		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
@@ -79,13 +79,13 @@ describe("the default configuration in GitHub Actions", () => {
 		enabledRuleKey                   | expectedRuleOptions
 		${"noBlankSubjectLines"}         | ${{}}
 		${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
+		${"noExcessiveWhitespace"}       | ${{}}
 		${"noMergeCommits"}              | ${{}}
 		${"noRepeatedSubjectLines"}      | ${{}}
 		${"noRevertRevertCommits"}       | ${{}}
 		${"noSingleWordSubjectLines"}    | ${{}}
 		${"noSquashMarkers"}             | ${{}}
 		${"noUnexpectedPunctuation"}     | ${{}}
-		${"noUnexpectedWhitespace"}      | ${{}}
 		${"useCapitalisedSubjectLines"}  | ${{}}
 		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}

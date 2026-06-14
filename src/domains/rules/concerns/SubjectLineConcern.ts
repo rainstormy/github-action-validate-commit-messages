@@ -11,11 +11,11 @@ export type SubjectLineConcern = {
 
 export type SubjectLineConcernRuleKey =
 	| "noBlankSubjectLines"
+	| "noExcessiveWhitespace"
 	| "noRevertRevertCommits"
 	| "noSingleWordSubjectLines"
 	| "noSquashMarkers"
 	| "noUnexpectedPunctuation"
-	| "noUnexpectedWhitespace"
 	| "useCapitalisedSubjectLines"
 	| "useConciseSubjectLines"
 	| "useImperativeSubjectLines"

@@ -223,6 +223,9 @@ function subjectLineRuleMessage(
 		case "noBlankSubjectLines": {
 			return ruleMessage("Subject lines must contain at least one non-whitespace character.")
 		}
+		case "noExcessiveWhitespace": {
+			throw new Error(`Not implemented yet: ${rule}`)
+		}
 		case "noRevertRevertCommits": {
 			return ruleMessage("Cherry-pick the original commit instead of reverting it over.")
 		}
@@ -233,9 +236,6 @@ function subjectLineRuleMessage(
 			return ruleMessage("Combine squash commits with their ancestors.")
 		}
 		case "noUnexpectedPunctuation": {
-			throw new Error(`Not implemented yet: ${rule}`)
-		}
-		case "noUnexpectedWhitespace": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useCapitalisedSubjectLines": {
@@ -279,6 +279,9 @@ function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configurat
 	}
 
 	switch (rule) {
+		case "noExcessiveWhitespace": {
+			throw new Error(`Not implemented yet: ${rule}`)
+		}
 		case "noRestrictedTrailers": {
 			const options = getRuleOptions(rule, configuration)
 			return ruleMessage(
@@ -294,9 +297,6 @@ function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configurat
 			)
 		}
 		case "noUnexpectedPunctuation": {
-			throw new Error(`Not implemented yet: ${rule}`)
-		}
-		case "noUnexpectedWhitespace": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useEmptyLineBeforeBodyLines": {

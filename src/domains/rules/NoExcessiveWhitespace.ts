@@ -3,12 +3,12 @@ import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
-const _rule = "noUnexpectedWhitespace" satisfies RuleKey
+const _rule = "noExcessiveWhitespace" satisfies RuleKey
 
 /**
  * It ignores revert commits.
  */
-export function* noUnexpectedWhitespace(
+export function* noExcessiveWhitespace(
 	commits: Commits,
 	options: EmptyObject | null,
 ): Generator<Concern> {
@@ -22,5 +22,5 @@ export function* noUnexpectedWhitespace(
 }
 
 function getCommitConcerns(_commit: Commit): Generator<Concern> {
-	throw new Error("The `noUnexpectedWhitespace` rule has not been implemented yet") // TODO: To be implemented.
+	throw new Error("The `noExcessiveWhitespace` rule has not been implemented yet") // TODO: To be implemented.
 }

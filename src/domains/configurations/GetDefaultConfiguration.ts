@@ -24,6 +24,7 @@ function getDefaultCliConfiguration(): Configuration {
 		rules: {
 			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: { maxCommits: 10 },
+			noExcessiveWhitespace: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: null,
 			noRestrictedTrailers: null,
@@ -31,7 +32,6 @@ function getDefaultCliConfiguration(): Configuration {
 			noSingleWordSubjectLines: {},
 			noSquashMarkers: null,
 			noUnexpectedPunctuation: {},
-			noUnexpectedWhitespace: {},
 			useAuthorEmailPatterns: null,
 			useAuthorNamePatterns: null,
 			useCapitalisedSubjectLines: {},
@@ -53,6 +53,7 @@ function getDefaultGhaConfiguration(): Configuration {
 		rules: {
 			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: { maxCommits: 10 },
+			noExcessiveWhitespace: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
 			noRestrictedTrailers: null,
@@ -60,7 +61,6 @@ function getDefaultGhaConfiguration(): Configuration {
 			noSingleWordSubjectLines: {},
 			noSquashMarkers: {},
 			noUnexpectedPunctuation: {},
-			noUnexpectedWhitespace: {},
 			useAuthorEmailPatterns: null,
 			useAuthorNamePatterns: null,
 			useCapitalisedSubjectLines: {},
