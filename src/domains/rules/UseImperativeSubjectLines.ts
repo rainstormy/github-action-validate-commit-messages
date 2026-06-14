@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { text } from "#commits/tokens/TextToken.ts"
+import { rawText } from "#commits/tokens/TextToken.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -61,12 +61,9 @@ const firstWordRegex = /\S+/u
 function getFirstWordToken(token: Token): Token | null {
 	const firstWord = firstWordRegex.exec(token.value)?.[0] ?? null
 
-	if (firstWord === null) {
-		return null
-	}
-
-	const firstWordStartIndex = token.range[0] + token.value.indexOf(firstWord)
-	return text(firstWord, [firstWordStartIndex, firstWordStartIndex + firstWord.length])
+	return firstWord !== null
+		? rawText(firstWord, token.range[0] + token.value.indexOf(firstWord))
+		: null
 }
 
 function normaliseWord(word: string): string {
