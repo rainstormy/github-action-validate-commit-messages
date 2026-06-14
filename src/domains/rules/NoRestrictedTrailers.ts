@@ -1,7 +1,7 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { type TrailerToken, trimmedTrailerTokenKeyRange } from "#commits/tokens/TrailerToken.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
-import type { Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 
 const rule = "noRestrictedTrailers" satisfies RuleKey
@@ -12,39 +12,38 @@ const rule = "noRestrictedTrailers" satisfies RuleKey
  * For example, disallowing `Co-authored-by` trailers helps to keep the commit history attributable,
  * as co-authors are unable to sign commits. It also rejects commits made from code review suggestions through the GitHub web interface.
  */
-export function noRestrictedTrailers(
+export function* noRestrictedTrailers(
 	commits: Commits,
 	options: { restrictedKeys: Array<string> } | null,
-): Concerns {
+): Generator<Concern> {
 	if (options === null || options.restrictedKeys.length === 0) {
-		return []
+		return
 	}
 
 	const restrictedKeys = new Set(options.restrictedKeys.map(normaliseTrailerKey))
-	return commits.flatMap((commit) => verifyCommit(commit, restrictedKeys))
+
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit, restrictedKeys)
+	}
 }
 
-function verifyCommit(commit: Commit, restrictedKeys: Set<string>): Concerns {
-	const concerns: Concerns = []
-
+function* getCommitConcerns(commit: Commit, restrictedKeys: Set<string>): Generator<Concern> {
 	let line = 0
 
 	for (const bodyLine of commit.bodyLines) {
 		const [firstToken] = bodyLine
 
-		if (firstToken?.type === "trailer" && isRestrictedTrailer(firstToken, restrictedKeys)) {
+		if (firstToken?.type === "trailer" && isRestrictedTrailer(firstToken)) {
 			const range = trimmedTrailerTokenKeyRange(firstToken)
-			concerns.push(bodyLineConcern(rule, commit.sha, { line, range }))
+			yield bodyLineConcern(rule, commit.sha, { line, range })
 		}
 
 		line += 1
 	}
 
-	return concerns
-}
-
-function isRestrictedTrailer(trailer: TrailerToken, restrictedKeys: Set<string>): boolean {
-	return restrictedKeys.has(normaliseTrailerKey(trailer.key))
+	function isRestrictedTrailer(trailer: TrailerToken): boolean {
+		return restrictedKeys.has(normaliseTrailerKey(trailer.key))
+	}
 }
 
 export function normaliseTrailerKey(key: string): string {

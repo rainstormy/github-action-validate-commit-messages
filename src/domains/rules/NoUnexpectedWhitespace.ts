@@ -1,18 +1,26 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notNullish } from "#utilities/Arrays.ts"
 
 const _rule = "noUnexpectedWhitespace" satisfies RuleKey
 
 /**
  * It ignores revert commits.
  */
-export function noUnexpectedWhitespace(commits: Commits, options: EmptyObject | null): Concerns {
-	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
+export function* noUnexpectedWhitespace(
+	commits: Commits,
+	options: EmptyObject | null,
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
+
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit)
+	}
 }
 
-function verifyCommit(_commit: Commit): Concern | null {
+function getCommitConcerns(_commit: Commit): Generator<Concern> {
 	throw new Error("The `noUnexpectedWhitespace` rule has not been implemented yet") // TODO: To be implemented.
 }

@@ -1,10 +1,9 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Token } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notNullish } from "#utilities/Arrays.ts"
 
 const rule = "noBlankSubjectLines" satisfies RuleKey
 
@@ -16,11 +15,20 @@ const rule = "noBlankSubjectLines" satisfies RuleKey
  *
  * Issue links, revert markers, and squash markers do not count as non-whitespace characters.
  */
-export function noBlankSubjectLines(commits: Commits, options: EmptyObject | null): Concerns {
-	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
+export function* noBlankSubjectLines(
+	commits: Commits,
+	options: EmptyObject | null,
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
+
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit)
+	}
 }
 
-function verifyCommit(commit: Commit): Concern | null {
+function* getCommitConcerns(commit: Commit): Generator<Concern> {
 	let lastInsignificantToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
@@ -29,7 +37,7 @@ function verifyCommit(commit: Commit): Concern | null {
 			token.type === "inline-code" ||
 			(token.type === "text" && token.value.trim().length > 0)
 		) {
-			return null
+			return
 		}
 		if (
 			token.type === "issue-link" ||
@@ -45,5 +53,5 @@ function verifyCommit(commit: Commit): Concern | null {
 			? lastInsignificantToken.range[0] + lastInsignificantToken.value.trimEnd().length
 			: 0
 
-	return subjectLineConcern(rule, commit.sha, { range: [firstBlankIndex, firstBlankIndex + 1] })
+	yield subjectLineConcern(rule, commit.sha, { range: [firstBlankIndex, firstBlankIndex + 1] })
 }

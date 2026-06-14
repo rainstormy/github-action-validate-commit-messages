@@ -1,10 +1,10 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notEmptyString, notNullish } from "#utilities/Arrays.ts"
+import { notEmptyString } from "#utilities/Arrays.ts"
 
 const rule = "noSingleWordSubjectLines" satisfies RuleKey
 
@@ -17,17 +17,26 @@ const rule = "noSingleWordSubjectLines" satisfies RuleKey
  * It ignores commits with revert markers.
  * Leading issue links and squash markers do not count as words.
  */
-export function noSingleWordSubjectLines(commits: Commits, options: EmptyObject | null): Concerns {
-	return options !== null ? commits.map(verifyCommit).filter(notNullish) : []
+export function* noSingleWordSubjectLines(
+	commits: Commits,
+	options: EmptyObject | null,
+): Generator<Concern> {
+	if (options === null) {
+		return
+	}
+
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit)
+	}
 }
 
-function verifyCommit(commit: Commit): Concern | null {
+function* getCommitConcerns(commit: Commit): Generator<Concern> {
 	let words = 0
 	let firstWordToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
 		if (words > 1 || (token.type === "issue-link" && words > 0) || token.type === "revert-marker") {
-			return null
+			return
 		}
 		if (
 			token.type === "dependency-version" ||
@@ -40,10 +49,8 @@ function verifyCommit(commit: Commit): Concern | null {
 	}
 
 	if (words === 1 && firstWordToken !== null) {
-		return subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
+		yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
 	}
-
-	return null
 }
 
 const intoWords = /\s+/gu

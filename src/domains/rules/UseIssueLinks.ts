@@ -1,9 +1,8 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import type { Token } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { notNullish } from "#utilities/Arrays.ts"
+import type { RuleKey } from "#rules/Rule.ts"
 
 const rule = "useIssueLinks" satisfies RuleKey
 
@@ -17,34 +16,41 @@ const rule = "useIssueLinks" satisfies RuleKey
  * It ignores merge commits, revert commits, and dependency upgrade commits.
  * It disregards squash markers when the position is `prefix`.
  */
-export function useIssueLinks(
+export function* useIssueLinks(
 	commits: Commits,
 	options: { position: "anywhere" | "prefix" | "suffix" } | null,
-): Concerns {
-	return options !== null
-		? commits.map((commit) => verifyCommit(commit, options)).filter(notNullish)
-		: []
-}
-
-function verifyCommit(commit: Commit, options: RuleOptions<typeof rule>): Concern | null {
-	if (commit.isMergeCommit) {
-		return null
+): Generator<Concern> {
+	if (options === null) {
+		return
 	}
 
 	switch (options.position) {
 		case "anywhere": {
-			return verifyAnywhere(commit)
+			for (const commit of commits) {
+				yield* getCommitConcernsAnywhere(commit)
+			}
+			break
 		}
 		case "prefix": {
-			return verifyPrefix(commit)
+			for (const commit of commits) {
+				yield* getCommitConcernsPrefix(commit)
+			}
+			break
 		}
 		case "suffix": {
-			return verifySuffix(commit)
+			for (const commit of commits) {
+				yield* getCommitConcernsSuffix(commit)
+			}
+			break
 		}
 	}
 }
 
-function verifyAnywhere(commit: Commit): Concern | null {
+function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
+
 	let lastInsignificantToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
@@ -53,7 +59,7 @@ function verifyAnywhere(commit: Commit): Concern | null {
 			token.type === "issue-link" ||
 			token.type === "revert-marker"
 		) {
-			return null
+			return
 		}
 		if (token.type === "squash-marker") {
 			lastInsignificantToken = token
@@ -62,22 +68,26 @@ function verifyAnywhere(commit: Commit): Concern | null {
 
 	const firstSignificantIndex = lastInsignificantToken?.range[1] ?? 0
 
-	return subjectLineConcern(rule, commit.sha, {
+	yield subjectLineConcern(rule, commit.sha, {
 		range: [firstSignificantIndex, firstSignificantIndex + 1],
 	})
 }
 
-function verifyPrefix(commit: Commit): Concern | null {
+function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
+
 	let firstSignificantToken: Token | null = null
 	let lastInsignificantToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
 		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return null
+			return
 		}
 		if (firstSignificantToken === null) {
 			if (token.type === "issue-link") {
-				return null
+				return
 			}
 			if (token.type !== "squash-marker") {
 				firstSignificantToken = token
@@ -89,24 +99,28 @@ function verifyPrefix(commit: Commit): Concern | null {
 
 	const firstSignificantIndex = lastInsignificantToken?.range[1] ?? 0
 
-	return subjectLineConcern(rule, commit.sha, {
+	yield subjectLineConcern(rule, commit.sha, {
 		range: [firstSignificantIndex, firstSignificantIndex + 1],
 	})
 }
 
-function verifySuffix(commit: Commit): Concern | null {
+function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
+	if (commit.isMergeCommit) {
+		return
+	}
+
 	for (const token of commit.subjectLine) {
 		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return null
+			return
 		}
 	}
 
 	const lastToken = commit.subjectLine.at(-1)
 
 	if (lastToken?.type === "issue-link") {
-		return null
+		return
 	}
 
 	const lastIndex = lastToken?.range[1] ?? 0
-	return subjectLineConcern(rule, commit.sha, { range: [lastIndex, lastIndex + 1] })
+	yield subjectLineConcern(rule, commit.sha, { range: [lastIndex, lastIndex + 1] })
 }

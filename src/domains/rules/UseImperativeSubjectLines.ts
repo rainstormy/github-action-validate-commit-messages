@@ -1,10 +1,9 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { text } from "#commits/tokens/TextToken.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
-import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
+import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import { notNullish } from "#utilities/Arrays.ts"
 import { isImperativeVerb } from "#utilities/Verbs.ts"
 
 const rule = "useImperativeSubjectLines" satisfies RuleKey
@@ -17,24 +16,27 @@ const rule = "useImperativeSubjectLines" satisfies RuleKey
  * It ignores revert commits.
  * It disregards issue links and squash markers.
  */
-export function useImperativeSubjectLines(
+export function* useImperativeSubjectLines(
 	commits: Commits,
 	options: { whitelist: Array<string> } | null,
-): Concerns {
+): Generator<Concern> {
 	if (options === null) {
-		return []
+		return
 	}
 
 	const whitelist = new Set(options.whitelist.map(normaliseWord))
-	return commits.map((commit) => verifyCommit(commit, whitelist)).filter(notNullish)
+
+	for (const commit of commits) {
+		yield* getCommitConcerns(commit, whitelist)
+	}
 }
 
-function verifyCommit(commit: Commit, whitelist: Set<string>): Concern | null {
+function* getCommitConcerns(commit: Commit, whitelist: Set<string>): Generator<Concern> {
 	let firstWordToken: Token | null = null
 
 	for (const token of commit.subjectLine) {
 		if (token.type === "revert-marker") {
-			return null
+			return
 		}
 		if (firstWordToken === null && token.type !== "issue-link" && token.type !== "squash-marker") {
 			firstWordToken = getFirstWordToken(token)
@@ -42,16 +44,16 @@ function verifyCommit(commit: Commit, whitelist: Set<string>): Concern | null {
 	}
 
 	if (firstWordToken === null) {
-		return null
+		return
 	}
 
 	const firstWord = normaliseWord(firstWordToken.value)
 
 	if (whitelist.has(firstWord) || isImperativeVerb(firstWord)) {
-		return null
+		return
 	}
 
-	return subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
+	yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
 }
 
 const firstWordRegex = /\S+/u
