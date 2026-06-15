@@ -1,10 +1,11 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { tokeniseDependencyVersions } from "#commits/tokens/DependencyVersionToken.ts"
+import { tokeniseFencedCodeBlocks } from "#commits/tokens/FencedCodeBlockToken.ts"
 import { tokeniseInlineCodePhrases } from "#commits/tokens/InlineCodeToken.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
-import { text } from "#commits/tokens/TextToken.ts"
+import { rawText } from "#commits/tokens/TextToken.ts"
 import type { Token, TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
 import { tokeniseTrailers } from "#commits/tokens/TrailerToken.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
@@ -50,20 +51,13 @@ function tokeniseSubjectLine(
 	crudeSubjectLine: string,
 	configuration: TokenConfiguration,
 ): TokenisedLine {
-	// oxfmt-ignore
-	return (
-		tokeniseDependencyVersions(
-			tokeniseIssueLinks(
-				tokeniseInlineCodePhrases(
-					tokeniseRevertMarkers(
-						tokeniseSquashMarkers(
-							[text(crudeSubjectLine, [0, crudeSubjectLine.length])],
-						)
-					),
-				),
-				configuration,
-			),
-		)
+	const initialTokens = [rawText(crudeSubjectLine)]
+
+	return tokeniseDependencyVersions(
+		tokeniseIssueLinks(
+			tokeniseInlineCodePhrases(tokeniseRevertMarkers(tokeniseSquashMarkers(initialTokens))),
+			configuration,
+		),
 	).filter(notEmptyToken)
 }
 
@@ -72,7 +66,9 @@ function tokeniseBodyLines(
 	configuration: TokenConfiguration,
 ): TokenisedLines {
 	return tokeniseTrailers(
-		crudeBodyLines.map((crudeBodyLine) => tokeniseBodyLine(crudeBodyLine, configuration)),
+		tokeniseFencedCodeBlocks(
+			crudeBodyLines.map((crudeBodyLine) => tokeniseBodyLine(crudeBodyLine, configuration)),
+		),
 	)
 }
 
@@ -80,10 +76,9 @@ function tokeniseBodyLine(
 	crudeBodyLine: string,
 	_configuration: TokenConfiguration,
 ): TokenisedLine {
-	// oxfmt-ignore
-	return (
-		[text(crudeBodyLine, [0, crudeBodyLine.length])]
-	).filter(notEmptyToken)
+	const initialTokens = [rawText(crudeBodyLine)]
+
+	return initialTokens.filter(notEmptyToken)
 }
 
 function notEmptyToken(token: Token): boolean {

@@ -28,8 +28,13 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 
 	for (let i = initialBodyLines.length - 1; i >= 0; i -= 1) {
 		const bodyLine = initialBodyLines[i] ?? []
-		const bodyLineString = formatTokenisedLine(bodyLine)
 
+		// A trailer cannot appear on a line that has other tokens.
+		if (bodyLine.length === 1 && bodyLine[0]?.type !== "text") {
+			break
+		}
+
+		const bodyLineString = formatTokenisedLine(bodyLine)
 		const [, key = null, value = null] = regex.exec(bodyLineString) ?? []
 
 		if (key !== null && value !== null) {
@@ -37,7 +42,7 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 		} else if (bodyLineString.trim() === "") {
 			trailersAndBlankLines.push(bodyLine)
 		} else {
-			break
+			break // Stop processing trailers when a non-blank, non-trailer line is encountered.
 		}
 	}
 
