@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Tokens } from "#commits/Token.ts"
+import { type Tokens, tokenRangeEnd } from "#commits/Token.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
@@ -76,7 +76,7 @@ function formatSubjectLineConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = subjectLineRuleMessage(concern, configuration)
+	const message = subjectLineRuleMessage(concern, commit, configuration)
 
 	const [rangeStart, rangeEnd] = concern.range
 	const length = rangeEnd - rangeStart
@@ -211,6 +211,7 @@ type RuleMessage = {
 
 function subjectLineRuleMessage(
 	concern: SubjectLineConcern,
+	commit: Commit,
 	configuration: Configuration,
 ): RuleMessage {
 	const rule = concern.rule
@@ -224,7 +225,13 @@ function subjectLineRuleMessage(
 			return ruleMessage("Subject lines must contain at least one non-whitespace character.")
 		}
 		case "noExcessiveWhitespace": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const positionPhrase =
+				concern.range[0] === 0
+					? "start with"
+					: concern.range[1] === tokenRangeEnd(commit.subjectLine)
+						? "end with"
+						: "contain excessive"
+			return ruleMessage(`Subject lines must not ${positionPhrase} whitespace.`)
 		}
 		case "noRevertRevertCommits": {
 			return ruleMessage("Cherry-pick the original commit instead of reverting it over.")
@@ -280,7 +287,7 @@ function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configurat
 
 	switch (rule) {
 		case "noExcessiveWhitespace": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return ruleMessage("Message bodies must not contain excessive whitespace.")
 		}
 		case "noRestrictedTrailers": {
 			const options = getRuleOptions(rule, configuration)

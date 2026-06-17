@@ -28,16 +28,16 @@ export function* noRestrictedTrailers(
 	)
 
 	for (const commit of commits) {
-		let line = 0
+		let lineNumber = 0
 
 		for (const bodyLine of commit.bodyLines) {
 			const key = bodyLine.find(isToken("trailerkey")) ?? null
 
 			if (key !== null && restrictedKeys.has(key.value.toLowerCase())) {
-				yield bodyLineConcern(rule, commit.sha, { line, range: key.range })
+				yield bodyLineConcern(rule, commit.sha, { line: lineNumber, range: key.range })
 			}
 
-			line += 1
+			lineNumber += 1
 		}
 	}
 }
