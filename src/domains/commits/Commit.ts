@@ -5,7 +5,7 @@ import { tokeniseInlineCodePhrases } from "#commits/tokens/InlineCodeToken.ts"
 import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
 import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
 import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
-import { rawText } from "#commits/tokens/TextToken.ts"
+import { text } from "#commits/tokens/TextToken.ts"
 import type { Token, TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
 import { tokeniseTrailers } from "#commits/tokens/TrailerToken.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
@@ -51,7 +51,7 @@ function tokeniseSubjectLine(
 	crudeSubjectLine: string,
 	configuration: TokenConfiguration,
 ): TokenisedLine {
-	const initialTokens = [rawText(crudeSubjectLine)]
+	const initialTokens = [text(crudeSubjectLine)]
 
 	return tokeniseDependencyVersions(
 		tokeniseIssueLinks(
@@ -76,7 +76,7 @@ function tokeniseBodyLine(
 	crudeBodyLine: string,
 	_configuration: TokenConfiguration,
 ): TokenisedLine {
-	const initialTokens = [rawText(crudeBodyLine)]
+	const initialTokens = [text(crudeBodyLine)]
 
 	return initialTokens.filter(notEmptyToken)
 }

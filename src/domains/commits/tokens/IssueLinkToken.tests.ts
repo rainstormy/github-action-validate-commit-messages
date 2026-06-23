@@ -4,7 +4,7 @@ import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
 import { issueLink } from "#commits/tokens/IssueLinkToken.ts"
 import { revertMarker } from "#commits/tokens/RevertMarkerToken.ts"
 import { squashMarker } from "#commits/tokens/SquashMarkerToken.ts"
-import { rawText, text } from "#commits/tokens/TextToken.ts"
+import { text } from "#commits/tokens/TextToken.ts"
 import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
@@ -82,7 +82,7 @@ describe.each`
 
 		it("leaves the subject line unchanged", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, githubStyle)
-			expect(commit.subjectLine).toEqual([rawText(props.subjectLine)])
+			expect(commit.subjectLine).toEqual([text(props.subjectLine)])
 		})
 	},
 )
@@ -135,7 +135,7 @@ describe.each`
 
 		it("leaves the subject line unchanged", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, jiraStyle)
-			expect(commit.subjectLine).toEqual([rawText(props.subjectLine)])
+			expect(commit.subjectLine).toEqual([text(props.subjectLine)])
 		})
 	},
 )
@@ -158,7 +158,7 @@ describe.each`
 		describe("and issue link tokenisation is disabled", () => {
 			it("leaves the subject line unchanged", () => {
 				const commit = mapCrudeCommitToCommit(crudeCommit, none)
-				expect(commit.subjectLine).toEqual([rawText(props.subjectLine)])
+				expect(commit.subjectLine).toEqual([text(props.subjectLine)])
 			})
 		})
 	},

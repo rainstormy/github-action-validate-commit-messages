@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { rawText } from "#commits/tokens/TextToken.ts"
+import { text } from "#commits/tokens/TextToken.ts"
 import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -62,7 +62,7 @@ function getFirstWordToken(token: Token): Token | null {
 	const firstWord = firstWordRegex.exec(token.value)?.[0] ?? null
 
 	return firstWord !== null
-		? rawText(firstWord, token.range[0] + token.value.indexOf(firstWord))
+		? text(firstWord, token.range[0] + token.value.indexOf(firstWord))
 		: null
 }
 
