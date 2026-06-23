@@ -8,8 +8,13 @@ export type TrailerToken = {
 	range: CharacterRange
 }
 
-export function trailer(key: string, value: string, range: CharacterRange): TrailerToken {
-	return { type: "trailer", key, value, range }
+export function trailer(key: string, value: string, rangeStart = 0): TrailerToken {
+	return {
+		type: "trailer",
+		key,
+		value,
+		range: [rangeStart, rangeStart + key.length + value.length],
+	}
 }
 
 /**
@@ -38,7 +43,7 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 		const [, key = null, value = null] = regex.exec(bodyLineString) ?? []
 
 		if (key !== null && value !== null) {
-			trailersAndBlankLines.push([trailer(key, value, [0, bodyLineString.length])])
+			trailersAndBlankLines.push([trailer(key, value)])
 		} else if (bodyLineString.trim() === "") {
 			trailersAndBlankLines.push(bodyLine)
 		} else {

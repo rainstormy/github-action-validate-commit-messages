@@ -6,6 +6,10 @@ export type HyperlinkToken = {
 	range: CharacterRange
 }
 
-export function hyperlink(value: string, range: CharacterRange): HyperlinkToken {
-	return { type: "hyperlink", value, range }
+export function hyperlink(value: string, rangeStart = 0): HyperlinkToken {
+	return {
+		type: "hyperlink",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }

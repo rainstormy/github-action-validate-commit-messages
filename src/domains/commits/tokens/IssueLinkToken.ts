@@ -8,8 +8,12 @@ export type IssueLinkToken = {
 	range: CharacterRange
 }
 
-export function issueLink(value: string, range: CharacterRange): IssueLinkToken {
-	return { type: "issue-link", value, range }
+export function issueLink(value: string, rangeStart = 0): IssueLinkToken {
+	return {
+		type: "issue-link",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 export function tokeniseIssueLinks(

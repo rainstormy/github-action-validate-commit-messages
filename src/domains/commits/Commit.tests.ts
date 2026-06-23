@@ -159,7 +159,7 @@ describe("when the commit message has a single line", () => {
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([text("refactor the taxi module", [0, 24])])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("refactor the taxi module")])
 	})
 
 	it("has no body lines", () => {
@@ -173,12 +173,12 @@ describe("when the commit message has 2 blank lines", () => {
 
 	it("has a blank tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([text(" ", [0, 1])])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text(" ")])
 	})
 
 	it("has 1 blank tokenised body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([[text(" ", [0, 1])]])
+		expect(commit.bodyLines).toEqual<TokenisedLines>([[text(" ")]])
 	})
 })
 
@@ -188,7 +188,7 @@ describe("when the commit message has a subject line and 1 empty line", () => {
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			text("Fix this confusing plate of spaghetti", [0, 37]),
+			text("Fix this confusing plate of spaghetti"),
 		])
 	})
 
@@ -207,7 +207,7 @@ describe("when the commit message has a subject line and 1 body line", () => {
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			text("Apply strawberry jam to make the code sweeter", [0, 45]),
+			text("Apply strawberry jam to make the code sweeter"),
 		])
 	})
 
@@ -217,7 +217,6 @@ describe("when the commit message has a subject line and 1 body line", () => {
 			[
 				text(
 					"Sweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic.",
-					[0, 90],
 				),
 			],
 		])
@@ -231,16 +230,14 @@ describe("when the commit message has a subject line, 1 empty line, and 1 body l
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			text("  added some extra love to the code", [0, 35]),
-		])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("  added some extra love to the code")])
 	})
 
 	it("has 1 empty body line and 1 tokenised body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
 			[],
-			[text("The architecture is much more flexible now.", [0, 43])],
+			[text("The architecture is much more flexible now.")],
 		])
 	})
 })
@@ -253,14 +250,14 @@ describe("when the commit message has a subject line and 2 body lines", () => {
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Upgrade dependencies", [0, 20])])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Upgrade dependencies")])
 	})
 
 	it("has 2 tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
-			[text("This commit upgrades the following dependency:", [0, 46])],
-			[text("- `@types/node` from 20.19.20 to 20.19.23", [0, 41])],
+			[text("This commit upgrades the following dependency:")],
+			[text("- `@types/node` from 20.19.20 to 20.19.23")],
 		])
 	})
 })
@@ -273,18 +270,16 @@ describe("when the commit message has a subject line, 1 empty line, and 3 body l
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			text("Clean up to improve maintainability", [0, 35]),
-		])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Clean up to improve maintainability")])
 	})
 
 	it("has 1 empty body line and 3 tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
 			[],
-			[text("This commit removes unnecessary nesting.", [0, 40])],
-			[text("It also simplifies variable names.", [0, 34])],
-			[text("Finally, it adds more tests.", [0, 28])],
+			[text("This commit removes unnecessary nesting.")],
+			[text("It also simplifies variable names.")],
+			[text("Finally, it adds more tests.")],
 		])
 	})
 })
@@ -297,18 +292,18 @@ describe("when the commit message has a subject line, 3 body lines, 1 empty line
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Release the robot butler", [0, 24])])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Release the robot butler")])
 	})
 
 	it("has 3 tokenised body lines, 1 empty body line, and 2 more tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
-			[text("It will serve coffee.", [0, 21])],
-			[text("It will make jokes.", [0, 19])],
-			[text("It will clean the codebase.", [0, 27])],
+			[text("It will serve coffee.")],
+			[text("It will make jokes.")],
+			[text("It will clean the codebase.")],
 			[],
-			[text("Please be kind to the robot.", [0, 28])],
-			[text("Do not spill coffee on it.", [0, 26])],
+			[text("Please be kind to the robot.")],
+			[text("Do not spill coffee on it.")],
 		])
 	})
 })
@@ -320,9 +315,7 @@ describe("when the commit message has a subject line, 2 empty lines, and 1 body 
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			text("Make the commit scream fixup! again", [0, 35]),
-		])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Make the commit scream fixup! again")])
 	})
 
 	it("has 2 empty body lines and 1 tokenised body line", () => {
@@ -330,7 +323,7 @@ describe("when the commit message has a subject line, 2 empty lines, and 1 body 
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
 			[],
 			[],
-			[text("This commit renames a variable.", [0, 31])],
+			[text("This commit renames a variable.")],
 		])
 	})
 })
@@ -343,18 +336,18 @@ describe("when the commit message has a subject line, 1 body line, 1 empty line,
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Do some pair programming", [0, 24])])
+		expect(commit.subjectLine).toEqual<TokenisedLine>([text("Do some pair programming")])
 	})
 
 	it("has 1 tokenised body line, 1 empty body line, 4 tokenised body lines, and 1 trailing empty body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
-			[text("This commit is a collab.", [0, 24])],
+			[text("This commit is a collab.")],
 			[],
-			[text("Co-authored-by: Gon Freecss <rock.paper.scissors@hunters.com>", [0, 61])],
-			[text("Co-authored-by: Killua Zoldyck <killua@godspeed.net>", [0, 52])],
-			[text("Reported-by: Hisoka <no4@phantom.com>", [0, 37])],
-			[text("All participants had fun.", [0, 25])],
+			[text("Co-authored-by: Gon Freecss <rock.paper.scissors@hunters.com>")],
+			[text("Co-authored-by: Killua Zoldyck <killua@godspeed.net>")],
+			[text("Reported-by: Hisoka <no4@phantom.com>")],
+			[text("All participants had fun.")],
 			[],
 		])
 	})
@@ -369,7 +362,7 @@ describe("when the commit message has a subject line, 1 empty line, 2 body lines
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			text("Make the code go brrr with fancy updates", [0, 40]),
+			text("Make the code go brrr with fancy updates"),
 		])
 	})
 
@@ -377,12 +370,12 @@ describe("when the commit message has a subject line, 1 empty line, 2 body lines
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 		expect(commit.bodyLines).toEqual<TokenisedLines>([
 			[],
-			[text("This commit makes the hamsters run faster.", [0, 42])],
-			[text("Upgraded their tiny running wheels.", [0, 35])],
+			[text("This commit makes the hamsters run faster.")],
+			[text("Upgraded their tiny running wheels.")],
 			[],
-			[text("Added rocket fuel to hamster food.", [0, 34])],
-			[text("Installed nitro boosters on wheels.", [0, 35])],
-			[text("Now they're breaking the speed limit.", [0, 37])],
+			[text("Added rocket fuel to hamster food.")],
+			[text("Installed nitro boosters on wheels.")],
+			[text("Now they're breaking the speed limit.")],
 			[],
 		])
 	})

@@ -8,8 +8,12 @@ export type SquashMarkerToken = {
 	range: CharacterRange
 }
 
-export function squashMarker(value: string, range: CharacterRange): SquashMarkerToken {
-	return { type: "squash-marker", value, range }
+export function squashMarker(value: string, rangeStart = 0): SquashMarkerToken {
+	return {
+		type: "squash-marker",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 const regex = /^\s*(?:amend!+\s*|fixup!+\s*|squash!+\s*|!amend\b\s*|!fixup\b\s*|!squash\b\s*)+/iu
@@ -25,11 +29,7 @@ export function tokeniseSquashMarkers(initialTokens: TokenisedLine): TokenisedLi
 			return initialTokens
 		}
 
-		return [
-			squashMarker(match, [0, match.length]),
-			slicedText(firstToken, match.length),
-			...remainingTokens,
-		]
+		return [squashMarker(match), slicedText(firstToken, match.length), ...remainingTokens]
 	}
 
 	return initialTokens

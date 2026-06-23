@@ -7,8 +7,12 @@ export type DependencyVersionToken = {
 	range: CharacterRange
 }
 
-export function dependencyVersion(value: string, range: CharacterRange): DependencyVersionToken {
-	return { type: "dependency-version", value, range }
+export function dependencyVersion(value: string, rangeStart = 0): DependencyVersionToken {
+	return {
+		type: "dependency-version",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 /**

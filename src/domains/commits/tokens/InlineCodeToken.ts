@@ -7,8 +7,12 @@ export type InlineCodeToken = {
 	range: CharacterRange
 }
 
-export function inlineCode(value: string, range: CharacterRange): InlineCodeToken {
-	return { type: "inline-code", value, range }
+export function inlineCode(value: string, rangeStart = 0): InlineCodeToken {
+	return {
+		type: "inline-code",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 /**

@@ -13,9 +13,14 @@ export type RevertMarkerToken = {
 export function revertMarker(
 	value: string,
 	occurrences: number,
-	range: CharacterRange,
+	rangeStart = 0,
 ): RevertMarkerToken {
-	return { type: "revert-marker", value, occurrences, range }
+	return {
+		type: "revert-marker",
+		value,
+		occurrences,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 // Assume all revert markers to contain an opening double quote `"` (quote pair consistency not enforced for simplicity).
@@ -44,12 +49,12 @@ export function tokeniseRevertMarkers(initialTokens: TokenisedLine): TokenisedLi
 			const [oldStartIndex, oldEndIndex] = token.range
 
 			result.push(
-				revertMarker(match, occurrences, [oldStartIndex, oldStartIndex + match.length]),
+				revertMarker(match, occurrences, oldStartIndex),
 				slicedText(token, match.length, trailer !== null ? -trailer.length : undefined),
 			)
 
 			if (trailer !== null) {
-				result.push(revertMarker(trailer, 0, [oldEndIndex - trailer.length, oldEndIndex]))
+				result.push(revertMarker(trailer, 0, oldEndIndex - trailer.length))
 			}
 		} else {
 			result.push(token)

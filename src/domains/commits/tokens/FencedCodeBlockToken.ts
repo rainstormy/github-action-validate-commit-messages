@@ -7,12 +7,12 @@ export type FencedCodeBlockToken = {
 	range: CharacterRange
 }
 
-export function fencedCodeBlock(value: string, range: CharacterRange): FencedCodeBlockToken {
-	return { type: "fenced-code-block", value, range }
-}
-
-export function rawFencedCodeBlockToken(value: string): FencedCodeBlockToken {
-	return fencedCodeBlock(value, [0, value.length])
+export function fencedCodeBlock(value: string, rangeStart = 0): FencedCodeBlockToken {
+	return {
+		type: "fenced-code-block",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 export function tokeniseFencedCodeBlocks(initialBodyLines: TokenisedLines): TokenisedLines {
@@ -28,7 +28,7 @@ export function tokeniseFencedCodeBlocks(initialBodyLines: TokenisedLines): Toke
 		const bodyLineString = formatTokenisedLine(bodyLine)
 
 		if (currentFence !== null) {
-			result.push([rawFencedCodeBlockToken(bodyLineString)])
+			result.push([fencedCodeBlock(bodyLineString)])
 
 			if (isClosingFence(bodyLineString, currentFence)) {
 				currentFence = null
@@ -37,7 +37,7 @@ export function tokeniseFencedCodeBlocks(initialBodyLines: TokenisedLines): Toke
 			const openingFence = getOpeningFence(bodyLineString)
 
 			if (openingFence !== null) {
-				result.push([rawFencedCodeBlockToken(bodyLineString)])
+				result.push([fencedCodeBlock(bodyLineString)])
 				currentFence = openingFence
 			} else {
 				result.push(bodyLine)

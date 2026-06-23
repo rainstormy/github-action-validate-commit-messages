@@ -6,8 +6,12 @@ export type TextToken = {
 	range: CharacterRange
 }
 
-export function text(value: string, range: CharacterRange): TextToken {
-	return { type: "text", value, range }
+export function text(value: string, rangeStart = 0): TextToken {
+	return {
+		type: "text",
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
 }
 
 export function slicedText(token: TextToken, start = 0, end?: number): TextToken {
@@ -17,5 +21,5 @@ export function slicedText(token: TextToken, start = 0, end?: number): TextToken
 }
 
 export function rawText(value: string, offset = 0): TextToken {
-	return text(value, [offset, offset + value.length])
+	return text(value, offset)
 }

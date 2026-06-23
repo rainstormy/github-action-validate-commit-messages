@@ -34,7 +34,7 @@ function formatToken(token: Token): string {
 export function splitTextTokens(
 	tokens: TokenisedLine,
 	regex: RegExp,
-	onMatch: (value: string, range: CharacterRange) => Token,
+	onMatch: (value: string, rangeStart: number) => Token,
 ): TokenisedLine {
 	const result: TokenisedLine = []
 
@@ -44,13 +44,12 @@ export function splitTextTokens(
 			let startIndex = token.range[0]
 
 			for (const [partIndex, partValue] of parts.entries()) {
-				const endIndex = startIndex + partValue.length
-				const range: CharacterRange = [startIndex, endIndex]
-
 				// `split()` with a regex preserves the string delimiter (i.e. the substrings that match the regex).
 				// Every other item in the array is a match.
-				result.push(partIndex % 2 === 1 ? onMatch(partValue, range) : text(partValue, range))
-				startIndex = endIndex
+				result.push(
+					partIndex % 2 === 1 ? onMatch(partValue, startIndex) : text(partValue, startIndex),
+				)
+				startIndex += partValue.length
 			}
 		} else {
 			result.push(token)
