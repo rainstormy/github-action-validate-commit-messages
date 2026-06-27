@@ -1,10 +1,10 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
+import { type Token, type TokenisedLine, isPlainToken } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notEmptyString } from "#utilities/Arrays.ts"
 
 const rule = "noSingleWordSubjectLines" satisfies RuleKey
 
@@ -31,30 +31,51 @@ export function* noSingleWordSubjectLines(
 }
 
 function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	let words = 0
-	let firstWordToken: Token | null = null
+	const wordRanges = getWordRanges(commit.subjectLine)
 
-	for (const token of commit.subjectLine) {
-		if (words > 1 || (token.type === "issue-link" && words > 0) || token.type === "revert-marker") {
-			return
-		}
-		if (
-			token.type === "dependency-version" ||
-			token.type === "inline-code" ||
-			token.type === "text"
-		) {
-			words += countWords(token.value)
-			firstWordToken = token
-		}
-	}
+	if (wordRanges.length === 1) {
+		const [range] = wordRanges
 
-	if (words === 1 && firstWordToken !== null) {
-		yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
+		if (range !== undefined) {
+			yield subjectLineConcern(rule, commit.sha, { range })
+		}
 	}
 }
 
-const intoWords = /\s+/gu
+function getWordRanges(tokens: TokenisedLine): Array<CharacterRange> {
+	const wordRanges: Array<CharacterRange> = []
+	let activePlainWordIndex: number | null = null
 
-function countWords(token: string): number {
-	return token.split(intoWords).filter(notEmptyString).length
+	for (const token of tokens) {
+		if (token.type === "revert-marker" || (token.type === "issue-link" && wordRanges.length > 0)) {
+			return []
+		}
+		if (token.type === "whitespace") {
+			activePlainWordIndex = null
+		} else if (token.type === "dependency-version" || token.type === "inline-code") {
+			activePlainWordIndex = null
+			wordRanges.push(...getSpecialTokenWordRanges(token))
+		} else if (isPlainToken(token)) {
+			if (activePlainWordIndex === null) {
+				wordRanges.push(token.range)
+				activePlainWordIndex = wordRanges.length - 1
+			} else {
+				const [startIndex] = wordRanges[activePlainWordIndex] ?? token.range
+				wordRanges[activePlainWordIndex] = [startIndex, token.range[1]]
+			}
+		}
+	}
+
+	return wordRanges
+}
+
+const intoWords = /\S+/gu
+
+function getSpecialTokenWordRanges(token: Token): Array<CharacterRange> {
+	return [...token.value.matchAll(intoWords)].map((match) => {
+		const value = match[0]
+		const startIndex = token.range[0] + match.index
+
+		return [startIndex, startIndex + value.length]
+	})
 }

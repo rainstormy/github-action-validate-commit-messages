@@ -1,4 +1,4 @@
-import { type TokenisedLines, formatTokenisedLine } from "#commits/tokens/Token.ts"
+import { type TokenisedLines, formatTokenisedLine, isPlainToken } from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type FencedCodeBlockToken = {
@@ -21,7 +21,7 @@ export function tokeniseFencedCodeBlocks(initialBodyLines: TokenisedLines): Toke
 
 	for (const bodyLine of initialBodyLines) {
 		// A fenced code block cannot appear on a line that has other tokens.
-		if (bodyLine.length === 1 && bodyLine[0]?.type !== "text") {
+		if (bodyLine[0] && !isPlainToken(bodyLine[0])) {
 			break
 		}
 

@@ -1,4 +1,4 @@
-import { type TokenisedLines, formatTokenisedLine } from "#commits/tokens/Token.ts"
+import { type TokenisedLines, formatTokenisedLine, isPlainToken } from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type TrailerToken = {
@@ -35,7 +35,7 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 		const bodyLine = initialBodyLines[i] ?? []
 
 		// A trailer cannot appear on a line that has other tokens.
-		if (bodyLine.length === 1 && bodyLine[0]?.type !== "text") {
+		if (bodyLine.some((token) => !isPlainToken(token))) {
 			break
 		}
 

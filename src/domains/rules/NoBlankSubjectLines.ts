@@ -35,7 +35,8 @@ function* getCommitConcerns(commit: Commit): Generator<Concern> {
 		if (
 			token.type === "dependency-version" ||
 			token.type === "inline-code" ||
-			(token.type === "text" && token.value.trim().length > 0)
+			token.type === "punctuation" ||
+			token.type === "word"
 		) {
 			return
 		}

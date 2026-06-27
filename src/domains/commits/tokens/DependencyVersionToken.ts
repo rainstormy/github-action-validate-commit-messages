@@ -1,4 +1,4 @@
-import { type TokenisedLine, splitTextTokens } from "#commits/tokens/Token.ts"
+import { type TokenisedLine, splitPlainTokens } from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type DependencyVersionToken = {
@@ -29,5 +29,5 @@ const regex =
 	/(?<=\s)([0-9a-f]{7,}|v?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)(?=\s|"|$)/gu
 
 export function tokeniseDependencyVersions(initialTokens: TokenisedLine): TokenisedLine {
-	return splitTextTokens(initialTokens, regex, dependencyVersion)
+	return splitPlainTokens(initialTokens, regex, dependencyVersion)
 }

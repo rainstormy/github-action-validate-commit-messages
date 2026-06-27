@@ -1,4 +1,4 @@
-import { type TokenisedLine, splitTextTokens } from "#commits/tokens/Token.ts"
+import { type TokenisedLine, splitPlainTokens } from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type InlineCodeToken = {
@@ -21,5 +21,5 @@ export function inlineCode(value: string, rangeStart = 0): InlineCodeToken {
 const regex = /(`[^`]*`)/gu
 
 export function tokeniseInlineCodePhrases(initialTokens: TokenisedLine): TokenisedLine {
-	return splitTextTokens(initialTokens, regex, inlineCode)
+	return splitPlainTokens(initialTokens, regex, inlineCode)
 }

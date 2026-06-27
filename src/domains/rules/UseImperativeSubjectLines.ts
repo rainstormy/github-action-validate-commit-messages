@@ -1,9 +1,9 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { text } from "#commits/tokens/TextToken.ts"
-import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
+import { type Token, type TokenisedLine, isPlainToken } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 import { isImperativeVerb } from "#utilities/Verbs.ts"
 
 const rule = "useImperativeSubjectLines" satisfies RuleKey
@@ -32,38 +32,87 @@ export function* useImperativeSubjectLines(
 }
 
 function* getCommitConcerns(commit: Commit, whitelist: Set<string>): Generator<Concern> {
-	let firstWordToken: Token | null = null
+	const firstWord = getFirstWord(commit.subjectLine)
 
-	for (const token of commit.subjectLine) {
+	if (firstWord === null) {
+		return
+	}
+
+	const normalisedFirstWord = normaliseWord(firstWord.value)
+
+	if (whitelist.has(normalisedFirstWord) || isImperativeVerb(normalisedFirstWord)) {
+		return
+	}
+
+	yield subjectLineConcern(rule, commit.sha, { range: firstWord.range })
+}
+
+type WordCandidate = {
+	value: string
+	range: CharacterRange
+}
+
+function getFirstWord(tokens: TokenisedLine): WordCandidate | null {
+	for (let index = 0; index < tokens.length; index += 1) {
+		const token = tokens[index]
+
+		if (token === undefined) {
+			return null
+		}
 		if (token.type === "revert-marker") {
-			return
+			return null
 		}
-		if (firstWordToken === null && token.type !== "issue-link" && token.type !== "squash-marker") {
-			firstWordToken = getFirstWordToken(token)
+		if (
+			token.type !== "issue-link" &&
+			token.type !== "squash-marker" &&
+			token.type !== "whitespace"
+		) {
+			return isPlainToken(token) ? getFirstPlainWord(tokens, index) : getFirstWordInToken(token)
 		}
 	}
 
-	if (firstWordToken === null) {
-		return
+	return null
+}
+
+function getFirstPlainWord(tokens: TokenisedLine, startIndex: number): WordCandidate | null {
+	const firstToken = tokens[startIndex]
+
+	if (firstToken === undefined) {
+		return null
 	}
 
-	const firstWord = normaliseWord(firstWordToken.value)
+	let value = firstToken.value
+	let range: CharacterRange = firstToken.range
 
-	if (whitelist.has(firstWord) || isImperativeVerb(firstWord)) {
-		return
+	for (let index = startIndex + 1; index < tokens.length; index += 1) {
+		const token = tokens[index]
+
+		if (token === undefined || !isPlainToken(token) || token.type === "whitespace") {
+			break
+		}
+
+		value += token.value
+		range = [range[0], token.range[1]]
 	}
 
-	yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
+	return { value, range }
 }
 
 const firstWordRegex = /\S+/u
 
-function getFirstWordToken(token: Token): Token | null {
+function getFirstWordInToken(token: Token): WordCandidate | null {
 	const firstWord = firstWordRegex.exec(token.value)?.[0] ?? null
 
-	return firstWord !== null
-		? text(firstWord, token.range[0] + token.value.indexOf(firstWord))
-		: null
+	if (firstWord === null) {
+		return null
+	}
+
+	const wordStartIndex = token.range[0] + token.value.indexOf(firstWord)
+
+	return {
+		value: firstWord,
+		range: [wordStartIndex, wordStartIndex + firstWord.length],
+	}
 }
 
 function normaliseWord(word: string): string {

@@ -1,5 +1,9 @@
-import { slicedText } from "#commits/tokens/TextToken.ts"
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import {
+	type TokenisedLine,
+	formatTokenisedLine,
+	isPlainToken,
+	tokenisePlainText,
+} from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import { countOccurrences } from "#utilities/Strings.ts"
 
@@ -27,39 +31,72 @@ export function revertMarker(
 const regex = /^(?:\s*revert\s+")+/iu
 
 export function tokeniseRevertMarkers(initialTokens: TokenisedLine): TokenisedLine {
-	const result: TokenisedLine = []
-	let isFirstTextToken = true
+	const firstPlainSpan = getFirstPlainTokenSpan(initialTokens)
 
-	for (const token of initialTokens) {
-		if (token.type === "text" && isFirstTextToken) {
-			isFirstTextToken = false
-			const match = regex.exec(token.value)?.[0] ?? null
-
-			// Revert markers must appear at the beginning of the line (disregarding tokens with higher priority such as squash markers).
-			if (match === null) {
-				return initialTokens
-			}
-
-			const occurrences = countOccurrences(match, "revert", { caseInsensitive: true })
-
-			// Extract no more trailing double quotes than there are 'revert' occurrences.
-			const trailerRegex = new RegExp(String.raw`("\s*){1,${occurrences}}$`, "gu")
-			const trailer = trailerRegex.exec(token.value.slice(match.length))?.[0] ?? null
-
-			const [oldStartIndex, oldEndIndex] = token.range
-
-			result.push(
-				revertMarker(match, occurrences, oldStartIndex),
-				slicedText(token, match.length, trailer !== null ? -trailer.length : undefined),
-			)
-
-			if (trailer !== null) {
-				result.push(revertMarker(trailer, 0, oldEndIndex - trailer.length))
-			}
-		} else {
-			result.push(token)
-		}
+	if (firstPlainSpan === null) {
+		return initialTokens
 	}
 
-	return result
+	const { beforeTokens, plainTokens, afterTokens } = firstPlainSpan
+	const plainText = formatTokenisedLine(plainTokens)
+	const match = regex.exec(plainText)?.[0] ?? null
+
+	// Revert markers must appear at the beginning of the line (disregarding tokens with higher priority such as squash markers).
+	if (match === null) {
+		return initialTokens
+	}
+
+	const occurrences = countOccurrences(match, "revert", { caseInsensitive: true })
+
+	// Extract no more trailing double quotes than there are 'revert' occurrences.
+	const trailerRegex = new RegExp(String.raw`("\s*){1,${occurrences}}$`, "gu")
+	const trailer = trailerRegex.exec(plainText.slice(match.length))?.[0] ?? null
+	const [plainStartIndex, plainEndIndex] = getTokenSpanRange(plainTokens)
+
+	return [
+		...beforeTokens,
+		revertMarker(match, occurrences, plainStartIndex),
+		...tokenisePlainText(
+			plainText.slice(match.length, trailer !== null ? -trailer.length : undefined),
+			plainStartIndex + match.length,
+		),
+		...(trailer !== null ? [revertMarker(trailer, 0, plainEndIndex - trailer.length)] : []),
+		...afterTokens,
+	]
+}
+
+type FirstPlainTokenSpan = {
+	beforeTokens: TokenisedLine
+	plainTokens: TokenisedLine
+	afterTokens: TokenisedLine
+}
+
+function getFirstPlainTokenSpan(tokens: TokenisedLine): FirstPlainTokenSpan | null {
+	const plainStartIndex = tokens.findIndex(isPlainToken)
+
+	if (plainStartIndex === -1) {
+		return null
+	}
+
+	const plainEndIndex = tokens.findIndex(
+		(token, index) => index > plainStartIndex && !isPlainToken(token),
+	)
+	const exclusivePlainEndIndex = plainEndIndex === -1 ? tokens.length : plainEndIndex
+
+	return {
+		beforeTokens: tokens.slice(0, plainStartIndex),
+		plainTokens: tokens.slice(plainStartIndex, exclusivePlainEndIndex),
+		afterTokens: tokens.slice(exclusivePlainEndIndex),
+	}
+}
+
+function getTokenSpanRange(tokens: TokenisedLine): CharacterRange {
+	const [firstToken] = tokens
+	const lastToken = tokens.at(-1)
+
+	if (firstToken === undefined || lastToken === undefined) {
+		return [0, 0]
+	}
+
+	return [firstToken.range[0], lastToken.range[1]]
 }

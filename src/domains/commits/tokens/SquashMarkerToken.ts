@@ -1,5 +1,8 @@
-import { slicedText } from "#commits/tokens/TextToken.ts"
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import {
+	type TokenisedLine,
+	formatTokenisedLine,
+	tokenisePlainText,
+} from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
 export type SquashMarkerToken = {
@@ -22,14 +25,15 @@ export function tokeniseSquashMarkers(initialTokens: TokenisedLine): TokenisedLi
 	const [firstToken, ...remainingTokens] = initialTokens
 
 	// Squash markers must appear at the beginning of the line.
-	if (firstToken?.type === "text") {
-		const match = regex.exec(firstToken.value)?.[0] ?? null
+	if (firstToken !== undefined) {
+		const line = formatTokenisedLine([firstToken, ...remainingTokens])
+		const match = regex.exec(line)?.[0] ?? null
 
 		if (match === null) {
 			return initialTokens
 		}
 
-		return [squashMarker(match), slicedText(firstToken, match.length), ...remainingTokens]
+		return [squashMarker(match), ...tokenisePlainText(line.slice(match.length), match.length)]
 	}
 
 	return initialTokens

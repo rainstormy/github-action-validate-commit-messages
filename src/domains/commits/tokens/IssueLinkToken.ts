@@ -1,4 +1,4 @@
-import { type TokenisedLine, splitTextTokens } from "#commits/tokens/Token.ts"
+import { type TokenisedLine, splitPlainTokens } from "#commits/tokens/Token.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
@@ -24,5 +24,5 @@ export function tokeniseIssueLinks(
 		return initialTokens
 	}
 
-	return splitTextTokens(initialTokens, configuration.issueLinks.regex, issueLink)
+	return splitPlainTokens(initialTokens, configuration.issueLinks.regex, issueLink)
 }

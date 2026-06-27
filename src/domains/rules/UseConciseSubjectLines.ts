@@ -39,7 +39,7 @@ function* getCommitConcerns(commit: Commit, maxLength: number): Generator<Concer
 		if (token.type === "dependency-version" || token.type === "revert-marker") {
 			return
 		}
-		if (token.type === "text") {
+		if (token.type === "punctuation" || token.type === "whitespace" || token.type === "word") {
 			textLength += token.value.length
 
 			if (textLength > maxLength) {
