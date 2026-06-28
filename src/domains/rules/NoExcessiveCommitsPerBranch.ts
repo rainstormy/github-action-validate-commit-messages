@@ -35,5 +35,5 @@ export function* noExcessiveCommitsPerBranch(
 }
 
 function hasSquashMarker(commit: Commit): boolean {
-	return commit.subjectLine[0]?.type === "squash-marker"
+	return commit.subjectLine.find((token) => token.type !== "whitespace")?.type === "squash-marker"
 }

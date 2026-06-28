@@ -3,28 +3,13 @@ import {
 	formatTokenisedLine,
 	isPlainToken,
 	tokenisePlainText,
+	tokeniseStructuredText,
 } from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import { countOccurrences } from "#utilities/Strings.ts"
 
-export type RevertMarkerToken = {
-	type: "revert-marker"
-	value: string
-	occurrences: number
-	range: CharacterRange
-}
-
-export function revertMarker(
-	value: string,
-	occurrences: number,
-	rangeStart = 0,
-): RevertMarkerToken {
-	return {
-		type: "revert-marker",
-		value,
-		occurrences,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function revertMarker(value: string, rangeStart = 0): TokenisedLine {
+	return tokeniseStructuredText("revert-marker", value, rangeStart)
 }
 
 // Assume all revert markers to contain an opening double quote `"` (quote pair consistency not enforced for simplicity).
@@ -55,12 +40,12 @@ export function tokeniseRevertMarkers(initialTokens: TokenisedLine): TokenisedLi
 
 	return [
 		...beforeTokens,
-		revertMarker(match, occurrences, plainStartIndex),
+		...revertMarker(match, occurrences, plainStartIndex),
 		...tokenisePlainText(
 			plainText.slice(match.length, trailer !== null ? -trailer.length : undefined),
 			plainStartIndex + match.length,
 		),
-		...(trailer !== null ? [revertMarker(trailer, 0, plainEndIndex - trailer.length)] : []),
+		...(trailer !== null ? revertMarker(trailer, 0, plainEndIndex - trailer.length) : []),
 		...afterTokens,
 	]
 }
@@ -72,22 +57,31 @@ type FirstPlainTokenSpan = {
 }
 
 function getFirstPlainTokenSpan(tokens: TokenisedLine): FirstPlainTokenSpan | null {
-	const plainStartIndex = tokens.findIndex(isPlainToken)
+	let plainStartIndex = tokens.findIndex(isPlainToken)
 
-	if (plainStartIndex === -1) {
-		return null
+	while (plainStartIndex !== -1) {
+		const plainEndIndex = findPlainTokenSpanEndIndex(tokens, plainStartIndex)
+		const exclusivePlainEndIndex = plainEndIndex === -1 ? tokens.length : plainEndIndex
+		const plainTokens = tokens.slice(plainStartIndex, exclusivePlainEndIndex)
+
+		if (formatTokenisedLine(plainTokens).trim() !== "") {
+			return {
+				beforeTokens: tokens.slice(0, plainStartIndex),
+				plainTokens,
+				afterTokens: tokens.slice(exclusivePlainEndIndex),
+			}
+		}
+
+		const nextPlainTokenOffset = tokens.slice(exclusivePlainEndIndex).findIndex(isPlainToken)
+		plainStartIndex =
+			nextPlainTokenOffset === -1 ? -1 : exclusivePlainEndIndex + nextPlainTokenOffset
 	}
 
-	const plainEndIndex = tokens.findIndex(
-		(token, index) => index > plainStartIndex && !isPlainToken(token),
-	)
-	const exclusivePlainEndIndex = plainEndIndex === -1 ? tokens.length : plainEndIndex
+	return null
+}
 
-	return {
-		beforeTokens: tokens.slice(0, plainStartIndex),
-		plainTokens: tokens.slice(plainStartIndex, exclusivePlainEndIndex),
-		afterTokens: tokens.slice(exclusivePlainEndIndex),
-	}
+function findPlainTokenSpanEndIndex(tokens: TokenisedLine, plainStartIndex: number): number {
+	return tokens.findIndex((token, index) => index > plainStartIndex && !isPlainToken(token))
 }
 
 function getTokenSpanRange(tokens: TokenisedLine): CharacterRange {

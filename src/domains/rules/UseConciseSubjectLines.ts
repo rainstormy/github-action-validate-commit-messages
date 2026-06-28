@@ -1,4 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
+import type { Token, TokenisedLine } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -35,11 +36,11 @@ function* getCommitConcerns(commit: Commit, maxLength: number): Generator<Concer
 	let overflowStartIndex = 0
 	let overflowEndIndex = 0
 
-	for (const token of commit.subjectLine) {
+	for (const [index, token] of commit.subjectLine.entries()) {
 		if (token.type === "dependency-version" || token.type === "revert-marker") {
 			return
 		}
-		if (token.type === "punctuation" || token.type === "whitespace" || token.type === "word") {
+		if (isCountedToken(commit.subjectLine, token, index)) {
 			textLength += token.value.length
 
 			if (textLength > maxLength) {
@@ -55,4 +56,44 @@ function* getCommitConcerns(commit: Commit, maxLength: number): Generator<Concer
 	if (overflowEndIndex !== overflowStartIndex) {
 		yield subjectLineConcern(rule, commit.sha, { range: [overflowStartIndex, overflowEndIndex] })
 	}
+}
+
+function isCountedToken(subjectLine: TokenisedLine, token: Token, index: number): boolean {
+	if (token.type !== "punctuation" && token.type !== "whitespace" && token.type !== "word") {
+		return false
+	}
+
+	return !isInLeadingSquashPrefix(subjectLine, index) && !isIssueLinkWhitespace(subjectLine, index)
+}
+
+function isInLeadingSquashPrefix(subjectLine: TokenisedLine, index: number): boolean {
+	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
+	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
+
+	if (firstSignificantToken?.type !== "squash-marker" || index < firstSignificantTokenIndex) {
+		return false
+	}
+
+	return subjectLine
+		.slice(firstSignificantTokenIndex, index + 1)
+		.every((token) => token.type === "squash-marker" || token.type === "whitespace")
+}
+
+function isIssueLinkWhitespace(subjectLine: TokenisedLine, index: number): boolean {
+	const token = subjectLine[index]
+
+	if (token?.type !== "whitespace") {
+		return false
+	}
+
+	const previousSignificantToken = subjectLine
+		.slice(0, index)
+		.findLast((candidate) => candidate.type !== "whitespace")
+	const nextSignificantToken = subjectLine
+		.slice(index + 1)
+		.find((candidate) => candidate.type !== "whitespace")
+
+	return (
+		previousSignificantToken?.type === "issue-link" || nextSignificantToken?.type === "issue-link"
+	)
 }

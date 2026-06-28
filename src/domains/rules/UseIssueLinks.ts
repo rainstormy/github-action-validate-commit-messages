@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Token } from "#commits/tokens/Token.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -47,80 +47,80 @@ export function* useIssueLinks(
 }
 
 function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit) {
+	if (commit.isMergeCommit || hasIgnoredToken(commit.subjectLine)) {
 		return
 	}
 
-	let lastInsignificantToken: Token | null = null
-
-	for (const token of commit.subjectLine) {
-		if (
-			token.type === "dependency-version" ||
-			token.type === "issue-link" ||
-			token.type === "revert-marker"
-		) {
-			return
-		}
-		if (token.type === "squash-marker") {
-			lastInsignificantToken = token
-		}
+	if (commit.subjectLine.some((token) => token.type === "issue-link")) {
+		return
 	}
 
-	const firstSignificantIndex = lastInsignificantToken?.range[1] ?? 0
-
+	const firstSignificantIndex = getSquashPrefixEndIndex(commit.subjectLine) ?? 0
 	yield subjectLineConcern(rule, commit.sha, {
 		range: [firstSignificantIndex, firstSignificantIndex + 1],
 	})
 }
 
 function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit) {
+	if (commit.isMergeCommit || hasIgnoredToken(commit.subjectLine)) {
 		return
 	}
 
-	let firstSignificantToken: Token | null = null
-	let lastInsignificantToken: Token | null = null
+	const squashPrefixEndIndex = getSquashPrefixEndIndex(commit.subjectLine)
+	const subjectLineAfterPrefix =
+		squashPrefixEndIndex !== null
+			? commit.subjectLine.filter((token) => token.range[0] >= squashPrefixEndIndex)
+			: commit.subjectLine
+	const firstSignificantToken = subjectLineAfterPrefix.find((token) => token.type !== "whitespace")
 
-	for (const token of commit.subjectLine) {
-		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return
-		}
-		if (firstSignificantToken === null) {
-			if (token.type === "issue-link") {
-				return
-			}
-			if (token.type !== "squash-marker") {
-				firstSignificantToken = token
-			} else {
-				lastInsignificantToken = token
-			}
-		}
+	if (firstSignificantToken?.type === "issue-link") {
+		return
 	}
 
-	const firstSignificantIndex = lastInsignificantToken?.range[1] ?? 0
-
+	const firstSignificantIndex = squashPrefixEndIndex ?? 0
 	yield subjectLineConcern(rule, commit.sha, {
 		range: [firstSignificantIndex, firstSignificantIndex + 1],
 	})
 }
 
 function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit) {
+	if (commit.isMergeCommit || hasIgnoredToken(commit.subjectLine)) {
 		return
 	}
 
-	for (const token of commit.subjectLine) {
-		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return
-		}
-	}
+	const lastSignificantToken = commit.subjectLine.findLast((token) => token.type !== "whitespace")
 
-	const lastToken = commit.subjectLine.at(-1)
-
-	if (lastToken?.type === "issue-link") {
+	if (lastSignificantToken?.type === "issue-link") {
 		return
 	}
 
-	const lastIndex = lastToken?.range[1] ?? 0
+	const lastIndex = commit.subjectLine.at(-1)?.range[1] ?? 0
 	yield subjectLineConcern(rule, commit.sha, { range: [lastIndex, lastIndex + 1] })
+}
+
+function hasIgnoredToken(subjectLine: TokenisedLine): boolean {
+	return subjectLine.some(
+		(token) => token.type === "dependency-version" || token.type === "revert-marker",
+	)
+}
+
+function getSquashPrefixEndIndex(subjectLine: TokenisedLine): number | null {
+	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
+	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
+
+	if (firstSignificantToken?.type !== "squash-marker") {
+		return null
+	}
+
+	let endIndex = firstSignificantToken.range[1]
+
+	for (const token of subjectLine.slice(firstSignificantTokenIndex + 1)) {
+		if (token.type !== "squash-marker" && token.type !== "whitespace") {
+			break
+		}
+
+		endIndex = token.range[1]
+	}
+
+	return endIndex
 }

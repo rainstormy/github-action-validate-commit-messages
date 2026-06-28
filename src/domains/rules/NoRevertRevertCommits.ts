@@ -1,9 +1,11 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { trimmedTokenRange } from "#commits/tokens/Token.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
+import { countOccurrences } from "#utilities/Strings.ts"
 
 const rule = "noRevertRevertCommits" satisfies RuleKey
 
@@ -27,10 +29,38 @@ export function* noRevertRevertCommits(
 }
 
 function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	for (const token of commit.subjectLine) {
-		if (token.type === "revert-marker" && token.occurrences > 1) {
-			yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(token) })
-			return
+	const revertMarkerRange = getRevertRevertMarkerRange(commit.subjectLine)
+
+	if (revertMarkerRange !== null) {
+		yield subjectLineConcern(rule, commit.sha, { range: revertMarkerRange })
+	}
+}
+
+function getRevertRevertMarkerRange(subjectLine: TokenisedLine): CharacterRange | null {
+	let occurrences = 0
+	let startIndex: number | null = null
+	let endIndex = 0
+	let hasStartedRevertMarker = false
+
+	for (const token of subjectLine) {
+		if (hasStartedRevertMarker && token.type !== "revert-marker" && token.type !== "whitespace") {
+			break
+		}
+		if (hasStartedRevertMarker || token.type === "revert-marker") {
+			if (token.type === "revert-marker" && startIndex === null) {
+				startIndex = token.range[0]
+			}
+
+			occurrences +=
+				token.type === "revert-marker"
+					? countOccurrences(token.value, "revert", { caseInsensitive: true })
+					: 0
+			if (token.type === "revert-marker") {
+				hasStartedRevertMarker = true
+				endIndex = token.range[1]
+			}
 		}
 	}
+
+	return occurrences > 1 && startIndex !== null ? [startIndex, endIndex] : null
 }

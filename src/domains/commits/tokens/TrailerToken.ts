@@ -1,20 +1,23 @@
-import { type TokenisedLines, formatTokenisedLine, isPlainToken } from "#commits/tokens/Token.ts"
+import {
+	type Token,
+	type TokenisedLine,
+	type TokenisedLines,
+	formatTokenisedLine,
+	isPlainToken,
+	tokeniseStructuredText,
+} from "#commits/tokens/Token.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
-export type TrailerToken = {
-	type: "trailer"
-	key: string
-	value: string
-	range: CharacterRange
+export function trailer(key: string, value: string, rangeStart = 0): TokenisedLine {
+	return [...trailerKey(key, rangeStart), ...trailerValue(value, rangeStart + key.length)]
 }
 
-export function trailer(key: string, value: string, rangeStart = 0): TrailerToken {
-	return {
-		type: "trailer",
-		key,
-		value,
-		range: [rangeStart, rangeStart + key.length + value.length],
-	}
+export function trailerKey(value: string, rangeStart = 0): TokenisedLine {
+	return tokeniseStructuredText("trailer-key", value, rangeStart)
+}
+
+export function trailerValue(value: string, rangeStart = 0): TokenisedLine {
+	return tokeniseStructuredText("trailer-value", value, rangeStart)
 }
 
 /**
@@ -43,7 +46,7 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 		const [, key = null, value = null] = regex.exec(bodyLineString) ?? []
 
 		if (key !== null && value !== null) {
-			trailersAndBlankLines.push([trailer(key, value)])
+			trailersAndBlankLines.push(trailer(key, value))
 		} else if (bodyLineString.trim() === "") {
 			trailersAndBlankLines.push(bodyLine)
 		} else {
@@ -59,8 +62,8 @@ export function tokeniseTrailers(initialBodyLines: TokenisedLines): TokenisedLin
 	return [...initialBodyLines.slice(0, -trailersAndBlankLines.length), ...trailersAndBlankLines]
 }
 
-export function trimmedTrailerTokenKeyRange(token: TrailerToken): CharacterRange {
+export function trimmedTrailerTokenKeyRange(token: Token): CharacterRange {
 	const [untrimmedStart] = token.range
-	const leadingOffset = token.key.length - token.key.trimStart().length
-	return [untrimmedStart + leadingOffset, untrimmedStart + token.key.trimEnd().length]
+	const leadingOffset = token.value.length - token.value.trimStart().length
+	return [untrimmedStart + leadingOffset, untrimmedStart + token.value.trimEnd().length]
 }

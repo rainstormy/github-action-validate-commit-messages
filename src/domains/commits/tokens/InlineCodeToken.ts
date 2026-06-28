@@ -1,18 +1,7 @@
-import { type TokenisedLine, splitPlainTokens } from "#commits/tokens/Token.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { type Token, type TokenisedLine, splitPlainTokens, tokenOf } from "#commits/tokens/Token.ts"
 
-export type InlineCodeToken = {
-	type: "inline-code"
-	value: string
-	range: CharacterRange
-}
-
-export function inlineCode(value: string, rangeStart = 0): InlineCodeToken {
-	return {
-		type: "inline-code",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function inlineCode(value: string, rangeStart = 0): Token {
+	return tokenOf("inline-code", value, rangeStart)
 }
 
 /**

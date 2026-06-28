@@ -1,19 +1,12 @@
-import { type TokenisedLine, splitPlainTokens } from "#commits/tokens/Token.ts"
+import {
+	type TokenisedLine,
+	splitPlainTokens,
+	tokeniseStructuredText,
+} from "#commits/tokens/Token.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
 
-export type IssueLinkToken = {
-	type: "issue-link"
-	value: string
-	range: CharacterRange
-}
-
-export function issueLink(value: string, rangeStart = 0): IssueLinkToken {
-	return {
-		type: "issue-link",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function issueLink(value: string, rangeStart = 0): TokenisedLine {
+	return tokeniseStructuredText("issue-link", value, rangeStart)
 }
 
 export function tokeniseIssueLinks(

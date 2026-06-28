@@ -1,34 +1,36 @@
-import type { DependencyVersionToken } from "#commits/tokens/DependencyVersionToken.ts"
-import type { FencedCodeBlockToken } from "#commits/tokens/FencedCodeBlockToken.ts"
-import type { HyperlinkToken } from "#commits/tokens/HyperlinkToken.ts"
-import type { InlineCodeToken } from "#commits/tokens/InlineCodeToken.ts"
-import type { IssueLinkToken } from "#commits/tokens/IssueLinkToken.ts"
-import { type PunctuationToken, punctuation } from "#commits/tokens/PunctuationToken.ts"
-import type { RevertMarkerToken } from "#commits/tokens/RevertMarkerToken.ts"
-import type { SquashMarkerToken } from "#commits/tokens/SquashMarkerToken.ts"
-import type { TrailerToken } from "#commits/tokens/TrailerToken.ts"
-import { type WhitespaceToken, whitespace } from "#commits/tokens/WhitespaceToken.ts"
-import { type WordToken, word } from "#commits/tokens/WordToken.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 
-export type Token =
-	| DependencyVersionToken
-	| FencedCodeBlockToken
-	| HyperlinkToken
-	| InlineCodeToken
-	| IssueLinkToken
-	| PunctuationToken
-	| RevertMarkerToken
-	| SquashMarkerToken
-	| TrailerToken
-	| WhitespaceToken
-	| WordToken
+export type Token = {
+	type: TokenType
+	value: string
+	range: CharacterRange
+}
+
+export type TokenType = UniversalTokenType | SubjectLineTokenType | BodyLineTokenType
+
+export type UniversalTokenType = "inline-code" | "punctuation" | "whitespace" | "word"
+
+export type SubjectLineTokenType =
+	| "dependency-version"
+	| "issue-link"
+	| "revert-marker"
+	| "squash-marker"
+
+export type BodyLineTokenType = "fenced-code-block" | "hyperlink" | "trailer-key" | "trailer-value"
 
 export type TokenisedLine = Array<Token>
 export type TokenisedLines = Array<TokenisedLine>
 
+export function tokenOf(type: TokenType, value: string, rangeStart = 0): Token {
+	return {
+		type,
+		value,
+		range: [rangeStart, rangeStart + value.length],
+	}
+}
+
 export function formatTokenisedLine(tokens: TokenisedLine): string {
-	return tokens.map(formatToken).join("")
+	return tokens.map((token) => token.value).join("")
 }
 
 export function tokenisePlainText(value: string, rangeStart = 0): TokenisedLine {
@@ -37,25 +39,36 @@ export function tokenisePlainText(value: string, rangeStart = 0): TokenisedLine 
 		const tokenRangeStart = rangeStart + match.index
 
 		return tokenValue.trim() === ""
-			? whitespace(tokenValue, tokenRangeStart)
+			? tokenOf("whitespace", tokenValue, tokenRangeStart)
 			: wordRegex.test(tokenValue)
-				? word(tokenValue, tokenRangeStart)
-				: punctuation(tokenValue, tokenRangeStart)
+				? tokenOf("word", tokenValue, tokenRangeStart)
+				: tokenOf("punctuation", tokenValue, tokenRangeStart)
 	})
 }
 
-export function isPlainToken(token: Token): token is PlainToken {
-	return token.type === "punctuation" || token.type === "whitespace" || token.type === "word"
+export function tokeniseStructuredText(
+	type: TokenType,
+	value: string,
+	rangeStart = 0,
+): TokenisedLine {
+	return [...value.matchAll(structuredTextRegex)].map((match) => {
+		const tokenValue = match[0]
+		const tokenRangeStart = rangeStart + match.index
+
+		return tokenValue.trim() === ""
+			? tokenOf("whitespace", tokenValue, tokenRangeStart)
+			: tokenOf(type, tokenValue, tokenRangeStart)
+	})
 }
 
-function formatToken(token: Token): string {
-	return token.type === "trailer" ? `${token.key}${token.value}` : token.value
+export function isPlainToken(token: Token): boolean {
+	return token.type === "punctuation" || token.type === "whitespace" || token.type === "word"
 }
 
 export function splitPlainTokens(
 	tokens: TokenisedLine,
 	regex: RegExp,
-	onMatch: (value: string, rangeStart: number) => Token,
+	onMatch: (value: string, rangeStart: number) => Token | TokenisedLine,
 ): TokenisedLine {
 	const result: TokenisedLine = []
 	let plainTokens: TokenisedLine = []
@@ -89,15 +102,14 @@ export function trimmedTokenRange(token: Token): CharacterRange {
 	return [start + leadingOffset, end - trailingOffset]
 }
 
-type PlainToken = PunctuationToken | WhitespaceToken | WordToken
-
 const plainTextRegex = /\s+|[\p{L}\p{N}]+(?:['-][\p{L}\p{N}]+)*|[^\s\p{L}\p{N}]+/gu
+const structuredTextRegex = /\s+|\S+/gu
 const wordRegex = /^[\p{L}\p{N}]+(?:['-][\p{L}\p{N}]+)*$/u
 
 function splitPlainTokenSpan(
 	tokens: TokenisedLine,
 	regex: RegExp,
-	onMatch: (value: string, rangeStart: number) => Token,
+	onMatch: (value: string, rangeStart: number) => Token | TokenisedLine,
 ): TokenisedLine {
 	const [firstToken] = tokens
 
@@ -120,7 +132,7 @@ function splitPlainTokenSpan(
 					spanValue.slice(previousEndIndex, matchStartIndex),
 					spanStartIndex + previousEndIndex,
 				),
-				onMatch(matchValue, spanStartIndex + matchStartIndex),
+				...toTokenisedLine(onMatch(matchValue, spanStartIndex + matchStartIndex)),
 			)
 			previousEndIndex = matchStartIndex + matchValue.length
 		}
@@ -130,4 +142,8 @@ function splitPlainTokenSpan(
 		...result,
 		...tokenisePlainText(spanValue.slice(previousEndIndex), spanStartIndex + previousEndIndex),
 	]
+}
+
+function toTokenisedLine(tokenOrTokens: Token | TokenisedLine): TokenisedLine {
+	return Array.isArray(tokenOrTokens) ? tokenOrTokens : [tokenOrTokens]
 }

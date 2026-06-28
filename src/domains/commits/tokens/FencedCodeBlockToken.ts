@@ -1,18 +1,13 @@
-import { type TokenisedLines, formatTokenisedLine, isPlainToken } from "#commits/tokens/Token.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import {
+	type Token,
+	type TokenisedLines,
+	formatTokenisedLine,
+	isPlainToken,
+	tokenOf,
+} from "#commits/tokens/Token.ts"
 
-export type FencedCodeBlockToken = {
-	type: "fenced-code-block"
-	value: string
-	range: CharacterRange
-}
-
-export function fencedCodeBlock(value: string, rangeStart = 0): FencedCodeBlockToken {
-	return {
-		type: "fenced-code-block",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function fencedCodeBlock(value: string, rangeStart = 0): Token {
+	return tokenOf("fenced-code-block", value, rangeStart)
 }
 
 export function tokeniseFencedCodeBlocks(initialBodyLines: TokenisedLines): TokenisedLines {
@@ -21,7 +16,7 @@ export function tokeniseFencedCodeBlocks(initialBodyLines: TokenisedLines): Toke
 
 	for (const bodyLine of initialBodyLines) {
 		// A fenced code block cannot appear on a line that has other tokens.
-		if (bodyLine[0] && !isPlainToken(bodyLine[0])) {
+		if (bodyLine.some((token) => !isPlainToken(token))) {
 			break
 		}
 

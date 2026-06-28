@@ -1,8 +1,9 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { type TrailerToken, trimmedTrailerTokenKeyRange } from "#commits/tokens/TrailerToken.ts"
+import type { TokenisedLine } from "#commits/tokens/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import type { CharacterRange } from "#types/CharacterRange.ts"
 
 const rule = "noRestrictedTrailers" satisfies RuleKey
 
@@ -31,18 +32,49 @@ function* getCommitConcerns(commit: Commit, restrictedKeys: Set<string>): Genera
 	let line = 0
 
 	for (const bodyLine of commit.bodyLines) {
-		const [firstToken] = bodyLine
+		const trailerKey = getTrailerKey(bodyLine)
 
-		if (firstToken?.type === "trailer" && isRestrictedTrailer(firstToken)) {
-			const range = trimmedTrailerTokenKeyRange(firstToken)
-			yield bodyLineConcern(rule, commit.sha, { line, range })
+		if (trailerKey !== null && restrictedKeys.has(normaliseTrailerKey(trailerKey.value))) {
+			yield bodyLineConcern(rule, commit.sha, { line, range: trailerKey.range })
 		}
 
 		line += 1
 	}
+}
 
-	function isRestrictedTrailer(trailer: TrailerToken): boolean {
-		return restrictedKeys.has(normaliseTrailerKey(trailer.key))
+type TrailerKey = {
+	value: string
+	range: CharacterRange
+}
+
+function getTrailerKey(bodyLine: TokenisedLine): TrailerKey | null {
+	const firstKeyTokenIndex = bodyLine.findIndex((token) => token.type === "trailer-key")
+	const firstKeyToken = bodyLine[firstKeyTokenIndex]
+
+	if (firstKeyToken === undefined) {
+		return null
+	}
+
+	let value = ""
+	let lastKeyTokenEndIndex = firstKeyToken.range[1]
+
+	for (const token of bodyLine.slice(firstKeyTokenIndex)) {
+		if (token.type === "trailer-value") {
+			break
+		}
+
+		value += token.value
+
+		if (token.type === "trailer-key") {
+			lastKeyTokenEndIndex = token.range[1]
+		}
+	}
+
+	const [untrimmedStart] = firstKeyToken.range
+	const leadingOffset = value.length - value.trimStart().length
+	return {
+		value,
+		range: [untrimmedStart + leadingOffset, lastKeyTokenEndIndex],
 	}
 }
 

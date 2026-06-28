@@ -1,18 +1,7 @@
-import { type TokenisedLine, splitPlainTokens } from "#commits/tokens/Token.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { type Token, type TokenisedLine, splitPlainTokens, tokenOf } from "#commits/tokens/Token.ts"
 
-export type DependencyVersionToken = {
-	type: "dependency-version"
-	value: string
-	range: CharacterRange
-}
-
-export function dependencyVersion(value: string, rangeStart = 0): DependencyVersionToken {
-	return {
-		type: "dependency-version",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function dependencyVersion(value: string, rangeStart = 0): Token {
+	return tokenOf("dependency-version", value, rangeStart)
 }
 
 /**

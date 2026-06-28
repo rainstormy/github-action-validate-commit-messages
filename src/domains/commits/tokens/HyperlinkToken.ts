@@ -1,15 +1,5 @@
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { type Token, tokenOf } from "#commits/tokens/Token.ts"
 
-export type HyperlinkToken = {
-	type: "hyperlink"
-	value: string
-	range: CharacterRange
-}
-
-export function hyperlink(value: string, rangeStart = 0): HyperlinkToken {
-	return {
-		type: "hyperlink",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function hyperlink(value: string, rangeStart = 0): Token {
+	return tokenOf("hyperlink", value, rangeStart)
 }

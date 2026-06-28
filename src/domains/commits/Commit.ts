@@ -1,16 +1,12 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
-import { tokeniseDependencyVersions } from "#commits/tokens/DependencyVersionToken.ts"
 import { tokeniseFencedCodeBlocks } from "#commits/tokens/FencedCodeBlockToken.ts"
-import { tokeniseInlineCodePhrases } from "#commits/tokens/InlineCodeToken.ts"
-import { tokeniseIssueLinks } from "#commits/tokens/IssueLinkToken.ts"
-import { tokeniseRevertMarkers } from "#commits/tokens/RevertMarkerToken.ts"
-import { tokeniseSquashMarkers } from "#commits/tokens/SquashMarkerToken.ts"
 import {
 	type Token,
 	type TokenisedLine,
 	type TokenisedLines,
 	tokenisePlainText,
 } from "#commits/tokens/Token.ts"
+import { tokeniser } from "#commits/tokens/Tokeniser.ts"
 import { tokeniseTrailers } from "#commits/tokens/TrailerToken.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
@@ -55,14 +51,7 @@ function tokeniseSubjectLine(
 	crudeSubjectLine: string,
 	configuration: TokenConfiguration,
 ): TokenisedLine {
-	const initialTokens = tokenisePlainText(crudeSubjectLine)
-
-	return tokeniseDependencyVersions(
-		tokeniseIssueLinks(
-			tokeniseInlineCodePhrases(tokeniseRevertMarkers(tokeniseSquashMarkers(initialTokens))),
-			configuration,
-		),
-	).filter(notEmptyToken)
+	return tokeniser(configuration)(crudeSubjectLine)
 }
 
 function tokeniseBodyLines(

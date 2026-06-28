@@ -1,15 +1,5 @@
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { type Token, tokenOf } from "#commits/tokens/Token.ts"
 
-export type WordToken = {
-	type: "word"
-	value: string
-	range: CharacterRange
-}
-
-export function word(value: string, rangeStart = 0): WordToken {
-	return {
-		type: "word",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function word(value: string, rangeStart = 0): Token {
+	return tokenOf("word", value, rangeStart)
 }

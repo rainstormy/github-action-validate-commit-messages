@@ -1,15 +1,9 @@
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { type Token, tokenOf } from "#commits/tokens/Token.ts"
 
-export type WhitespaceToken = {
-	type: "whitespace"
-	value: string
-	range: CharacterRange
+export function space(rangeStart = 0): Token {
+	return whitespace(" ", rangeStart)
 }
 
-export function whitespace(value: string, rangeStart = 0): WhitespaceToken {
-	return {
-		type: "whitespace",
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function whitespace(value: string, rangeStart = 0): Token {
+	return tokenOf("whitespace", value, rangeStart)
 }
