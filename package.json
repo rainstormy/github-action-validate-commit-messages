@@ -16,7 +16,7 @@
 		"#utilities/*": "./src/utilities/*"
 	},
 	"dependencies": {
-		"valibot": "1.4.1"
+		"valibot": "1.4.2"
 	},
 	"// dependencies": {
 		"valibot": "Valibot provides type-safe data validation."
