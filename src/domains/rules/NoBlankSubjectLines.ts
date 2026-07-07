@@ -36,21 +36,21 @@ function* getCommitConcerns(commit: Commit): Generator<Concern> {
 
 	for (const token of commit.subjectLine) {
 		if (
-			token.type === "dependency-version" ||
-			token.type === "inline-code" ||
+			token.type === "semver" ||
+			token.type === "code" ||
 			token.type === "punctuation" ||
 			token.type === "word"
 		) {
 			return
 		}
-		if (token.type === "revert-marker" && firstTrailingRevertValueToken === null) {
+		if (token.type === "revert" && firstTrailingRevertValueToken === null) {
 			firstTrailingRevertValueToken = previousToken?.type === "whitespace" ? previousToken : token
 		}
 		if (
-			token.type === "issue-link" ||
-			(token.type === "revert-marker" &&
+			token.type === "issuelink" ||
+			(token.type === "revert" &&
 				countOccurrences(token.value, "revert", { caseInsensitive: true }) > 0) ||
-			token.type === "squash-marker"
+			token.type === "squash"
 		) {
 			lastInsignificantToken = token
 		}

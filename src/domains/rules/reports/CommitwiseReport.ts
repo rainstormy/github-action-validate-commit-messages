@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { type TokenisedLines, formatTokenisedLine } from "#commits/tokens/Token.ts"
+import type { Tokens } from "#commits/tokens/Token.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
@@ -7,10 +7,9 @@ import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
-import { normaliseTrailerKey } from "#rules/NoRestrictedTrailers.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatCharacterRange } from "#types/CharacterRange.ts"
-import { ALPHABETICALLY } from "#utilities/Arrays.ts"
+import { ALPHABETICALLY, notEmptyString } from "#utilities/Arrays.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 import { capitalise, formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
 
@@ -133,7 +132,7 @@ function formatBodyLineConcern(
 }
 
 function getBodyLine(
-	bodyLines: TokenisedLines,
+	bodyLines: Array<Tokens>,
 	lineNumber: number,
 	gutterWidth: number,
 	isConcernedLine = false,
@@ -145,7 +144,7 @@ function getBodyLine(
 	}
 
 	const formattedLineNumber = (lineNumber + 1).toString().padStart(gutterWidth - 3, " ")
-	return `${isConcernedLine ? "∙" : " "} ${formattedLineNumber} │ ${formatTokenisedLine(bodyLine)}\n`
+	return `${isConcernedLine ? "∙" : " "} ${formattedLineNumber} │ ${formatTokens(bodyLine)}\n`
 }
 
 function formatUserIdentityConcern(
@@ -168,7 +167,7 @@ function formatUserIdentityConcern(
 }
 
 function getCommitLine(commit: Commit): string {
-	return `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatTokenisedLine(commit.subjectLine)}`
+	return `${commit.sha.slice(0, SHORT_SHA_LENGTH)} ${formatTokens(commit.subjectLine)}`
 }
 
 function getIdentityLine(concern: UserIdentityConcern, commit: Commit): string {
@@ -231,7 +230,8 @@ function getRuleMessage(concern: Concern, configuration: Configuration): RuleMes
 				formatList(
 					"Disallowed trailers:",
 					[...options.restrictedKeys]
-						.map((key) => capitalise(normaliseTrailerKey(key)))
+						.map((key) => capitalise(key.trim().toLowerCase()))
+						.filter(notEmptyString)
 						.toSorted(ALPHABETICALLY),
 					"\n",
 				),
@@ -332,6 +332,10 @@ function getRuleOptions<Key extends RuleKey>(
 		configuration.rules[rule],
 		() => `Concern raised for disabled rule '${rule}'`,
 	)
+}
+
+function formatTokens(tokens: Tokens): string {
+	return tokens.map((token) => token.value).join("")
 }
 
 function formatList(heading: string, items: Array<string>, trailer = ""): string {

@@ -35,7 +35,7 @@ function getLeadingSquashMarkerRange(subjectLine: TokenisedLine): CharacterRange
 	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
 	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
 
-	if (firstSignificantToken?.type !== "squash-marker") {
+	if (firstSignificantToken?.type !== "squash") {
 		return null
 	}
 
@@ -43,11 +43,11 @@ function getLeadingSquashMarkerRange(subjectLine: TokenisedLine): CharacterRange
 	let endIndex = firstSignificantToken.range[1]
 
 	for (const token of subjectLine.slice(firstSignificantTokenIndex + 1)) {
-		if (token.type !== "squash-marker" && token.type !== "whitespace") {
+		if (token.type !== "squash" && token.type !== "whitespace") {
 			break
 		}
 
-		if (token.type === "squash-marker") {
+		if (token.type === "squash") {
 			endIndex = token.range[1]
 		}
 	}

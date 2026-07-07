@@ -43,7 +43,7 @@ function getNormalisedSubjectLine(subjectLine: TokenisedLine): string | null {
 	const significantText: Array<string> = []
 
 	for (const token of subjectLine) {
-		if (token.type === "revert-marker" || token.type === "squash-marker") {
+		if (token.type === "revert" || token.type === "squash") {
 			return null
 		}
 

@@ -59,14 +59,10 @@ function getFirstWord(tokens: TokenisedLine): WordCandidate | null {
 		if (token === undefined) {
 			return null
 		}
-		if (token.type === "revert-marker") {
+		if (token.type === "revert") {
 			return null
 		}
-		if (
-			token.type !== "issue-link" &&
-			token.type !== "squash-marker" &&
-			token.type !== "whitespace"
-		) {
+		if (token.type !== "issuelink" && token.type !== "squash" && token.type !== "whitespace") {
 			return isPlainToken(token) ? getFirstPlainWord(tokens, index) : getFirstWordInToken(token)
 		}
 	}

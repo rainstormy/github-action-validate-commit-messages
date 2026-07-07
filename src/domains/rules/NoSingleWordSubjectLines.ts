@@ -47,12 +47,12 @@ function getWordRanges(tokens: TokenisedLine): Array<CharacterRange> {
 	let activePlainWordIndex: number | null = null
 
 	for (const token of tokens) {
-		if (token.type === "revert-marker" || (token.type === "issue-link" && wordRanges.length > 0)) {
+		if (token.type === "revert" || (token.type === "issuelink" && wordRanges.length > 0)) {
 			return []
 		}
 		if (token.type === "whitespace") {
 			activePlainWordIndex = null
-		} else if (token.type === "dependency-version" || token.type === "inline-code") {
+		} else if (token.type === "semver" || token.type === "code") {
 			activePlainWordIndex = null
 			wordRanges.push(...getSpecialTokenWordRanges(token))
 		} else if (isPlainToken(token)) {

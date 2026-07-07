@@ -37,7 +37,7 @@ function* getCommitConcerns(commit: Commit, maxLength: number): Generator<Concer
 	let overflowEndIndex = 0
 
 	for (const [index, token] of commit.subjectLine.entries()) {
-		if (token.type === "dependency-version" || token.type === "revert-marker") {
+		if (token.type === "semver" || token.type === "revert") {
 			return
 		}
 		if (isCountedToken(commit.subjectLine, token, index)) {
@@ -70,13 +70,13 @@ function isInLeadingSquashPrefix(subjectLine: TokenisedLine, index: number): boo
 	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
 	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
 
-	if (firstSignificantToken?.type !== "squash-marker" || index < firstSignificantTokenIndex) {
+	if (firstSignificantToken?.type !== "squash" || index < firstSignificantTokenIndex) {
 		return false
 	}
 
 	return subjectLine
 		.slice(firstSignificantTokenIndex, index + 1)
-		.every((token) => token.type === "squash-marker" || token.type === "whitespace")
+		.every((token) => token.type === "squash" || token.type === "whitespace")
 }
 
 function isIssueLinkWhitespace(subjectLine: TokenisedLine, index: number): boolean {
@@ -94,6 +94,6 @@ function isIssueLinkWhitespace(subjectLine: TokenisedLine, index: number): boole
 		.find((candidate) => candidate.type !== "whitespace")
 
 	return (
-		previousSignificantToken?.type === "issue-link" || nextSignificantToken?.type === "issue-link"
+		previousSignificantToken?.type === "issuelink" || nextSignificantToken?.type === "issuelink"
 	)
 }

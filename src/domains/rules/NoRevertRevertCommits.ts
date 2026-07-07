@@ -43,19 +43,19 @@ function getRevertRevertMarkerRange(subjectLine: TokenisedLine): CharacterRange 
 	let hasStartedRevertMarker = false
 
 	for (const token of subjectLine) {
-		if (hasStartedRevertMarker && token.type !== "revert-marker" && token.type !== "whitespace") {
+		if (hasStartedRevertMarker && token.type !== "revert" && token.type !== "whitespace") {
 			break
 		}
-		if (hasStartedRevertMarker || token.type === "revert-marker") {
-			if (token.type === "revert-marker" && startIndex === null) {
+		if (hasStartedRevertMarker || token.type === "revert") {
+			if (token.type === "revert" && startIndex === null) {
 				startIndex = token.range[0]
 			}
 
 			occurrences +=
-				token.type === "revert-marker"
+				token.type === "revert"
 					? countOccurrences(token.value, "revert", { caseInsensitive: true })
 					: 0
-			if (token.type === "revert-marker") {
+			if (token.type === "revert") {
 				hasStartedRevertMarker = true
 				endIndex = token.range[1]
 			}

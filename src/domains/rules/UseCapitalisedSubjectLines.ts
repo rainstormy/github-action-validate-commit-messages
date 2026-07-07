@@ -30,7 +30,7 @@ export function* useCapitalisedSubjectLines(
 
 function* getCommitConcerns(commit: Commit): Generator<Concern> {
 	for (const token of commit.subjectLine) {
-		if (token.type === "word" || token.type === "revert-marker") {
+		if (token.type === "word" || token.type === "revert") {
 			if (startsWithLowercaseLetter(token)) {
 				const [startIndex] = trimmedTokenRange(token)
 				yield subjectLineConcern(rule, commit.sha, { range: [startIndex, startIndex + 1] })

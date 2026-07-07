@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
-import { punctuation } from "#commits/tokens/PunctuationToken.ts"
-import type { TokenisedLine, TokenisedLines } from "#commits/tokens/Token.ts"
-import { space, whitespace } from "#commits/tokens/WhitespaceToken.ts"
-import { word } from "#commits/tokens/WordToken.ts"
+import { type Tokens, code, punctuation, space, whitespace, word } from "#commits/tokens/Token.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
@@ -147,12 +144,12 @@ describe("when the commit message is empty", () => {
 
 	it("has an empty subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([])
+		expect(commit.subjectLine).toEqual<Tokens>([])
 	})
 
 	it("has no body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([])
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([])
 	})
 })
 
@@ -161,7 +158,7 @@ describe("when the commit message has a single line", () => {
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("refactor"),
 			space(8),
 			word("the", 9),
@@ -174,7 +171,7 @@ describe("when the commit message has a single line", () => {
 
 	it("has no body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([])
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([])
 	})
 })
 
@@ -183,12 +180,12 @@ describe("when the commit message has 2 blank lines", () => {
 
 	it("has a blank tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([space()])
+		expect(commit.subjectLine).toEqual<Tokens>([space()])
 	})
 
 	it("has 1 blank tokenised body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([[space()]])
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([[space()]])
 	})
 })
 
@@ -197,7 +194,7 @@ describe("when the commit message has a subject line and 1 empty line", () => {
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Fix"),
 			space(3),
 			word("this", 4),
@@ -214,7 +211,7 @@ describe("when the commit message has a subject line and 1 empty line", () => {
 
 	it("has 1 empty body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([[]])
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([[]])
 	})
 })
 
@@ -226,7 +223,7 @@ describe("when the commit message has a subject line and 1 body line", () => {
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Apply"),
 			space(5),
 			word("strawberry", 6),
@@ -247,7 +244,7 @@ describe("when the commit message has a subject line and 1 body line", () => {
 
 	it("has 1 tokenised body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[
 				word("Sweetness"),
 				space(9),
@@ -302,7 +299,7 @@ describe("when the commit message has a subject line, 1 empty line, and 1 body l
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			whitespace("  "),
 			word("added", 2),
 			space(7),
@@ -322,7 +319,7 @@ describe("when the commit message has a subject line, 1 empty line, and 1 body l
 
 	it("has 1 empty body line and 1 tokenised body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[],
 			[
 				word("The"),
@@ -352,16 +349,12 @@ describe("when the commit message has a subject line and 2 body lines", () => {
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
-			word("Upgrade"),
-			space(7),
-			word("dependencies", 8),
-		])
+		expect(commit.subjectLine).toEqual<Tokens>([word("Upgrade"), space(7), word("dependencies", 8)])
 	})
 
 	it("has 2 tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[
 				word("This"),
 				space(4),
@@ -379,11 +372,7 @@ describe("when the commit message has a subject line and 2 body lines", () => {
 			[
 				punctuation("-"),
 				space(1),
-				punctuation("`@", 2),
-				word("types", 4),
-				punctuation("/", 9),
-				word("node", 10),
-				punctuation("`", 14),
+				code("`@types/node`", 2),
 				space(15),
 				word("from", 16),
 				space(20),
@@ -413,7 +402,7 @@ describe("when the commit message has a subject line, 1 empty line, and 3 body l
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Clean"),
 			space(5),
 			word("up", 6),
@@ -428,7 +417,7 @@ describe("when the commit message has a subject line, 1 empty line, and 3 body l
 
 	it("has 1 empty body line and 3 tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[],
 			[
 				word("This"),
@@ -479,7 +468,7 @@ describe("when the commit message has a subject line, 3 body lines, 1 empty line
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Release"),
 			space(7),
 			word("the", 8),
@@ -492,7 +481,7 @@ describe("when the commit message has a subject line, 3 body lines, 1 empty line
 
 	it("has 3 tokenised body lines, 1 empty body line, and 2 more tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[
 				word("It"),
 				space(2),
@@ -565,7 +554,7 @@ describe("when the commit message has a subject line, 2 empty lines, and 1 body 
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Make"),
 			space(4),
 			word("the", 5),
@@ -583,7 +572,7 @@ describe("when the commit message has a subject line, 2 empty lines, and 1 body 
 
 	it("has 2 empty body lines and 1 tokenised body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[],
 			[],
 			[
@@ -610,7 +599,7 @@ describe("when the commit message has a subject line, 1 body line, 1 empty line,
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Do"),
 			space(2),
 			word("some", 3),
@@ -623,7 +612,7 @@ describe("when the commit message has a subject line, 1 body line, 1 empty line,
 
 	it("has 1 tokenised body line, 1 empty body line, 4 tokenised body lines, and 1 trailing empty body line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[
 				word("This"),
 				space(4),
@@ -710,7 +699,7 @@ describe("when the commit message has a subject line, 1 empty line, 2 body lines
 
 	it("has a tokenised subject line", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.subjectLine).toEqual<TokenisedLine>([
+		expect(commit.subjectLine).toEqual<Tokens>([
 			word("Make"),
 			space(4),
 			word("the", 5),
@@ -731,7 +720,7 @@ describe("when the commit message has a subject line, 1 empty line, 2 body lines
 
 	it("has the expected mix of empty and tokenised body lines", () => {
 		const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-		expect(commit.bodyLines).toEqual<TokenisedLines>([
+		expect(commit.bodyLines).toEqual<Array<Tokens>>([
 			[],
 			[
 				word("This"),

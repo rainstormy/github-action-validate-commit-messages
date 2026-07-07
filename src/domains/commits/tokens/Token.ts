@@ -1,149 +1,93 @@
 import type { CharacterRange } from "#types/CharacterRange.ts"
+import type { NonEmptyArray } from "#utilities/Arrays.ts"
 
-export type Token = {
-	type: TokenType
+export type Token<Type extends TokenType = TokenType> = {
+	type: Type
 	value: string
 	range: CharacterRange
 }
 
-export type TokenType = UniversalTokenType | SubjectLineTokenType | BodyLineTokenType
+export type Tokens<Type extends TokenType = TokenType> = Array<Token<Type>>
 
-export type UniversalTokenType = "inline-code" | "punctuation" | "whitespace" | "word"
+export type TokenType =
+	| "code"
+	| "codeblock"
+	| "hyperlink"
+	| "issuelink"
+	| "punctuation"
+	| "revert"
+	| "semver"
+	| "squash"
+	| "trailerkey"
+	| "whitespace"
+	| "word"
 
-export type SubjectLineTokenType =
-	| "dependency-version"
-	| "issue-link"
-	| "revert-marker"
-	| "squash-marker"
-
-export type BodyLineTokenType = "fenced-code-block" | "hyperlink" | "trailer-key" | "trailer-value"
-
-export type TokenisedLine = Array<Token>
-export type TokenisedLines = Array<TokenisedLine>
-
-export function tokenOf(type: TokenType, value: string, rangeStart = 0): Token {
-	return {
-		type,
-		value,
-		range: [rangeStart, rangeStart + value.length],
-	}
+export function code(value: string, rangeStart = 0): Token<"code"> {
+	return tokenOf("code", value, rangeStart)
 }
 
-export function formatTokenisedLine(tokens: TokenisedLine): string {
-	return tokens.map((token) => token.value).join("")
+export function codeblock(value: string, rangeStart = 0): Token<"codeblock"> {
+	return tokenOf("codeblock", value, rangeStart)
 }
 
-export function tokenisePlainText(value: string, rangeStart = 0): TokenisedLine {
-	return [...value.matchAll(plainTextRegex)].map((match) => {
-		const tokenValue = match[0]
-		const tokenRangeStart = rangeStart + match.index
-
-		return tokenValue.trim() === ""
-			? tokenOf("whitespace", tokenValue, tokenRangeStart)
-			: wordRegex.test(tokenValue)
-				? tokenOf("word", tokenValue, tokenRangeStart)
-				: tokenOf("punctuation", tokenValue, tokenRangeStart)
-	})
+export function hyperlink(value: string, rangeStart = 0): Token<"hyperlink"> {
+	return tokenOf("hyperlink", value, rangeStart)
 }
 
-export function tokeniseStructuredText(
-	type: TokenType,
+export function issuelink(value: string, rangeStart = 0): Token<"issuelink"> {
+	return tokenOf("issuelink", value, rangeStart)
+}
+
+export function punctuation(value: string, rangeStart = 0): Token<"punctuation"> {
+	return tokenOf("punctuation", value, rangeStart)
+}
+
+export function revert(value: string, rangeStart = 0): Token<"revert"> {
+	return tokenOf("revert", value, rangeStart)
+}
+
+export function semver(value: string, rangeStart = 0): Token<"semver"> {
+	return tokenOf("semver", value, rangeStart)
+}
+
+export function squash(value: string, rangeStart = 0): Token<"squash"> {
+	return tokenOf("squash", value, rangeStart)
+}
+
+export function trailerkey(value: string, rangeStart = 0): Token<"trailerkey"> {
+	return tokenOf("trailerkey", value, rangeStart)
+}
+
+export function space(rangeStart = 0): Token<"whitespace"> {
+	return whitespace(" ", rangeStart)
+}
+
+export function whitespace(value: string, rangeStart = 0): Token<"whitespace"> {
+	return tokenOf("whitespace", value, rangeStart)
+}
+
+export function word(value: string, rangeStart = 0): Token<"word"> {
+	return tokenOf("word", value, rangeStart)
+}
+
+export function tokenOf<Type extends TokenType>(
+	type: Type,
 	value: string,
 	rangeStart = 0,
-): TokenisedLine {
-	return [...value.matchAll(structuredTextRegex)].map((match) => {
-		const tokenValue = match[0]
-		const tokenRangeStart = rangeStart + match.index
-
-		return tokenValue.trim() === ""
-			? tokenOf("whitespace", tokenValue, tokenRangeStart)
-			: tokenOf(type, tokenValue, tokenRangeStart)
-	})
+): Token<Type> {
+	return { type, value, range: [rangeStart, rangeStart + value.length] }
 }
 
-export function isPlainToken(token: Token): boolean {
-	return token.type === "punctuation" || token.type === "whitespace" || token.type === "word"
+export function isToken<Type extends TokenType>(
+	...desiredTypes: NonEmptyArray<Type>
+): (token: Token) => token is Token<Type> {
+	return (token): token is Token<Type> =>
+		(desiredTypes as NonEmptyArray<TokenType>).includes(token.type)
 }
 
-export function splitPlainTokens(
-	tokens: TokenisedLine,
-	regex: RegExp,
-	onMatch: (value: string, rangeStart: number) => Token | TokenisedLine,
-): TokenisedLine {
-	const result: TokenisedLine = []
-	let plainTokens: TokenisedLine = []
-
-	function flushPlainTokens(): void {
-		if (plainTokens.length === 0) {
-			return
-		}
-
-		result.push(...splitPlainTokenSpan(plainTokens, regex, onMatch))
-		plainTokens = []
-	}
-
-	for (const token of tokens) {
-		if (isPlainToken(token)) {
-			plainTokens.push(token)
-		} else {
-			flushPlainTokens()
-			result.push(token)
-		}
-	}
-
-	flushPlainTokens()
-	return result
-}
-
-export function trimmedTokenRange(token: Token): CharacterRange {
-	const [start, end] = token.range
-	const leadingOffset = token.value.length - token.value.trimStart().length
-	const trailingOffset = token.value.length - token.value.trimEnd().length
-	return [start + leadingOffset, end - trailingOffset]
-}
-
-const plainTextRegex = /\s+|[\p{L}\p{N}]+(?:['-][\p{L}\p{N}]+)*|[^\s\p{L}\p{N}]+/gu
-const structuredTextRegex = /\s+|\S+/gu
-const wordRegex = /^[\p{L}\p{N}]+(?:['-][\p{L}\p{N}]+)*$/u
-
-function splitPlainTokenSpan(
-	tokens: TokenisedLine,
-	regex: RegExp,
-	onMatch: (value: string, rangeStart: number) => Token | TokenisedLine,
-): TokenisedLine {
-	const [firstToken] = tokens
-
-	if (firstToken === undefined) {
-		return []
-	}
-
-	const spanStartIndex = firstToken.range[0]
-	const spanValue = formatTokenisedLine(tokens)
-	const result: TokenisedLine = []
-	let previousEndIndex = 0
-
-	for (const match of spanValue.matchAll(regex)) {
-		const matchValue = match[0]
-		const matchStartIndex = match.index
-
-		if (matchValue !== "") {
-			result.push(
-				...tokenisePlainText(
-					spanValue.slice(previousEndIndex, matchStartIndex),
-					spanStartIndex + previousEndIndex,
-				),
-				...toTokenisedLine(onMatch(matchValue, spanStartIndex + matchStartIndex)),
-			)
-			previousEndIndex = matchStartIndex + matchValue.length
-		}
-	}
-
-	return [
-		...result,
-		...tokenisePlainText(spanValue.slice(previousEndIndex), spanStartIndex + previousEndIndex),
-	]
-}
-
-function toTokenisedLine(tokenOrTokens: Token | TokenisedLine): TokenisedLine {
-	return Array.isArray(tokenOrTokens) ? tokenOrTokens : [tokenOrTokens]
+export function isNotToken<Type extends TokenType>(
+	...undesiredTypes: NonEmptyArray<Type>
+): (token: Token) => token is Token<Exclude<TokenType, Type>> {
+	return (token): token is Token<Exclude<TokenType, Type>> =>
+		!(undesiredTypes as NonEmptyArray<TokenType>).includes(token.type)
 }

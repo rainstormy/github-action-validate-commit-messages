@@ -51,7 +51,7 @@ function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
 		return
 	}
 
-	if (commit.subjectLine.some((token) => token.type === "issue-link")) {
+	if (commit.subjectLine.some((token) => token.type === "issuelink")) {
 		return
 	}
 
@@ -73,7 +73,7 @@ function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
 			: commit.subjectLine
 	const firstSignificantToken = subjectLineAfterPrefix.find((token) => token.type !== "whitespace")
 
-	if (firstSignificantToken?.type === "issue-link") {
+	if (firstSignificantToken?.type === "issuelink") {
 		return
 	}
 
@@ -90,7 +90,7 @@ function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
 
 	const lastSignificantToken = commit.subjectLine.findLast((token) => token.type !== "whitespace")
 
-	if (lastSignificantToken?.type === "issue-link") {
+	if (lastSignificantToken?.type === "issuelink") {
 		return
 	}
 
@@ -99,23 +99,21 @@ function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
 }
 
 function hasIgnoredToken(subjectLine: TokenisedLine): boolean {
-	return subjectLine.some(
-		(token) => token.type === "dependency-version" || token.type === "revert-marker",
-	)
+	return subjectLine.some((token) => token.type === "semver" || token.type === "revert")
 }
 
 function getSquashPrefixEndIndex(subjectLine: TokenisedLine): number | null {
 	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
 	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
 
-	if (firstSignificantToken?.type !== "squash-marker") {
+	if (firstSignificantToken?.type !== "squash") {
 		return null
 	}
 
 	let endIndex = firstSignificantToken.range[1]
 
 	for (const token of subjectLine.slice(firstSignificantTokenIndex + 1)) {
-		if (token.type !== "squash-marker" && token.type !== "whitespace") {
+		if (token.type !== "squash" && token.type !== "whitespace") {
 			break
 		}
 
