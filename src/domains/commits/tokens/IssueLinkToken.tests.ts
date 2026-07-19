@@ -11,7 +11,6 @@ import {
 	whitespace,
 	word,
 } from "#commits/tokens/Token.ts"
-import { issueLinkPattern, tokeniseSubjectLine } from "#commits/tokens/Tokenise.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
@@ -56,7 +55,9 @@ describe.each`
 	(props: { subjectLine: string; expectedTokens: Tokens }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("extracts issue link tokens", () => {
+		it("extracts issuelink tokens", () => {
+			expect(props.expectedTokens).toContainToken("issuelink")
+
 			const commit = mapCrudeCommitToCommit(crudeCommit, githubStyle)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
@@ -86,13 +87,9 @@ describe.each`
 	(props: { subjectLine: string }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("leaves the subject line unchanged", () => {
+		it("does not extract any issuelink tokens", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, githubStyle)
-			expect(commit.subjectLine).toEqual(
-				tokeniseSubjectLine(props.subjectLine, {
-					issueLink: issueLinkPattern(githubStyle),
-				}),
-			)
+			expect(commit.subjectLine).not.toContainToken("issuelink")
 		})
 	},
 )
@@ -120,6 +117,8 @@ describe.each`
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
 		it("extracts issue link tokens", () => {
+			expect(props.expectedTokens).toContainToken("issuelink")
+
 			const commit = mapCrudeCommitToCommit(crudeCommit, jiraStyle)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
@@ -143,13 +142,9 @@ describe.each`
 	(props: { subjectLine: string }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("leaves the subject line unchanged", () => {
+		it("does not extract any issuelink tokens", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, jiraStyle)
-			expect(commit.subjectLine).toEqual(
-				tokeniseSubjectLine(props.subjectLine, {
-					issueLink: issueLinkPattern(jiraStyle),
-				}),
-			)
+			expect(commit.subjectLine).not.toContainToken("issuelink")
 		})
 	},
 )
@@ -170,13 +165,9 @@ describe.each`
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
 		describe("and issue link tokenisation is disabled", () => {
-			it("leaves the subject line unchanged", () => {
+			it("does not extract any issuelink tokens", () => {
 				const commit = mapCrudeCommitToCommit(crudeCommit, none)
-				expect(commit.subjectLine).toEqual(
-					tokeniseSubjectLine(props.subjectLine, {
-						issueLink: issueLinkPattern(none),
-					}),
-				)
+				expect(commit.subjectLine).not.toContainToken("issuelink")
 			})
 		})
 	},

@@ -11,7 +11,6 @@ import {
 	squash,
 	word,
 } from "#commits/tokens/Token.ts"
-import { issueLinkPattern, tokeniseSubjectLine } from "#commits/tokens/Tokenise.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 
 const configuration = fakeTokenConfiguration()
@@ -33,11 +32,13 @@ describe.each`
 	${"fixup! Bump @typescript-eslint/parser from 5.52.0 to 5.59.1"} | ${[squash("fixup!"), space(6), word("Bump", 7), space(11), punctuation("@", 12), word("typescript-eslint", 13), punctuation("/", 30), word("parser", 31), space(37), word("from", 38), space(42), semver("5.52.0", 43), space(49), word("to", 50), space(52), semver("5.59.1", 53)]}
 	${"amend! Upgrade React to 19.2.0 (#52)"}                        | ${[squash("amend!"), space(6), word("Upgrade", 7), space(14), word("React", 15), space(20), word("to", 21), space(23), semver("19.2.0", 24), space(30), issuelink("(#52)", 31)]}
 `(
-	"when the subject line of $subjectLine contains dependency versions",
+	"when the subject line of $subjectLine contains semantic dependency versions",
 	(props: { subjectLine: string; expectedTokens: Tokens }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("extracts dependency version tokens", () => {
+		it("extracts semver tokens", () => {
+			expect(props.expectedTokens).toContainToken("semver")
+
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
@@ -57,17 +58,13 @@ describe.each`
 	${"badf00d not found"}
 	${" Codename 0ff1ce"}
 `(
-	"when the subject line of $subjectLine does not contain any dependency versions",
+	"when the subject line of $subjectLine does not contain any semantic dependency versions",
 	(props: { subjectLine: string }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("leaves the subject line unchanged", () => {
+		it("does not extract any semver tokens", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual(
-				tokeniseSubjectLine(props.subjectLine, {
-					issueLink: issueLinkPattern(configuration),
-				}),
-			)
+			expect(commit.subjectLine).not.toContainToken("semver")
 		})
 	},
 )

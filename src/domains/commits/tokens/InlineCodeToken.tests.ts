@@ -12,7 +12,6 @@ import {
 	squash,
 	word,
 } from "#commits/tokens/Token.ts"
-import { issueLinkPattern, tokeniseSubjectLine } from "#commits/tokens/Tokenise.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 
 const configuration = fakeTokenConfiguration()
@@ -36,7 +35,9 @@ describe.each`
 	(props: { subjectLine: string; expectedTokens: Tokens }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("extracts inline code tokens", () => {
+		it("extracts code tokens", () => {
+			expect(props.expectedTokens).toContainToken("code")
+
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
@@ -52,13 +53,15 @@ describe.each`
 	${"squash! `fixup!` is the correct syntax"}                | ${[squash("squash!"), space(7), code("`fixup!`", 8), space(16), word("is", 17), space(19), word("the", 20), space(23), word("correct", 24), space(31), word("syntax", 32)]}
 	${"#440: Codename `GH-32`"}                                | ${[issuelink("#440:"), space(5), word("Codename", 6), space(14), code("`GH-32`", 15)]}
 	${"this looks related to `#92`"}                           | ${[word("this"), space(4), word("looks", 5), space(10), word("related", 11), space(18), word("to", 19), space(21), code("`#92`", 22)]}
-	${'Revert "`Revert` "the malfunctioning coffee machine""'} | ${[revert("Revert"), space(6), punctuation('"', 7), code("`Revert`", 8), space(16), punctuation('"', 17), word("the", 18), space(21), word("malfunctioning", 22), space(36), word("coffee", 37), space(43), word("machine", 44), punctuation('"', 51), punctuation('"', 52)]}
+	${'Revert "`Revert` "the malfunctioning coffee machine""'} | ${[revert("Revert"), space(6), punctuation('"', 7), code("`Revert`", 8), space(16), punctuation('"', 17), word("the", 18), space(21), word("malfunctioning", 22), space(36), word("coffee", 37), space(43), word("machine", 44), punctuation('""', 51)]}
 `(
 	"when the subject line of $subjectLine contains inline code phrases that resemble other kinds of tokens",
 	(props: { subjectLine: string; expectedTokens: Tokens }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("extracts inline code tokens", () => {
+		it("extracts code tokens", () => {
+			expect(props.expectedTokens).toContainToken("code")
+
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
@@ -77,13 +80,9 @@ describe.each`
 	(props: { subjectLine: string }) => {
 		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
 
-		it("leaves the subject line unchanged", () => {
+		it("does not extract any code tokens", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
-			expect(commit.subjectLine).toEqual(
-				tokeniseSubjectLine(props.subjectLine, {
-					issueLink: issueLinkPattern(configuration),
-				}),
-			)
+			expect(commit.subjectLine).not.toContainToken("code")
 		})
 	},
 )

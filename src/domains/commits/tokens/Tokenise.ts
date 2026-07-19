@@ -8,18 +8,26 @@ import { regexEnum, regexUnion } from "#utilities/Regexes.ts"
 // language=jsunicoderegexp
 const CODE = `(?<code>\`[^\`]*\`)`
 
+/**
+ * Matches a single punctuation or symbol character, thus avoiding greedily matching inline code phrases and issue link prefixes adjacent to other punctuation.
+ * The tokeniser consolidates consecutive punctuation tokens into a single token.
+ */
 // language=jsunicoderegexp
 const PUNCTUATION = String.raw`(?<punctuation>[\p{P}\p{S}])`
 
-// language=jsunicoderegexp
-const REVERT = String.raw`(?<revert>(?i:revert))(?=\s+")`
-
 /**
- * Matches a leading squash marker with leading or trailing exclamation marks, optionally preceded by whitespace.
- * There is at most one squash marker per line. Subsequent squash markers are treated as regular words.
+ * Matches a revert marker literal, following by optional whitespace and a double quote character.
+ * The tokeniser ensures that revert tokens only appear at the start of the subject line.
  */
 // language=jsunicoderegexp
-const SQUASH = String.raw`(?<=^\s*)(?<squash>(?i:amend!+|fixup!+|squash!+|!amend\b|!fixup\b|!squash\b))`
+const REVERT = String.raw`(?<revert>(?i:revert))(?=\s*")`
+
+/**
+ * Matches a squash marker literal with one or more leading or trailing exclamation marks, optionally preceded by whitespace.
+ * The tokeniser ensures that squash tokens only appear at the start of the subject line.
+ */
+// language=jsunicoderegexp
+const SQUASH = String.raw`(?<squash>(?i:amend!+|fixup!+|squash!+|!+amend\b|!+fixup\b|!+squash\b))`
 
 /**
  * Matches a dependency version string in one of the following formats:
@@ -159,15 +167,65 @@ function tokenise(rawText: string, regex: RegExp): Tokens {
 
 	const tokens: Tokens = []
 
+	// Some token types are only valid in certain contexts.
+	// To keep things simple, the regex patterns match broadly and then the tokeniser keeps track of the context and corrects the token type accordingly.
+	let revertEnabled = true
+	let squashEnabled = true
+
 	for (const segment of segments) {
 		const groups = (segment.groups ?? {}) as Partial<Record<TokenType, string | undefined>>
-		const group = Object.entries(groups).find(([, value]) => value !== undefined)
+		const group = Object.entries(groups).find(([, value]) => value !== undefined) ?? null
 
-		if (group !== undefined) {
-			const [tokenType, value] = group
-			tokens.push(tokenOf(tokenType as TokenType, value as string, segment.index))
+		if (group === null) {
+			continue
+		}
+
+		const [tokenType, tokenValue] = group
+		const type = tokenType as TokenType
+		const value = tokenValue as string
+
+		revertEnabled &&=
+			type === "revert" ||
+			type === "squash" ||
+			type === "whitespace" ||
+			(type === "punctuation" && value === '"' && tokens.length > 0)
+
+		squashEnabled &&= type === "squash" || type === "whitespace"
+
+		const lastToken = tokens.at(-1)
+
+		if (type === "revert" && !revertEnabled) {
+			tokens.push(tokenOf("word", value, segment.index))
+		} else if (type === "squash" && !squashEnabled) {
+			tokens.push(...splitSquashTokens(value, segment.index))
+		} else if (type === "punctuation" && lastToken?.type === "punctuation") {
+			// Append to the existing punctuation token.
+			lastToken.value += value
+			lastToken.range[1] += 1
+		} else {
+			tokens.push(tokenOf(type, value, segment.index))
 		}
 	}
 
 	return tokens
+}
+
+function splitSquashTokens(value: string, index: number): Tokens {
+	if (value.startsWith("!")) {
+		const exclamationCount = value.lastIndexOf("!")
+		const exclamationMarks = value.slice(0, exclamationCount + 1)
+
+		return [
+			tokenOf("punctuation", exclamationMarks, index),
+			tokenOf("word", value.slice(exclamationCount + 1), index + exclamationCount + 1),
+		]
+	}
+
+	const exclamationStart = value.indexOf("!")
+	const exclamationMarks = value.slice(exclamationStart)
+
+	return [
+		tokenOf("word", value.slice(0, exclamationStart), index),
+		tokenOf("punctuation", exclamationMarks, index + exclamationStart),
+	]
 }
