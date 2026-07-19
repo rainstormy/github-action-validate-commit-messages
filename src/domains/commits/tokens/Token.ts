@@ -91,3 +91,7 @@ export function isNotToken<Type extends TokenType>(
 	return (token): token is Token<Exclude<TokenType, Type>> =>
 		!(undesiredTypes as NonEmptyArray<TokenType>).includes(token.type)
 }
+
+export function tokenRangeEnd(tokens: Tokens): number {
+	return tokens.at(-1)?.range[1] ?? 0
+}

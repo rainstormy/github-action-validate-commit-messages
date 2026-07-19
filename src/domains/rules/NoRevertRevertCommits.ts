@@ -1,11 +1,10 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isToken } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { rangeBetween } from "#types/CharacterRange.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { countOccurrences } from "#utilities/Strings.ts"
 
 const rule = "noRevertRevertCommits" satisfies RuleKey
 
@@ -24,43 +23,13 @@ export function* noRevertRevertCommits(
 	}
 
 	for (const commit of commits) {
-		yield* getCommitConcerns(commit)
-	}
-}
+		const firstRevertToken = commit.subjectLine.find(isToken("revert"))
+		const lastRevertToken = commit.subjectLine.findLast(isToken("revert"))
 
-function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	const revertMarkerRange = getRevertRevertMarkerRange(commit.subjectLine)
-
-	if (revertMarkerRange !== null) {
-		yield subjectLineConcern(rule, commit.sha, { range: revertMarkerRange })
-	}
-}
-
-function getRevertRevertMarkerRange(subjectLine: TokenisedLine): CharacterRange | null {
-	let occurrences = 0
-	let startIndex: number | null = null
-	let endIndex = 0
-	let hasStartedRevertMarker = false
-
-	for (const token of subjectLine) {
-		if (hasStartedRevertMarker && token.type !== "revert" && token.type !== "whitespace") {
-			break
-		}
-		if (hasStartedRevertMarker || token.type === "revert") {
-			if (token.type === "revert" && startIndex === null) {
-				startIndex = token.range[0]
-			}
-
-			occurrences +=
-				token.type === "revert"
-					? countOccurrences(token.value, "revert", { caseInsensitive: true })
-					: 0
-			if (token.type === "revert") {
-				hasStartedRevertMarker = true
-				endIndex = token.range[1]
-			}
+		if (firstRevertToken && lastRevertToken && firstRevertToken !== lastRevertToken) {
+			yield subjectLineConcern(rule, commit.sha, {
+				range: rangeBetween(firstRevertToken.range, lastRevertToken.range),
+			})
 		}
 	}
-
-	return occurrences > 1 && startIndex !== null ? [startIndex, endIndex] : null
 }

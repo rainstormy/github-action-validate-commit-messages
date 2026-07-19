@@ -1,5 +1,5 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { type Token, isToken } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -24,22 +24,11 @@ export function* useCapitalisedSubjectLines(
 	}
 
 	for (const commit of commits) {
-		yield* getCommitConcerns(commit)
-	}
-}
+		const firstToken = commit.subjectLine.find(isToken("punctuation", "revert", "word"))
 
-function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	for (const token of commit.subjectLine) {
-		if (token.type === "word" || token.type === "revert") {
-			if (startsWithLowercaseLetter(token)) {
-				const [startIndex] = trimmedTokenRange(token)
-				yield subjectLineConcern(rule, commit.sha, { range: [startIndex, startIndex + 1] })
-			}
-
-			return
-		}
-		if (token.type === "punctuation") {
-			return
+		if (firstToken && startsWithLowercaseLetter(firstToken)) {
+			const rangeStart = firstToken.range[0]
+			yield subjectLineConcern(rule, commit.sha, { range: [rangeStart, rangeStart + 1] })
 		}
 	}
 }

@@ -19,10 +19,16 @@ describe.each`
 	subjectLine | expectedRange
 	${""}       | ${[0, 1]}
 	${" "}      | ${[0, 1]}
-	${"     "}  | ${[0, 1]}
-	${"\t\t"}   | ${[0, 1]}
+	${"     "}  | ${[0, 5]}
+	${"\t\t"}   | ${[0, 2]}
+	${"_"}      | ${[0, 1]}
+	${"-"}      | ${[0, 1]}
+	${"'"}      | ${[0, 1]}
+	${"??"}     | ${[0, 2]}
+	${"..."}    | ${[0, 3]}
+	${"``"}     | ${[0, 2]}
 `(
-	"when the subject line of $subjectLine is blank",
+	"when the subject line of $subjectLine only contains whitespace or punctuation characters",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
@@ -49,17 +55,17 @@ describe.each`
 describe.each`
 	subjectLine                                  | expectedRange
 	${"#1"}                                      | ${[2, 3]}
-	${"(GH-17)  "}                               | ${[7, 8]}
+	${"(GH-17)  "}                               | ${[7, 9]}
 	${"#2 #3 (GL-1)"}                            | ${[12, 13]}
 	${"fixup!"}                                  | ${[6, 7]}
-	${"squash!  "}                               | ${[7, 8]}
+	${"squash!  "}                               | ${[7, 9]}
 	${"  amend!"}                                | ${[8, 9]}
-	${'Revert ""'}                               | ${[8, 9]}
-	${'Revert "Revert """'}                      | ${[16, 17]}
+	${'Revert ""'}                               | ${[6, 9]}
+	${'Revert "Revert """'}                      | ${[14, 18]}
 	${"fixup! fixup! "}                          | ${[13, 14]}
-	${" squash! "}                               | ${[8, 9]}
-	${'amend! Revert " "'}                       | ${[15, 16]}
-	${'squash!fixup! revert " revert " GH-67 "'} | ${[37, 38]}
+	${" squash!  "}                              | ${[8, 10]}
+	${'amend! Revert " "'}                       | ${[13, 17]}
+	${'squash!fixup! revert " revert " GH-67 "'} | ${[37, 39]}
 `(
 	"when the subject line of $subjectLine starts with insignificant tokens and is blank otherwise",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
@@ -87,12 +93,9 @@ describe.each`
 
 describe.each`
 	subjectLine
-	${"."}
-	${"-"}
-	${"'"}
-	${"``"}
 	${"test"}
 	${"bugfix "}
+	${"`1`"}
 	${"init project"}
 	${"Add a search feature for the recipe database"}
 	${" Fix authentication bug in login flow"}
@@ -136,7 +139,7 @@ describe("when verifying a set of multiple commits and some commits have blank s
 		it("raises concerns about the commits with blank subject lines", () => {
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(rule, commits[0].sha, { range: [0, 1] }),
-				subjectLineConcern(rule, commits[1].sha, { range: [3, 4] }),
+				subjectLineConcern(rule, commits[1].sha, { range: [3, 5] }),
 				subjectLineConcern(rule, commits[4].sha, { range: [0, 1] }),
 			])
 		})

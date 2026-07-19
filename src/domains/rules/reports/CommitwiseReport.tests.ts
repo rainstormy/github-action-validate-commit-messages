@@ -47,7 +47,7 @@ describe("when 'noBlankSubjectLines' has a concern about characters 0-1 of the s
 	})
 })
 
-describe("when 'noBlankSubjectLines' has a concern about characters 15-16 of the subject line", () => {
+describe("when 'noBlankSubjectLines' has a concern about characters 13-17 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -55,16 +55,16 @@ describe("when 'noBlankSubjectLines' has a concern about characters 15-16 of the
 		sha: "2ba57d6e3490324db1bacf22ae288481357ef5c",
 		message: 'amend! Revert " "',
 	})
-	const concern = subjectLineConcern("noBlankSubjectLines", commit.sha, { range: [15, 16] })
+	const concern = subjectLineConcern("noBlankSubjectLines", commit.sha, { range: [13, 17] })
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
 2ba57d6 amend! Revert " "
-                       ┬
-                       ╰─ Subject lines must contain at least one non-whitespace character.
-                          (noBlankSubjectLines)
+                     ─┬──
+                      ╰─ Subject lines must contain at least one non-whitespace character.
+                         (noBlankSubjectLines)
 `.trim(),
 		)
 	})
@@ -255,7 +255,7 @@ describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Co
 		message:
 			"Wire the release breadcrumb trail\n\nReviewed-By: April O'Neil <april.oneil@fastforward.com>\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>\nSigned-Off-By: Hamato Yoshi <hamato@nycsewers.com>\nRefs: #123",
 	})
-	const concern = bodyLineConcern("noRestrictedTrailers", commit.sha, { line: 2, range: [0, 15] })
+	const concern = bodyLineConcern("noRestrictedTrailers", commit.sha, { line: 2, range: [0, 14] })
 
 	it("describes the rule violation in the body line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
@@ -265,13 +265,13 @@ a04ada4 Wire the release breadcrumb trail
     ╭──
   2 │ Reviewed-By: April O'Neil <april.oneil@fastforward.com>
 ∙ 3 │ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>
-    · ───────┬───────
-    ·        ╰─ Message bodies must not contain disallowed trailers.
-    ·           (noRestrictedTrailers)
-    ·           
-    ·           Disallowed trailers:
-    ·             ∙ Co-authored-by
-    ·           
+    · ──────┬───────
+    ·       ╰─ Message bodies must not contain disallowed trailers.
+    ·          (noRestrictedTrailers)
+    ·          
+    ·          Disallowed trailers:
+    ·            ∙ Co-authored-by
+    ·          
   4 │ Signed-Off-By: Hamato Yoshi <hamato@nycsewers.com>
     ╰──
 `.trim(),
@@ -294,7 +294,7 @@ describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Re
 		message:
 			"one link and two notes\nwith overpowered statements\nno one can beat us now hahaha\n\n  change-id: deadbeef\n  signed-off-by: baxter.stockman <baxter.stockman@fastforward.com>\n  refs: #668182",
 	})
-	const concern = bodyLineConcern("noRestrictedTrailers", commit.sha, { line: 5, range: [2, 7] })
+	const concern = bodyLineConcern("noRestrictedTrailers", commit.sha, { line: 5, range: [2, 6] })
 
 	it("describes the rule violation in the body line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
@@ -304,22 +304,22 @@ describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Re
     ╭──
   5 │   signed-off-by: baxter.stockman <baxter.stockman@fastforward.com>
 ∙ 6 │   refs: #668182
-    ·   ──┬──
-    ·     ╰─ Message bodies must not contain disallowed trailers.
-    ·        (noRestrictedTrailers)
-    ·        
-    ·        Disallowed trailers:
-    ·          ∙ Co-authored-by
-    ·          ∙ Refs
-    ·          ∙ Reviewed-by
-    ·          ∙ Signed-off-by
+    ·   ─┬──
+    ·    ╰─ Message bodies must not contain disallowed trailers.
+    ·       (noRestrictedTrailers)
+    ·       
+    ·       Disallowed trailers:
+    ·         ∙ Co-authored-by
+    ·         ∙ Refs
+    ·         ∙ Reviewed-by
+    ·         ∙ Signed-off-by
     ╰──
 `.trim(),
 		)
 	})
 })
 
-describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of the subject line", () => {
+describe("when 'noRevertRevertCommits' has a concern about characters 0-14 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -327,22 +327,22 @@ describe("when 'noRevertRevertCommits' has a concern about characters 0-16 of th
 		sha: "d4e7a978cea34b727ea52f90c928fd535e4aee",
 		message: 'Revert "Revert "Make the program act like a clown""',
 	})
-	const concern = subjectLineConcern("noRevertRevertCommits", commit.sha, { range: [0, 16] })
+	const concern = subjectLineConcern("noRevertRevertCommits", commit.sha, { range: [0, 14] })
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
 d4e7a97 Revert "Revert "Make the program act like a clown""
-        ───────┬────────
-               ╰─ Cherry-pick the original commit instead of reverting it over.
-                  (noRevertRevertCommits)
+        ──────┬───────
+              ╰─ Cherry-pick the original commit instead of reverting it over.
+                 (noRevertRevertCommits)
 `.trim(),
 		)
 	})
 })
 
-describe("when 'noRevertRevertCommits' has a concern about characters 1-26 of the subject line", () => {
+describe("when 'noRevertRevertCommits' has a concern about characters 1-24 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -350,16 +350,16 @@ describe("when 'noRevertRevertCommits' has a concern about characters 1-26 of th
 		sha: "34aa41b818c40682cabeecd5623dfe51df7a4a5",
 		message: ' revert "revert  "revert "repair the soft ice machine """',
 	})
-	const concern = subjectLineConcern("noRevertRevertCommits", commit.sha, { range: [1, 26] })
+	const concern = subjectLineConcern("noRevertRevertCommits", commit.sha, { range: [1, 24] })
 
 	it("describes the rule violation in the subject line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
 		expect(actualOutput).toBe(
 			`
 34aa41b  revert "revert  "revert "repair the soft ice machine """
-         ────────────┬────────────
-                     ╰─ Cherry-pick the original commit instead of reverting it over.
-                        (noRevertRevertCommits)
+         ───────────┬───────────
+                    ╰─ Cherry-pick the original commit instead of reverting it over.
+                       (noRevertRevertCommits)
 `.trim(),
 		)
 	})
@@ -452,52 +452,6 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14 of the subj
          ──────┬──────
                ╰─ Combine squash commits with their ancestors.
                   (noSquashMarkers)
-`.trim(),
-		)
-	})
-})
-
-describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1 of the subject line", () => {
-	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration.tokens)
-
-	const commit = fakeCommit({
-		sha: "497de39943643a56f7a69d3d19723e3035318644",
-		message: "release the robot butler",
-	})
-	const concern = subjectLineConcern("useCapitalisedSubjectLines", commit.sha, { range: [0, 1] })
-
-	it("describes the rule violation in the subject line", () => {
-		const actualOutput = commitwiseReport([concern], [commit], configuration)
-		expect(actualOutput).toBe(
-			`
-497de39 release the robot butler
-        ┬
-        ╰─ The first letter in subject lines must be in uppercase.
-           (useCapitalisedSubjectLines)
-`.trim(),
-		)
-	})
-})
-
-describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 of the subject line", () => {
-	const configuration = fakeConfiguration()
-	const fakeCommit = fakeCommitFactory(configuration.tokens)
-
-	const commit = fakeCommit({
-		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
-		message: "fixup! resolve a bug that thought it was a feature",
-	})
-	const concern = subjectLineConcern("useCapitalisedSubjectLines", commit.sha, { range: [7, 8] })
-
-	it("describes the rule violation in the subject line", () => {
-		const actualOutput = commitwiseReport([concern], [commit], configuration)
-		expect(actualOutput).toBe(
-			`
-92d6b11 fixup! resolve a bug that thought it was a feature
-               ┬
-               ╰─ The first letter in subject lines must be in uppercase.
-                  (useCapitalisedSubjectLines)
 `.trim(),
 		)
 	})
@@ -647,6 +601,52 @@ e4236bf I’m not lazy, I’m on energy-saving mode
                  Accepted patterns:
                    ∙ ${String.raw`\p{Lu}.*\s.+`}
                    ∙ ${String.raw`dependabot\[bot\]`}
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "497de39943643a56f7a69d3d19723e3035318644",
+		message: "release the robot butler",
+	})
+	const concern = subjectLineConcern("useCapitalisedSubjectLines", commit.sha, { range: [0, 1] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+497de39 release the robot butler
+        ┬
+        ╰─ The first letter in subject lines must be in uppercase.
+           (useCapitalisedSubjectLines)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "92d6b11650c6b63d64fd77522241b7f50ff5b",
+		message: "fixup! resolve a bug that thought it was a feature",
+	})
+	const concern = subjectLineConcern("useCapitalisedSubjectLines", commit.sha, { range: [7, 8] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+92d6b11 fixup! resolve a bug that thought it was a feature
+               ┬
+               ╰─ The first letter in subject lines must be in uppercase.
+                  (useCapitalisedSubjectLines)
 `.trim(),
 		)
 	})

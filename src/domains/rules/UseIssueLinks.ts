@@ -1,5 +1,5 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isNotToken, isToken, tokenRangeEnd } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -24,101 +24,51 @@ export function* useIssueLinks(
 		return
 	}
 
-	switch (options.position) {
-		case "anywhere": {
-			for (const commit of commits) {
-				yield* getCommitConcernsAnywhere(commit)
+	if (options.position === "anywhere") {
+		for (const commit of commits) {
+			if (
+				commit.isMergeCommit ||
+				commit.subjectLine.some(isToken("issuelink", "revert", "semver"))
+			) {
+				continue
 			}
-			break
+
+			const firstToken = commit.subjectLine.find(isNotToken("squash", "whitespace"))
+			const firstStart = firstToken?.range[0] ?? tokenRangeEnd(commit.subjectLine)
+
+			yield subjectLineConcern(rule, commit.sha, { range: [firstStart, firstStart + 1] })
 		}
-		case "prefix": {
-			for (const commit of commits) {
-				yield* getCommitConcernsPrefix(commit)
+
+		return
+	}
+
+	if (options.position === "prefix") {
+		for (const commit of commits) {
+			if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver"))) {
+				continue
 			}
-			break
-		}
-		case "suffix": {
-			for (const commit of commits) {
-				yield* getCommitConcernsSuffix(commit)
+
+			const firstToken = commit.subjectLine.find(isNotToken("squash", "whitespace"))
+
+			if (firstToken?.type !== "issuelink") {
+				const firstStart = firstToken?.range[0] ?? tokenRangeEnd(commit.subjectLine)
+				yield subjectLineConcern(rule, commit.sha, { range: [firstStart, firstStart + 1] })
 			}
-			break
-		}
-	}
-}
-
-function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit || hasIgnoredToken(commit.subjectLine)) {
-		return
-	}
-
-	if (commit.subjectLine.some((token) => token.type === "issuelink")) {
-		return
-	}
-
-	const firstSignificantIndex = getSquashPrefixEndIndex(commit.subjectLine) ?? 0
-	yield subjectLineConcern(rule, commit.sha, {
-		range: [firstSignificantIndex, firstSignificantIndex + 1],
-	})
-}
-
-function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit || hasIgnoredToken(commit.subjectLine)) {
-		return
-	}
-
-	const squashPrefixEndIndex = getSquashPrefixEndIndex(commit.subjectLine)
-	const subjectLineAfterPrefix =
-		squashPrefixEndIndex !== null
-			? commit.subjectLine.filter((token) => token.range[0] >= squashPrefixEndIndex)
-			: commit.subjectLine
-	const firstSignificantToken = subjectLineAfterPrefix.find((token) => token.type !== "whitespace")
-
-	if (firstSignificantToken?.type === "issuelink") {
-		return
-	}
-
-	const firstSignificantIndex = squashPrefixEndIndex ?? 0
-	yield subjectLineConcern(rule, commit.sha, {
-		range: [firstSignificantIndex, firstSignificantIndex + 1],
-	})
-}
-
-function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit || hasIgnoredToken(commit.subjectLine)) {
-		return
-	}
-
-	const lastSignificantToken = commit.subjectLine.findLast((token) => token.type !== "whitespace")
-
-	if (lastSignificantToken?.type === "issuelink") {
-		return
-	}
-
-	const lastIndex = commit.subjectLine.at(-1)?.range[1] ?? 0
-	yield subjectLineConcern(rule, commit.sha, { range: [lastIndex, lastIndex + 1] })
-}
-
-function hasIgnoredToken(subjectLine: TokenisedLine): boolean {
-	return subjectLine.some((token) => token.type === "semver" || token.type === "revert")
-}
-
-function getSquashPrefixEndIndex(subjectLine: TokenisedLine): number | null {
-	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
-	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
-
-	if (firstSignificantToken?.type !== "squash") {
-		return null
-	}
-
-	let endIndex = firstSignificantToken.range[1]
-
-	for (const token of subjectLine.slice(firstSignificantTokenIndex + 1)) {
-		if (token.type !== "squash" && token.type !== "whitespace") {
-			break
 		}
 
-		endIndex = token.range[1]
+		return
 	}
 
-	return endIndex
+	for (const commit of commits) {
+		if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver"))) {
+			continue
+		}
+
+		const lastToken = commit.subjectLine.findLast(isNotToken("whitespace"))
+
+		if (lastToken?.type !== "issuelink") {
+			const lastEnd = tokenRangeEnd(commit.subjectLine)
+			yield subjectLineConcern(rule, commit.sha, { range: [lastEnd, lastEnd + 1] })
+		}
+	}
 }

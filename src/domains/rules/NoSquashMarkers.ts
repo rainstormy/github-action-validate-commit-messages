@@ -1,9 +1,9 @@
 import type { Commits } from "#commits/Commit.ts"
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import { isToken } from "#commits/tokens/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import type { CharacterRange } from "#types/CharacterRange.ts"
+import { rangeBetween } from "#types/CharacterRange.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
 const rule = "noSquashMarkers" satisfies RuleKey
@@ -23,34 +23,14 @@ export function* noSquashMarkers(
 	}
 
 	for (const commit of commits) {
-		const range = getLeadingSquashMarkerRange(commit.subjectLine)
+		const firstSquashToken = commit.subjectLine.find(isToken("squash"))
 
-		if (range !== null) {
-			yield subjectLineConcern(rule, commit.sha, { range })
+		if (firstSquashToken) {
+			const lastSquashToken = commit.subjectLine.findLast(isToken("squash")) ?? firstSquashToken
+
+			yield subjectLineConcern(rule, commit.sha, {
+				range: rangeBetween(firstSquashToken.range, lastSquashToken.range),
+			})
 		}
 	}
-}
-
-function getLeadingSquashMarkerRange(subjectLine: TokenisedLine): CharacterRange | null {
-	const firstSignificantTokenIndex = subjectLine.findIndex((token) => token.type !== "whitespace")
-	const firstSignificantToken = subjectLine[firstSignificantTokenIndex]
-
-	if (firstSignificantToken?.type !== "squash") {
-		return null
-	}
-
-	const startIndex = firstSignificantToken.range[0]
-	let endIndex = firstSignificantToken.range[1]
-
-	for (const token of subjectLine.slice(firstSignificantTokenIndex + 1)) {
-		if (token.type !== "squash" && token.type !== "whitespace") {
-			break
-		}
-
-		if (token.type === "squash") {
-			endIndex = token.range[1]
-		}
-	}
-
-	return [startIndex, endIndex]
 }

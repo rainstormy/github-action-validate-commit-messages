@@ -129,10 +129,10 @@ describe.each`
 )
 
 describe.each`
-	subjectLine                                                                                 | expectedRange20 | expectedRange50
-	${"Fixed a bug, but have probably introduced another one #510"}                             | ${[20, 53]}     | ${[50, 53]}
-	${"fixup! forgot to save my changes before entering the merge chaos"}                       | ${[27, 64]}     | ${[57, 64]}
-	${"fixup! GH-291 Resolve memory issues to make the code work better than it did last year"} | ${[34, 86]}     | ${[64, 86]}
+	subjectLine                                                                      | expectedRange20 | expectedRange50
+	${"Fixed a bug, but have probably introduced another one #510"}                  | ${[20, 54]}     | ${[50, 54]}
+	${"forgot to save my changes in `BonusAdapter` before entering the merge chaos"} | ${[20, 75]}     | ${[64, 75]}
+	${"GH-291 Resolve memory issues to make the code work better than last year"}    | ${[26, 72]}     | ${[56, 72]}
 `(
 	"when the subject line of $subjectLine contains insignificant tokens and still exceeds 50 characters, but not 72 characters",
 	(props: {
@@ -182,17 +182,17 @@ describe.each`
 
 describe.each`
 	subjectLine                                                              | expectedRange20
-	${"Make the user interface less chaotic (GH-11) (GL-17)"}                | ${[20, 36]}
-	${"<#71238> free up unclaimed disk space"}                               | ${[29, 37]}
-	${"#1104: Upgrade rainstormy/updraft in GitHub Actions flows"}           | ${[27, 57]}
+	${"Make the user interface less chaotic (GH-11) (GL-17)"}                | ${[20, 45]}
+	${"<#71238> free up unclaimed disk space"}                               | ${[28, 37]}
+	${"#1104: Upgrade rainstormy/updraft in GitHub Actions"}                 | ${[26, 51]}
 	${"`pnpm dlx` is the preferred way now"}                                 | ${[30, 35]}
 	${"revisit the boolean properties in the `IceCreamMachine` constructor"} | ${[20, 67]}
 	${"Remove redundant call to `wrapper`"}                                  | ${[20, 25]}
 	${"Enable `firewall` protection again"}                                  | ${[30, 34]}
-	${"(GH-72): fix security vulnerability in `BridgeService`"}              | ${[29, 39]}
+	${"(GH-72): fix security vulnerability in `BridgeService`"}              | ${[28, 39]}
 	${"Make a smile to the `camera` again"}                                  | ${[28, 34]}
 	${"revisit the glorious `MaxDPS` algorithm"}                             | ${[20, 39]}
-	${"Squash! Make the program act like a clown"}                           | ${[28, 41]}
+	${"#30 Make the `MainProgram` act like a clown"}                         | ${[36, 43]}
 `(
 	"when the subject line of $subjectLine contains insignificant tokens and still exceeds 20 characters, but not 50 characters",
 	(props: { subjectLine: string; expectedRange20: CharacterRange }) => {
@@ -247,8 +247,11 @@ describe.each`
 	${'Revert "Revert "Revert "Fix the nasty bug from yesterday"""'}
 	${'fixup! revert "keep the lowercase story around long enough to exceed the limit"'}
 	${'Revert "Upgrade nginx image digest to 9d739ff1ada6"'}
+	${"fixup! forgot to save my changes before entering the merge chaos"}
+	${"fixup! GH-291 Resolve memory issues to make the code work better than it did last year"}
+	${"Squash! Make the program act like a clown"}
 `(
-	"when the subject line of $subjectLine contains a dependency version or a revert marker",
+	"when the subject line of $subjectLine contains a revert, semver, or squash token",
 	(props: { subjectLine: string }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
@@ -387,10 +390,9 @@ describe("when verifying a set of multiple commits and some commits have long su
 				subjectLineConcern(rule, commits[0].sha, { range: [20, 52] }),
 				subjectLineConcern(rule, commits[1].sha, { range: [20, 24] }),
 				subjectLineConcern(rule, commits[3].sha, { range: [20, 67] }),
-				subjectLineConcern(rule, commits[5].sha, { range: [25, 33] }),
+				subjectLineConcern(rule, commits[5].sha, { range: [24, 33] }),
 				subjectLineConcern(rule, commits[7].sha, { range: [20, 75] }),
 				subjectLineConcern(rule, commits[8].sha, { range: [20, 28] }),
-				subjectLineConcern(rule, commits[9].sha, { range: [27, 35] }),
 				subjectLineConcern(rule, commits[10].sha, { range: [89, 99] }),
 				subjectLineConcern(rule, commits[11].sha, { range: [20, 76] }),
 			])
@@ -430,11 +432,13 @@ describe("when verifying a set of multiple commits and some commits have long su
 })
 
 describe("when verifying a set of multiple commits and all commits have concise subject lines", () => {
-	const commits: Vector<Commit, 4> = [
+	const commits: Vector<Commit, 6> = [
 		fakeCommit({ message: "Fix the bug (GH-27)" }),
-		fakeCommit({ message: "#41: Refactor the factory" }),
+		fakeCommit({ message: "#444: refactored factory" }),
 		fakeCommit({ message: "Upgrade Vitest to 4.1.2" }),
+		fakeCommit({ message: 'Revert "Revert "Revert "Fix the nasty bug from yesterday"""' }),
 		fakeCommit({ message: "Subscribe to the `RapidTransportService`" }),
+		fakeCommit({ message: "amend!! Make the program act like a clown" }),
 	]
 
 	describe.each`

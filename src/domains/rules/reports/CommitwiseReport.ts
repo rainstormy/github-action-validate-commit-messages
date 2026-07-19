@@ -7,8 +7,9 @@ import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
+import { normaliseTrailerKey } from "#rules/NoRestrictedTrailers.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
-import { formatCharacterRange } from "#types/CharacterRange.ts"
+import { formatRange } from "#types/CharacterRange.ts"
 import { ALPHABETICALLY, notEmptyString } from "#utilities/Arrays.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 import { capitalise, formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
@@ -81,7 +82,7 @@ function formatSubjectLineConcern(
 	const anchoredRight = violationLength < offset + longHalfLength
 
 	const commitLine = getCommitLine(commit)
-	const rangeLine = indentString(formatCharacterRange(concern.range, anchoredRight), offset)
+	const rangeLine = indentString(formatRange(concern.range, anchoredRight), offset)
 	const messageLines = anchoredRight
 		? getMessageLines(message, offset + longHalfLength - violationLength, true)
 		: getMessageLines(message, offset + shortHalfLength)
@@ -117,7 +118,7 @@ function formatBodyLineConcern(
 	const concernedBodyLine = getBodyLine(commit.bodyLines, concern.line, gutterWidth, true)
 
 	const rangeLine = `${concernGutter}${indentString(
-		formatCharacterRange(concern.range, anchoredRight),
+		formatRange(concern.range, anchoredRight),
 		rangeStart,
 	)}`
 
@@ -230,7 +231,7 @@ function getRuleMessage(concern: Concern, configuration: Configuration): RuleMes
 				formatList(
 					"Disallowed trailers:",
 					[...options.restrictedKeys]
-						.map((key) => capitalise(key.trim().toLowerCase()))
+						.map((key) => capitalise(normaliseTrailerKey(key)))
 						.filter(notEmptyString)
 						.toSorted(ALPHABETICALLY),
 					"\n",

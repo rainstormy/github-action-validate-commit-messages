@@ -25,8 +25,8 @@ describe.each`
 	${"Added a new feature"}                          | ${[0, 5]}
 	${"Updated some dependencies"}                    | ${[0, 7]}
 	${" never give up!!"}                             | ${[1, 6]}
-	${"finally..."}                                   | ${[0, 10]}
-	${"Formatting."}                                  | ${[0, 11]}
+	${"finally..."}                                   | ${[0, 7]}
+	${"Formatting."}                                  | ${[0, 10]}
 	${"  It works"}                                   | ${[2, 4]}
 	${"always validate"}                              | ${[0, 6]}
 	${"`Fix` it"}                                     | ${[0, 5]}

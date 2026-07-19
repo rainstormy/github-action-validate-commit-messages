@@ -1,5 +1,5 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import { formatTokenisedLine } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isNotToken } from "#commits/tokens/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -21,27 +21,20 @@ export function* useEmptyLineBeforeBodyLines(
 	}
 
 	for (const commit of commits) {
-		yield* getCommitConcerns(commit)
-	}
-}
+		let lineNumber = 0
 
-function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	let firstNonBlankLineNumber: number | null = null
-	let lineNumber = 0
+		for (const bodyLine of commit.bodyLines) {
+			if (bodyLine.some(isNotToken("whitespace"))) {
+				if (lineNumber === 0) {
+					yield bodyLineConcern(rule, commit.sha, { line: 0, range: [0, 1] })
+				}
+				if (lineNumber > 1) {
+					yield bodyLineConcern(rule, commit.sha, { line: lineNumber - 1, range: [0, 1] })
+				}
+				break
+			}
 
-	for (const bodyLine of commit.bodyLines) {
-		if (formatTokenisedLine(bodyLine).trim() !== "") {
-			firstNonBlankLineNumber = lineNumber
-			break
+			lineNumber += 1
 		}
-
-		lineNumber += 1
-	}
-
-	if (firstNonBlankLineNumber === 0) {
-		yield bodyLineConcern(rule, commit.sha, { line: 0, range: [0, 1] })
-	}
-	if (firstNonBlankLineNumber !== null && firstNonBlankLineNumber > 1) {
-		yield bodyLineConcern(rule, commit.sha, { line: firstNonBlankLineNumber - 1, range: [0, 1] })
 	}
 }

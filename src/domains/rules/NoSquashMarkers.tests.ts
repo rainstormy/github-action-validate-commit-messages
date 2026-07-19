@@ -29,8 +29,11 @@ describe.each`
 	${"fixup!! another attempt"}                            | ${[0, 7]}
 	${"amend!!  Update the documentation"}                  | ${[0, 7]}
 	${" squash!!! make changes"}                            | ${[1, 10]}
+	${"amend!squash!"}                                      | ${[0, 13]}
+	${"fixup! FIXUP!! Enforce the linting rules"}           | ${[0, 14]}
+	${" squash! amend!     fixup! long polling"}            | ${[1, 26]}
 `(
-	"when the subject line of $subjectLine starts with a single squash marker",
+	"when the subject line of $subjectLine contains a squash marker",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 
@@ -38,36 +41,6 @@ describe.each`
 			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises a concern about the squash marker", () => {
-				expect(actualConcerns).toEqual<Concerns>([
-					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
-				])
-			})
-		})
-
-		describe("and the rule is disabled", () => {
-			const actualConcerns = mapCommitsToConcerns([commit], disabled)
-
-			it("does not raise any concerns", () => {
-				expect(actualConcerns).toEqual<Concerns>([])
-			})
-		})
-	},
-)
-
-describe.each`
-	subjectLine                                   | expectedRange
-	${"squash!amend!"}                            | ${[0, 13]}
-	${"fixup! FIXUP!! Enforce the linting rules"} | ${[0, 14]}
-	${" squash! amend!     fixup! long polling"}  | ${[1, 26]}
-`(
-	"when the subject line of $subjectLine starts with multiple squash markers",
-	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
-		const commit = fakeCommit({ message: props.subjectLine })
-
-		describe("and the rule is enabled", () => {
-			const actualConcerns = mapCommitsToConcerns([commit], enabled)
-
-			it("raises a concern about all squash markers", () => {
 				expect(actualConcerns).toEqual<Concerns>([
 					subjectLineConcern(rule, commit.sha, { range: props.expectedRange }),
 				])
