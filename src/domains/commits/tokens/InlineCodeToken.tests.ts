@@ -11,7 +11,7 @@ import {
 	space,
 	squash,
 	word,
-} from "#commits/tokens/Token.ts"
+} from "#commits/Token.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 
 const configuration = fakeTokenConfiguration()

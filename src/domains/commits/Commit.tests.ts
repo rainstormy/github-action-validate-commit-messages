@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
-import { type Tokens, code, punctuation, space, whitespace, word } from "#commits/tokens/Token.ts"
+import { type Tokens, code, punctuation, space, whitespace, word } from "#commits/Token.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"

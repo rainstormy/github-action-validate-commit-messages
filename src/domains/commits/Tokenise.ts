@@ -1,4 +1,4 @@
-import { type TokenType, type Tokens, codeblock, tokenOf } from "#commits/tokens/Token.ts"
+import { type TokenType, type Tokens, codeblock, tokenOf } from "#commits/Token.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
 import { regexEnum, regexUnion } from "#utilities/Regexes.ts"
 

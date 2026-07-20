@@ -1,14 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
-import {
-	type Tokens,
-	codeblock,
-	punctuation,
-	space,
-	trailerkey,
-	word,
-} from "#commits/tokens/Token.ts"
+import { type Tokens, codeblock, punctuation, space, trailerkey, word } from "#commits/Token.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 
 const configuration = fakeTokenConfiguration()

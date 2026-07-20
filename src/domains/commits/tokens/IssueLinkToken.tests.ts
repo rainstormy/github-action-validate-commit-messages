@@ -10,7 +10,7 @@ import {
 	squash,
 	whitespace,
 	word,
-} from "#commits/tokens/Token.ts"
+} from "#commits/Token.ts"
 import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 

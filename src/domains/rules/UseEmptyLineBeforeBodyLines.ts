@@ -1,5 +1,5 @@
 import type { Commits } from "#commits/Commit.ts"
-import { isNotToken } from "#commits/tokens/Token.ts"
+import { isNotToken } from "#commits/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"

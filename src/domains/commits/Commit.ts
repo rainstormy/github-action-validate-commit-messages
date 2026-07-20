@@ -1,11 +1,11 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
-import type { Tokens } from "#commits/tokens/Token.ts"
+import type { Tokens } from "#commits/Token.ts"
 import {
 	type TokeniserPatterns,
 	issueLinkPattern,
 	tokeniseBodyLines,
 	tokeniseSubjectLine,
-} from "#commits/tokens/Tokenise.ts"
+} from "#commits/Tokenise.ts"
 import type { TokenConfiguration } from "#configurations/Configuration.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 

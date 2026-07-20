@@ -1,5 +1,5 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Tokens } from "#commits/tokens/Token.ts"
+import type { Tokens } from "#commits/Token.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
 import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"

@@ -1,5 +1,5 @@
 import type { MatcherResult, MatcherState } from "vitest"
-import { type TokenType, isNotToken, isToken } from "#commits/tokens/Token.ts"
+import { type TokenType, isNotToken, isToken } from "#commits/Token.ts"
 import type { NonEmptyArray } from "#utilities/Arrays.ts"
 
 export function toContainToken(
