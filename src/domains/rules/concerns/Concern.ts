@@ -1,4 +1,4 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
+import type { Commits } from "#commits/Commit.ts"
 import type { RuleConfiguration } from "#configurations/Configuration.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
@@ -25,20 +25,13 @@ import { useImperativeSubjectLines } from "#rules/UseImperativeSubjectLines.ts"
 import { useIssueLinks } from "#rules/UseIssueLinks.ts"
 import { useLineWrapping } from "#rules/UseLineWrapping.ts"
 import { useSignedCommits } from "#rules/UseSignedCommits.ts"
-import { requireNotNullish } from "#utilities/Assertions.ts"
+import { uniqueItemsByKey } from "#utilities/Arrays.ts"
 
 export type Concern = BodyLineConcern | CommitConcern | SubjectLineConcern | UserIdentityConcern
 export type Concerns = Array<Concern>
 
-export function concernedCommit(concern: Concern, commits: Commits): Commit {
-	return requireNotNullish(
-		commits.find(({ sha }) => sha === concern.commitSha),
-		() => `Concerned commit ${concern.commitSha} not found`,
-	)
-}
-
 export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration): Concerns {
-	return [
+	const allConcerns: Concerns = [
 		...noBlankSubjectLines(commits, rules.noBlankSubjectLines),
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),
 		...noMergeCommits(commits, rules.noMergeCommits),
@@ -61,4 +54,6 @@ export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration)
 		...useLineWrapping(commits, rules.useLineWrapping),
 		...useSignedCommits(commits, rules.useSignedCommits),
 	]
+
+	return uniqueItemsByKey(allConcerns, (concern) => concern.key)
 }

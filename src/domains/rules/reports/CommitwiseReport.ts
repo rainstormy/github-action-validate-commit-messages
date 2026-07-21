@@ -4,7 +4,7 @@ import type { Configuration } from "#configurations/Configuration.ts"
 import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
-import { type Concern, type Concerns, concernedCommit } from "#rules/concerns/Concern.ts"
+import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import { normaliseTrailerKey } from "#rules/NoRestrictedTrailers.ts"
@@ -20,8 +20,15 @@ export function commitwiseReport(
 	configuration: Configuration,
 ): string {
 	return concerns
-		.map((concern) => formatConcern(concern, concernedCommit(concern, commits), configuration))
+		.map((concern) => formatConcern(concern, getConcernedCommit(concern, commits), configuration))
 		.join("\n\n")
+}
+
+function getConcernedCommit(concern: Concern, commits: Commits): Commit {
+	return requireNotNullish(
+		commits.find(({ sha }) => sha === concern.commitSha),
+		() => `Concerned commit ${concern.commitSha} not found`,
+	)
 }
 
 function formatConcern(concern: Concern, commit: Commit, configuration: Configuration): string {

@@ -80,3 +80,19 @@ export function binarySearchIndexOf(sortedValues: Array<string>, target: string)
 export function uniqueItems<Item>(items: Array<Item>): Array<Item> {
 	return [...new Set(items)]
 }
+
+export function uniqueItemsByKey<Item>(
+	items: Array<Item>,
+	keySelector: (item: Item) => string,
+): Array<Item> {
+	const previousKeys = new Set<string>()
+
+	return items.filter((item) => {
+		const key = keySelector(item)
+		if (previousKeys.has(key)) {
+			return false
+		}
+		previousKeys.add(key)
+		return true
+	})
+}
