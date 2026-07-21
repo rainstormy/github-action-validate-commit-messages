@@ -7,9 +7,14 @@ export function regexEnum(literals: Array<string>): string {
 		.join("|")
 }
 
-export function regexUnion(alternatives: Array<string>): string {
-	return alternatives
-		.filter(notEmptyString)
-		.map((alternative) => `(?:${alternative})`)
-		.join("|")
+export function regexUnion(
+	alternatives: Array<string>,
+	options: Partial<{ preserveCapturingGroups?: boolean }> = {},
+): string {
+	const preserveCapturingGroups = options.preserveCapturingGroups ?? false
+	const nonEmptyAlternatives = alternatives.filter(notEmptyString)
+
+	return preserveCapturingGroups
+		? nonEmptyAlternatives.join("|")
+		: nonEmptyAlternatives.map((alternative) => `(?:${alternative})`).join("|")
 }

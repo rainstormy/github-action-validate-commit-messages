@@ -47,7 +47,7 @@
 		"eslint/no-constant-binary-expression": "warn",
 		"eslint/no-constant-condition": "warn",
 		"eslint/no-constructor-return": "warn",
-		"eslint/no-continue": "warn",
+		"eslint/no-continue": "off",
 		"eslint/no-control-regex": "warn",
 		"eslint/no-debugger": "warn",
 		"eslint/no-delete-var": "warn",

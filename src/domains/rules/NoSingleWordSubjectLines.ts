@@ -1,10 +1,9 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import { type Token, trimmedTokenRange } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isToken } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { notEmptyString } from "#utilities/Arrays.ts"
 
 const rule = "noSingleWordSubjectLines" satisfies RuleKey
 
@@ -15,7 +14,7 @@ const rule = "noSingleWordSubjectLines" satisfies RuleKey
  * the traceability of the commit history.
  *
  * It ignores commits with revert markers.
- * Leading issue links and squash markers do not count as words.
+ * Issue links and squash markers do not count as words. An inline code phrase counts as one word.
  */
 export function* noSingleWordSubjectLines(
 	commits: Commits,
@@ -26,35 +25,15 @@ export function* noSingleWordSubjectLines(
 	}
 
 	for (const commit of commits) {
-		yield* getCommitConcerns(commit)
-	}
-}
-
-function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	let words = 0
-	let firstWordToken: Token | null = null
-
-	for (const token of commit.subjectLine) {
-		if (words > 1 || (token.type === "issue-link" && words > 0) || token.type === "revert-marker") {
-			return
+		if (commit.subjectLine.some(isToken("revert"))) {
+			continue
 		}
-		if (
-			token.type === "dependency-version" ||
-			token.type === "inline-code" ||
-			token.type === "text"
-		) {
-			words += countWords(token.value)
-			firstWordToken = token
+
+		const wordLikeTokens = commit.subjectLine.filter(isToken("code", "semver", "word"))
+		const soloWord = wordLikeTokens.length === 1 ? wordLikeTokens[0] : null
+
+		if (soloWord) {
+			yield subjectLineConcern(rule, commit.sha, { range: soloWord.range })
 		}
 	}
-
-	if (words === 1 && firstWordToken !== null) {
-		yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstWordToken) })
-	}
-}
-
-const intoWords = /\s+/gu
-
-function countWords(token: string): number {
-	return token.split(intoWords).filter(notEmptyString).length
 }

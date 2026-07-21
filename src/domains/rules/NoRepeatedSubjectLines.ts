@@ -1,10 +1,9 @@
 import type { Commits } from "#commits/Commit.ts"
-import type { TokenisedLine } from "#commits/tokens/Token.ts"
+import { isNotToken, isToken } from "#commits/Token.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
-import { collapseWhitespace } from "#utilities/Strings.ts"
 
 const rule = "noRepeatedSubjectLines" satisfies RuleKey
 
@@ -28,27 +27,20 @@ export function* noRepeatedSubjectLines(
 	const previousSubjectLines = new Set<string>()
 
 	for (const commit of commits) {
-		const normalisedSubjectLine = getNormalisedSubjectLine(commit.subjectLine)
-
-		if (normalisedSubjectLine !== null) {
-			if (previousSubjectLines.has(normalisedSubjectLine) && !commit.isMergeCommit) {
-				yield commitConcern(rule, commit.sha)
-			}
-			previousSubjectLines.add(normalisedSubjectLine)
-		}
-	}
-}
-
-function getNormalisedSubjectLine(subjectLine: TokenisedLine): string | null {
-	const significantText: Array<string> = []
-
-	for (const token of subjectLine) {
-		if (token.type === "revert-marker" || token.type === "squash-marker") {
-			return null
+		if (commit.subjectLine.some(isToken("revert", "squash"))) {
+			continue
 		}
 
-		significantText.push(collapseWhitespace(token.value.trim()).toLowerCase())
-	}
+		const canonicalSubjectLine = commit.subjectLine
+			.filter(isNotToken("whitespace"))
+			.map((token) => token.value)
+			.join("")
+			.toLowerCase()
 
-	return significantText.join("")
+		if (previousSubjectLines.has(canonicalSubjectLine) && !commit.isMergeCommit) {
+			yield commitConcern(rule, commit.sha)
+		}
+
+		previousSubjectLines.add(canonicalSubjectLine)
+	}
 }

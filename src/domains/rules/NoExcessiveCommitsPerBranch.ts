@@ -1,4 +1,5 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isToken } from "#commits/Token.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -24,16 +25,14 @@ export function* noExcessiveCommitsPerBranch(
 	let commitCount = 0
 
 	for (const commit of commits) {
-		if (!commit.isMergeCommit && !hasSquashMarker(commit)) {
-			commitCount += 1
+		if (commit.isMergeCommit || commit.subjectLine.some(isToken("squash"))) {
+			continue
+		}
 
-			if (commitCount > options.maxCommits) {
-				yield commitConcern(rule, commit.sha)
-			}
+		commitCount += 1
+
+		if (commitCount > options.maxCommits) {
+			yield commitConcern(rule, commit.sha)
 		}
 	}
-}
-
-function hasSquashMarker(commit: Commit): boolean {
-	return commit.subjectLine[0]?.type === "squash-marker"
 }

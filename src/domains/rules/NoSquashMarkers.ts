@@ -1,8 +1,9 @@
 import type { Commits } from "#commits/Commit.ts"
-import { trimmedTokenRange } from "#commits/tokens/Token.ts"
+import { isToken } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import { rangeBetween } from "#types/CharacterRange.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
 const rule = "noSquashMarkers" satisfies RuleKey
@@ -22,10 +23,14 @@ export function* noSquashMarkers(
 	}
 
 	for (const commit of commits) {
-		const [firstToken] = commit.subjectLine
+		const firstSquashToken = commit.subjectLine.find(isToken("squash"))
 
-		if (firstToken?.type === "squash-marker") {
-			yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(firstToken) })
+		if (firstSquashToken) {
+			const lastSquashToken = commit.subjectLine.findLast(isToken("squash")) ?? firstSquashToken
+
+			yield subjectLineConcern(rule, commit.sha, {
+				range: rangeBetween(firstSquashToken.range, lastSquashToken.range),
+			})
 		}
 	}
 }

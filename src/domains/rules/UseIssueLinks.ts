@@ -1,5 +1,5 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import type { Token } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isNotToken, isToken, tokenRangeEnd } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -24,103 +24,51 @@ export function* useIssueLinks(
 		return
 	}
 
-	switch (options.position) {
-		case "anywhere": {
-			for (const commit of commits) {
-				yield* getCommitConcernsAnywhere(commit)
+	if (options.position === "anywhere") {
+		for (const commit of commits) {
+			if (
+				commit.isMergeCommit ||
+				commit.subjectLine.some(isToken("issuelink", "revert", "semver"))
+			) {
+				continue
 			}
-			break
-		}
-		case "prefix": {
-			for (const commit of commits) {
-				yield* getCommitConcernsPrefix(commit)
-			}
-			break
-		}
-		case "suffix": {
-			for (const commit of commits) {
-				yield* getCommitConcernsSuffix(commit)
-			}
-			break
-		}
-	}
-}
 
-function* getCommitConcernsAnywhere(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit) {
+			const firstToken = commit.subjectLine.find(isNotToken("squash", "whitespace"))
+			const firstStart = firstToken?.range[0] ?? tokenRangeEnd(commit.subjectLine)
+
+			yield subjectLineConcern(rule, commit.sha, { range: [firstStart, firstStart + 1] })
+		}
+
 		return
 	}
 
-	let lastInsignificantToken: Token | null = null
-
-	for (const token of commit.subjectLine) {
-		if (
-			token.type === "dependency-version" ||
-			token.type === "issue-link" ||
-			token.type === "revert-marker"
-		) {
-			return
-		}
-		if (token.type === "squash-marker") {
-			lastInsignificantToken = token
-		}
-	}
-
-	const firstSignificantIndex = lastInsignificantToken?.range[1] ?? 0
-
-	yield subjectLineConcern(rule, commit.sha, {
-		range: [firstSignificantIndex, firstSignificantIndex + 1],
-	})
-}
-
-function* getCommitConcernsPrefix(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit) {
-		return
-	}
-
-	let firstSignificantToken: Token | null = null
-	let lastInsignificantToken: Token | null = null
-
-	for (const token of commit.subjectLine) {
-		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return
-		}
-		if (firstSignificantToken === null) {
-			if (token.type === "issue-link") {
-				return
+	if (options.position === "prefix") {
+		for (const commit of commits) {
+			if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver"))) {
+				continue
 			}
-			if (token.type !== "squash-marker") {
-				firstSignificantToken = token
-			} else {
-				lastInsignificantToken = token
+
+			const firstToken = commit.subjectLine.find(isNotToken("squash", "whitespace"))
+
+			if (firstToken?.type !== "issuelink") {
+				const firstStart = firstToken?.range[0] ?? tokenRangeEnd(commit.subjectLine)
+				yield subjectLineConcern(rule, commit.sha, { range: [firstStart, firstStart + 1] })
 			}
 		}
-	}
 
-	const firstSignificantIndex = lastInsignificantToken?.range[1] ?? 0
-
-	yield subjectLineConcern(rule, commit.sha, {
-		range: [firstSignificantIndex, firstSignificantIndex + 1],
-	})
-}
-
-function* getCommitConcernsSuffix(commit: Commit): Generator<Concern> {
-	if (commit.isMergeCommit) {
 		return
 	}
 
-	for (const token of commit.subjectLine) {
-		if (token.type === "dependency-version" || token.type === "revert-marker") {
-			return
+	for (const commit of commits) {
+		if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver"))) {
+			continue
+		}
+
+		const lastToken = commit.subjectLine.findLast(isNotToken("whitespace"))
+
+		if (lastToken?.type !== "issuelink") {
+			const lastEnd = tokenRangeEnd(commit.subjectLine)
+			yield subjectLineConcern(rule, commit.sha, { range: [lastEnd, lastEnd + 1] })
 		}
 	}
-
-	const lastToken = commit.subjectLine.at(-1)
-
-	if (lastToken?.type === "issue-link") {
-		return
-	}
-
-	const lastIndex = lastToken?.range[1] ?? 0
-	yield subjectLineConcern(rule, commit.sha, { range: [lastIndex, lastIndex + 1] })
 }

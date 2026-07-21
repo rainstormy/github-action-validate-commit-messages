@@ -17,15 +17,13 @@ const fakeCommit = fakeCommitFactory()
 
 describe.each`
 	subjectLine                         | expectedRange
-	${"-"}                              | ${[0, 1]}
-	${".."}                             | ${[0, 2]}
 	${"WIP"}                            | ${[0, 3]}
-	${"wip!"}                           | ${[0, 4]}
+	${"wip!"}                           | ${[0, 3]}
 	${"init"}                           | ${[0, 4]}
 	${"test"}                           | ${[0, 4]}
 	${"bugfix "}                        | ${[0, 6]}
 	${"Unsubscribe"}                    | ${[0, 11]}
-	${"#flabbergastered"}               | ${[0, 16]}
+	${"#flabbergastered"}               | ${[1, 16]}
 	${"HOTFIX"}                         | ${[0, 6]}
 	${" Refactor"}                      | ${[1, 9]}
 	${"  oops "}                        | ${[2, 6]}
@@ -35,7 +33,8 @@ describe.each`
 	${"Revert"}                         | ${[0, 6]}
 	${"#1 fix"}                         | ${[3, 6]}
 	${"(GH-31)   test"}                 | ${[10, 14]}
-	${"GL-7 `Unscheduled-Maintenance`"} | ${[5, 30]}
+	${"Closes #362"}                    | ${[0, 6]}
+	${"GL-7 `Unscheduled Maintenance`"} | ${[5, 30]}
 	${"#2 #3 (GL-1) init"}              | ${[13, 17]}
 	${"fixup! WIP"}                     | ${[7, 10]}
 	${"squash!  bad"}                   | ${[9, 12]}
@@ -71,6 +70,8 @@ describe.each`
 	${""}
 	${" "}
 	${"\t\t"}
+	${"-"}
+	${".."}
 	${"#1"}
 	${"(GH-31)   "}
 	${"#2 #3 (GL-1) "}
@@ -141,7 +142,6 @@ describe.each`
 	${"resolve issues in #21 to make the code work"}
 	${"Refactor `HotChocolateMachine`"}
 	${"release 1.0.0"}
-	${"Closes #1"}
 	${"amend! Upgrade React to 19.2.0 (#52)"}
 `(
 	"when the subject line of $subjectLine contains more than one word",
@@ -184,7 +184,7 @@ describe("when verifying a set of multiple commits and some commits have single-
 		it("raises concerns about the commits with single-word subject lines", () => {
 			expect(actualConcerns).toEqual<Concerns>([
 				subjectLineConcern(rule, commits[0].sha, { range: [0, 4] }),
-				subjectLineConcern(rule, commits[1].sha, { range: [0, 5] }),
+				subjectLineConcern(rule, commits[1].sha, { range: [0, 3] }),
 				subjectLineConcern(rule, commits[3].sha, { range: [1, 9] }),
 				subjectLineConcern(rule, commits[5].sha, { range: [0, 7] }),
 			])

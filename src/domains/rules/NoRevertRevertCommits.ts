@@ -1,8 +1,9 @@
-import type { Commit, Commits } from "#commits/Commit.ts"
-import { trimmedTokenRange } from "#commits/tokens/Token.ts"
+import type { Commits } from "#commits/Commit.ts"
+import { isToken } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import { rangeBetween } from "#types/CharacterRange.ts"
 import type { EmptyObject } from "#types/EmptyObject.ts"
 
 const rule = "noRevertRevertCommits" satisfies RuleKey
@@ -22,15 +23,13 @@ export function* noRevertRevertCommits(
 	}
 
 	for (const commit of commits) {
-		yield* getCommitConcerns(commit)
-	}
-}
+		const firstRevertToken = commit.subjectLine.find(isToken("revert"))
+		const lastRevertToken = commit.subjectLine.findLast(isToken("revert"))
 
-function* getCommitConcerns(commit: Commit): Generator<Concern> {
-	for (const token of commit.subjectLine) {
-		if (token.type === "revert-marker" && token.occurrences > 1) {
-			yield subjectLineConcern(rule, commit.sha, { range: trimmedTokenRange(token) })
-			return
+		if (firstRevertToken && lastRevertToken && firstRevertToken !== lastRevertToken) {
+			yield subjectLineConcern(rule, commit.sha, {
+				range: rangeBetween(firstRevertToken.range, lastRevertToken.range),
+			})
 		}
 	}
 }
