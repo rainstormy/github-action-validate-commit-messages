@@ -15,6 +15,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 		rules: {
 			noBlankSubjectLines: {},
 			noExcessiveCommitsPerBranch: { maxCommits: 10 },
+			noExcessiveWhitespace: {},
 			noMergeCommits: {},
 			noRepeatedSubjectLines: {},
 			noRestrictedTrailers: { restrictedKeys: ["Co-authored-by"] },
@@ -22,7 +23,6 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			noSingleWordSubjectLines: {},
 			noSquashMarkers: {},
 			noUnexpectedPunctuation: {},
-			noUnexpectedWhitespace: {},
 			useAuthorEmailPatterns: {
 				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
 			},
@@ -66,6 +66,7 @@ export function emptyRuleConfiguration(
 	return {
 		noBlankSubjectLines: null,
 		noExcessiveCommitsPerBranch: null,
+		noExcessiveWhitespace: null,
 		noMergeCommits: null,
 		noRepeatedSubjectLines: null,
 		noRestrictedTrailers: null,
@@ -73,7 +74,6 @@ export function emptyRuleConfiguration(
 		noSingleWordSubjectLines: null,
 		noSquashMarkers: null,
 		noUnexpectedPunctuation: null,
-		noUnexpectedWhitespace: null,
 		useAuthorEmailPatterns: null,
 		useAuthorNamePatterns: null,
 		useCapitalisedSubjectLines: null,

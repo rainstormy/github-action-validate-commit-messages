@@ -1,5 +1,6 @@
 import type { noBlankSubjectLines } from "#rules/NoBlankSubjectLines.ts"
 import type { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
+import type { noExcessiveWhitespace } from "#rules/NoExcessiveWhitespace.ts"
 import type { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import type { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
 import type { noRestrictedTrailers } from "#rules/NoRestrictedTrailers.ts"
@@ -7,7 +8,6 @@ import type { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
 import type { noSingleWordSubjectLines } from "#rules/NoSingleWordSubjectLines.ts"
 import type { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
 import type { noUnexpectedPunctuation } from "#rules/NoUnexpectedPunctuation.ts"
-import type { noUnexpectedWhitespace } from "#rules/NoUnexpectedWhitespace.ts"
 import type { useAuthorEmailPatterns } from "#rules/UseAuthorEmailPatterns.ts"
 import type { useAuthorNamePatterns } from "#rules/UseAuthorNamePatterns.ts"
 import type { useCapitalisedSubjectLines } from "#rules/UseCapitalisedSubjectLines.ts"
@@ -23,6 +23,7 @@ import type { useSignedCommits } from "#rules/UseSignedCommits.ts"
 export type RulesByKey = {
 	noBlankSubjectLines: typeof noBlankSubjectLines
 	noExcessiveCommitsPerBranch: typeof noExcessiveCommitsPerBranch
+	noExcessiveWhitespace: typeof noExcessiveWhitespace
 	noMergeCommits: typeof noMergeCommits
 	noRepeatedSubjectLines: typeof noRepeatedSubjectLines
 	noRestrictedTrailers: typeof noRestrictedTrailers
@@ -30,7 +31,6 @@ export type RulesByKey = {
 	noSingleWordSubjectLines: typeof noSingleWordSubjectLines
 	noSquashMarkers: typeof noSquashMarkers
 	noUnexpectedPunctuation: typeof noUnexpectedPunctuation
-	noUnexpectedWhitespace: typeof noUnexpectedWhitespace
 	useAuthorEmailPatterns: typeof useAuthorEmailPatterns
 	useAuthorNamePatterns: typeof useAuthorNamePatterns
 	useCapitalisedSubjectLines: typeof useCapitalisedSubjectLines

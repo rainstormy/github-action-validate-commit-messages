@@ -606,6 +606,160 @@ e4236bf I’m not lazy, I’m on energy-saving mode
 	})
 })
 
+describe("when 'noExcessiveWhitespace' has a concern about characters 0-1 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "47722cd548b381520b85ee0100100d0df224531af",
+		message: " Recalibrate the espresso machine",
+	})
+	const concern = subjectLineConcern("noExcessiveWhitespace", commit.sha, { range: [0, 1] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+47722cd  Recalibrate the espresso machine
+        ┬
+        ╰─ Subject lines must not start with whitespace.
+           (noExcessiveWhitespace)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveWhitespace' has a concern about characters 39-40 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "067ab0c953eab2c17c16aad10bd7d4d91077",
+		message: "make the office fern require less water ",
+	})
+	const concern = subjectLineConcern("noExcessiveWhitespace", commit.sha, { range: [39, 40] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+067ab0c make the office fern require less water 
+                                               ┬
+  Subject lines must not end with whitespace. ─╯
+  (noExcessiveWhitespace)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveWhitespace' has a concern about characters 18-20 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "50bd2ccaeaf34476184ce6ad71a733d93c76a",
+		message: "taught the toaster  to write haiku",
+	})
+	const concern = subjectLineConcern("noExcessiveWhitespace", commit.sha, { range: [18, 20] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+50bd2cc taught the toaster  to write haiku
+                          ┬─
+                          ╰─ Subject lines must not contain excessive whitespace.
+                             (noExcessiveWhitespace)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveWhitespace' has a concern about characters 23-26 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "c687be901727c8876140a5f099b5f5dbac4510",
+		message: "Install tiny disco ball   in build room",
+	})
+	const concern = subjectLineConcern("noExcessiveWhitespace", commit.sha, { range: [23, 26] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+c687be9 Install tiny disco ball   in build room
+                               ─┬─
+                                ╰─ Subject lines must not contain excessive whitespace.
+                                   (noExcessiveWhitespace)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveWhitespace' has a concern about characters 9-12 of a body line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "41548802d6bb14a3032403e6fc0cc69534e22e4",
+		message: "Polish the arcade cabinet\n\nThe prize   counter now accepts coupons.",
+	})
+	const concern = bodyLineConcern("noExcessiveWhitespace", commit.sha, {
+		line: 1,
+		range: [9, 12],
+	})
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+4154880 Polish the arcade cabinet
+    ╭──
+  1 │ 
+∙ 2 │ The prize   counter now accepts coupons.
+    ·          ─┬─
+    ·           ╰─ Message bodies must not contain excessive whitespace.
+    ·              (noExcessiveWhitespace)
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noExcessiveWhitespace' has a concern about characters 14-18 of a body line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "100634682b66756712fa4664de8fc6cc47332c739",
+		message:
+			"Map the museum heist\n\nFirst note is perfectly ordinary.\nThe blue vault    needs a quieter alarm.\nLast note keeps watch.",
+	})
+	const concern = bodyLineConcern("noExcessiveWhitespace", commit.sha, {
+		line: 2,
+		range: [14, 18],
+	})
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+1006346 Map the museum heist
+    ╭──
+  2 │ First note is perfectly ordinary.
+∙ 3 │ The blue vault    needs a quieter alarm.
+    ·               ─┬──
+    ·                ╰─ Message bodies must not contain excessive whitespace.
+    ·                   (noExcessiveWhitespace)
+  4 │ Last note keeps watch.
+    ╰──
+`.trim(),
+		)
+	})
+})
+
 describe("when 'useCapitalisedSubjectLines' has a concern about characters 0-1 of the subject line", () => {
 	const configuration = fakeConfiguration()
 	const fakeCommit = fakeCommitFactory(configuration.tokens)

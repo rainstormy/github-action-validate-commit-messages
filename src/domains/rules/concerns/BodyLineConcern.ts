@@ -11,9 +11,9 @@ export type BodyLineConcern = {
 }
 
 export type BodyLineConcernRuleKey =
+	| "noExcessiveWhitespace"
 	| "noRestrictedTrailers"
 	| "noUnexpectedPunctuation"
-	| "noUnexpectedWhitespace"
 	| "useEmptyLineBeforeBodyLines"
 	| "useLineWrapping"
 

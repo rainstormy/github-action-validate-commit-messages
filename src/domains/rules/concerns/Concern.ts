@@ -6,6 +6,7 @@ import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import { noBlankSubjectLines } from "#rules/NoBlankSubjectLines.ts"
 import { noExcessiveCommitsPerBranch } from "#rules/NoExcessiveCommitsPerBranch.ts"
+import { noExcessiveWhitespace } from "#rules/NoExcessiveWhitespace.ts"
 import { noMergeCommits } from "#rules/NoMergeCommits.ts"
 import { noRepeatedSubjectLines } from "#rules/NoRepeatedSubjectLines.ts"
 import { noRestrictedTrailers } from "#rules/NoRestrictedTrailers.ts"
@@ -13,7 +14,6 @@ import { noRevertRevertCommits } from "#rules/NoRevertRevertCommits.ts"
 import { noSingleWordSubjectLines } from "#rules/NoSingleWordSubjectLines.ts"
 import { noSquashMarkers } from "#rules/NoSquashMarkers.ts"
 import { noUnexpectedPunctuation } from "#rules/NoUnexpectedPunctuation.ts"
-import { noUnexpectedWhitespace } from "#rules/NoUnexpectedWhitespace.ts"
 import { useAuthorEmailPatterns } from "#rules/UseAuthorEmailPatterns.ts"
 import { useAuthorNamePatterns } from "#rules/UseAuthorNamePatterns.ts"
 import { useCapitalisedSubjectLines } from "#rules/UseCapitalisedSubjectLines.ts"
@@ -34,6 +34,7 @@ export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration)
 	const allConcerns: Concerns = [
 		...noBlankSubjectLines(commits, rules.noBlankSubjectLines),
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),
+		...noExcessiveWhitespace(commits, rules.noExcessiveWhitespace),
 		...noMergeCommits(commits, rules.noMergeCommits),
 		...noRepeatedSubjectLines(commits, rules.noRepeatedSubjectLines),
 		...noRestrictedTrailers(commits, rules.noRestrictedTrailers),
@@ -41,7 +42,6 @@ export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration)
 		...noSingleWordSubjectLines(commits, rules.noSingleWordSubjectLines),
 		...noSquashMarkers(commits, rules.noSquashMarkers),
 		...noUnexpectedPunctuation(commits, rules.noUnexpectedPunctuation),
-		...noUnexpectedWhitespace(commits, rules.noUnexpectedWhitespace),
 		...useAuthorEmailPatterns(commits, rules.useAuthorEmailPatterns),
 		...useAuthorNamePatterns(commits, rules.useAuthorNamePatterns),
 		...useCapitalisedSubjectLines(commits, rules.useCapitalisedSubjectLines),
