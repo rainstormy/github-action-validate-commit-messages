@@ -59,7 +59,7 @@ function formatCommitConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern, configuration)
+	const message = commitRuleMessage(concern, configuration)
 
 	const commitLine = getCommitLine(commit)
 	const rangeLine = indentString(
@@ -76,7 +76,7 @@ function formatSubjectLineConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern, configuration)
+	const message = subjectLineRuleMessage(concern, configuration)
 
 	const [rangeStart, rangeEnd] = concern.range
 	const length = rangeEnd - rangeStart
@@ -102,7 +102,7 @@ function formatBodyLineConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern, configuration)
+	const message = bodyLineRuleMessage(concern, configuration)
 
 	const [rangeStart, rangeEnd] = concern.range
 	const length = rangeEnd - rangeStart
@@ -160,7 +160,7 @@ function formatUserIdentityConcern(
 	commit: Commit,
 	configuration: Configuration,
 ): string {
-	const message = getRuleMessage(concern, configuration)
+	const message = userIdentityRuleMessage(concern, configuration)
 
 	const identityLine = `╰─ ${getIdentityLine(concern, commit)}`
 
@@ -209,7 +209,10 @@ type RuleMessage = {
 	sidenote: string
 }
 
-function getRuleMessage(concern: Concern, configuration: Configuration): RuleMessage {
+function subjectLineRuleMessage(
+	concern: SubjectLineConcern,
+	configuration: Configuration,
+): RuleMessage {
 	const rule = concern.rule
 
 	function ruleMessage(violation: string, sidenote = ""): RuleMessage {
@@ -219,31 +222,6 @@ function getRuleMessage(concern: Concern, configuration: Configuration): RuleMes
 	switch (rule) {
 		case "noBlankSubjectLines": {
 			return ruleMessage("Subject lines must contain at least one non-whitespace character.")
-		}
-		case "noExcessiveCommitsPerBranch": {
-			const options = getRuleOptions(rule, configuration)
-			const commitPhrase = formatCount(options.maxCommits, "commit", "commits")
-			return ruleMessage(`Branches must not contain more than ${commitPhrase}.`)
-		}
-		case "noMergeCommits": {
-			return ruleMessage("Merge commits are not allowed.")
-		}
-		case "noRepeatedSubjectLines": {
-			return ruleMessage("Commits must have unique subject lines within a branch.")
-		}
-		case "noRestrictedTrailers": {
-			const options = getRuleOptions(rule, configuration)
-			return ruleMessage(
-				"Message bodies must not contain disallowed trailers.",
-				formatList(
-					"Disallowed trailers:",
-					[...options.restrictedKeys]
-						.map((key) => capitalise(normaliseTrailerKey(key)))
-						.filter(notEmptyString)
-						.toSorted(ALPHABETICALLY),
-					"\n",
-				),
-			)
 		}
 		case "noRevertRevertCommits": {
 			return ruleMessage("Cherry-pick the original commit instead of reverting it over.")
@@ -260,46 +238,13 @@ function getRuleMessage(concern: Concern, configuration: Configuration): RuleMes
 		case "noUnexpectedWhitespace": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
-		case "useAuthorEmailPatterns": {
-			const options = getRuleOptions(rule, configuration)
-			return ruleMessage(
-				"Email addresses of commit authors must match an accepted pattern.",
-				formatList("Accepted patterns:", options.patterns),
-			)
-		}
-		case "useAuthorNamePatterns": {
-			const options = getRuleOptions(rule, configuration)
-			return ruleMessage(
-				"Names of commit authors must match an accepted pattern.",
-				formatList("Accepted patterns:", options.patterns),
-			)
-		}
 		case "useCapitalisedSubjectLines": {
 			return ruleMessage("The first letter in subject lines must be in uppercase.")
-		}
-		case "useCommitterEmailPatterns": {
-			const options = getRuleOptions(rule, configuration)
-			return ruleMessage(
-				"Email addresses of committers must match an accepted pattern.",
-				formatList("Accepted patterns:", options.patterns),
-			)
-		}
-		case "useCommitterNamePatterns": {
-			const options = getRuleOptions(rule, configuration)
-			return ruleMessage(
-				"Names of committers must match an accepted pattern.",
-				formatList("Accepted patterns:", options.patterns),
-			)
 		}
 		case "useConciseSubjectLines": {
 			const options = getRuleOptions(rule, configuration)
 			const characterPhrase = formatCount(options.maxLength, "character", "characters")
 			return ruleMessage(`Subject lines must not exceed ${characterPhrase}.`)
-		}
-		case "useEmptyLineBeforeBodyLines": {
-			return ruleMessage(
-				"Subject lines and message bodies must be separated by exactly one empty line.",
-			)
 		}
 		case "useImperativeSubjectLines": {
 			return ruleMessage("Subject lines must start with a verb in the imperative mood.")
@@ -323,11 +268,111 @@ function getRuleMessage(concern: Concern, configuration: Configuration): RuleMes
 				examples.length > 0 ? `${examplePhrase}: ${examples.join(", ")}` : "",
 			)
 		}
+	}
+}
+
+function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configuration): RuleMessage {
+	const rule = concern.rule
+
+	function ruleMessage(violation: string, sidenote = ""): RuleMessage {
+		return { rule, violation, sidenote }
+	}
+
+	switch (rule) {
+		case "noRestrictedTrailers": {
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Message bodies must not contain disallowed trailers.",
+				formatList(
+					"Disallowed trailers:",
+					[...options.restrictedKeys]
+						.map((key) => capitalise(normaliseTrailerKey(key)))
+						.filter(notEmptyString)
+						.toSorted(ALPHABETICALLY),
+					"\n",
+				),
+			)
+		}
+		case "noUnexpectedPunctuation": {
+			throw new Error(`Not implemented yet: ${rule}`)
+		}
+		case "noUnexpectedWhitespace": {
+			throw new Error(`Not implemented yet: ${rule}`)
+		}
+		case "useEmptyLineBeforeBodyLines": {
+			return ruleMessage(
+				"Subject lines and message bodies must be separated by exactly one empty line.",
+			)
+		}
 		case "useLineWrapping": {
 			throw new Error(`Not implemented yet: ${rule}`)
 		}
+	}
+}
+
+function commitRuleMessage(concern: CommitConcern, configuration: Configuration): RuleMessage {
+	const rule = concern.rule
+
+	function ruleMessage(violation: string, sidenote = ""): RuleMessage {
+		return { rule, violation, sidenote }
+	}
+
+	switch (rule) {
+		case "noExcessiveCommitsPerBranch": {
+			const options = getRuleOptions(rule, configuration)
+			const commitPhrase = formatCount(options.maxCommits, "commit", "commits")
+			return ruleMessage(`Branches must not contain more than ${commitPhrase}.`)
+		}
+		case "noMergeCommits": {
+			return ruleMessage("Merge commits are not allowed.")
+		}
+		case "noRepeatedSubjectLines": {
+			return ruleMessage("Commits must have unique subject lines within a branch.")
+		}
 		case "useSignedCommits": {
 			return ruleMessage("Commits must be signed cryptographically with a signing key.")
+		}
+	}
+}
+
+function userIdentityRuleMessage(
+	concern: UserIdentityConcern,
+	configuration: Configuration,
+): RuleMessage {
+	const rule = concern.rule
+
+	function ruleMessage(violation: string, sidenote = ""): RuleMessage {
+		return { rule, violation, sidenote }
+	}
+
+	switch (rule) {
+		case "useAuthorEmailPatterns": {
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Email addresses of commit authors must match an accepted pattern.",
+				formatList("Accepted patterns:", options.patterns),
+			)
+		}
+		case "useAuthorNamePatterns": {
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Names of commit authors must match an accepted pattern.",
+				formatList("Accepted patterns:", options.patterns),
+			)
+		}
+		case "useCommitterEmailPatterns": {
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Email addresses of committers must match an accepted pattern.",
+				formatList("Accepted patterns:", options.patterns),
+			)
+		}
+		case "useCommitterNamePatterns": {
+			const options = getRuleOptions(rule, configuration)
+			return ruleMessage(
+				"Names of committers must match an accepted pattern.",
+				formatList("Accepted patterns:", options.patterns),
+			)
 		}
 	}
 }
