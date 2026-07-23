@@ -14,7 +14,7 @@ node = "24.18.0"
 
 # pnpm is a Node.js package manager.
 # https://pnpm.io
-pnpm = "11.9.0"
+pnpm = "11.13.1"
 
 [tasks.build]
 # language=sh
