@@ -1,39 +1,79 @@
-# Configure pnpm, especially to reduce the risk of supply chain attacks.
+# Configure pnpm and manage third-party dependencies.
 # https://pnpm.io/settings
+
+# Declare third-party dependencies installed in `node_modules`.
+#
+# IMPORTANT: Always add a comment that describes why we need that dependency and if it has any special maintenance requirements.
+# Keep in mind that adding a new dependency may increase the risk of supply chain attacks, as the attack surface grows.
+catalog:
+  # This library provides predefined, opinionated TypeScript configurations.
+  # https://github.com/rainstormy/presets-typescript
+  '@rainstormy/presets-typescript': 1.1.0
+
+  # Type definitions for the Node.js standard library.
+  # https://nodejs.org/docs/latest/api
+  # https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node
+  '@types/node': 24.13.2
+
+  # The official Go-powered 'tsgo' CLI for TypeScript. It will merge with `typescript` in TypeScript 7.
+  # https://github.com/microsoft/typescript-go
+  '@typescript/native-preview': 7.0.0-dev.20260701.1
+
+  # This Vitest plugin provides a test overview in the web browser.
+  # https://vitest.dev/guide/ui.html
+  '@vitest/ui': 4.1.10
+
+  # Lefthook is a Git hooks manager.
+  # https://lefthook.dev
+  lefthook: 2.1.8
+
+  # Oxfmt is an opinionated code formatter.
+  # https://oxc.rs/docs/guide/usage/formatter.html
+  oxfmt: 0.40.0
+
+  # Oxlint is a TypeScript linter.
+  # https://oxc.rs/docs/guide/usage/linter.html
+  oxlint: 1.55.0
+
+  # This Oxlint plugin provides type-aware linting rules.
+  # https://github.com/oxc-project/tsgolint
+  oxlint-tsgolint: 0.21.1
+
+  # A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.
+  # https://github.com/microsoft/tslib
+  tslib: 2.8.1
+
+  # The official 'tsc' CLI for TypeScript, including the language service (LSP).
+  # https://www.typescriptlang.org
+  typescript: 6.0.3
+
+  # Valibot provides type-safe data validation.
+  # https://valibot.dev
+  valibot: 1.4.2
+
+  # Vite is a local development server and a bundler.
+  # https://vitejs.dev
+  vite: 8.1.4
+
+  # Vitest is a unit testing framework.
+  # https://vitest.dev
+  vitest: 4.1.10
+
+# Be very strict about third-party dependencies to reduce the risk of supply chain attacks.
 # https://pnpm.io/blog/2025/12/05/newsroom-npm-supply-chain-security
-
-# Disallow transitive dependencies from being installed from untrusted sources.
-blockExoticSubdeps: true
-
-# Require a minimum release age of 7 days before allowing packages to be installed.
-# This reduces the risk of supply chain attacks in the npm registry.
-minimumReleaseAge: 10080 # 7 * 1440 minutes
-
-# Allow certain packages to bypass the minimum release age requirement.
-# This allows urgent security upgrades to be installed despite being less than 7 days old.
-# Expand the whitelist as needed. Add new packages with exact version numbers to the top.
-minimumReleaseAgeExclude:
-  # CVE-2026-39363 + CVE-2026-39364.
-  # https://github.com/vitejs/vite/security/advisories/GHSA-p9ff-h696-f583
-  # https://github.com/vitejs/vite/security/advisories/GHSA-v2wj-q39q-566r
-  - 'vite@8.0.5'
-
-  # https://github.com/oxc-project/oxc/issues/21429
-  - '@oxlint-tsgolint/darwin-arm64@0.21.1'
-  - '@oxlint-tsgolint/darwin-x64@0.21.1'
-  - '@oxlint-tsgolint/linux-arm64@0.21.1'
-  - '@oxlint-tsgolint/linux-x64@0.21.1'
-  - '@oxlint-tsgolint/win32-arm64@0.21.1'
-  - '@oxlint-tsgolint/win32-x64@0.21.1'
-  - 'oxlint-tsgolint@0.21.1'
-
-# Pin packages to exact versions to ensure that all developers use the same versions.
+catalogMode: strict
+minimumReleaseAge: 4200 # minutes = 70 hours (3 days minus 2 hours to account for scheduling offsets in Renovate)
 savePrefix: ''
-
-# Disallow direct and transitive dependencies with unreviewed build scripts.
 strictDepBuilds: true
-
-# Prevent packages from being upgraded when their trust evidence or provenance is weaker than the previous version.
-# This reduces the risk of installing compromised packages.
 trustPolicy: no-downgrade
-trustPolicyIgnoreAfter: 10080 # 7 * 1440 minutes
+trustPolicyIgnoreAfter: 4200 # minutes
+
+# Disallow all script execution during package installation.
+allowBuilds:
+  lefthook: false
+
+# Let some packages bypass the minimum release age requirement to allow urgent security upgrades to be installed despite being less than 3 days old.
+minimumReleaseAgeExclude: []
+
+# Consolidate transitive dependency versions with the ones specified in the catalog.
+overrides: {}
