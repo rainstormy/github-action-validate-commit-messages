@@ -19,10 +19,6 @@ catalog:
   # https://github.com/microsoft/typescript-go
   '@typescript/native-preview': 7.0.0-dev.20260701.1
 
-  # This Vitest plugin provides a test overview in the web browser.
-  # https://vitest.dev/guide/ui.html
-  '@vitest/ui': 4.1.10
-
   # Lefthook is a Git hooks manager.
   # https://lefthook.dev
   lefthook: 2.1.8

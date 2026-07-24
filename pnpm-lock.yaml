@@ -15,9 +15,6 @@ catalogs:
     '@typescript/native-preview':
       specifier: 7.0.0-dev.20260701.1
       version: 7.0.0-dev.20260701.1
-    '@vitest/ui':
-      specifier: 4.1.10
-      version: 4.1.10
     lefthook:
       specifier: 2.1.8
       version: 2.1.8
@@ -57,9 +54,6 @@ importers:
       '@typescript/native-preview':
         specifier: 'catalog:'
         version: 7.0.0-dev.20260701.1
-      '@vitest/ui':
-        specifier: 'catalog:'
-        version: 4.1.10(vitest@4.1.10)
       lefthook:
         specifier: 'catalog:'
         version: 2.1.8
@@ -1280,6 +1274,7 @@ snapshots:
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
       vitest: 4.1.10(@types/node@24.13.2)(@vitest/ui@4.1.10)(vite@8.1.4(@types/node@24.13.2))
+    optional: true
 
   '@vitest/utils@4.1.10':
     dependencies:
@@ -1305,9 +1300,11 @@ snapshots:
     optionalDependencies:
       picomatch: 4.0.5
 
-  fflate@0.8.2: {}
+  fflate@0.8.2:
+    optional: true
 
-  flatted@3.4.2: {}
+  flatted@3.4.2:
+    optional: true
 
   fsevents@2.3.3:
     optional: true
