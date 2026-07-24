@@ -2,7 +2,7 @@ import type { JsonValue } from "#types/JsonValue.ts"
 import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
-import { mockFetchError, mockFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
+import { mockFetchError, mockFetchableJsonResource } from "#utilities/http/Fetch.fakes.ts"
 
 export function mockGithubResourceDto(
 	url: `${GithubUrlString}/${string}`,

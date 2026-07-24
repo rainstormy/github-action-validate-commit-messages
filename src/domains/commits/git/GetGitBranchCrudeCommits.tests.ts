@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { getGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits.ts"
-import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { Vector } from "#types/Vector.ts"
-import { fakeGitLogCommitDtos } from "#utilities/git/cli/dtos/GitLogCommitDto.fixtures.ts"
-import { mockGitLog, mockSabotagedGitLog } from "#utilities/git/cli/GetGitLog.mocks.ts"
+import { fakeGitLogCommitDtos } from "#utilities/git/cli/dtos/GitLogCommitDto.fakes.ts"
+import { mockGitLog, mockSabotagedGitLog } from "#utilities/git/cli/GetGitLog.fakes.ts"
 
 describe.each`
 	sha

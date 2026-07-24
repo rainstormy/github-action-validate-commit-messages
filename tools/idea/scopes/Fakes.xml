@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Fakes" pattern="file:*.fakes.ts||file:*.fakes.tsx" />
+</component>

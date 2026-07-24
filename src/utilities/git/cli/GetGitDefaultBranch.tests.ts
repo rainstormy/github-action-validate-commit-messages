@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { getGitDefaultBranch } from "#utilities/git/cli/GetGitDefaultBranch.ts"
-import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
+import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.fakes.ts"
 
 describe.each`
 	remote        | defaultBranch

@@ -22,7 +22,7 @@ export default defineConfig({
 	test: {
 		include: ["src/**/*.tests.ts"],
 		pool: "vmThreads",
-		setupFiles: ["src/utilities/vitest/VitestSetup.mocks.ts"],
+		setupFiles: ["src/utilities/vitest/VitestSetup.fakes.ts"],
 		mockReset: true,
 		unstubEnvs: true,
 		unstubGlobals: true,

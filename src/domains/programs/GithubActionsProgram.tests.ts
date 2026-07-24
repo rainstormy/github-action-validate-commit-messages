@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { githubActionsProgram } from "#programs/GithubActionsProgram.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
-import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.mocks.ts"
-import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
-import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
+import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.fakes.ts"
+import { mockGithubEnv } from "#utilities/github/env/GithubEnv.fakes.ts"
+import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.fakes.ts"
 import { printError } from "#utilities/logging/Logger.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
 
 beforeEach(() => {
 	mockCometPlatform("gha")

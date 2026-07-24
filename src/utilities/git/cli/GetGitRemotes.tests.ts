@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { getGitRemotes } from "#utilities/git/cli/GetGitRemotes.ts"
-import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
+import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.fakes.ts"
 
 describe("when there are no remotes", () => {
 	beforeEach(() => {

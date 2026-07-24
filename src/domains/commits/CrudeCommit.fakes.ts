@@ -1,5 +1,5 @@
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
-import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 
 export type CrudeCommitTemplate = Partial<CrudeCommit>
 

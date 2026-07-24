@@ -1,8 +1,8 @@
 import { type MockInstance, beforeEach, describe, expect, it, vi } from "vitest"
 import { printError } from "#utilities/logging/Logger.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
 
-// Undo the automatic use of `mockLogger` in `VitestSetup.mocks.ts`.
+// Undo the automatic use of `mockLogger` in `VitestSetup.fakes.ts`.
 vi.unmock(import("#utilities/logging/Logger.ts"))
 
 describe.each`

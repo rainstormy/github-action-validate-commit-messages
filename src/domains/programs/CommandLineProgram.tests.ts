@@ -3,8 +3,8 @@ import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { printMessage } from "#utilities/logging/Logger.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
-import { mockCometVersion } from "#utilities/version/CometVersion.mocks.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
+import { mockCometVersion } from "#utilities/version/CometVersion.fakes.ts"
 
 beforeEach(() => {
 	mockCometPlatform("cli")

@@ -1,9 +1,9 @@
 import {
 	type GitLogCommitDtoTemplate,
 	fakeGitLogCommitDto,
-} from "#utilities/git/cli/dtos/GitLogCommitDto.fixtures.ts"
+} from "#utilities/git/cli/dtos/GitLogCommitDto.fakes.ts"
 import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts"
-import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
+import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.fakes.ts"
 
 export function mockGitLog(dtos: Array<GitLogCommitDtoTemplate>): void {
 	mockGitCommand("remote", { output: "origin" })

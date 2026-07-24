@@ -1,11 +1,11 @@
 import {
 	type GithubPullRequestReference,
 	fakeGithubPullRequestReference,
-} from "#commits/github/GithubPullRequestReference.fixtures.ts"
+} from "#commits/github/GithubPullRequestReference.fakes.ts"
 import { assertNotNullish } from "#utilities/Assertions.ts"
-import { mockJsonFile } from "#utilities/files/Files.mocks.ts"
+import { mockJsonFile } from "#utilities/files/Files.fakes.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
-import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
+import { mockGithubEnv } from "#utilities/github/env/GithubEnv.fakes.ts"
 import type { GithubPullRequestEventDto } from "#utilities/github/event/dtos/GithubPullRequestEventDto.ts"
 
 const eventPath = "/github/workflow/event.json"

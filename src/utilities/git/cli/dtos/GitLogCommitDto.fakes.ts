@@ -1,4 +1,4 @@
-import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import { type Vector, vectorOf } from "#types/Vector.ts"
 import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts"
 
