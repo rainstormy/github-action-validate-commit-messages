@@ -6,9 +6,9 @@
 # IMPORTANT: Always add a comment that describes why we need that dependency and if it has any special maintenance requirements.
 # Keep in mind that adding a new dependency may increase the risk of supply chain attacks, as the attack surface grows.
 catalog:
-  # This library provides predefined, opinionated TypeScript configurations.
-  # https://github.com/rainstormy/presets-typescript
-  '@rainstormy/presets-typescript': 1.1.0
+  # Predefined configurations for Oxfmt, Oxlint, and TypeScript.
+  # https://github.com/rainstormy/presets-web
+  '@rainstormy/presets-web': 1.0.0-rc.1
 
   # Type definitions for the Node.js standard library.
   # https://nodejs.org/docs/latest/api
@@ -29,15 +29,11 @@ catalog:
 
   # Oxfmt is an opinionated code formatter.
   # https://oxc.rs/docs/guide/usage/formatter.html
-  oxfmt: 0.40.0
+  oxfmt: 0.60.0
 
   # Oxlint is a TypeScript linter.
   # https://oxc.rs/docs/guide/usage/linter.html
-  oxlint: 1.55.0
-
-  # This Oxlint plugin provides type-aware linting rules.
-  # https://github.com/oxc-project/tsgolint
-  oxlint-tsgolint: 0.21.1
+  oxlint: 1.75.0
 
   # The official 'tsc' CLI for TypeScript, including the language service (LSP).
   # https://www.typescriptlang.org
@@ -69,7 +65,5 @@ allowBuilds:
   lefthook: false
 
 # Let some packages bypass the minimum release age requirement to allow urgent security upgrades to be installed despite being less than 3 days old.
-minimumReleaseAgeExclude: []
-
-# Consolidate transitive dependency versions with the ones specified in the catalog.
-overrides: {}
+minimumReleaseAgeExclude:
+  - '@rainstormy/presets-web@1.0.0-rc.1'

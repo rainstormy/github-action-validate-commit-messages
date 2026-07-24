@@ -2,9 +2,9 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "@rainstormy/comet",
 	"version": "2.0.0-alpha.0",
+	"private": true,
 	"license": "MIT",
 	"author": "Steffen Diswal",
-	"private": true,
 	"type": "module",
 	"imports": {
 		"#commits/*": "./src/domains/commits/*",
@@ -19,14 +19,13 @@
 		"valibot": "catalog:"
 	},
 	"devDependencies": {
-		"@rainstormy/presets-typescript": "catalog:",
+		"@rainstormy/presets-web": "catalog:",
 		"@types/node": "catalog:",
 		"@typescript/native-preview": "catalog:",
 		"@vitest/ui": "catalog:",
 		"lefthook": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
-		"oxlint-tsgolint": "catalog:",
 		"typescript": "catalog:",
 		"vite": "catalog:",
 		"vitest": "catalog:"
