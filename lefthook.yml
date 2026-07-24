@@ -3,36 +3,34 @@
 
 post-checkout:
   commands:
-    # Re-installs third-party dependencies after checking out a branch or a commit.
-    # Only runs if `mise.toml` or `pnpm-lock.yaml` has changed during the checkout.
-    mise:
+    install:
+      # Re-install dependencies if they have changed (detected in `pnpm-lock.yaml`) after checking out a branch or a commit.
       # language=sh
       run: |
-        if ! git diff --quiet HEAD@\{1\} HEAD -- 'mise.toml' 'pnpm-lock.yaml'; then
-          mise install
+        if ! git diff --quiet HEAD@\{1\} HEAD -- 'pnpm-lock.yaml'; then
+          vp run install
         fi
 
 post-rewrite:
   commands:
-    # Re-installs third-party dependencies after rebasing onto another branch or commit.
-    # Only runs if `mise.toml` or `pnpm-lock.yaml` has changed during the rebase.
-    mise:
-      use_stdin: true
+    install:
+      # Re-install dependencies if they have changed (detected in `pnpm-lock.yaml`) after rebasing onto another branch or commit.
       # language=sh
       run: |
         read -r BASE_SHA _
-        if ! git diff --quiet "$BASE_SHA~1" HEAD -- 'mise.toml' 'pnpm-lock.yaml'; then
-          mise install
+        if ! git diff --quiet "$BASE_SHA~1" HEAD -- 'pnpm-lock.yaml'; then
+          vp run install
         fi
+      use_stdin: true
   only:
     - rebase
 
 pre-commit:
   commands:
-    mise:
-      # Reformats files before committing changes.
+    fmt:
+      # Reformat files before committing changes.
       # language=sh
-      run: mise run format
+      run: vp run fmt
       stage_fixed: true
   skip:
     - merge
@@ -40,7 +38,7 @@ pre-commit:
 
 pre-push:
   commands:
-    mise:
-      # Runs `check` and `test` before allowing commits to be pushed.
+    check:
+      # Verify the software quality before allowing commits to be pushed.
       # language=sh
-      run: mise run check && mise run check-actions && mise run test
+      run: vp run check && vp run test
