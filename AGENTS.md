@@ -14,7 +14,7 @@ Its intended use is in local Git hooks and as part of the CI pipeline in GitHub 
 ## Project structure
 - `src/main-cli.ts`: Comet CLI entrypoint
 - `src/main-gha.ts`: Comet GitHub Actions entrypoint
-- `src/legacy-v1-main.ts`: Legacy entrypoint, no longer maintained
+- `src/main-legacy-v1.ts`: Legacy entrypoint, no longer maintained
 - `src/domains/commits/`: Commits and tokenised commit messages
 - `src/domains/configurations/`: Configurations to customise Comet's behaviour
 - `src/domains/programs/`: Program flows invoked by entrypoints

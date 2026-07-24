@@ -72,7 +72,7 @@ describe.each`
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it(
-					// oxlint-disable-next-line jest/no-conditional-in-test -- The conditional expression only affects the test name.
+					// oxlint-disable-next-line jest/no-conditional-in-test, vitest/valid-title -- The conditional expression only affects the test name.
 					configProps.expectedRanges.length > 0
 						? "raises concerns about the disallowed trailer keys"
 						: "does not raise any concerns",
@@ -186,7 +186,7 @@ describe("when verifying a set of multiple commits and some commits contain rest
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it(
-				// oxlint-disable-next-line jest/no-conditional-in-test -- The conditional expression only affects the test name.
+				// oxlint-disable-next-line jest/no-conditional-in-test, vitest/valid-title -- The conditional expression only affects the test name.
 				configProps.expectedConcerns.length > 0
 					? "raises concerns about the disallowed trailer keys"
 					: "does not raise any concerns",

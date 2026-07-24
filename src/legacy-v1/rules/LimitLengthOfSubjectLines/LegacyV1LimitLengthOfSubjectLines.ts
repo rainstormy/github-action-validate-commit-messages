@@ -25,7 +25,7 @@ export function legacyV1LimitLengthOfSubjectLines({
 }
 
 const versionNumberRegex =
-	/(?:from|to) (?:[0-9A-Fa-f]{7,}|(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?<prerelease>-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?<build>\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)$/
+	/(?:from|to) (?:[0-9A-Fa-f]{7,}|(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?<prerelease>-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?<build>\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)$/u
 
 function endsWithVersionNumber(subjectLine: string): boolean {
 	return versionNumberRegex.test(subjectLine)

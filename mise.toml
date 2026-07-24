@@ -21,7 +21,7 @@ pnpm = "11.9.0"
 run = """
   COMET_PLATFORM='cli' vite build --ssr src/main-cli.ts --outDir dist/cli/ && \
   COMET_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/ && \
-  vite build --ssr src/legacy-v1-main.ts --outDir dist/
+  vite build --ssr src/main-legacy-v1.ts --outDir dist/
 """
 description = "Generates production-grade build artefacts of all entrypoints with Vite."
 alias = ["b"]

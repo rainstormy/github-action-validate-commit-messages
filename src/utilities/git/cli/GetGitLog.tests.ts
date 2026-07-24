@@ -1,7 +1,7 @@
-import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { GitLogCommitDto } from "#utilities/git/cli/dtos/GitLogCommitDto.ts"
 import { getGitLog } from "#utilities/git/cli/GetGitLog.ts"
+import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.mocks.ts"
 
 describe.each`
 	fromRef                                        | toRef

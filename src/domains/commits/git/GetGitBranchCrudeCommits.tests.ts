@@ -1,4 +1,3 @@
-import { mockGitLog, mockSabotagedGitLog } from "#utilities/git/cli/GetGitLog.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { getGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits.ts"
@@ -6,6 +5,7 @@ import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { Vector } from "#types/Vector.ts"
 import { fakeGitLogCommitDtos } from "#utilities/git/cli/dtos/GitLogCommitDto.fixtures.ts"
+import { mockGitLog, mockSabotagedGitLog } from "#utilities/git/cli/GetGitLog.mocks.ts"
 
 describe.each`
 	sha

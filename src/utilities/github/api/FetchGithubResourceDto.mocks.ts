@@ -1,8 +1,8 @@
-import { mockFetchError, mockFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
 import type { JsonValue } from "#types/JsonValue.ts"
 import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
+import { mockFetchError, mockFetchableJsonResource } from "#utilities/http/Fetch.mocks.ts"
 
 export function mockGithubResourceDto(
 	url: `${GithubUrlString}/${string}`,
@@ -28,7 +28,7 @@ export function mockGithubResourceDto(
 	const pageCount = pages.length
 
 	for (const [index, page] of Object.entries(pages)) {
-		const pageNumber = Number.parseInt(index, 10) + 1
+		const pageNumber = Math.trunc(Number(index)) + 1
 
 		mockFetchableJsonResource(
 			{

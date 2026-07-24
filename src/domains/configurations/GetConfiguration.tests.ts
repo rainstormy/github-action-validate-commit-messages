@@ -1,8 +1,8 @@
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import type { Configuration } from "#configurations/Configuration.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 
 describe("the default configuration in the command-line", () => {
 	let configuration: Configuration

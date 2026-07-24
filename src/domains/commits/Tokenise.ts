@@ -142,7 +142,7 @@ export function tokeniseBodyLines(
 			lines.push([codeblock(line)])
 			currentFence = "```"
 		} else {
-			const lineNumber = Number.parseInt(index, 10)
+			const lineNumber = Math.trunc(Number(index))
 			lines.push(tokenise(line, lineNumber < firstTrailerLineNumber ? regex : TRAILERLINE_REGEX))
 		}
 	}

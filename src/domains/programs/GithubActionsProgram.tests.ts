@@ -1,11 +1,11 @@
-import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.mocks.ts"
-import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
-import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { githubActionsProgram } from "#programs/GithubActionsProgram.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
+import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.mocks.ts"
+import { mockGithubEnv } from "#utilities/github/env/GithubEnv.mocks.ts"
+import { mockEmptyGithubEventDto } from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
 import { printError } from "#utilities/logging/Logger.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
 
 beforeEach(() => {
 	mockCometPlatform("gha")
@@ -24,10 +24,9 @@ describe("when the event payload is not a pull request", () => {
 	})
 
 	it("prints an error message that describes the expected event payload", () => {
-		expect(printError).toHaveBeenCalledWith(
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
 			"The 'rainstormy/comet' action expects the workflow trigger to be a 'pull_request' event.",
 		)
-		expect(printError).toHaveBeenCalledTimes(1)
 	})
 })
 
@@ -46,8 +45,9 @@ describe("when the event payload is missing in the file system", () => {
 	})
 
 	it("prints the error message raised by the file system", () => {
-		expect(printError).toHaveBeenCalledWith(`Failed to read ${eventPath}: File not found`)
-		expect(printError).toHaveBeenCalledTimes(1)
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
+			`Failed to read ${eventPath}: File not found`,
+		)
 	})
 })
 
@@ -66,9 +66,8 @@ describe("when the 'github-token' input parameter is missing", () => {
 	})
 
 	it("prints an error message that describes the expected input parameter", () => {
-		expect(printError).toHaveBeenCalledWith(
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
 			"The 'rainstormy/comet' action expects the 'github-token' input parameter to be set",
 		)
-		expect(printError).toHaveBeenCalledTimes(1)
 	})
 })

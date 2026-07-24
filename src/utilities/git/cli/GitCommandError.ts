@@ -1,4 +1,3 @@
-// oxlint-disable-next-line max-classes-per-file: Custom errors must extend the `Error` class.
 export class GitCommandError extends Error {
 	exitCode: number
 
@@ -11,7 +10,7 @@ export class GitCommandError extends Error {
 			].join(""),
 			{ cause: props.cause },
 		)
-
+		this.name = "GitCommandError"
 		this.exitCode = props.exitCode
 	}
 }

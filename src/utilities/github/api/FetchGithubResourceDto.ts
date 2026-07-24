@@ -2,7 +2,7 @@ import { type GenericSchema, type InferOutput, array, parse } from "valibot"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
-const nextPageRegex = /<(?<nextResourceUrl>\S*)>; rel="next"/i
+const nextPageRegex = /<(?<nextResourceUrl>\S*)>; rel="next"/iu
 
 /**
  * Retrieves a paginated resource from the GitHub API and returns a flattened array.
@@ -21,7 +21,7 @@ export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 	let nextResourceUrl: string | null = resourceUrl
 
 	while (nextResourceUrl !== null) {
-		// oxlint-disable-next-line eslint/no-await-in-loop: The paginated API makes each loop iteration depend on the result of the previous iteration.
+		// oxlint-disable-next-line eslint/no-await-in-loop -- The paginated API makes each loop iteration depend on the result of the previous iteration.
 		const response: Response = await fetch(nextResourceUrl, {
 			headers: {
 				accept: "application/vnd.github+json",
