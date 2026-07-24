@@ -39,10 +39,6 @@ catalog:
   # https://github.com/oxc-project/tsgolint
   oxlint-tsgolint: 0.21.1
 
-  # A runtime library that optimises TypeScript applications when the `importHelpers` option is enabled in `tsconfig.json`.
-  # https://github.com/microsoft/tslib
-  tslib: 2.8.1
-
   # The official 'tsc' CLI for TypeScript, including the language service (LSP).
   # https://www.typescriptlang.org
   typescript: 6.0.3
