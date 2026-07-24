@@ -26,7 +26,7 @@
 		"@types/node": "24.13.2",
 		"@typescript/native-preview": "7.0.0-dev.20260701.1",
 		"@vitest/ui": "4.1.10",
-		"lefthook": "2.1.8",
+		"lefthook": "2.1.10",
 		"oxfmt": "0.40.0",
 		"oxlint": "1.55.0",
 		"oxlint-tsgolint": "0.21.1",
