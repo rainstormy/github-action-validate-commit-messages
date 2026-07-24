@@ -23,7 +23,7 @@
 	},
 	"devDependencies": {
 		"@rainstormy/presets-typescript": "1.1.0",
-		"@types/node": "24.13.2",
+		"@types/node": "24.13.3",
 		"@typescript/native-preview": "7.0.0-dev.20260701.1",
 		"@vitest/ui": "4.1.10",
 		"lefthook": "2.1.8",
