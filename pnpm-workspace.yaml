@@ -43,6 +43,11 @@ catalog:
   # https://vitejs.dev
   vite: 8.1.4
 
+  # Vite+ is a unified toolchain and task runner for Oxfmt, Oxlint, Vite, and Vitest.
+  # It is also a version manager of Node.js and pnpm.
+  # https://viteplus.dev
+  vite-plus: 0.2.6
+
   # Vitest is a unit testing framework.
   # https://vitest.dev
   vitest: 4.1.10
@@ -63,3 +68,13 @@ allowBuilds:
 # Let some packages bypass the minimum release age requirement to allow urgent security upgrades to be installed despite being less than 3 days old.
 minimumReleaseAgeExclude:
   - '@rainstormy/presets-web@1.0.0-rc.1'
+  - '@voidzero-dev/vite-plus-core@0.2.6'
+  - '@voidzero-dev/vite-plus-darwin-arm64@0.2.6'
+  - '@voidzero-dev/vite-plus-darwin-x64@0.2.6'
+  - '@voidzero-dev/vite-plus-linux-arm64-gnu@0.2.6'
+  - '@voidzero-dev/vite-plus-linux-arm64-musl@0.2.6'
+  - '@voidzero-dev/vite-plus-linux-x64-gnu@0.2.6'
+  - '@voidzero-dev/vite-plus-linux-x64-musl@0.2.6'
+  - '@voidzero-dev/vite-plus-win32-arm64-msvc@0.2.6'
+  - '@voidzero-dev/vite-plus-win32-x64-msvc@0.2.6'
+  - vite-plus@0.2.6
