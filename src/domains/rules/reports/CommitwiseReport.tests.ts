@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
+import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit, Commits } from "#commits/Commit.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { fakeConfiguration } from "#configurations/Configuration.fakes.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
@@ -9,7 +9,7 @@ import type { Concerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
-import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { Vector } from "#types/Vector.ts"
 
 describe("when there are no concerns", () => {

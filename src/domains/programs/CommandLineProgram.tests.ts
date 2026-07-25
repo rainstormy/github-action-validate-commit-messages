@@ -1,10 +1,10 @@
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.mocks.ts"
-import { mockCometVersion } from "#utilities/version/CometVersion.mocks.ts"
 import { beforeEach, describe, expect, it } from "vitest"
 import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts"
 import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { printMessage } from "#utilities/logging/Logger.ts"
+import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
+import { mockCometVersion } from "#utilities/version/CometVersion.fakes.ts"
 
 beforeEach(() => {
 	mockCometPlatform("cli")
@@ -29,8 +29,7 @@ describe.each`
 	})
 
 	it("prints a help text with usage instructions", () => {
-		expect(printMessage).toHaveBeenCalledWith(getHelpText())
-		expect(printMessage).toHaveBeenCalledTimes(1)
+		expect(printMessage).toHaveBeenCalledExactlyOnceWith(getHelpText())
 	})
 })
 
@@ -68,8 +67,7 @@ describe.each`
 		})
 
 		it(`prints the tool version of '${props.version}'`, () => {
-			expect(printMessage).toHaveBeenCalledWith(props.version)
-			expect(printMessage).toHaveBeenCalledTimes(1)
+			expect(printMessage).toHaveBeenCalledExactlyOnceWith(props.version)
 		})
 	},
 )

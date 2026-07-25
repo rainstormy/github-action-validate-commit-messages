@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
-import { fakeCrudeCommit } from "#commits/CrudeCommit.fixtures.ts"
-import { fakeTokenConfiguration } from "#configurations/Configuration.fixtures.ts"
-import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCrudeCommit } from "#commits/CrudeCommit.fakes.ts"
+import { fakeTokenConfiguration } from "#configurations/Configuration.fakes.ts"
+import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 
 const configuration = fakeTokenConfiguration()

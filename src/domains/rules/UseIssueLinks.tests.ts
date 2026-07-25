@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest"
-import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
+import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
 import {
 	emptyRuleConfiguration,
 	fakeTokenConfiguration,
-} from "#configurations/Configuration.fixtures.ts"
+} from "#configurations/Configuration.fakes.ts"
 import type { RuleConfiguration } from "#configurations/Configuration.ts"
 import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
-import { fakeCommitSha } from "#types/CommitSha.fixtures.ts"
+import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { Vector } from "#types/Vector.ts"
 

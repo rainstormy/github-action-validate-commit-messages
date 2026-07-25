@@ -55,8 +55,16 @@ jobs:
           # Use a separate access token with permission to commit and push.
           token: ${{ secrets.BOT_NIMBUS_GH_AUTH_TOKEN }}
         #
-      - name: Restore the build artefacts to be distributed in the release
-        uses: ./.github/actions/build-artefacts
+      - name: Install dependencies
+        uses: voidzero-dev/setup-vp@250f29ce396baf5e8f24498e17c0dfdebabc26eb # v1.15.0
+        with:
+          node-version-file: package.json
+          version-file: pnpm-workspace.yaml
+        #
+      - name: Generate build artefacts to be distributed in the release
+        # language=sh
+        run: vp run build
+        shell: bash
         #
       - name: Update the release artefacts
         uses: rainstormy/updraft@23bb449c54a4e967c87a6943a1ef9a237eafdb99 # v1.2.0

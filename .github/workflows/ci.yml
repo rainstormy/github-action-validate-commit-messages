@@ -49,8 +49,16 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         #
-      - name: Restore the build artefacts to be run
-        uses: ./.github/actions/build-artefacts
+      - name: Install dependencies
+        uses: voidzero-dev/setup-vp@250f29ce396baf5e8f24498e17c0dfdebabc26eb # v1.15.0
+        with:
+          node-version-file: package.json
+          version-file: pnpm-workspace.yaml
+        #
+      - name: Generate build artefacts to be run
+        # language=sh
+        run: vp run build
+        shell: bash
         #
       - name: Verify the commit messages
         # Run the action on itself.

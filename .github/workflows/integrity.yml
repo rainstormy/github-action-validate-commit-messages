@@ -38,36 +38,8 @@ concurrency:
 # All third-party actions are pinned to a specific commit SHA for security reasons.
 # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-24.04-arm
-    timeout-minutes: 2
-    permissions:
-      # To check out the repository.
-      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
-      contents: read
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        #
-      - name: Build the project (Vite)
-        uses: ./.github/actions/task
-        with:
-          # The cache key includes:
-          # - All production code (`src/**/*`).
-          # - The TypeScript configuration file which defines import path aliases (`tsconfig.json`).
-          # - The Vite configuration file (`vite.config.ts`).
-          # - Tool versions and mise task definitions (`mise.toml`).
-          # - Node.js package versions (`pnpm-lock.yaml`).
-          #
-          # CAUTION: The cache key is repeated in `.github/actions/build-artefacts/action.yml` to restore the build artefacts.
-          cache-key: build:${{ hashFiles('src/**/*', '!src/**/*.fixtures.*', '!src/**/*.mocks.*', '!src/**/*.tests.*', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json', 'vite.config.ts') }}
-          cache-path: dist/
-          # language=sh
-          task: build
-
   check:
-    name: Clean code
+    name: Check
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 2
     permissions:
@@ -79,70 +51,50 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         #
       - name: Verify the workflow syntax (actionlint)
-        uses: ./.github/actions/task
-        with:
-          # The cache key includes:
-          # - Workflow files (`.github/workflows/*.yml`).
-          # - Reusable actions (`.github/actions/**/action.yml`).
-          # - The metadata file of the GitHub Actions entrypoint (`action.yml`).
-          # - Tool versions and mise task definitions (`mise.toml`).
-          cache-key: check-actions:${{ hashFiles('.github/**/*.yml', 'action.yml', 'mise.toml') }}
-          cache-path: node_modules/.cache/actionlint/
-          # language=sh
-          task: check-actions
+        # Download and run actionlint in one step, as recommended by the actionlint docs.
+        # https://github.com/rhysd/actionlint/blob/main/docs/install.md#download-script
+        # https://github.com/rhysd/actionlint/blob/main/docs/usage.md#use-actionlint-on-github-actions
+        # language=sh
+        run: |
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/914e7df21a07ef503a81201c76d2b11c789d3fca/scripts/download-actionlint.bash) 1.7.12
+          ./actionlint -color
+        shell: bash
         #
-      - name: Verify the code style (Oxlint, TypeScript, Oxfmt)
-        uses: ./.github/actions/task
+      - name: Install dependencies
+        uses: voidzero-dev/setup-vp@250f29ce396baf5e8f24498e17c0dfdebabc26eb # v1.15.0
         with:
-          # The cache key includes:
-          # - Files covered by Oxlint, TypeScript, and Oxfmt, as defined by `.oxlintrc.jsonc`, `tsconfig.json`, and `.oxfmtrc.jsonc`.
-          # - The Oxlint configuration file (`.oxlintrc.jsonc`).
-          # - The TypeScript configuration file (`tsconfig.json`).
-          # - The Oxfmt configuration file (`.oxfmtrc.jsonc`).
-          # - The EditorConfig file which is respected by Oxfmt (`.editorconfig`).
-          # - Tool versions and mise task definitions (`mise.toml`).
-          # - Node.js package versions (`pnpm-lock.yaml`).
-          cache-key: check:${{ hashFiles('.github/**/*', '.vscode/**/*', 'src/**/*', '*.json', '*.jsonc', '*.toml', '*.ts', '*.yaml', '*.yml', '.editorconfig') }}
-          cache-path: node_modules/.cache/typescript/
-          # language=sh
-          task: check
+          node-version-file: package.json
+          version-file: pnpm-workspace.yaml
+          cache: true
         #
-      - name: Verify the Renovate configuration
-        uses: ./.github/actions/task
+      - name: Restore the task cache
+        id: task-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          # The cache key includes:
-          # - The Renovate configuration file (`.github/renovate.json`).
-          # - Tool versions and mise task definitions (`mise.toml`).
-          cache-key: check-renovate:${{ hashFiles('.github/renovate.json', 'mise.toml') }}
-          cache-path: node_modules/.cache/renovate/
-          # language=sh
-          task: check-renovate
-
-  test:
-    name: Unit tests
-    runs-on: ubuntu-24.04-arm
-    timeout-minutes: 2
-    permissions:
-      # To check out the repository.
-      # https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
-      contents: read
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+          # Use a rolling cache key with a stable prefix, as recommended by the Vite+ docs.
+          # https://viteplus.dev/guide/github-actions-cache
+          path: node_modules/.vite/task-cache/
+          key: vite-task-${{ runner.os }}-${{ runner.arch }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: vite-task-${{ runner.os }}-${{ runner.arch }}-
+        #
+      - name: Verify the code style (Oxfmt, Oxlint, TypeScript)
+        # language=sh
+        run: vp run check
+        shell: bash
         #
       - name: Verify the unit tests (Vitest)
-        uses: ./.github/actions/task
+        # language=sh
+        run: vp run test
+        shell: bash
+        #
+      - name: Verify the build (Vite)
+        # language=sh
+        run: vp run build
+        shell: bash
+        #
+      - name: Save the task cache
+        if: ${{ !cancelled() }}
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          # The cache key includes:
-          # - Test fixtures (`src/**/*.fixtures.ts`).
-          # - Module mocks (`src/**/*.mocks.ts`).
-          # - Unit test suites (`src/**/*.tests.ts`).
-          # - Files covered by unit tests (`src/**/*`).
-          # - The TypeScript configuration file which defines import path aliases (`tsconfig.json`).
-          # - The Vite configuration file (`vite.config.ts`).
-          # - Tool versions and mise task definitions (`mise.toml`).
-          # - Node.js package versions (`pnpm-lock.yaml`).
-          cache-key: test:${{ hashFiles('src/**/*', 'mise.toml', 'pnpm-lock.yaml', 'tsconfig.json', 'vite.config.ts') }}
-          cache-path: node_modules/.cache/vitest/
-          # language=sh
-          task: test --reporter default --reporter github-actions
+          path: node_modules/.vite/task-cache/
+          key: ${{ steps.task-cache.outputs.cache-primary-key }}

@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="Test Fixtures and Mocks" pattern="file:*.fixtures.ts||file:*.fixtures.tsx||file:*.mocks.ts||file:*.mocks.tsx" />
-</component>

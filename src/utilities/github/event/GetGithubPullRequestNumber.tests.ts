@@ -1,8 +1,8 @@
+import { beforeEach, describe, expect, it } from "vitest"
 import {
 	mockEmptyGithubEventDto,
 	mockGithubPullRequestEventDto,
-} from "#utilities/github/event/FetchGithubEventDto.mocks.ts"
-import { beforeEach, describe, expect, it } from "vitest"
+} from "#utilities/github/event/FetchGithubEventDto.fakes.ts"
 import { getGithubPullRequestNumber } from "#utilities/github/event/GetGithubPullRequestNumber.ts"
 
 describe.each`

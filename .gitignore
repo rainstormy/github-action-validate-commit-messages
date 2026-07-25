@@ -10,21 +10,14 @@ dist/*
 node_modules/
 
 # Development tools and IDEs
-.idea/*
-!.idea/runConfigurations/
-!.idea/scopes/
-!.idea/*.iml
-!.idea/externalDependencies.xml
-!.idea/jsonSchemas.xml
-!.idea/modules.xml
-!.idea/vcs.xml
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
-!.vscode/tasks.json
+.idea/
+.run/
+.vscode/
+*.code-workspace
 *.local
 *.local.*
 *-local.*
+.ws-context
 
 # Operating system artefacts
 *~

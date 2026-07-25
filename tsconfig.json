@@ -1,11 +1,11 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": ["@rainstormy/presets-typescript/base", "@rainstormy/presets-typescript/es2023"],
+	"extends": ["@rainstormy/presets-web/typescript"],
 	"compilerOptions": {
-		"allowImportingTsExtensions": true,
-		"erasableSyntaxOnly": true,
 		"incremental": true,
-		"libReplacement": false,
+		"lib": ["ES2025"],
+		"module": "ESNext",
+		"target": "ESNext",
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
 		"types": ["node", "vite/client"]
 	},

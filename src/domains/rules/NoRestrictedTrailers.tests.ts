@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { fakeCommitFactory } from "#commits/Commit.fixtures.ts"
+import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRuleConfiguration } from "#configurations/Configuration.fixtures.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
 import type { RuleConfiguration } from "#configurations/Configuration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
@@ -72,7 +72,7 @@ describe.each`
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it(
-					// oxlint-disable-next-line jest/no-conditional-in-test -- The conditional expression only affects the test name.
+					// oxlint-disable-next-line jest/no-conditional-in-test, vitest/valid-title -- The conditional expression only affects the test name.
 					configProps.expectedRanges.length > 0
 						? "raises concerns about the disallowed trailer keys"
 						: "does not raise any concerns",
@@ -186,7 +186,7 @@ describe("when verifying a set of multiple commits and some commits contain rest
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it(
-				// oxlint-disable-next-line jest/no-conditional-in-test -- The conditional expression only affects the test name.
+				// oxlint-disable-next-line jest/no-conditional-in-test, vitest/valid-title -- The conditional expression only affects the test name.
 				configProps.expectedConcerns.length > 0
 					? "raises concerns about the disallowed trailer keys"
 					: "does not raise any concerns",
