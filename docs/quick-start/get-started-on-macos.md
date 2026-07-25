@@ -76,7 +76,7 @@ Last updated: July 26, 2025.
    Go to **Settings** (<kbd>⌘ Cmd</kbd><kbd>,</kbd>) › **Developer** › **Set up the SSH agent** › **Use key names**.  
    Select **Use the SSH agent**.
 
-   ![](assets/downscaled/1password-ssh-agent-macos.png)
+   ![](assets/downscaled/1password-ssh-agent.png)
 
 4. [Configure](https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client)
    the SSH client to use the SSH agent in 1Password:
@@ -357,7 +357,7 @@ Last updated: July 26, 2025.
    Locate and run **Shell Command: Install 'code' command in PATH**.  
    _(it may request elevated privileges)_
 
-   ![](assets/downscaled/vscode-cli-macos.png)
+   ![](assets/downscaled/vscode-cli.png)
 
 4. Quit Visual Studio Code (<kbd>⌘ Cmd</kbd><kbd>Q</kbd>).
 
