@@ -1,10 +1,3 @@
-# Configure pnpm and manage third-party dependencies.
-# https://pnpm.io/settings
-
-# Declare third-party dependencies installed in `node_modules`.
-#
-# IMPORTANT: Always add a comment that describes why we need that dependency and if it has any special maintenance requirements.
-# Keep in mind that adding a new dependency may increase the risk of supply chain attacks, as the attack surface grows.
 catalog:
   # Predefined configurations for Oxfmt, Oxlint, and TypeScript.
   # https://github.com/rainstormy/presets-web
@@ -33,7 +26,7 @@ catalog:
 
   # The official 'tsc' CLI for TypeScript, including the language service (LSP).
   # https://www.typescriptlang.org
-  typescript: 6.0.3
+  typescript: 7.0.2
 
   # Valibot provides type-safe data validation.
   # https://valibot.dev
