@@ -1,21 +1,84 @@
-# Contribution Guidelines
+# Human contribution guidelines
 
-## Quick Start
-- [Get started on 🍏 macOS](docs/quick-start/get-started-on-macos.md)
+Consult `AGENTS.md` for a detailed description of the project.
 
 ## Tasks
-```shell
-mise run name_of_task
-```
 
-| Task name        | Alias | Description                                                                                                                                                                                                                                  |
-|------------------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `build`          | `b`   | Generates production-grade build artefacts of all entrypoints with [Vite](https://vite.dev).                                                                                                                                                 |
-| `check`          | `c`   | Verifies that the source code is clean, type-safe, and well-formatted with [Oxlint](https://oxc.rs/docs/guide/usage/linter.html), [TypeScript](https://www.typescriptlang.org), and [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html). |
-| `check-actions`  |       | Verifies that the GitHub Actions workflows are valid with [actionlint](https://github.com/rhysd/actionlint).                                                                                                                                 |
-| `check-renovate` |       | Verifies that the [Renovate](https://github.com/renovatebot/renovate) configuration file (`.github/renovate.json`) is valid.                                                                                                                 |
-| `format`         | `f`   | Applies linting suggestions with [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) and reformats the source code with [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html).                                                           |
-| `install`        | `i`   | Installs all third-party dependencies with [mise-en-place](https://mise.jdx.dev) and [pnpm](https://pnpm.io) and (unless opted out) enables the Git hooks with [Lefthook](https://lefthook.dev).                                             |
-| `test`           | `t`   | Runs the entire unit test suite once with [Vitest](https://vitest.dev).                                                                                                                                                                      |
-| `vitest`         | `v`   | Starts the [Vitest UI](https://vitest.dev/guide/ui.html#vitest-ui) test explorer for continuous unit testing.                                                                                                                                |
-| `yolo`           |       | Disables the Git hooks temporarily with [Lefthook](https://lefthook.dev).                                                                                                                                                                    |
+| Task                         | Description                                                                           |
+|------------------------------|---------------------------------------------------------------------------------------|
+| `vp run build`               | Generates production-grade build artefacts of all entrypoints.                        |
+| `vp run check`               | Verifies that the source code is clean, type-safe, and well-formatted.                |
+| `vp run fmt`                 | Applies linting suggestions and reformats the source code.                            |
+| `vp run install`             | Installs dependencies and enables Git hooks.                                          |
+| `vp run test [...filenames]` | Runs the given unit test files or the entire test suite if no arguments are provided. |
+| `vp run yolo`                | Disables the Git hooks temporarily.                                                   |
+
+## Get started
+
+This section describes the necessary steps for you to start coding in this project.
+
+### Prerequisites
+
+- [Git](https://git-scm.com)
+- [Vite+](https://viteplus.dev)
+- [actionlint](https://rhysd.github.io/actionlint) (optional)
+
+### Set up the Git repository
+
+1. Generate separate pairs of authentication and signing keys with an SSH agent such as [1Password](https://www.1password.dev/ssh/get-started) or [OpenSSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
+
+2. [Upload the public keys](https://github.com/settings/ssh/new) (`ssh-ed25519 AAAAC3...`) to your GitHub profile.
+
+3. [Add GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints) to the list of trusted remotes:
+
+   ```shell
+   touch ~/.ssh/known_hosts && \
+   echo 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' >> ~/.ssh/known_hosts
+   ```
+
+4. [Clone the project](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) with the authentication key:
+
+   ```shell
+   git clone 'git@github.com:rainstormy/github-action-validate-commit-messages.git' && \
+   cd 'github-action-validate-commit-messages'
+   ```
+
+5. Declare your Git identity with your first and last names and GitHub noreply email address:
+
+   ```shell
+   git config user.name '<FirstName> <LastName>'
+   ```
+
+   ```shell
+   git config user.email '<id>+<username>@users.noreply.github.com'
+   ```
+
+6. [Sign your commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification) with the signing key:
+
+   ```shell
+   git config user.signingkey 'ssh-ed25519 AAAAC3<SigningKey>'
+   ```
+
+   ```shell
+   git config gpg.format 'ssh' && \
+   git config commit.gpgsign 'true' && \
+   git config tag.gpgsign 'true'
+   ```
+
+### Set up the workspace
+
+1. Install dependencies and enable Git hooks:
+
+   ```shell
+   vp run install
+   ```
+
+2. Create a workspace in the IDE of your choice.
+
+> [!TIP]  
+> For IntelliJ IDEA or WebStorm, you can use the project generator as a starting point:
+> 
+> ```shell
+> ./tools/generate-idea-project.sh && \
+> idea .
+> ```
