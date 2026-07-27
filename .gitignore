@@ -10,14 +10,21 @@ dist/*
 node_modules/
 
 # Development tools and IDEs
+.claude/
+.cursor/
+.github/copilot-instructions.md
 .idea/
+.junie/
+.opencode/
 .run/
 .vscode/
+.zed/
 *.code-workspace
 *.local
 *.local.*
 *-local.*
 .ws-context
+CLAUDE.md
 
 # Operating system artefacts
 *~
