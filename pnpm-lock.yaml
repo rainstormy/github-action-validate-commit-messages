@@ -206,8 +206,8 @@ settings:
 catalogs:
   default:
     '@rainstormy/presets-web':
-      specifier: 1.0.0-rc.1
-      version: 1.0.0-rc.1
+      specifier: 1.0.0-rc.2
+      version: 1.0.0-rc.2
     '@types/node':
       specifier: 24.13.3
       version: 24.13.3
@@ -246,7 +246,7 @@ importers:
     devDependencies:
       '@rainstormy/presets-web':
         specifier: 'catalog:'
-        version: 1.0.0-rc.1(oxfmt@0.60.0(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(oxlint@1.75.0(oxlint-tsgolint@7.0.2001)(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(typescript@7.0.2)
+        version: 1.0.0-rc.2(oxfmt@0.60.0(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(oxlint@1.75.0(oxlint-tsgolint@7.0.2001)(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(typescript@7.0.2)
       '@types/node':
         specifier: 'catalog:'
         version: 24.13.3
@@ -601,8 +601,8 @@ packages:
   '@polka/url@1.0.0-next.25':
     resolution: {integrity: sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==}
 
-  '@rainstormy/presets-web@1.0.0-rc.1':
-    resolution: {integrity: sha512-pRb7yqWKu6HCjCsWf0AFyNtDdBxNtncrrGzRa8r5tNhQ6VKItzB3UzhbRVQtyOpMC6/L+nmDhP+lC6dZ21sRCg==}
+  '@rainstormy/presets-web@1.0.0-rc.2':
+    resolution: {integrity: sha512-1ZaPhDfLXzsy8IvTO7NFFMlKIfwR6V9Dz1Hn208w6f1fGFrDLCDg7SdLuie8nPDus2OCBizNxcBiDtRsL5aM7g==}
     peerDependencies:
       oxfmt: ^0.60.0
       oxlint: ^1.75.0
@@ -1959,7 +1959,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.25': {}
 
-  '@rainstormy/presets-web@1.0.0-rc.1(oxfmt@0.60.0(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(oxlint@1.75.0(oxlint-tsgolint@7.0.2001)(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(typescript@7.0.2)':
+  '@rainstormy/presets-web@1.0.0-rc.2(oxfmt@0.60.0(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(oxlint@1.75.0(oxlint-tsgolint@7.0.2001)(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))))(typescript@7.0.2)':
     dependencies:
       oxfmt: 0.60.0(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3)))
       oxlint: 1.75.0(oxlint-tsgolint@7.0.2001)(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3)))
