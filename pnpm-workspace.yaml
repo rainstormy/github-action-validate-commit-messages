@@ -17,7 +17,7 @@ catalog:
 
   # Lefthook is a Git hooks manager.
   # https://lefthook.dev
-  lefthook: 2.1.8
+  lefthook: 2.1.10
 
   # Oxfmt is an opinionated code formatter.
   # https://oxc.rs/docs/guide/usage/formatter.html
