@@ -21,7 +21,6 @@
 	"devDependencies": {
 		"@rainstormy/presets-web": "catalog:",
 		"@types/node": "catalog:",
-		"@typescript/native-preview": "catalog:",
 		"lefthook": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
@@ -33,7 +32,7 @@
 	"devEngines": {
 		"packageManager": {
 			"name": "pnpm",
-			"version": "11.9.0",
+			"version": "11.17.0",
 			"onFail": "download"
 		},
 		"runtime": {
