@@ -21,7 +21,6 @@
 	"devDependencies": {
 		"@rainstormy/presets-web": "catalog:",
 		"@types/node": "catalog:",
-		"@typescript/native-preview": "catalog:",
 		"lefthook": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
