@@ -6,7 +6,7 @@ import { regexEnum, regexUnion } from "#utilities/Regexes.ts"
  * Matches an inline code phrase enclosed in a pair of backticks (e.g. Markdown inline code) spanning all characters in-between, including whitespace.
  */
 // language=jsunicoderegexp
-const CODE = `(?<code>\`[^\`]*\`)`
+const CODE = String.raw`(?<code>${"`"}[^${"`"}]*${"`"})`
 
 /**
  * Matches a single punctuation or symbol character, thus avoiding greedily matching inline code phrases and issue link prefixes adjacent to other punctuation.
@@ -23,13 +23,6 @@ const PUNCTUATION = String.raw`(?<punctuation>[\p{P}\p{S}])`
 const REVERT = String.raw`(?<revert>(?i:revert))(?=\s*")`
 
 /**
- * Matches a squash marker literal with one or more leading or trailing exclamation marks, optionally preceded by whitespace.
- * The tokeniser ensures that squash tokens only appear at the start of the subject line.
- */
-// language=jsunicoderegexp
-const SQUASH = String.raw`(?<squash>(?i:amend!+|fixup!+|squash!+|!+amend\b|!+fixup\b|!+squash\b))`
-
-/**
  * Matches a dependency version string in one of the following formats:
  *
  * - SHA code of 7 or more lowercase hexadecimal characters (e.g. a Docker image digest or a Git commit).
@@ -41,6 +34,13 @@ const SQUASH = String.raw`(?<squash>(?i:amend!+|fixup!+|squash!+|!+amend\b|!+fix
  */
 // language=jsunicoderegexp
 const SEMVER = String.raw`(?<=\s)(?<semver>[0-9a-f]{7,}|v?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)(?=\s|"|$)`
+
+/**
+ * Matches a squash marker literal with one or more leading or trailing exclamation marks, optionally preceded by whitespace.
+ * The tokeniser ensures that squash tokens only appear at the start of the subject line.
+ */
+// language=jsunicoderegexp
+const SQUASH = String.raw`(?<squash>(?i:amend!+|fixup!+|squash!+|!+amend\b|!+fixup\b|!+squash\b))`
 
 /**
  * Matches the key of a colon-separated key-value pair, optionally preceded and/or separated by whitespace, in one of the following formats:
