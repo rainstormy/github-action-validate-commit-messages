@@ -1,78 +1,82 @@
-# Agent Contribution Guidelines
+# Agent contribution guidelines
 
-'Comet' is a linter to ensure that Git commit messages conform to certain standards and conventions as declared by a customisable set of rules.
+'Comet' is a linter to ensure that Git commit messages conform to certain standards and conventions declared by a customisable set of rules.
 Its intended use is in local Git hooks and as part of the CI pipeline in GitHub pull requests.
 
-## Key technologies
-- **Language:** TypeScript
-- **Runtime:** Node.js 24
-- **Package managers:** mise-en-place and pnpm
-- **Bundler:** Vite
-- **Testing framework:** Vitest
+## Technologies
+
+- **Language:** TypeScript on ECMAScript 2025
+- **Toolchain:** Vite+ (including Oxfmt, Oxlint, tsdown, Vite, and Vitest)
+- **Runtime:** Node.js 24 (LTS)
 - **CI/CD pipeline:** GitHub Actions
 
-## Project structure
-- `src/main-cli.ts`: Comet CLI entrypoint
-- `src/main-gha.ts`: Comet GitHub Actions entrypoint
-- `src/main-legacy-v1.ts`: Legacy entrypoint, no longer maintained
-- `src/domains/commits/`: Commits and tokenised commit messages
-- `src/domains/configurations/`: Configurations to customise Comet's behaviour
-- `src/domains/programs/`: Program flows invoked by entrypoints
-- `src/domains/rules/`: Rule validation logic and reporters to output concerns
-- `src/types/`: Self-contained TypeScript types and related utilities
-- `src/utilities/`: General-purpose utilities and adapters to externals (local Git client, GitHub REST API, local file system, console output, etc.)
-- `src/legacy-v1/`: Legacy code, no longer maintained, to be migrated to v2
-- `docs/`: Markdown documentation for contributors and for end users
-- `README.md`: Usage instructions for end users of Comet
+## Tasks
 
-## Common development tasks
-- `mise install`: Installs all required tools and dependencies
-- `mise run check`: Verifies that the source code is clean, type-safe, and well-formatted
-- `mise run format`: Applies linting suggestions and reformats the source code
-- `mise run test`: Runs the entire unit test suite once (equivalent to `vitest run`, accepts same arguments)
+Always use `vp run` to install dependencies and run tasks. Never use npm, npx, pnpm, yarn etc.
 
-Always use mise to install dependencies and run tasks. Never use pnpm, npm, npx, nvm, or yarn for this.
+- `vp run fmt`: Reformats the code. Mandatory after implementing code changes.
+- `vp run check`: Verifies that the code is clean, type-safe, and well-formatted. Mandatory before finishing.
+- `vp run test [...filenames]`: Runs the given unit test files or the entire test suite if no arguments are provided. Mandatory before finishing.
+- `vp run install`: Installs dependencies. Rarely needed for code changes.
 
-## Principles
-- Prefer functional and immutable solutions unless an imperative and mutable solution is clearly superior, e.g. in terms of performance or readability
-- Prefer creative, realistic, and lowkey funny data over boring, repetitive data in unit tests, e.g. for commit messages and author names under test
-- Prefer simple and consistent solutions over clever ones
-- Follow patterns of existing code
+## Concepts
+
+- **Crude commit:** Platform-agnostic metadata of a Git commit such as SHA, parents, commit message, author, and signature. Mapped from DTOs retrieved from the local Git client or the GitHub REST API.
+- **Commit:** Refined from a crude commit with tokenised subject line and body lines.
+- **Token:** A text segment of a commit message of a particular class such as word, whitespace, issuelink, squash, or code. Enriched with string start index and end index (character range). Never multi-line. Never overlaps with other tokens.
+- **Rule:** Logic to evaluate a commit and raise a list of concerns. Some rules accept customisable parameters for fine-tuned behaviour.
+- **Concern:** Describes how and where a commit violates the policy enforced by a rule. May overlap with other concerns.
+- **Reporter:** Summary of concerns in a particular output format such as human-readable console output, concise agent-friendly console output, or Markdown output.
+- **Configuration:** Customisable declaration of how to tokenise commit messages and which rules to enforce, including their parameters. Comet provides a default configuration, but end users may override it by providing a `comet.json` configuration file.
+
+## Skills
+
+Read only the relevant skill guides for the task at hand:
+
+- Before exploring, delegating, implementing, modifying, testing, or reviewing a new rule, read `.agents/skills/new-rule/SKILL.md`.
+- Before exploring, delegating, implementing, modifying, testing, or reviewing a new token type in commit messages, read `.agents/skills/new-token-type/SKILL.md`.
+
+## Entrypoints
+
+- `src/main-cli.ts`: Comet CLI entrypoint. Uses the local Git client.
+- `src/main-gha.ts`: Comet GitHub Actions entrypoint. Uses the GitHub REST API.
+- `src/main-legacy-v1.ts`: Legacy entrypoint. No longer maintained.
+- `README.md`: Usage instructions for Comet end users.
+
+## Directories
+
+- `src/domains/commits/`: Platform-agnostic commits and tokenised commit messages.
+- `src/domains/configurations/`: Configurations to customise Comet's behaviour.
+- `src/domains/programs/`: Program flows invoked by entrypoints.
+- `src/domains/rules/`: Rule validation logic and reporters to output concerns.
+- `src/legacy-v1/`: Legacy code. No longer maintained.
+- `src/types/`: Self-contained TypeScript types and related utilities.
+- `src/utilities/`: General-purpose utility functions and adapters to externals such as the local Git client, GitHub REST API, local file system, console output, etc.
 
 ## Code style
-- Use PascalCase in filenames with extensions of `.ts` for source files and `.tests.ts` for test files
-- Use tab indents
-- Use double quotes for strings unless escaping is required
-- Omit trailing semicolons
-- Omit `readonly` modifiers unless absolutely necessary
-- Use predictable top-down declaration order of functions and types like Uncle Bob's stepdown rule
-- Always prefer path aliases prefixed by `#` over relative paths in imports (consult `tsconfig.json` for valid aliases)
-- Include file extensions (`.ts`) in imports
-- Always prefer `type` over `interface` (except in `d.ts` files)
-- Always prefer named `function` declarations over `const` arrow functions
-- Always prefer generic `Array<Item>` over shorthand `Item[]` syntax
-- Always specify types on top-level consts and all function parameters and return values,
-- Never use `any` and avoid type casts with `as`
+
+- Write unit tests whenever feasible.
+- Use PascalCase for filenames in general with extensions of `.ts` for source files, `.tests.ts` for test files, and `.fakes.ts` for test fixtures and mocks.
+- Use tab indents.
+- Use double quotes for strings unless escaping is required.
+- Omit trailing semicolons.
+- Omit `readonly` modifiers unless absolutely necessary.
+- Use predictable top-down declaration order of functions and types like Uncle Bob's stepdown rule.
+- Pick precise, descriptive, unabbreviated names for variables, functions, and types.
+- Always prefer subpath imports prefixed by `#` over relative paths in imports. Consult `package.json` for valid path aliases.
+- Include file extensions (`.ts`) in imports.
+- Always prefer `type` over `interface`, except in `d.ts` files.
+- Always prefer named `function` declarations over `const` arrow functions.
+- Always prefer generic `Array<Item>` over shorthand `Item[]` syntax.
+- Always specify types on top-level consts and all function parameters and return values.
+- Never use `any` and keep type casts with `as` to a minimum.
 
 ## Git workflow
-- Each commit should be atomic, self-contained, and easily revertible
-- Keep changes and diffs small and focused
-- Follow the same general commit message standards as the existing commits, write concise subject lines in commit messages, and add additional context in the commit message body
-- Rebase your branch onto `main` instead of merging `main` into your branch
 
-## Common scenarios
-### Add a new rule
-- Implement the rule logic in the appropriate file in `src/domains/rules/`
-- Write a description of the rule and the motivation behind it in JSDoc
-- For each commit to verify, return the appropriate concern when the rule is violated and return null when all is good
-- If it is a brand-new rule, add it to `Rule.ts` and default configurations with meaningful options and write unit tests
-- Add the rule key to the relevant concern types in `src/domains/rules/concerns/`
-- Write unit tests for the rule logic in isolation, including multiple positive and negative cases, covering edge cases and different configurations if applicable
-- Support the new rule in reports in `src/domains/rules/reports/`
-- Write unit tests for the reports (preserve the alphabetical rule order)
-
-### Tokenise parts of a commit message
-- Define the token type in `src/domains/commits/tokens/`
-- Implement the tokeniser function
-- Write unit tests for the tokeniser in isolation, including multiple positive and negative cases, covering edge cases and different configurations if applicable
-- Add some test cases where the new token is mixed with other tokens
+- Each commit should be atomic, self-contained, and easily revertible.
+- Keep changes and diffs small and focused.
+- Rebase your branch onto `main` instead of merging `main` into your branch.
+- Comet enforces some of its commit message standards on itself:
+  - Write concise subject lines in commit messages. Add additional context in the commit message body.
+  - Separate the subject line and the first body line with an empty line.
+  - Start the subject line with a capitalised verb in the imperative mood.
