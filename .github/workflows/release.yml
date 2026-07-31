@@ -63,7 +63,7 @@ jobs:
         #
       - name: Generate build artefacts to be distributed in the release
         # language=sh
-        run: vp run build
+        run: vpr build
         shell: bash
         #
       - name: Update the release artefacts

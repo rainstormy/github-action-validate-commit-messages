@@ -1,0 +1,4 @@
+interface:
+  display_name: 'New Comet token type'
+  short_description: 'Add or modify a token type in commit messages'
+  default_prompt: 'Use the $new-token-type skill to add or modify a Comet token type, including tokenisation, regular expressions, and tests.'

@@ -8,7 +8,7 @@ post-checkout:
       # language=sh
       run: |
         if ! git diff --quiet HEAD@\{1\} HEAD -- 'pnpm-lock.yaml'; then
-          vp run install
+          vpr install
         fi
 
 post-rewrite:
@@ -19,7 +19,7 @@ post-rewrite:
       run: |
         read -r BASE_SHA _
         if ! git diff --quiet "$BASE_SHA~1" HEAD -- 'pnpm-lock.yaml'; then
-          vp run install
+          vpr install
         fi
       use_stdin: true
   only:
@@ -30,7 +30,7 @@ pre-commit:
     fmt:
       # Reformat files before committing changes.
       # language=sh
-      run: vp run fmt
+      run: vpr fmt
       stage_fixed: true
   skip:
     - merge
@@ -41,4 +41,4 @@ pre-push:
     check:
       # Verify the software quality before allowing commits to be pushed.
       # language=sh
-      run: vp run check && vp run test
+      run: vpr check && vpr test
