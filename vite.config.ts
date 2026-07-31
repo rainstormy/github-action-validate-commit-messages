@@ -2,6 +2,7 @@ import { env } from "node:process"
 import { defineOxfmtConfig } from "@rainstormy/presets-web/oxfmt"
 import { defineOxlintConfig, oxlintRestrictedImportPatterns } from "@rainstormy/presets-web/oxlint"
 import { defineConfig } from "vite-plus"
+import { version } from "./package.json" with { type: "json" }
 
 export default defineConfig({
 	build: {
@@ -42,7 +43,7 @@ export default defineConfig({
 			build: {
 				// language=sh
 				command: [
-					"COMET_PLATFORM='cli' vite build --ssr src/main-cli.ts --outDir dist/cli/",
+					`COMET_PLATFORM='cli' COMET_VERSION='${version}' vite build --ssr src/main-cli.ts --outDir dist/cli/`,
 					"COMET_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/",
 					"vite build --ssr src/main-legacy-v1.ts --outDir dist/",
 				],
