@@ -178,7 +178,7 @@ Keep this exception narrow; patterns that are valid everywhere should remain pur
 Iterate over the tokeniser implementation and the unit tests in a TDD-like manner until it satisfies all requirements as clarified in Step 1:
 
 ```shell
-vp run test 'src/domains/commits/Tokenise.tests.ts'
+vpr test 'src/domains/commits/Tokenise.tests.ts'
 ```
 
 ## Step 6: Test rules
@@ -188,7 +188,7 @@ Where relevant, update the existing unit tests of rules in `src/domains/rules/` 
 Run the mandatory project-wide checks before finishing:
 
 ```shell
-vp run fmt
-vp run check
-vp run test
+vpr fmt
+vpr check
+vpr test
 ```

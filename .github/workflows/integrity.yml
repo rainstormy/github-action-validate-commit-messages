@@ -79,17 +79,17 @@ jobs:
         #
       - name: Verify the code style (Oxfmt, Oxlint, TypeScript)
         # language=sh
-        run: vp run check
+        run: vpr check
         shell: bash
         #
       - name: Verify the unit tests (Vitest)
         # language=sh
-        run: vp run test
+        run: vpr test
         shell: bash
         #
       - name: Verify the build (Vite)
         # language=sh
-        run: vp run build
+        run: vpr build
         shell: bash
         #
       - name: Save the task cache

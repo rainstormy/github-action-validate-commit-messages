@@ -12,12 +12,12 @@ Its intended use is in local Git hooks and as part of the CI pipeline in GitHub 
 
 ## Tasks
 
-Always use `vp run` to install dependencies and run tasks. Never use npm, npx, pnpm, yarn etc.
+Always use `vpr` to install dependencies and run tasks. Never use npm, npx, pnpm, yarn etc.
 
-- `vp run fmt`: Reformats the code. Mandatory after implementing code changes.
-- `vp run check`: Verifies that the code is clean, type-safe, and well-formatted. Mandatory before finishing.
-- `vp run test [...filenames]`: Runs the given unit test files or the entire test suite if no arguments are provided. Mandatory before finishing.
-- `vp run install`: Installs dependencies. Rarely needed for code changes.
+- `vpr fmt`: Reformats the code. Mandatory after implementing code changes.
+- `vpr check`: Verifies that the code is clean, type-safe, and well-formatted. Mandatory before finishing.
+- `vpr test [...filenames]`: Runs the given unit test files or the entire test suite if no arguments are provided. Mandatory before finishing.
+- `vpr install`: Installs dependencies. Rarely needed for code changes.
 
 ## Concepts
 

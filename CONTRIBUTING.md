@@ -4,14 +4,14 @@ Consult `AGENTS.md` for a detailed description of the project.
 
 ## Tasks
 
-| Task                         | Description                                                                           |
-|------------------------------|---------------------------------------------------------------------------------------|
-| `vp run build`               | Generates production-grade build artefacts of all entrypoints.                        |
-| `vp run check`               | Verifies that the source code is clean, type-safe, and well-formatted.                |
-| `vp run fmt`                 | Applies linting suggestions and reformats the source code.                            |
-| `vp run install`             | Installs dependencies and enables Git hooks.                                          |
-| `vp run test [...filenames]` | Runs the given unit test files or the entire test suite if no arguments are provided. |
-| `vp run yolo`                | Disables the Git hooks temporarily.                                                   |
+| Task                      | Description                                                                           |
+|---------------------------|---------------------------------------------------------------------------------------|
+| `vpr build`               | Generates production-grade build artefacts of all entrypoints.                        |
+| `vpr check`               | Verifies that the source code is clean, type-safe, and well-formatted.                |
+| `vpr fmt`                 | Applies linting suggestions and reformats the source code.                            |
+| `vpr install`             | Installs dependencies and enables Git hooks.                                          |
+| `vpr test [...filenames]` | Runs the given unit test files or the entire test suite if no arguments are provided. |
+| `vpr yolo`                | Disables the Git hooks temporarily.                                                   |
 
 ## Get started
 
@@ -70,7 +70,7 @@ This section describes the necessary steps for you to start coding in this proje
 1. Install dependencies and enable Git hooks:
 
    ```shell
-   vp run install
+   vpr install
    ```
 
 2. Create a workspace in the IDE of your choice.

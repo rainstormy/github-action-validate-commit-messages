@@ -57,7 +57,7 @@ jobs:
         #
       - name: Generate build artefacts to be run
         # language=sh
-        run: vp run build
+        run: vpr build
         shell: bash
         #
       - name: Verify the commit messages

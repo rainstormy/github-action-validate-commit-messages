@@ -267,7 +267,7 @@ Iterate over the rule implementation and its unit tests in a TDD-like manner unt
 For example:
 
 ```shell
-vp run test 'src/domains/rules/NoTypos.tests.ts'
+vpr test 'src/domains/rules/NoTypos.tests.ts'
 ```
 
 ## Step 6: Implement reports
@@ -283,7 +283,7 @@ Implement the message in `src/domains/rules/reports/CommitwiseReport.ts`.
 Run the mandatory project-wide checks before finishing:
 
 ```shell
-vp run fmt
-vp run check
-vp run test
+vpr fmt
+vpr check
+vpr test
 ```
