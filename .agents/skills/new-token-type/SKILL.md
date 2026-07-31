@@ -147,7 +147,8 @@ Be sure to cover many different scenarios, for example (but not exhaustive):
 - every relevant configuration branch, including the feature being disabled (when applicable)
 
 Prefer creative, realistic, lowkey funny commit messages over repetitive placeholder data.
-They should resemble a large variety of real-world commit messages. For example:
+They should resemble a large variety of real-world commit messages to improve the general test coverage.
+For example:
 
 - `Release the robot butler`
 - `made the console less dramatic`

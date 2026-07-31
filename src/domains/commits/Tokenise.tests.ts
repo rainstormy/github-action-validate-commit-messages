@@ -5,6 +5,7 @@ import {
 	type Tokens,
 	code,
 	codeblock,
+	hyperlink,
 	issuelink,
 	punctuation,
 	revert,
@@ -38,6 +39,7 @@ describe.each`
 	message                                                                                                                                                                                                                                              | expectedSubjectLine                                                                                                                                                                                                              | expectedBodyLines
 	${" \n "}                                                                                                                                                                                                                                            | ${[space()]}                                                                                                                                                                                                                     | ${[[space()]]}
 	${"refactor the taxi module"}                                                                                                                                                                                                                        | ${[word("refactor"), space(8), word("the", 9), space(12), word("taxi", 13), space(17), word("module", 18)]}                                                                                                                      | ${[]}
+	${"IT'S OVER 9000!! he shouted"}                                                                                                                                                                                                                     | ${[word("IT'S"), space(4), word("OVER", 5), space(9), word("9000", 10), punctuation("!!", 14), space(16), word("he", 17), space(19), word("shouted", 20)]}                                                                       | ${[]}
 	${"Fix this confusing plate of spaghetti\n"}                                                                                                                                                                                                         | ${[word("Fix"), space(3), word("this", 4), space(8), word("confusing", 9), space(18), word("plate", 19), space(24), word("of", 25), space(27), word("spaghetti", 28)]}                                                           | ${[[]]}
 	${"Apply strawberry jam to make the code sweeter\nSweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic."}                                                                                                       | ${[word("Apply"), space(5), word("strawberry", 6), space(16), word("jam", 17), space(20), word("to", 21), space(23), word("make", 24), space(28), word("the", 29), space(32), word("code", 33), space(37), word("sweeter", 38)]} | ${[[word("Sweetness"), space(9), word("went", 10), space(14), word("to", 15), space(17), word("a", 18), space(19), word("8", 20), space(21), word("out", 22), space(25), word("of", 26), space(28), word("10", 29), punctuation(",", 31), space(32), word("as", 33), space(35), word("we", 36), space(38), word("held", 39), space(43), word("back", 44), space(48), word("a", 49), space(50), word("bit", 51), space(54), word("to", 55), space(57), word("avoid", 58), space(63), word("turning", 64), space(71), word("the", 72), space(75), word("code", 76), space(80), word("diabetic", 81), punctuation(".", 89)]]}
 	${"  added some extra love to the code\n\nThe architecture is much more flexible now."}                                                                                                                                                              | ${[whitespace("  "), word("added", 2), space(7), word("some", 8), space(12), word("extra", 13), space(18), word("love", 19), space(23), word("to", 24), space(26), word("the", 27), space(30), word("code", 31)]}                | ${[[], [word("The"), space(3), word("architecture", 4), space(16), word("is", 17), space(19), word("much", 20), space(24), word("more", 25), space(29), word("flexible", 30), space(38), word("now", 39), punctuation(".", 42)]]}
@@ -57,6 +59,158 @@ describe.each`
 		})
 
 		it("extracts word, whitespace, and punctuation tokens in the body lines", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.bodyLines).toEqual(props.expectedBodyLines)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                                                          | expectedTokens
+	${"https://example.com"}                                                                             | ${[hyperlink("https://example.com")]}
+	${"https://github.com/rainstormy/github-action-validate-commit-messages/pull/100/changes/badf00d"}   | ${[hyperlink("https://github.com/rainstormy/github-action-validate-commit-messages/pull/100/changes/badf00d")]}
+	${"mailto:hello@example.com"}                                                                        | ${[hyperlink("mailto:hello@example.com")]}
+	${"ssh://git@github.com"}                                                                            | ${[hyperlink("ssh://git@github.com")]}
+	${"  event https://status.example.com/incidents/2026/06/14?component=commit-body&severity=medium  "} | ${[whitespace("  "), word("event", 2), space(7), hyperlink("https://status.example.com/incidents/2026/06/14?component=commit-body&severity=medium", 8), whitespace("  ", 93)]}
+	${"See https://example.com for details"}                                                             | ${[word("See"), space(3), hyperlink("https://example.com", 4), space(23), word("for", 24), space(27), word("details", 28)]}
+	${"Cloned ssh://git@github.com/rainstormy/comet.git..."}                                             | ${[word("Cloned"), space(6), hyperlink("ssh://git@github.com/rainstormy/comet.git", 7), punctuation("...", 48)]}
+	${"maintainer contact: mailto:noreply@github.com. "}                                                 | ${[word("maintainer"), space(10), word("contact", 11), punctuation(":", 18), space(19), hyperlink("mailto:noreply@github.com", 20), punctuation(".", 45), space(46)]}
+	${"a pull request [https://github.com/rainstormy/comet/pull/42]."}                                   | ${[word("a"), space(1), word("pull", 2), space(6), word("request", 7), space(14), punctuation("[", 15), hyperlink("https://github.com/rainstormy/comet/pull/42", 16), punctuation("].", 59)]}
+	${"https://docs.github.com/en/rest/commits/commits?per_page=100,"}                                   | ${[hyperlink("https://docs.github.com/en/rest/commits/commits?per_page=100"), punctuation(",", 60)]}
+	${"https://www.rfc-editor.org/rfc/rfc3986.html!"}                                                    | ${[hyperlink("https://www.rfc-editor.org/rfc/rfc3986.html"), punctuation("!", 43)]}
+	${"Have you seen https://status.comet-lab.test/incidents/2026-07-31?component=robot-arm?"}           | ${[word("Have"), space(4), word("you", 5), space(8), word("seen", 9), space(13), hyperlink("https://status.comet-lab.test/incidents/2026-07-31?component=robot-arm", 14), punctuation("?", 84)]}
+	${'Upgrade "https://registry.npmjs.org/@rainstormy/comet" to 2.0.0'}                                 | ${[word("Upgrade"), space(7), punctuation('"', 8), hyperlink("https://registry.npmjs.org/@rainstormy/comet", 9), punctuation('"', 53), space(54), word("to", 55), space(57), semver("2.0.0", 58)]}
+	${"https://gitlab.com/robot-bakers/comet/-/merge_requests/42'"}                                      | ${[hyperlink("https://gitlab.com/robot-bakers/comet/-/merge_requests/42"), punctuation("'", 57)]}
+	${"RTFM: https://developer.mozilla.org/en-US/docs/Web/JavaScript!!"}                                 | ${[word("RTFM"), punctuation(":", 4), space(5), hyperlink("https://developer.mozilla.org/en-US/docs/Web/JavaScript", 6), punctuation("!!", 61)]}
+	${"fixup! Enclose with {https://ci.rainstormy.dev/builds/robot-butler/42}"}                          | ${[squash("fixup!"), space(6), word("Enclose", 7), space(14), word("with", 15), space(19), punctuation("{", 20), hyperlink("https://ci.rainstormy.dev/builds/robot-butler/42", 21), punctuation("}", 69)]}
+	${"local health at https://[::1]/healthy"}                                                           | ${[word("local"), space(5), word("health", 6), space(12), word("at", 13), space(15), hyperlink("https://[::1]/healthy", 16)]}
+	${'Revert "Contact my sensei mailto:sensei@ninja-academy.com"'}                                      | ${[revert("Revert"), space(6), punctuation('"', 7), word("Contact", 8), space(15), word("my", 16), space(18), word("sensei", 19), space(25), hyperlink("mailto:sensei@ninja-academy.com", 26), punctuation('"', 57)]}
+	${"Implement the RFC at https://datatracker.ietf.org/doc/html/rfc2549"}                              | ${[word("Implement"), space(9), word("the", 10), space(13), word("RFC", 14), space(17), word("at", 18), space(20), hyperlink("https://datatracker.ietf.org/doc/html/rfc2549", 21)]}
+	${"Send complaints to mailto:bugs@example.com and praise to mailto:kudos@example.com"}               | ${[word("Send"), space(4), word("complaints", 5), space(15), word("to", 16), space(18), hyperlink("mailto:bugs@example.com", 19), space(42), word("and", 43), space(46), word("praise", 47), space(53), word("to", 54), space(56), hyperlink("mailto:kudos@example.com", 57)]}
+	${"Download from https://releases.example.com/v2 and https://releases.example.com/v3"}               | ${[word("Download"), space(8), word("from", 9), space(13), hyperlink("https://releases.example.com/v2", 14), space(45), word("and", 46), space(49), hyperlink("https://releases.example.com/v3", 50)]}
+	${"fixup! See https://example.com/changelog"}                                                        | ${[squash("fixup!"), space(6), word("See", 7), space(10), hyperlink("https://example.com/changelog", 11)]}
+	${'Revert "Remove https://example.com link"'}                                                        | ${[revert("Revert"), space(6), punctuation('"', 7), word("Remove", 8), space(14), hyperlink("https://example.com", 15), space(34), word("link", 35), punctuation('"', 39)]}
+	${"#42: See https://example.com"}                                                                    | ${[issuelink("#42:"), space(4), word("See", 5), space(8), hyperlink("https://example.com", 9)]}
+	${"Use `curl` to fetch https://api.example.com/data"}                                                | ${[word("Use"), space(3), code("`curl`", 4), space(10), word("to", 11), space(13), word("fetch", 14), space(19), hyperlink("https://api.example.com/data", 20)]}
+	${"Upgrade react from 18.3.1 to 19.2.0, see https://react.dev/blog/2024/12/05/react-19"}             | ${[word("Upgrade"), space(7), word("react", 8), space(13), word("from", 14), space(18), semver("18.3.1", 19), space(25), word("to", 26), space(28), semver("19.2.0", 29), punctuation(",", 35), space(36), word("see", 37), space(40), hyperlink("https://react.dev/blog/2024/12/05/react-19", 41)]}
+`(
+	"when the subject line of $subjectLine contains hyperlinks",
+	(props: { subjectLine: string; expectedTokens: Tokens }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("extracts hyperlink tokens", () => {
+			expect(props.expectedTokens).toContainToken("hyperlink")
+
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
+		})
+	},
+)
+
+describe.each`
+	subjectLine
+	${"https is a must-have"}
+	${"http://example.org/guides/migrate-from-v1"}
+	${"HTTPS://example.com/uses-an-unsupported-scheme-case"}
+	${"https:/almost.example.com"}
+	${"https://"}
+	${"ftp://ftp.gnu.org/gnu/git/git-2.50.1.tar.xz"}
+	${"git://github.com/rainstormy/comet"}
+	${"ssh:/git@github.com/rainstormy/comet.git"}
+	${"ssh://."}
+	${"mail:owl@nest.test"}
+	${"mailto:"}
+	${"Add HTTPS support for the API"}
+	${"Email us at support@example.com"}
+	${"The protocol is https"}
+	${"Use custom://myprotocol for internal links"}
+	${"It costs $5 to register the domain"}
+`(
+	"when the subject line of $subjectLine does not contain hyperlinks",
+	(props: { subjectLine: string }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("does not extract hyperlink tokens", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).not.toContainToken("hyperlink")
+		})
+	},
+)
+
+describe.each`
+	subjectLine                  | body                                                                                                                                                                                                                                                                                                                            | expectedBodyLines
+	${"release process notes"}   | ${"https://github.com/rainstormy/comet/releases/tag/v1.0.0"}                                                                                                                                                                                                                                                                    | ${[[hyperlink("https://github.com/rainstormy/comet/releases/tag/v1.0.0")]]}
+	${"status page overview"}    | ${"a lowercase [note](https://status.example.com/incidents/2026/06/14?component=commit-body&severity=medium)"}                                                                                                                                                                                                                  | ${[[word("a"), space(1), word("lowercase", 2), space(11), punctuation("[", 12), word("note", 13), punctuation("](", 17), hyperlink("https://status.example.com/incidents/2026/06/14?component=commit-body&severity=medium", 19), punctuation(")", 104)]]}
+	${"repository access notes"} | ${"  ssh://git@github.com/rainstormy/comet.git  "}                                                                                                                                                                                                                                                                              | ${[[whitespace("  "), hyperlink("ssh://git@github.com/rainstormy/comet.git", 2), whitespace("  ", 43)]]}
+	${"support contacts list"}   | ${"Contact mailto:noreply@github.com"}                                                                                                                                                                                                                                                                                          | ${[[word("Contact"), space(7), hyperlink("mailto:noreply@github.com", 8)]]}
+	${"cross-reference notes"}   | ${"Compare https://github.com/rainstormy/comet/issues/42 with https://docs.github.com/en/rest/commits/commits."}                                                                                                                                                                                                                | ${[[word("Compare"), space(7), hyperlink("https://github.com/rainstormy/comet/issues/42", 8), space(53), word("with", 54), space(58), hyperlink("https://docs.github.com/en/rest/commits/commits", 59), punctuation(".", 106)]]}
+	${"contact channel notes"}   | ${"Reach mailto:maintainers@rainstormy.com, clone ssh://git@github.com/rainstormy/comet.git, then read https://github.com/rainstormy/comet/tree/main/docs."}                                                                                                                                                                    | ${[[word("Reach"), space(5), hyperlink("mailto:maintainers@rainstormy.com", 6), punctuation(",", 39), space(40), word("clone", 41), space(46), hyperlink("ssh://git@github.com/rainstormy/comet.git", 47), punctuation(",", 88), space(89), word("then", 90), space(94), word("read", 95), space(99), hyperlink("https://github.com/rainstormy/comet/tree/main/docs", 100), punctuation(".", 150)]]}
+	${"release dashboard notes"} | ${"The deployment train is calm.\nRead https://status.comet-lab.test/health.\nCompare https://docs.github.com/en/rest with https://developer.mozilla.org/en-US/docs/Web/JavaScript.\nNotify mailto:ops@comet-lab.test, clone ssh://git@github.com/rainstormy/comet.git, and review https://github.com/rainstormy/comet/pulls."} | ${[[word("The"), space(3), word("deployment", 4), space(14), word("train", 15), space(20), word("is", 21), space(23), word("calm", 24), punctuation(".", 28)], [word("Read"), space(4), hyperlink("https://status.comet-lab.test/health", 5), punctuation(".", 41)], [word("Compare"), space(7), hyperlink("https://docs.github.com/en/rest", 8), space(39), word("with", 40), space(44), hyperlink("https://developer.mozilla.org/en-US/docs/Web/JavaScript", 45), punctuation(".", 100)], [word("Notify"), space(6), hyperlink("mailto:ops@comet-lab.test", 7), punctuation(",", 32), space(33), word("clone", 34), space(39), hyperlink("ssh://git@github.com/rainstormy/comet.git", 40), punctuation(",", 81), space(82), word("and", 83), space(86), word("review", 87), space(93), hyperlink("https://github.com/rainstormy/comet/pulls", 94), punctuation(".", 135)]]}
+`(
+	"when the message body of $body contains hyperlinks",
+	(props: { subjectLine: string; body: string; expectedBodyLines: Array<Tokens> }) => {
+		const crudeCommit = fakeCrudeCommit({ message: `${props.subjectLine}\n${props.body}` })
+
+		it("extracts hyperlink tokens", () => {
+			expect(props.expectedBodyLines).toContainToken("hyperlink")
+
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.bodyLines).toEqual(props.expectedBodyLines)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                        | body
+	${"Describe the dusty bridge"}     | ${"https is still a must-have"}
+	${"dodged a bullet"}               | ${"https:/close.call"}
+	${"Use the correct clone address"} | ${"git://github.com/rainstormy/comet"}
+	${"email protocol matters"}        | ${"mail:owl@nest.test"}
+	${""}                              | ${"mailto:"}
+	${"legacy transport"}              | ${"HTTPS://example.org/guides/migrate-from-v1"}
+	${"custom links"}                  | ${"Use custom://myprotocol for internal links"}
+`(
+	"when the message body of $body does not contain hyperlinks",
+	(props: { subjectLine: string; body: string }) => {
+		const crudeCommit = fakeCrudeCommit({ message: `${props.subjectLine}\n${props.body}` })
+
+		it("does not extract hyperlink tokens", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.bodyLines).not.toContainToken("hyperlink")
+		})
+	},
+)
+
+describe.each`
+	subjectLine                        | body
+	${"Quote the API documentation"}   | ${"Keep `https://docs.github.com/en/rest` as an example."}
+	${"links inside a fenced example"} | ${"```text\nhttps://github.com/rainstormy/comet\nmailto:noreply@github.com\n```"}
+`(
+	"when the commit message contains hyperlink-like text inside code",
+	(props: { subjectLine: string; body: string }) => {
+		const crudeCommit = fakeCrudeCommit({ message: `${props.subjectLine}\n${props.body}` })
+
+		it("does not extract hyperlink tokens", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.bodyLines).not.toContainToken("hyperlink")
+		})
+	},
+)
+
+describe.each`
+	subjectLine                    | trailer                                                           | expectedBodyLines
+	${"Added docs"}                | ${"Docs: https://github.com/rainstormy/comet/tree/main/docs"}     | ${[[], [trailerkey("Docs"), punctuation(":", 4), space(5), hyperlink("https://github.com/rainstormy/comet/tree/main/docs", 6)]]}
+	${"Record the package mirror"} | ${"Mirror: ssh://git@github.com/rainstormy/comet.git"}            | ${[[], [trailerkey("Mirror"), punctuation(":", 6), space(7), hyperlink("ssh://git@github.com/rainstormy/comet.git", 8)]]}
+	${"publish support contacts"}  | ${"Support: mailto:noreply@github.com"}                           | ${[[], [trailerkey("Support"), punctuation(":", 7), space(8), hyperlink("mailto:noreply@github.com", 9)]]}
+	${"the release notes"}         | ${"  Docs: https://github.com/rainstormy/comet/tree/main/docs  "} | ${[[], [whitespace("  "), trailerkey("Docs", 2), punctuation(":", 6), space(7), hyperlink("https://github.com/rainstormy/comet/tree/main/docs", 8), whitespace("  ", 58)]]}
+`(
+	"when the trailer value of $trailer contains a hyperlink",
+	(props: { subjectLine: string; trailer: string; expectedBodyLines: Array<Tokens> }) => {
+		const crudeCommit = fakeCrudeCommit({ message: `${props.subjectLine}\n\n${props.trailer}` })
+
+		it("extracts the hyperlink token after the trailer key", () => {
+			expect(props.expectedBodyLines).toContainToken("hyperlink")
+
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.bodyLines).toEqual(props.expectedBodyLines)
 		})
@@ -129,6 +283,7 @@ describe.each`
 	${"Run the command `git status`"}                   | ${[word("Run"), space(3), word("the", 4), space(7), word("command", 8), space(15), code("`git status`", 16)]}
 	${"Run `this` and `that`"}                          | ${[word("Run"), space(3), code("`this`", 4), space(10), word("and", 11), space(14), code("`that`", 15)]}
 	${"Replace `a`, `b`, and `c`"}                      | ${[word("Replace"), space(7), code("`a`", 8), punctuation(",", 11), space(12), code("`b`", 13), punctuation(",", 16), space(17), word("and", 18), space(21), code("`c`", 22)]}
+	${"Run `wget https://example.com` to download"}     | ${[word("Run"), space(3), code("`wget https://example.com`", 4), space(30), word("to", 31), space(33), word("download", 34)]}
 	${"`1``23``456`"}                                   | ${[code("`1`"), code("`23`", 3), code("`456`", 7)]}
 	${"fixup! Use `pnpm install` to get started"}       | ${[squash("fixup!"), space(6), word("Use", 7), space(10), code("`pnpm install`", 11), space(25), word("to", 26), space(28), word("get", 29), space(32), word("started", 33)]}
 	${'Revert "Use `pnpm install` to get started"'}     | ${[revert("Revert"), space(6), punctuation('"', 7), word("Use", 8), space(11), code("`pnpm install`", 12), space(26), word("to", 27), space(29), word("get", 30), space(33), word("started", 34), punctuation('"', 41)]}
