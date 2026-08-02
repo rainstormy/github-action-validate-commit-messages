@@ -232,6 +232,32 @@ describe("when verifying a set of multiple commits and some commits have repeate
 	})
 })
 
+describe("when verifying a set of multiple commits and some commits have repeated hyperlinks", () => {
+	const commits: Vector<Commit, 3> = [
+		fakeCommit({ message: "Read https://docs.github.com/en/rest before lunch" }),
+		fakeCommit({
+			message: "Read https://developer.mozilla.org/en-US/docs/Web/JavaScript before lunch",
+		}),
+		fakeCommit({ message: "Read https://docs.github.com/en/rest before lunch" }),
+	]
+
+	describe("and the rule is enabled", () => {
+		const actualConcerns = mapCommitsToConcerns(commits, enabled)
+
+		it("raises a concern about the repeated subject line", () => {
+			expect(actualConcerns).toEqual<Concerns>([commitConcern(rule, commits[2].sha)])
+		})
+	})
+
+	describe("and the rule is disabled", () => {
+		const actualConcerns = mapCommitsToConcerns(commits, disabled)
+
+		it("does not raise any concerns", () => {
+			expect(actualConcerns).toEqual<Concerns>([])
+		})
+	})
+})
+
 describe("when verifying a set of multiple commits and no commits have repeated subject lines", () => {
 	const commits: Vector<Commit, 10> = [
 		fakeCommit({ message: "init" }),

@@ -107,8 +107,9 @@ describe.each`
 	${"99 reasons to upgrade the framework, but this is not one of them"}
 	${"!wip"}
 	${"_ marks the spot"}
+	${"https://github.com/rainstormy/comet/pull/42 release the robot butler"}
 `(
-	"when the subject line of $subjectLine starts with a non-letter",
+	"when the subject line of $subjectLine starts with a non-letter or a hyperlink",
 	(props: { subjectLine: string }) => {
 		const commit = fakeCommit({ message: props.subjectLine })
 

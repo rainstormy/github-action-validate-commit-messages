@@ -79,6 +79,7 @@ describe.each`
 	${"Install React\n```\npnpm add --save \\\n  @types/react \\\n  @types/react-dom \\\n  react \\\n  react-dom\n```"} | ${0}         | ${[0, 1]}
 	${'Revert "Repair the soft ice machine"\nThis commit undoes the changes made in revision 6227ca0.'}                 | ${0}         | ${[0, 1]}
 	${"squash! serve the tiny sandwiches\n guests get fewer crumbs in the keyboard"}                                    | ${0}         | ${[0, 1]}
+	${"Release the notes\nhttps://github.com/rainstormy/comet/releases"}                                                | ${0}         | ${[0, 1]}
 `(
 	"when the commit message $message does not have an empty line before the body",
 	(props: { message: string; expectedLine: number; expectedRange: CharacterRange }) => {

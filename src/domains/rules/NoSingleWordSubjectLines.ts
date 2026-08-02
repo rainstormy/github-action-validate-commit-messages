@@ -14,7 +14,7 @@ const rule = "noSingleWordSubjectLines" satisfies RuleKey
  * the traceability of the commit history.
  *
  * It ignores commits with revert markers.
- * Issue links and squash markers do not count as words. An inline code phrase counts as one word.
+ * Issue links and squash markers do not count as words. Hyperlinks and inline code phrases count as one word each.
  */
 export function* noSingleWordSubjectLines(
 	commits: Commits,
@@ -29,7 +29,7 @@ export function* noSingleWordSubjectLines(
 			continue
 		}
 
-		const wordLikeTokens = commit.subjectLine.filter(isToken("code", "semver", "word"))
+		const wordLikeTokens = commit.subjectLine.filter(isToken("code", "hyperlink", "semver", "word"))
 		const soloWord = wordLikeTokens.length === 1 ? wordLikeTokens[0] : null
 
 		if (soloWord) {

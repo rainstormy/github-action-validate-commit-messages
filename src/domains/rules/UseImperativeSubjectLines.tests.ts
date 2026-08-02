@@ -39,6 +39,7 @@ describe.each`
 	${"I'd rather not!"}                              | ${[0, 3]}
 	${"99 hot air balloons"}                          | ${[0, 2]}
 	${"fixup! squash! #987 1 2 3 this is a test"}     | ${[20, 21]}
+	${"https://github.com/rainstormy/comet/pull/42"}  | ${[0, 43]}
 `(
 	"when the subject line of $subjectLine does not start with an imperative verb",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {

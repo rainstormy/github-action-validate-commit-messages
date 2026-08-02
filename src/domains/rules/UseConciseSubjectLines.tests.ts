@@ -21,10 +21,12 @@ const enabled72 = emptyRuleConfiguration({ [rule]: { maxLength: 72 } })
 const fakeCommit = fakeCommitFactory()
 
 describe.each`
-	subjectLine                                                                             | expectedRange20 | expectedRange50 | expectedRange72
-	${"Upgrade dependency @opentelemetry/exporter-metrics-otlp-http to the newest version"} | ${[20, 82]}     | ${[50, 82]}     | ${[72, 82]}
-	${"make a genuine attempt to fix the bugs that the users were complaining about"}       | ${[20, 76]}     | ${[50, 76]}     | ${[72, 76]}
-	${"shelve the broken cursor until the warm summer weather makes it shine again"}        | ${[20, 75]}     | ${[50, 75]}     | ${[72, 75]}
+	subjectLine                                                                                                                                                                  | expectedRange20 | expectedRange50 | expectedRange72
+	${"Upgrade dependency @opentelemetry/exporter-metrics-otlp-http to the newest version"}                                                                                      | ${[20, 82]}     | ${[50, 82]}     | ${[72, 82]}
+	${"make a genuine attempt to fix the bugs that the users were complaining about"}                                                                                            | ${[20, 76]}     | ${[50, 76]}     | ${[72, 76]}
+	${"shelve the broken cursor until the warm summer weather makes it shine again"}                                                                                             | ${[20, 75]}     | ${[50, 75]}     | ${[72, 75]}
+	${"Read https://github.com/rainstormy/comet/pull/42 the release notes before lunch while robots nap beside the sleepy console"}                                              | ${[63, 122]}    | ${[93, 122]}    | ${[115, 122]}
+	${"See https://docs.github.com/en/rest with https://developer.mozilla.org/en-US/docs/Web/JavaScript before lunch while robots nap beside the sleepy console after midnight"} | ${[106, 167]}   | ${[136, 167]}   | ${[158, 167]}
 `(
 	"when the subject line of $subjectLine exceeds 72 characters",
 	(props: {
@@ -129,10 +131,12 @@ describe.each`
 )
 
 describe.each`
-	subjectLine                                                                      | expectedRange20 | expectedRange50
-	${"Fixed a bug, but have probably introduced another one #510"}                  | ${[20, 54]}     | ${[50, 54]}
-	${"forgot to save my changes in `BonusAdapter` before entering the merge chaos"} | ${[20, 75]}     | ${[64, 75]}
-	${"GH-291 Resolve memory issues to make the code work better than last year"}    | ${[26, 72]}     | ${[56, 72]}
+	subjectLine                                                                                                                                          | expectedRange20 | expectedRange50
+	${"Fixed a bug, but have probably introduced another one #510"}                                                                                      | ${[20, 54]}     | ${[50, 54]}
+	${"forgot to save my changes in `BonusAdapter` before entering the merge chaos"}                                                                     | ${[20, 75]}     | ${[64, 75]}
+	${"GH-291 Resolve memory issues to make the code work better than last year"}                                                                        | ${[26, 72]}     | ${[56, 72]}
+	${"See release notes in https://github.com/rainstormy/comet/pull/42 before the majestic robots take a nap"}                                          | ${[20, 102]}    | ${[93, 102]}
+	${"read https://docs.github.com/en/rest and https://developer.mozilla.org/en-US/docs/Web/JavaScript while mowing the lawn and feeding the goldfish"} | ${[106, 143]}   | ${[136, 143]}
 `(
 	"when the subject line of $subjectLine contains insignificant tokens and still exceeds 50 characters, but not 72 characters",
 	(props: {
@@ -181,18 +185,20 @@ describe.each`
 )
 
 describe.each`
-	subjectLine                                                              | expectedRange20
-	${"Make the user interface less chaotic (GH-11) (GL-17)"}                | ${[20, 45]}
-	${"<#71238> free up unclaimed disk space"}                               | ${[28, 37]}
-	${"#1104: Upgrade rainstormy/updraft in GitHub Actions"}                 | ${[26, 51]}
-	${"`pnpm dlx` is the preferred way now"}                                 | ${[30, 35]}
-	${"revisit the boolean properties in the `IceCreamMachine` constructor"} | ${[20, 67]}
-	${"Remove redundant call to `wrapper`"}                                  | ${[20, 25]}
-	${"Enable `firewall` protection again"}                                  | ${[30, 34]}
-	${"(GH-72): fix security vulnerability in `BridgeService`"}              | ${[28, 39]}
-	${"Make a smile to the `camera` again"}                                  | ${[28, 34]}
-	${"revisit the glorious `MaxDPS` algorithm"}                             | ${[20, 39]}
-	${"#30 Make the `MainProgram` act like a clown"}                         | ${[36, 43]}
+	subjectLine                                                                                 | expectedRange20
+	${"Make the user interface less chaotic (GH-11) (GL-17)"}                                   | ${[20, 45]}
+	${"<#71238> free up unclaimed disk space"}                                                  | ${[28, 37]}
+	${"#1104: Upgrade rainstormy/updraft in GitHub Actions"}                                    | ${[26, 51]}
+	${"`pnpm dlx` is the preferred way now"}                                                    | ${[30, 35]}
+	${"revisit the boolean properties in the `IceCreamMachine` constructor"}                    | ${[20, 67]}
+	${"Remove redundant call to `wrapper`"}                                                     | ${[20, 25]}
+	${"Enable `firewall` protection again"}                                                     | ${[30, 34]}
+	${"(GH-72): fix security vulnerability in `BridgeService`"}                                 | ${[28, 39]}
+	${"Make a smile to the `camera` again"}                                                     | ${[28, 34]}
+	${"revisit the glorious `MaxDPS` algorithm"}                                                | ${[20, 39]}
+	${"#30 Make the `MainProgram` act like a clown"}                                            | ${[36, 43]}
+	${"monitored https://status.comet-lab.test/health with the release crew"}                   | ${[56, 68]}
+	${"Note to self: https://docs.github.com/en/rest to mailto:noreply@github.com after lunch"} | ${[76, 86]}
 `(
 	"when the subject line of $subjectLine contains insignificant tokens and still exceeds 20 characters, but not 50 characters",
 	(props: { subjectLine: string; expectedRange20: CharacterRange }) => {
@@ -326,6 +332,9 @@ describe.each`
 	${"Refactor some stuff"}
 	${"Move `RapidTransportService` up"}
 	${"Upgrade React"}
+	${"read first page of https://interesting.reads/a-very-long-page"}
+	${"read https://github.com/rainstormy/comet/pull/42 notes"}
+	${"Clone ssh://git@github.com/rainstormy/comet.git and notify mailto:noreply@github.com"}
 `(
 	"when the subject line of $subjectLine does not exceed 20 characters",
 	(props: { subjectLine: string }) => {
