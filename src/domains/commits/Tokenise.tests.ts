@@ -39,7 +39,6 @@ describe.each`
 	message                                                                                                                                                                                                                                              | expectedSubjectLine                                                                                                                                                                                                              | expectedBodyLines
 	${" \n "}                                                                                                                                                                                                                                            | ${[space()]}                                                                                                                                                                                                                     | ${[[space()]]}
 	${"refactor the taxi module"}                                                                                                                                                                                                                        | ${[word("refactor"), space(8), word("the", 9), space(12), word("taxi", 13), space(17), word("module", 18)]}                                                                                                                      | ${[]}
-	${"IT'S OVER 9000!! he shouted"}                                                                                                                                                                                                                     | ${[word("IT'S"), space(4), word("OVER", 5), space(9), word("9000", 10), punctuation("!!", 14), space(16), word("he", 17), space(19), word("shouted", 20)]}                                                                       | ${[]}
 	${"Fix this confusing plate of spaghetti\n"}                                                                                                                                                                                                         | ${[word("Fix"), space(3), word("this", 4), space(8), word("confusing", 9), space(18), word("plate", 19), space(24), word("of", 25), space(27), word("spaghetti", 28)]}                                                           | ${[[]]}
 	${"Apply strawberry jam to make the code sweeter\nSweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic."}                                                                                                       | ${[word("Apply"), space(5), word("strawberry", 6), space(16), word("jam", 17), space(20), word("to", 21), space(23), word("make", 24), space(28), word("the", 29), space(32), word("code", 33), space(37), word("sweeter", 38)]} | ${[[word("Sweetness"), space(9), word("went", 10), space(14), word("to", 15), space(17), word("a", 18), space(19), word("8", 20), space(21), word("out", 22), space(25), word("of", 26), space(28), word("10", 29), punctuation(",", 31), space(32), word("as", 33), space(35), word("we", 36), space(38), word("held", 39), space(43), word("back", 44), space(48), word("a", 49), space(50), word("bit", 51), space(54), word("to", 55), space(57), word("avoid", 58), space(63), word("turning", 64), space(71), word("the", 72), space(75), word("code", 76), space(80), word("diabetic", 81), punctuation(".", 89)]]}
 	${"  added some extra love to the code\n\nThe architecture is much more flexible now."}                                                                                                                                                              | ${[whitespace("  "), word("added", 2), space(7), word("some", 8), space(12), word("extra", 13), space(18), word("love", 19), space(23), word("to", 24), space(26), word("the", 27), space(30), word("code", 31)]}                | ${[[], [word("The"), space(3), word("architecture", 4), space(16), word("is", 17), space(19), word("much", 20), space(24), word("more", 25), space(29), word("flexible", 30), space(38), word("now", 39), punctuation(".", 42)]]}
@@ -61,6 +60,31 @@ describe.each`
 		it("extracts word, whitespace, and punctuation tokens in the body lines", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.bodyLines).toEqual(props.expectedBodyLines)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                | expectedTokens
+	${"IT'S OVER 9000!! he shouted"}                           | ${[word("IT'S"), space(4), word("OVER", 5), space(9), word("9000", 10), punctuation("!!", 14), space(16), word("he", 17), space(19), word("shouted", 20)]}
+	${"This one is Lucas'"}                                    | ${[word("This"), space(4), word("one", 5), space(8), word("is", 9), space(11), word("Lucas'", 12)]}
+	${"the mountain- and ocean clouds"}                        | ${[word("the"), space(3), word("mountain-", 4), space(13), word("and", 14), space(17), word("ocean", 18), space(23), word("clouds", 24)]}
+	${"The old parser still says 'Twas"}                       | ${[word("The"), space(3), word("old", 4), space(7), word("parser", 8), space(14), word("still", 15), space(20), word("says", 21), space(25), word("'Twas", 26)]}
+	${"Pass the --dry-run option to CI"}                       | ${[word("Pass"), space(4), word("the", 5), space(8), word("--dry-run", 9), space(18), word("option", 19), space(25), word("to", 26), space(28), word("CI", 29)]}
+	${"the cat says 'meow'"}                                   | ${[word("the"), space(3), word("cat", 4), space(7), word("says", 8), space(12), punctuation("'", 13), word("meow", 14), punctuation("'", 18)]}
+	${"Keep 'old-school' magic alive"}                         | ${[word("Keep"), space(4), punctuation("'", 5), word("old-school", 6), punctuation("'", 16), space(17), word("magic", 18), space(23), word("alive", 24)]}
+	${"Punctuation-heavy words are a must-must-have"}          | ${[word("Punctuation-heavy"), space(17), word("words", 18), space(23), word("are", 24), space(27), word("a", 28), space(29), word("must-must-have", 30)]}
+	${"apply the quick-freeze to the x-ray"}                   | ${[word("apply"), space(5), word("the", 6), space(9), word("quick-freeze", 10), space(22), word("to", 23), space(25), word("the", 26), space(29), word("x-ray", 30)]}
+	${"I'd say don't interrupt O'Neil's presentation"}         | ${[word("I'd"), space(3), word("say", 4), space(7), word("don't", 8), space(13), word("interrupt", 14), space(23), word("O'Neil's", 24), space(32), word("presentation", 33)]}
+	${"Jeanne d'Arc carved a mother-in-law's jack-o'-lantern"} | ${[word("Jeanne"), space(6), word("d'Arc", 7), space(12), word("carved", 13), space(19), word("a", 20), space(21), word("mother-in-law's", 22), space(37), word("jack-o'-lantern", 38)]}
+`(
+	"when the subject line of $subjectLine contains words with hyphens and/or apostrophes",
+	(props: { subjectLine: string; expectedTokens: Tokens }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("extracts each compound word as one word token", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
 	},
 )

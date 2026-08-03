@@ -66,10 +66,10 @@ const TRAILERKEY = String.raw`(?<=^\s*)(?<trailerkey>(?i:[a-z0-9-]+|breaking cha
 const WHITESPACE = String.raw`(?<whitespace>\s+)`
 
 /**
- * Matches alphanumeric words, optionally with non-consecutive hyphens (e.g. `quick-freeze` and `x-ray`), apostrophes (e.g. `I'd` and `O'Neil`), or a mix of both (e.g. `mother-in-law's` and `jack-o'-lantern`).
+ * Matches alphanumeric words, optionally preceded or followed and/or separated by one or more hyphens or apostrophes (e.g. `quick-freeze`, `O'Neil's`, `mother-in-law's`, `jack-o'-lantern`). Apostrophes enclosing a word on both sides are left as punctuation.
  */
 // language=jsunicoderegexp
-const WORD = String.raw`(?<word>[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*(?:'[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*)?)` // TODO: Recognise certain names like Vite+, C++, F#, etc.
+const WORD = String.raw`(?<word>(?<=')[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*(?=')|(?!'[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*[-']*')[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*[-']*)` // TODO: Recognise certain names like Vite+, C++, F#, etc.
 
 const TRAILERKEY_REGEX = new RegExp(TRAILERKEY, "u")
 const TRAILERLINE_REGEX = new RegExp(
