@@ -243,7 +243,7 @@ function subjectLineRuleMessage(
 			return ruleMessage("Combine squash commits with their ancestors.")
 		}
 		case "noUnexpectedPunctuation": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			return ruleMessage("Subject lines must not end with punctuation.")
 		}
 		case "useCapitalisedSubjectLines": {
 			return ruleMessage("The first letter in subject lines must be in uppercase.")
@@ -302,9 +302,6 @@ function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configurat
 					"\n",
 				),
 			)
-		}
-		case "noUnexpectedPunctuation": {
-			throw new Error(`Not implemented yet: ${rule}`)
 		}
 		case "useEmptyLineBeforeBodyLines": {
 			return ruleMessage(

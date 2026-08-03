@@ -611,6 +611,121 @@ describe("when 'noSquashMarkers' has a concern about characters 1-14 of the subj
 	})
 })
 
+describe("when 'noUnexpectedPunctuation' has a concern about characters 8-9 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "41c3cb1f09a1e33fa6bfd13c622356d89673729",
+		message: "fixed it!",
+	})
+	const concern = subjectLineConcern("noUnexpectedPunctuation", commit.sha, { range: [8, 9] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+41c3cb1 fixed it!
+                ┬
+                ╰─ Subject lines must not end with punctuation.
+                   (noUnexpectedPunctuation)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noUnexpectedPunctuation' has a concern about characters 10-11 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "9b83d7cd4b0f0749c69afdb712b19df2b7782ab",
+		message: "Formatting.",
+	})
+	const concern = subjectLineConcern("noUnexpectedPunctuation", commit.sha, { range: [10, 11] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+9b83d7c Formatting.
+                  ┬
+                  ╰─ Subject lines must not end with punctuation.
+                     (noUnexpectedPunctuation)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noUnexpectedPunctuation' has a concern about characters 14-16 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "94486b7f620ad99ef8598a2bd6a3adbb3b8d3e4",
+		message: "the old route -> ",
+	})
+	const concern = subjectLineConcern("noUnexpectedPunctuation", commit.sha, { range: [14, 16] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+94486b7 the old route -> 
+                      ┬─
+                      ╰─ Subject lines must not end with punctuation.
+                         (noUnexpectedPunctuation)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noUnexpectedPunctuation' has a concern about characters 57-62 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "f67544d7167b417f44ffb3a8e6e762f645f546e",
+		message: "a cheerful easter egg is hiding somewhere in this commit :joy:",
+	})
+	const concern = subjectLineConcern("noUnexpectedPunctuation", commit.sha, { range: [57, 62] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+f67544d a cheerful easter egg is hiding somewhere in this commit :joy:
+                                                                 ──┬──
+                     Subject lines must not end with punctuation. ─╯
+                     (noUnexpectedPunctuation)
+`.trim(),
+		)
+	})
+})
+
+describe("when 'noUnexpectedPunctuation' has a concern about characters 27-31 of the subject line", () => {
+	const configuration = fakeConfiguration()
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "926af33140bac01e1cb50df365ddd45bba0acd",
+		message: "the moon laser is operating!!!! #42",
+	})
+	const concern = subjectLineConcern("noUnexpectedPunctuation", commit.sha, { range: [27, 31] })
+
+	it("describes the rule violation in the subject line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+926af33 the moon laser is operating!!!! #42
+                                   ─┬──
+                                    ╰─ Subject lines must not end with punctuation.
+                                       (noUnexpectedPunctuation)
+`.trim(),
+		)
+	})
+})
+
 describe("when 'useAuthorEmailPatterns' has a concern about a missing author email address", () => {
 	const configuration = fakeConfiguration({
 		rules: {
