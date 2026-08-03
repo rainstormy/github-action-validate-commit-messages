@@ -39,7 +39,6 @@ describe.each`
 	message                                                                                                                                                                                                                                              | expectedSubjectLine                                                                                                                                                                                                              | expectedBodyLines
 	${" \n "}                                                                                                                                                                                                                                            | ${[space()]}                                                                                                                                                                                                                     | ${[[space()]]}
 	${"refactor the taxi module"}                                                                                                                                                                                                                        | ${[word("refactor"), space(8), word("the", 9), space(12), word("taxi", 13), space(17), word("module", 18)]}                                                                                                                      | ${[]}
-	${"IT'S OVER 9000!! he shouted"}                                                                                                                                                                                                                     | ${[word("IT'S"), space(4), word("OVER", 5), space(9), word("9000", 10), punctuation("!!", 14), space(16), word("he", 17), space(19), word("shouted", 20)]}                                                                       | ${[]}
 	${"Fix this confusing plate of spaghetti\n"}                                                                                                                                                                                                         | ${[word("Fix"), space(3), word("this", 4), space(8), word("confusing", 9), space(18), word("plate", 19), space(24), word("of", 25), space(27), word("spaghetti", 28)]}                                                           | ${[[]]}
 	${"Apply strawberry jam to make the code sweeter\nSweetness went to a 8 out of 10, as we held back a bit to avoid turning the code diabetic."}                                                                                                       | ${[word("Apply"), space(5), word("strawberry", 6), space(16), word("jam", 17), space(20), word("to", 21), space(23), word("make", 24), space(28), word("the", 29), space(32), word("code", 33), space(37), word("sweeter", 38)]} | ${[[word("Sweetness"), space(9), word("went", 10), space(14), word("to", 15), space(17), word("a", 18), space(19), word("8", 20), space(21), word("out", 22), space(25), word("of", 26), space(28), word("10", 29), punctuation(",", 31), space(32), word("as", 33), space(35), word("we", 36), space(38), word("held", 39), space(43), word("back", 44), space(48), word("a", 49), space(50), word("bit", 51), space(54), word("to", 55), space(57), word("avoid", 58), space(63), word("turning", 64), space(71), word("the", 72), space(75), word("code", 76), space(80), word("diabetic", 81), punctuation(".", 89)]]}
 	${"  added some extra love to the code\n\nThe architecture is much more flexible now."}                                                                                                                                                              | ${[whitespace("  "), word("added", 2), space(7), word("some", 8), space(12), word("extra", 13), space(18), word("love", 19), space(23), word("to", 24), space(26), word("the", 27), space(30), word("code", 31)]}                | ${[[], [word("The"), space(3), word("architecture", 4), space(16), word("is", 17), space(19), word("much", 20), space(24), word("more", 25), space(29), word("flexible", 30), space(38), word("now", 39), punctuation(".", 42)]]}
@@ -61,6 +60,31 @@ describe.each`
 		it("extracts word, whitespace, and punctuation tokens in the body lines", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.bodyLines).toEqual(props.expectedBodyLines)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                                | expectedTokens
+	${"IT'S OVER 9000!! he shouted"}                           | ${[word("IT'S"), space(4), word("OVER", 5), space(9), word("9000", 10), punctuation("!!", 14), space(16), word("he", 17), space(19), word("shouted", 20)]}
+	${"This one is Lucas'"}                                    | ${[word("This"), space(4), word("one", 5), space(8), word("is", 9), space(11), word("Lucas'", 12)]}
+	${"the mountain- and ocean clouds"}                        | ${[word("the"), space(3), word("mountain-", 4), space(13), word("and", 14), space(17), word("ocean", 18), space(23), word("clouds", 24)]}
+	${"The old parser still says 'Twas"}                       | ${[word("The"), space(3), word("old", 4), space(7), word("parser", 8), space(14), word("still", 15), space(20), word("says", 21), space(25), word("'Twas", 26)]}
+	${"Pass the --dry-run option to CI"}                       | ${[word("Pass"), space(4), word("the", 5), space(8), word("--dry-run", 9), space(18), word("option", 19), space(25), word("to", 26), space(28), word("CI", 29)]}
+	${"the cat says 'meow'"}                                   | ${[word("the"), space(3), word("cat", 4), space(7), word("says", 8), space(12), punctuation("'", 13), word("meow", 14), punctuation("'", 18)]}
+	${"Keep 'old-school' magic alive"}                         | ${[word("Keep"), space(4), punctuation("'", 5), word("old-school", 6), punctuation("'", 16), space(17), word("magic", 18), space(23), word("alive", 24)]}
+	${"Punctuation-heavy words are a must-must-have"}          | ${[word("Punctuation-heavy"), space(17), word("words", 18), space(23), word("are", 24), space(27), word("a", 28), space(29), word("must-must-have", 30)]}
+	${"apply the quick-freeze to the x-ray"}                   | ${[word("apply"), space(5), word("the", 6), space(9), word("quick-freeze", 10), space(22), word("to", 23), space(25), word("the", 26), space(29), word("x-ray", 30)]}
+	${"I'd say don't interrupt O'Neil's presentation"}         | ${[word("I'd"), space(3), word("say", 4), space(7), word("don't", 8), space(13), word("interrupt", 14), space(23), word("O'Neil's", 24), space(32), word("presentation", 33)]}
+	${"Jeanne d'Arc carved a mother-in-law's jack-o'-lantern"} | ${[word("Jeanne"), space(6), word("d'Arc", 7), space(12), word("carved", 13), space(19), word("a", 20), space(21), word("mother-in-law's", 22), space(37), word("jack-o'-lantern", 38)]}
+`(
+	"when the subject line of $subjectLine contains words with hyphens and/or apostrophes",
+	(props: { subjectLine: string; expectedTokens: Tokens }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("extracts each compound word as one word token", () => {
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
 	},
 )
@@ -229,7 +253,7 @@ describe.each`
 	${"Update dependency to v2.0.0-rc.1+4905fa03"}                   | ${[word("Update"), space(6), word("dependency", 7), space(17), word("to", 18), space(20), semver("v2.0.0-rc.1+4905fa03", 21)]}
 	${"Downgrade the grumpy cat module from 3.1.4 to 3.0.0"}         | ${[word("Downgrade"), space(9), word("the", 10), space(13), word("grumpy", 14), space(20), word("cat", 21), space(24), word("module", 25), space(31), word("from", 32), space(36), semver("3.1.4", 37), space(42), word("to", 43), space(45), semver("3.0.0", 46)]}
 	${"Release v0.1.0-next"}                                         | ${[word("Release"), space(7), semver("v0.1.0-next", 8)]}
-	${"Pin the Node.js image to 4af617c"}                            | ${[word("Pin"), space(3), word("the", 4), space(7), word("Node", 8), punctuation(".", 12), word("js", 13), space(15), word("image", 16), space(21), word("to", 22), space(24), semver("4af617c", 25)]}
+	${"Pin the Node.js image to 4af617c"}                            | ${[word("Pin"), space(3), word("the", 4), space(7), word("Node.js", 8), space(15), word("image", 16), space(21), word("to", 22), space(24), semver("4af617c", 25)]}
 	${"Upgrade nginx image digest to 9d739ff1ada6"}                  | ${[word("Upgrade"), space(7), word("nginx", 8), space(13), word("image", 14), space(19), word("digest", 20), space(26), word("to", 27), space(29), semver("9d739ff1ada6", 30)]}
 	${'Revert "Upgrade nginx image digest to 9d739ff1ada6"'}         | ${[revert("Revert"), space(6), punctuation('"', 7), word("Upgrade", 8), space(15), word("nginx", 16), space(21), word("image", 22), space(27), word("digest", 28), space(34), word("to", 35), space(37), semver("9d739ff1ada6", 38), punctuation('"', 50)]}
 	${'Revert "Deploy v2.4.0, carefully"'}                           | ${[revert("Revert"), space(6), punctuation('"', 7), word("Deploy", 8), space(14), semver("v2.4.0", 15), punctuation(",", 21), space(22), word("carefully", 23), punctuation('"', 32)]}
@@ -297,6 +321,78 @@ describe.each`
 		it("extracts code tokens", () => {
 			expect(props.expectedTokens).toContainToken("code")
 
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                 | expectedTokens
+	${"Upgrade Vite+ beside C++"}               | ${[word("Upgrade"), space(7), word("Vite+", 8), space(13), word("beside", 14), space(20), word("C++", 21)]}
+	${"Compare C#, F#, F*, and VDM++"}          | ${[word("Compare"), space(7), word("C#", 8), punctuation(",", 10), space(11), word("F#", 12), punctuation(",", 14), space(15), word("F*", 16), punctuation(",", 18), space(19), word("and", 20), space(23), word("VDM++", 24)]}
+	${"Keep (C++) and [F#] documented"}         | ${[word("Keep"), space(4), punctuation("(", 5), word("C++", 6), punctuation(")", 9), space(10), word("and", 11), space(14), punctuation("[", 15), word("F#", 16), punctuation("]", 18), space(19), word("documented", 20)]}
+	${"Deploy .NET with ASP.NET"}               | ${[word("Deploy"), space(6), word(".NET", 7), space(11), word("with", 12), space(16), word("ASP.NET", 17)]}
+	${"Keep VB.NET, Node.js, and Next.js calm"} | ${[word("Keep"), space(4), word("VB.NET", 5), punctuation(",", 11), space(12), word("Node.js", 13), punctuation(",", 20), space(21), word("and", 22), space(25), word("Next.js", 26), space(33), word("calm", 34)]}
+	${"C#'s syntax needs a tiny parser"}        | ${[word("C#'s"), space(4), word("syntax", 5), space(11), word("needs", 12), space(17), word("a", 18), space(19), word("tiny", 20), space(24), word("parser", 25)]}
+	${"Next.js' caching is oddly polite"}       | ${[word("Next.js'"), space(8), word("caching", 9), space(16), word("is", 17), space(19), word("oddly", 20), space(25), word("polite", 26)]}
+	${"Node.js' release schedule moved"}        | ${[word("Node.js'"), space(8), word("release", 9), space(16), word("schedule", 17), space(25), word("moved", 26)]}
+	${"Vite+'s config needs a tiny umbrella"}   | ${[word("Vite+'s"), space(7), word("config", 8), space(14), word("needs", 15), space(20), word("a", 21), space(22), word("tiny", 23), space(27), word("umbrella", 28)]}
+	${"Node.js-powered tools behave"}           | ${[word("Node.js-powered"), space(15), word("tools", 16), space(21), word("behave", 22)]}
+	${".NET-powered apps stay calm"}            | ${[word(".NET-powered"), space(12), word("apps", 13), space(17), word("stay", 18), space(22), word("calm", 23)]}
+	${"Vite+-like toolchain"}                   | ${[word("Vite+-like"), space(10), word("toolchain", 11)]}
+	${"C++-based solution"}                     | ${[word("C++-based"), space(9), word("solution", 10)]}
+`(
+	"when the subject line of $subjectLine contains names with punctuation",
+	(props: { subjectLine: string; expectedTokens: Tokens }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("extracts the names as word tokens", () => {
+			expect(props.expectedTokens).toContainToken("word")
+
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.subjectLine).toEqual(props.expectedTokens)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                         | body                                                                                                                       | expectedBodyLines
+	${"Document language names"}        | ${"Vite+ and C++ now build.\nC#, F#, F*, and VDM++ all compile.\n.NET, ASP.NET, VB.NET, Node.js, and Next.js all deploy."} | ${[[word("Vite+"), space(5), word("and", 6), space(9), word("C++", 10), space(13), word("now", 14), space(17), word("build", 18), punctuation(".", 23)], [word("C#"), punctuation(",", 2), space(3), word("F#", 4), punctuation(",", 6), space(7), word("F*", 8), punctuation(",", 10), space(11), word("and", 12), space(15), word("VDM++", 16), space(21), word("all", 22), space(25), word("compile", 26), punctuation(".", 33)], [word(".NET"), punctuation(",", 4), space(5), word("ASP.NET", 6), punctuation(",", 13), space(14), word("VB.NET", 15), punctuation(",", 21), space(22), word("Node.js", 23), punctuation(",", 30), space(31), word("and", 32), space(35), word("Next.js", 36), space(43), word("all", 44), space(47), word("deploy", 48), punctuation(".", 54)]]}
+	${"Tidy the web stack"}             | ${"ASP.NET and VB.NET still behave.\nNode.js meets Next.js at the deploy station."}                                        | ${[[word("ASP.NET"), space(7), word("and", 8), space(11), word("VB.NET", 12), space(18), word("still", 19), space(24), word("behave", 25), punctuation(".", 31)], [word("Node.js"), space(7), word("meets", 8), space(13), word("Next.js", 14), space(21), word("at", 22), space(24), word("the", 25), space(28), word("deploy", 29), space(35), word("station", 36), punctuation(".", 43)]]}
+	${"Explain the punctuation parade"} | ${".NET, Vite+, and C++ share a comma.\nF#, F*, and VDM++ share a footnote."}                                              | ${[[word(".NET"), punctuation(",", 4), space(5), word("Vite+", 6), punctuation(",", 11), space(12), word("and", 13), space(16), word("C++", 17), space(20), word("share", 21), space(26), word("a", 27), space(28), word("comma", 29), punctuation(".", 34)], [word("F#"), punctuation(",", 2), space(3), word("F*", 4), punctuation(",", 6), space(7), word("and", 8), space(11), word("VDM++", 12), space(17), word("share", 18), space(23), word("a", 24), space(25), word("footnote", 26), punctuation(".", 34)]]}
+	${"Keep the wrappers polite"}       | ${"(ASP.NET), [VB.NET], Node.js; Next.js!"}                                                                                | ${[[punctuation("("), word("ASP.NET", 1), punctuation("),", 8), space(10), punctuation("[", 11), word("VB.NET", 12), punctuation("],", 18), space(20), word("Node.js", 21), punctuation(";", 28), space(29), word("Next.js", 30), punctuation("!", 37)]]}
+`(
+	"when the message body of $body contains names with punctuation",
+	(props: { subjectLine: string; body: string; expectedBodyLines: Array<Tokens> }) => {
+		const crudeCommit = fakeCrudeCommit({ message: `${props.subjectLine}\n${props.body}` })
+
+		it("extracts the names as word tokens", () => {
+			expect(props.expectedBodyLines).toContainToken("word")
+
+			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
+			expect(commit.bodyLines).toEqual(props.expectedBodyLines)
+		})
+	},
+)
+
+describe.each`
+	subjectLine                                    | expectedTokens
+	${"The Vite package is unrelated"}             | ${[word("The"), space(3), word("Vite", 4), space(8), word("package", 9), space(16), word("is", 17), space(19), word("unrelated", 20)]}
+	${"The Vite+ish package is experimental"}      | ${[word("The"), space(3), word("Vite", 4), punctuation("+", 8), word("ish", 9), space(12), word("package", 13), space(20), word("is", 21), space(23), word("experimental", 24)]}
+	${"C#sharp is not a standalone name"}          | ${[word("C"), punctuation("#", 1), word("sharp", 2), space(7), word("is", 8), space(10), word("not", 11), space(14), word("a", 15), space(16), word("standalone", 17), space(27), word("name", 28)]}
+	${"Fsharp is different from the hash symbol"}  | ${[word("Fsharp"), space(6), word("is", 7), space(9), word("different", 10), space(19), word("from", 20), space(24), word("the", 25), space(28), word("hash", 29), space(33), word("symbol", 34)]}
+	${"VDM+ is not the model name"}                | ${[word("VDM"), punctuation("+", 3), space(4), word("is", 5), space(7), word("not", 8), space(11), word("the", 12), space(15), word("model", 16), space(21), word("name", 22)]}
+	${"Use `C++` in the documentation"}            | ${[word("Use"), space(3), code("`C++`", 4), space(9), word("in", 10), space(12), word("the", 13), space(16), word("documentation", 17)]}
+	${"Ship .NETCore with ASP.NETish"}             | ${[word("Ship"), space(4), punctuation(".", 5), word("NETCore", 6), space(13), word("with", 14), space(18), word("ASP", 19), punctuation(".", 22), word("NETish", 23)]}
+	${"VB.NETx and Node.jsland"}                   | ${[word("VB", 0), punctuation(".", 2), word("NETx", 3), space(7), word("and", 8), space(11), word("Node", 12), punctuation(".", 16), word("jsland", 17)]}
+	${"Next.jscript is nearly the framework name"} | ${[word("Next", 0), punctuation(".", 4), word("jscript", 5), space(12), word("is", 13), space(15), word("nearly", 16), space(22), word("the", 23), space(26), word("framework", 27), space(36), word("name", 37)]}
+`(
+	"when the subject line of $subjectLine contains no standalone recognised name",
+	(props: { subjectLine: string; expectedTokens: Tokens }) => {
+		const crudeCommit = fakeCrudeCommit({ message: props.subjectLine })
+
+		it("extracts only the existing word, punctuation, whitespace, and code tokens", () => {
 			const commit = mapCrudeCommitToCommit(crudeCommit, configuration)
 			expect(commit.subjectLine).toEqual(props.expectedTokens)
 		})
@@ -780,16 +876,17 @@ describe.each`
 )
 
 describe.each`
-	subjectLine                                  | body                                                                                                                                                     | expectedBodyLines
-	${"Teach the parser to carry tiny snippets"} | ${'The recipe starts here.\n```js\nconst snack = "waffle"\nconsole.log(snack)\n```\nAnd then the prose comes back.'}                                     | ${[[word("The"), space(3), word("recipe", 4), space(10), word("starts", 11), space(17), word("here", 18), punctuation(".", 22)], [codeblock("```js")], [codeblock('const snack = "waffle"')], [codeblock("console.log(snack)")], [codeblock("```")], [word("And"), space(3), word("then", 4), space(8), word("the", 9), space(12), word("prose", 13), space(18), word("comes", 19), space(24), word("back", 25), punctuation(".", 29)]]}
-	${"let the empty block breathe"}             | ${"Before\n```\n```\nAfter"}                                                                                                                             | ${[[word("Before")], [codeblock("```")], [codeblock("```")], [word("After")]]}
-	${"Keep code that smells like trailerkeys"}  | ${"```\nRefs: #404\nBREAKING CHANGE: the toaster learned sarcasm\n```\nSigned-off-by: Master Splinter <sensei@ninja-academy.com>"}                       | ${[[codeblock("```")], [codeblock("Refs: #404")], [codeblock("BREAKING CHANGE: the toaster learned sarcasm")], [codeblock("```")], [trailerkey("Signed-off-by"), punctuation(":", 13), space(14), word("Master", 15), space(21), word("Splinter", 22), space(30), punctuation("<", 31), word("sensei", 32), punctuation("@", 38), word("ninja-academy", 39), punctuation(".", 52), word("com", 53), punctuation(">", 56)]]}
-	${"Tokenise two separate code postcards"}    | ${"```ts\nconst first = true\n```\nMiddle words.\n```sh\necho second\n```"}                                                                              | ${[[codeblock("```ts")], [codeblock("const first = true")], [codeblock("```")], [word("Middle"), space(6), word("words", 7), punctuation(".", 12)], [codeblock("```sh")], [codeblock("echo second")], [codeblock("```")]]}
-	${"unclosed note fenced"}                    | ${'Intro\n```json\n{ "verified": false }\nRefs: #9001'}                                                                                                  | ${[[word("Intro")], [codeblock("```json")], [codeblock('{ "verified": false }')], [codeblock("Refs: #9001")]]}
-	${"install the ceremonial shell helpers"}    | ${'```shell\npnpm add @rainstormy/comet-sprinkles --save-dev\npnpm exec comet --mode="committee-approved"\n```'}                                         | ${[[codeblock("```shell")], [codeblock("pnpm add @rainstormy/comet-sprinkles --save-dev")], [codeblock('pnpm exec comet --mode="committee-approved"')], [codeblock("```")]]}
-	${"One long release breadcrumb"}             | ${'```shell\ncurl -L https://example.com/releases/2026/quietly-dramatic/checksums/commit-message-linter.tar.gz\nprintf "deploy window: 03:14 UTC"\n```'} | ${[[codeblock("```shell")], [codeblock("curl -L https://example.com/releases/2026/quietly-dramatic/checksums/commit-message-linter.tar.gz")], [codeblock('printf "deploy window: 03:14 UTC"')], [codeblock("```")]]}
-	${"no tokenised links inside text fences"}   | ${"```text\nhttps://status.example.com/incidents/2026/06/14/linting-pipeline-refused-to-wear-a-tie?component=commit-body&severity=medium\n```"}          | ${[[codeblock("```text")], [codeblock("https://status.example.com/incidents/2026/06/14/linting-pipeline-refused-to-wear-a-tie?component=commit-body&severity=medium")], [codeblock("```")]]}
-	${"Close a tiny fence with a bigger one"}    | ${'```\nconst cake = "tiny"\n````\nstill-open: not a trailerkey because fence was not closed properly\nand more prose follows'}                          | ${[[codeblock("```")], [codeblock('const cake = "tiny"')], [codeblock("````")], [codeblock("still-open: not a trailerkey because fence was not closed properly")], [codeblock("and more prose follows")]]}
+	subjectLine                                     | body                                                                                                                                                     | expectedBodyLines
+	${"Teach the parser to carry tiny snippets"}    | ${'The recipe starts here.\n```js\nconst snack = "waffle"\nconsole.log(snack)\n```\nAnd then the prose comes back.'}                                     | ${[[word("The"), space(3), word("recipe", 4), space(10), word("starts", 11), space(17), word("here", 18), punctuation(".", 22)], [codeblock("```js")], [codeblock('const snack = "waffle"')], [codeblock("console.log(snack)")], [codeblock("```")], [word("And"), space(3), word("then", 4), space(8), word("the", 9), space(12), word("prose", 13), space(18), word("comes", 19), space(24), word("back", 25), punctuation(".", 29)]]}
+	${"Keep punctuation-heavy names inside fences"} | ${"```\nVite+ C++ C# F# F* VDM++ .NET ASP.NET VB.NET Node.js Next.js\n```"}                                                                              | ${[[codeblock("```")], [codeblock("Vite+ C++ C# F# F* VDM++ .NET ASP.NET VB.NET Node.js Next.js")], [codeblock("```")]]}
+	${"let the empty block breathe"}                | ${"Before\n```\n```\nAfter"}                                                                                                                             | ${[[word("Before")], [codeblock("```")], [codeblock("```")], [word("After")]]}
+	${"Keep code that smells like trailerkeys"}     | ${"```\nRefs: #404\nBREAKING CHANGE: the toaster learned sarcasm\n```\nSigned-off-by: Master Splinter <sensei@ninja-academy.com>"}                       | ${[[codeblock("```")], [codeblock("Refs: #404")], [codeblock("BREAKING CHANGE: the toaster learned sarcasm")], [codeblock("```")], [trailerkey("Signed-off-by"), punctuation(":", 13), space(14), word("Master", 15), space(21), word("Splinter", 22), space(30), punctuation("<", 31), word("sensei", 32), punctuation("@", 38), word("ninja-academy", 39), punctuation(".", 52), word("com", 53), punctuation(">", 56)]]}
+	${"Tokenise two separate code postcards"}       | ${"```ts\nconst first = true\n```\nMiddle words.\n```sh\necho second\n```"}                                                                              | ${[[codeblock("```ts")], [codeblock("const first = true")], [codeblock("```")], [word("Middle"), space(6), word("words", 7), punctuation(".", 12)], [codeblock("```sh")], [codeblock("echo second")], [codeblock("```")]]}
+	${"unclosed note fenced"}                       | ${'Intro\n```json\n{ "verified": false }\nRefs: #9001'}                                                                                                  | ${[[word("Intro")], [codeblock("```json")], [codeblock('{ "verified": false }')], [codeblock("Refs: #9001")]]}
+	${"install the ceremonial shell helpers"}       | ${'```shell\npnpm add @rainstormy/comet-sprinkles --save-dev\npnpm exec comet --mode="committee-approved"\n```'}                                         | ${[[codeblock("```shell")], [codeblock("pnpm add @rainstormy/comet-sprinkles --save-dev")], [codeblock('pnpm exec comet --mode="committee-approved"')], [codeblock("```")]]}
+	${"One long release breadcrumb"}                | ${'```shell\ncurl -L https://example.com/releases/2026/quietly-dramatic/checksums/commit-message-linter.tar.gz\nprintf "deploy window: 03:14 UTC"\n```'} | ${[[codeblock("```shell")], [codeblock("curl -L https://example.com/releases/2026/quietly-dramatic/checksums/commit-message-linter.tar.gz")], [codeblock('printf "deploy window: 03:14 UTC"')], [codeblock("```")]]}
+	${"no tokenised links inside text fences"}      | ${"```text\nhttps://status.example.com/incidents/2026/06/14/linting-pipeline-refused-to-wear-a-tie?component=commit-body&severity=medium\n```"}          | ${[[codeblock("```text")], [codeblock("https://status.example.com/incidents/2026/06/14/linting-pipeline-refused-to-wear-a-tie?component=commit-body&severity=medium")], [codeblock("```")]]}
+	${"Close a tiny fence with a bigger one"}       | ${'```\nconst cake = "tiny"\n````\nstill-open: not a trailerkey because fence was not closed properly\nand more prose follows'}                          | ${[[codeblock("```")], [codeblock('const cake = "tiny"')], [codeblock("````")], [codeblock("still-open: not a trailerkey because fence was not closed properly")], [codeblock("and more prose follows")]]}
 `(
 	"when the message body of $body contains triple-backtick fenced code blocks",
 	(props: { subjectLine: string; body: string; expectedBodyLines: Array<Tokens> }) => {
