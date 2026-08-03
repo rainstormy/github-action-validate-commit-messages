@@ -66,10 +66,18 @@ const TRAILERKEY = String.raw`(?<=^\s*)(?<trailerkey>(?i:[a-z0-9-]+|breaking cha
 const WHITESPACE = String.raw`(?<whitespace>\s+)`
 
 /**
- * Matches alphanumeric words, optionally preceded or followed and/or separated by one or more hyphens or apostrophes (e.g. `quick-freeze`, `O'Neil's`, `mother-in-law's`, `jack-o'-lantern`). Apostrophes enclosing a word on both sides are left as punctuation.
+ * Matches one of these predefined names: .NET, ASP.NET, C++, C#, F#, F*, Next.js, Node.js, VB.NET, VDM++, Vite+.
  */
 // language=jsunicoderegexp
-const WORD = String.raw`(?<word>(?<=')[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*(?=')|(?!'[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*[-']*')[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*[-']*)` // TODO: Recognise certain names like Vite+, C++, F#, etc.
+const PREDEFINED_NAME = String.raw`(?<![\p{L}\p{N}])(?:\.NET|ASP\.NET|C\+\+|C#|F#|F\*|Next\.js|Node\.js|VB\.NET|VDM\+\+|Vite\+)(?:[-']+[\p{L}\p{N}]+)*[-']*(?![\p{L}\p{N}])`
+
+/**
+ * Matches predefined names or alphanumeric words, optionally preceded or followed and/or separated by one or more hyphens or apostrophes (e.g. `quick-freeze`, `O'Neil's`, `mother-in-law's`, `jack-o'-lantern`). Apostrophes enclosing a word on both sides are left as punctuation.
+ *
+ * @see PREDEFINED_NAME
+ */
+// language=jsunicoderegexp
+const WORD = String.raw`(?<word>${PREDEFINED_NAME}|(?<=')[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*(?=')|(?!'[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*[-']*')[-']*[\p{L}\p{N}]+(?:[-']+[\p{L}\p{N}]+)*[-']*)`
 
 const TRAILERKEY_REGEX = new RegExp(TRAILERKEY, "u")
 const TRAILERLINE_REGEX = new RegExp(
