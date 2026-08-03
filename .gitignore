@@ -11,6 +11,7 @@ node_modules/
 
 # Development tools and IDEs
 .claude/
+.codex/
 .cursor/
 .github/copilot-instructions.md
 .idea/

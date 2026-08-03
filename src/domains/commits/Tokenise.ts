@@ -9,6 +9,12 @@ import { regexEnum, regexUnion } from "#utilities/Regexes.ts"
 const CODE = String.raw`(?<code>${"`"}[^${"`"}]*${"`"})`
 
 /**
+ * Matches a hyperlink of one of these protocol schemes: https://, mailto:, or ssh://, excluding sentence punctuation at the end.
+ */
+// language=jsunicoderegexp
+const HYPERLINK = String.raw`(?<hyperlink>(?:https://|mailto:|ssh://)\S*[^\s.,!?"')\]}])`
+
+/**
  * Matches a single punctuation or symbol character, thus avoiding greedily matching inline code phrases and issue link prefixes adjacent to other punctuation.
  * The tokeniser consolidates consecutive punctuation tokens into a single token.
  */
@@ -33,7 +39,7 @@ const REVERT = String.raw`(?<revert>(?i:revert))(?=\s*")`
  * @see https://semver.org
  */
 // language=jsunicoderegexp
-const SEMVER = String.raw`(?<=\s)(?<semver>[0-9a-f]{7,}|v?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)(?=\s|"|$)`
+const SEMVER = String.raw`(?<=\s)(?<semver>[0-9a-f]{7,}|v?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?:\+[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*)?)(?=[\s,]|"|$)`
 
 /**
  * Matches a squash marker literal with one or more leading or trailing exclamation marks, optionally preceded by whitespace.
@@ -67,7 +73,9 @@ const WORD = String.raw`(?<word>[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*(?:'[\p{L}\p{N}]
 
 const TRAILERKEY_REGEX = new RegExp(TRAILERKEY, "u")
 const TRAILERLINE_REGEX = new RegExp(
-	regexUnion([TRAILERKEY, WORD, WHITESPACE, PUNCTUATION], { preserveCapturingGroups: true }),
+	regexUnion([HYPERLINK, TRAILERKEY, WORD, WHITESPACE, PUNCTUATION], {
+		preserveCapturingGroups: true,
+	}),
 	"gu",
 )
 
@@ -97,6 +105,7 @@ export function tokeniseSubjectLine(crudeSubjectLine: string, patterns: Tokenise
 		SQUASH,
 		REVERT,
 		CODE,
+		HYPERLINK,
 		SEMVER,
 		patterns.issueLink,
 		WORD,
@@ -114,6 +123,7 @@ export function tokeniseBodyLines(
 ): Array<Tokens> {
 	const prioritisedPatterns: Array<string> = [
 		CODE,
+		HYPERLINK,
 		patterns.issueLink,
 		WORD,
 		WHITESPACE,

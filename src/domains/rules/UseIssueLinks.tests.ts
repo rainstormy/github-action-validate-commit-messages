@@ -35,6 +35,7 @@ describe.each`
 	${"accept `pseudocode:` as a valid keyword in the compiler"} | ${[0, 1]}             | ${[0, 1]}           | ${[55, 56]}
 	${" squash! "}                                               | ${[9, 10]}            | ${[9, 10]}          | ${[9, 10]}
 	${"fixup! Smoothen the rough edges"}                         | ${[7, 8]}             | ${[7, 8]}           | ${[31, 32]}
+	${"Read https://github.com/rainstormy/comet/pull/42"}        | ${[0, 1]}             | ${[0, 1]}           | ${[48, 49]}
 `(
 	"when the subject line of $subjectLine does not contain an issue link",
 	(props: {

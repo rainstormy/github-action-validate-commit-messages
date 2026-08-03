@@ -16,30 +16,31 @@ const enabled = emptyRuleConfiguration({ [rule]: {} })
 const fakeCommit = fakeCommitFactory()
 
 describe.each`
-	subjectLine                         | expectedRange
-	${"WIP"}                            | ${[0, 3]}
-	${"wip!"}                           | ${[0, 3]}
-	${"init"}                           | ${[0, 4]}
-	${"test"}                           | ${[0, 4]}
-	${"bugfix "}                        | ${[0, 6]}
-	${"Unsubscribe"}                    | ${[0, 11]}
-	${"#flabbergastered"}               | ${[1, 16]}
-	${"HOTFIX"}                         | ${[0, 6]}
-	${" Refactor"}                      | ${[1, 9]}
-	${"  oops "}                        | ${[2, 6]}
-	${"strategy-pattern"}               | ${[0, 16]}
-	${"`Bingo`"}                        | ${[0, 7]}
-	${"`EternalWealth`"}                | ${[0, 15]}
-	${"Revert"}                         | ${[0, 6]}
-	${"#1 fix"}                         | ${[3, 6]}
-	${"(GH-31)   test"}                 | ${[10, 14]}
-	${"Closes #362"}                    | ${[0, 6]}
-	${"GL-7 `Unscheduled Maintenance`"} | ${[5, 30]}
-	${"#2 #3 (GL-1) init"}              | ${[13, 17]}
-	${"fixup! WIP"}                     | ${[7, 10]}
-	${"squash!  bad"}                   | ${[9, 12]}
-	${"  amend!Hotfix"}                 | ${[8, 14]}
-	${"fixup! fixup! Restored"}         | ${[14, 22]}
+	subjectLine                                       | expectedRange
+	${"WIP"}                                          | ${[0, 3]}
+	${"wip!"}                                         | ${[0, 3]}
+	${"init"}                                         | ${[0, 4]}
+	${"test"}                                         | ${[0, 4]}
+	${"bugfix "}                                      | ${[0, 6]}
+	${"Unsubscribe"}                                  | ${[0, 11]}
+	${"#flabbergastered"}                             | ${[1, 16]}
+	${"HOTFIX"}                                       | ${[0, 6]}
+	${" Refactor"}                                    | ${[1, 9]}
+	${"  oops "}                                      | ${[2, 6]}
+	${"strategy-pattern"}                             | ${[0, 16]}
+	${"`Bingo`"}                                      | ${[0, 7]}
+	${"`EternalWealth`"}                              | ${[0, 15]}
+	${"Revert"}                                       | ${[0, 6]}
+	${"#1 fix"}                                       | ${[3, 6]}
+	${"(GH-31)   test"}                               | ${[10, 14]}
+	${"Closes #362"}                                  | ${[0, 6]}
+	${"GL-7 `Unscheduled Maintenance`"}               | ${[5, 30]}
+	${"#2 #3 (GL-1) init"}                            | ${[13, 17]}
+	${"fixup! WIP"}                                   | ${[7, 10]}
+	${"squash!  bad"}                                 | ${[9, 12]}
+	${"  amend!Hotfix"}                               | ${[8, 14]}
+	${"fixup! fixup! Restored"}                       | ${[14, 22]}
+	${" https://github.com/rainstormy/comet/pull/42"} | ${[1, 44]}
 `(
 	"when the subject line of $subjectLine contains exactly one significant word",
 	(props: { subjectLine: string; expectedRange: CharacterRange }) => {
@@ -143,6 +144,7 @@ describe.each`
 	${"Refactor `HotChocolateMachine`"}
 	${"release 1.0.0"}
 	${"amend! Upgrade React to 19.2.0 (#52)"}
+	${"merged https://github.com/rainstormy/comet/pull/42"}
 `(
 	"when the subject line of $subjectLine contains more than one word",
 	(props: { subjectLine: string }) => {

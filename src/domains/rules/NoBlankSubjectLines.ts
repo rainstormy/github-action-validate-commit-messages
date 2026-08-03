@@ -26,7 +26,7 @@ export function* noBlankSubjectLines(
 
 	for (const commit of commits) {
 		if (
-			commit.subjectLine.some(isToken("semver", "word")) ||
+			commit.subjectLine.some(isToken("hyperlink", "semver", "word")) ||
 			commit.subjectLine.some((token) => token.type === "code" && token.value !== "``")
 		) {
 			continue

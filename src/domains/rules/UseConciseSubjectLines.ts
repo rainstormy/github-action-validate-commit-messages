@@ -12,7 +12,7 @@ const rule = "useConciseSubjectLines" satisfies RuleKey
  * Keeping the subject line short helps to preserve the readability of the commit history in various Git clients.
  *
  * It ignores merge commits, revert commits, squash commits, and dependency upgrade commits.
- * Issue links and inline code phrases do not count towards the limit.
+ * Hyperlinks, issue links, and inline code phrases do not count towards the limit.
  */
 export function* useConciseSubjectLines(
 	commits: Commits,
@@ -33,7 +33,7 @@ export function* useConciseSubjectLines(
 		let overflowStartIndex = 0
 		let overflowEndIndex = 0
 
-		const tokens = commit.subjectLine.filter(isNotToken("code", "issuelink"))
+		const tokens = commit.subjectLine.filter(isNotToken("code", "hyperlink", "issuelink"))
 
 		for (const token of tokens) {
 			textLength += token.value.length

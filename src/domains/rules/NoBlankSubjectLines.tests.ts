@@ -103,6 +103,9 @@ describe.each`
 	${"Let `SoftIceMachineAdapter` produce the goods"}
 	${"resolve issues in #21 to make the code work"}
 	${"Refactor `HotChocolateMachine`"}
+	${"https://github.com/rainstormy/comet/pull/42"}
+	${"mailto:noreply@github.com"}
+	${"Clone ssh://git@github.com/rainstormy/comet.git"}
 `("when the subject line of $subjectLine is not blank", (props: { subjectLine: string }) => {
 	const commit = fakeCommit({ message: props.subjectLine })
 

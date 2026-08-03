@@ -147,7 +147,8 @@ Be sure to cover many different scenarios, for example (but not exhaustive):
 - every relevant configuration branch, including the feature being disabled (when applicable)
 
 Prefer creative, realistic, lowkey funny commit messages over repetitive placeholder data.
-They should resemble a large variety of real-world commit messages. For example:
+They should resemble a large variety of real-world commit messages to improve the general test coverage.
+For example:
 
 - `Release the robot butler`
 - `made the console less dramatic`
@@ -183,7 +184,8 @@ vpr test 'src/domains/commits/Tokenise.tests.ts'
 
 ## Step 6: Test rules
 
-Where relevant, update the existing unit tests of rules in `src/domains/rules/` and add new test cases to cover the new token type in rule contexts.
+Where relevant, update the existing unit tests of rules in `src/domains/rules/` to take the new token type into account.
+In general, add new test cases to cover the new token type in rule contexts, ensuring that the existing rules work as expected when facing the new token type.
 
 Run the mandatory project-wide checks before finishing:
 

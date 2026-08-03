@@ -12,7 +12,7 @@ const rule = "useCapitalisedSubjectLines" satisfies RuleKey
  *
  * Standardising the commit message format helps to preserve the readability of the commit history.
  *
- * It ignores commits that do not start with a letter.
+ * It ignores commits that do not start with a letter and commits that start with a hyperlink.
  * It disregards issue links, inline code phrases, and squash markers.
  */
 export function* useCapitalisedSubjectLines(
@@ -24,9 +24,11 @@ export function* useCapitalisedSubjectLines(
 	}
 
 	for (const commit of commits) {
-		const firstToken = commit.subjectLine.find(isToken("punctuation", "revert", "word"))
+		const firstToken = commit.subjectLine.find(
+			isToken("hyperlink", "punctuation", "revert", "word"),
+		)
 
-		if (firstToken && startsWithLowercaseLetter(firstToken)) {
+		if (firstToken && firstToken.type !== "hyperlink" && startsWithLowercaseLetter(firstToken)) {
 			const rangeStart = firstToken.range[0]
 			yield subjectLineConcern(rule, commit.sha, { range: [rangeStart, rangeStart + 1] })
 		}
