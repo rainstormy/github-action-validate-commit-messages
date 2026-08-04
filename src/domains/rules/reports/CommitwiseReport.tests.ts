@@ -245,10 +245,7 @@ describe("when 'noExcessiveWhitespace' has a concern about characters 9-12 of a 
 		sha: "41548802d6bb14a3032403e6fc0cc69534e22e4",
 		message: "Polish the arcade cabinet\n\nThe prize   counter now accepts coupons.",
 	})
-	const concern = bodyLineConcern("noExcessiveWhitespace", commit.sha, {
-		line: 1,
-		range: [9, 12],
-	})
+	const concern = bodyLineConcern("noExcessiveWhitespace", commit.sha, { line: 1, range: [9, 12] })
 
 	it("describes the rule violation in the body line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
@@ -276,10 +273,7 @@ describe("when 'noExcessiveWhitespace' has a concern about characters 14-18 of a
 		message:
 			"Map the museum heist\n\nFirst note is perfectly ordinary.\nThe blue vault    needs a quieter alarm.\nLast note keeps watch.",
 	})
-	const concern = bodyLineConcern("noExcessiveWhitespace", commit.sha, {
-		line: 2,
-		range: [14, 18],
-	})
+	const concern = bodyLineConcern("noExcessiveWhitespace", commit.sha, { line: 2, range: [14, 18] })
 
 	it("describes the rule violation in the body line", () => {
 		const actualOutput = commitwiseReport([concern], [commit], configuration)
@@ -1498,6 +1492,263 @@ cccee2c Fixed a bad typo in comment (yes, really)
      (useIssueLinks)
      
      Examples: AWESOME-123, UNICORN-123, PROJECT-123
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 20-22 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 20 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "646e47176db1f754a924ffed3ab6f8249c38b5",
+		message: "Tidy the note\n\nBefore this note.\nA tiny note runs long.\nAfter this note.",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 2, range: [20, 22] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+646e471 Tidy the note
+    ╭──
+  2 │ Before this note.
+∙ 3 │ A tiny note runs long.
+    ·                     ┬─
+    ·                     ╰─ Message body lines must not exceed 20 characters.
+    ·                        (useLineWrapping)
+  4 │ After this note.
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 20-56 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 20 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "7756d3722de8fcf41cd37d2a1ce50b86e8c3bf1",
+		message:
+			"Record the migration\n\nThe pager now points to the correct team before sunrise.\n\n```text\nThis fenced explanation is long but should not be marked.\nAnother fenced line keeps the sample readable.\n```",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 1, range: [20, 56] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+7756d37 Record the migration
+    ╭──
+  1 │ 
+∙ 2 │ The pager now points to the correct team before sunrise.
+    ·                     ─────────────────┬──────────────────
+    ·                                      ╰─ Message body lines must not exceed 20 characters.
+    ·                                         (useLineWrapping)
+  3 │ 
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 50-77 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 50 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "df31f7e62eccc9663a9b1d8339c22c1cfd5acf",
+		message:
+			"squash! refine the deploy notes\n\nthe deploy bot left a very long note about sandwiches and spectral keyboards.\nthe release train leaves at noon with snacks.",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 1, range: [50, 77] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+df31f7e squash! refine the deploy notes
+    ╭──
+  1 │ 
+∙ 2 │ the deploy bot left a very long note about sandwiches and spectral keyboards.
+    ·                                                   ─────────────┬─────────────
+    ·             Message body lines must not exceed 50 characters. ─╯
+    ·             (useLineWrapping)
+  3 │ the release train leaves at noon with snacks.
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 72-73 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 72 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "e0121c88a51c6859cdf081d4f2b902b3bba811",
+		message:
+			"Ship to production\n\nIt was just a matter of time before it would cause customers to complain.",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 1, range: [72, 73] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+e0121c8 Ship to production
+    ╭──
+  1 │ 
+∙ 2 │ It was just a matter of time before it would cause customers to complain.
+    ·                                                                         ┬
+    ·                      Message body lines must not exceed 72 characters. ─╯
+    ·                      (useLineWrapping)
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 72-91 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 72 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "14c415edd4649de8cfc64fb4602a3e4a1afb9995",
+		message:
+			"Audit the migration\n\nFirst note.\nSecond note.\nThird note.\nFourth note.\nFifth note.\n```text\nA fenced example can span several lines.\n```\nThe tenth body line is intentionally long so the report shows its two-digit gutter clearly.",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 9, range: [72, 91] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+14c415e Audit the migration
+     ╭──
+   9 │ \`\`\`
+∙ 10 │ The tenth body line is intentionally long so the report shows its two-digit gutter clearly.
+     ·                                                                         ─────────┬─────────
+     ·                               Message body lines must not exceed 72 characters. ─╯
+     ·                               (useLineWrapping)
+     ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 72-95 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 72 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "2376812af70245dce50251837a651cfc39289e",
+		message:
+			"Audit the deployment\n\nFirst.\nSecond.\nThird.\nFourth.\nFifth.\nSixth.\n```text\nA fenced example occupies one line.\nThe second fenced line keeps the robot amused.\n```\nThe twelfth body line is also intentionally too long for the report to show a two-digit gutter.\nmore info goes here...",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 11, range: [72, 95] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+2376812 Audit the deployment
+     ╭──
+  11 │ \`\`\`
+∙ 12 │ The twelfth body line is also intentionally too long for the report to show a two-digit gutter.
+     ·                                                                         ───────────┬───────────
+     ·                                 Message body lines must not exceed 72 characters. ─╯
+     ·                                 (useLineWrapping)
+  13 │ more info goes here...
+     ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has a concern about characters 130-154 of a body line", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 72 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "a5fa8214282a38861f929d8a7bafa727b45c42",
+		message:
+			"Document the audit breadcrumb\n\nRead https://github.com/rainstormy/comet/pull/42 and keep the `ReleaseLedger` adapter available while the robots inspect the quiet archive before sunrise.",
+	})
+	const concern = bodyLineConcern("useLineWrapping", commit.sha, { line: 1, range: [130, 154] })
+
+	it("describes the rule violation in the body line", () => {
+		const actualOutput = commitwiseReport([concern], [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+a5fa821 Document the audit breadcrumb
+    ╭──
+  1 │ 
+∙ 2 │ Read https://github.com/rainstormy/comet/pull/42 and keep the \`ReleaseLedger\` adapter available while the robots inspect the quiet archive before sunrise.
+    ·                                                                                                                                   ────────────┬───────────
+    ·                                                                                            Message body lines must not exceed 72 characters. ─╯
+    ·                                                                                            (useLineWrapping)
+    ╰──
+`.trim(),
+		)
+	})
+})
+
+describe("when 'useLineWrapping' has concerns about two body lines", () => {
+	const configuration = fakeConfiguration({
+		rules: { useLineWrapping: { maxLength: 20 } },
+	})
+	const fakeCommit = fakeCommitFactory(configuration.tokens)
+
+	const commit = fakeCommit({
+		sha: "62f9aaea578ae41f1ff7bab5192ebabcb282ab",
+		message:
+			"Polish the release notes\n\nThe first migration note is intentionally too long for this tiny limit.\nThe second note also runs beyond twenty characters for comparison.\nShort.",
+	})
+	const concerns = [
+		bodyLineConcern("useLineWrapping", commit.sha, { line: 1, range: [20, 71] }),
+		bodyLineConcern("useLineWrapping", commit.sha, { line: 2, range: [20, 66] }),
+	]
+
+	it("describes the rule violations in the body lines", () => {
+		const actualOutput = commitwiseReport(concerns, [commit], configuration)
+		expect(actualOutput).toBe(
+			`
+62f9aae Polish the release notes
+    ╭──
+  1 │ 
+∙ 2 │ The first migration note is intentionally too long for this tiny limit.
+    ·                     ─────────────────────────┬─────────────────────────
+    ·                                              ╰─ Message body lines must not exceed 20 characters.
+    ·                                                 (useLineWrapping)
+  3 │ The second note also runs beyond twenty characters for comparison.
+    ╰──
+
+62f9aae Polish the release notes
+    ╭──
+  2 │ The first migration note is intentionally too long for this tiny limit.
+∙ 3 │ The second note also runs beyond twenty characters for comparison.
+    ·                     ──────────────────────┬───────────────────────
+    ·                                           ╰─ Message body lines must not exceed 20 characters.
+    ·                                              (useLineWrapping)
+  4 │ Short.
+    ╰──
 `.trim(),
 		)
 	})

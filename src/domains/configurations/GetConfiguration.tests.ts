@@ -32,7 +32,7 @@ describe("the default configuration in the command-line", () => {
 		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
 		${"useImperativeSubjectLines"}   | ${{ whitelist: [] }}
-		${"useLineWrapping"}             | ${{}}
+		${"useLineWrapping"}             | ${{ maxLength: 72 }}
 		${"useSignedCommits"}            | ${{}}
 	`(
 		"enables $enabledRuleKey",
@@ -90,7 +90,7 @@ describe("the default configuration in GitHub Actions", () => {
 		${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
 		${"useEmptyLineBeforeBodyLines"} | ${{}}
 		${"useImperativeSubjectLines"}   | ${{ whitelist: [] }}
-		${"useLineWrapping"}             | ${{}}
+		${"useLineWrapping"}             | ${{ maxLength: 72 }}
 		${"useSignedCommits"}            | ${{}}
 	`(
 		"enables $enabledRuleKey",
