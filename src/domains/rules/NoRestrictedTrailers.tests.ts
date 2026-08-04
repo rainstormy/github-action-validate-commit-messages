@@ -3,7 +3,7 @@ import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
 import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
 import type { RuleConfiguration } from "#configurations/Configuration.ts"
-import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
+import { bodyLineConcern, bodyLineConcerns } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
@@ -77,10 +77,9 @@ describe.each`
 						? "raises concerns about the disallowed trailer keys"
 						: "does not raise any concerns",
 					() => {
-						const expectedConcerns: Concerns = configProps.expectedRanges.map((range) =>
-							bodyLineConcern(rule, commit.sha, range),
+						expect(actualConcerns).toEqual<Concerns>(
+							bodyLineConcerns(rule, commit.sha, configProps.expectedRanges),
 						)
-						expect(actualConcerns).toEqual<Concerns>(expectedConcerns)
 					},
 				)
 			},

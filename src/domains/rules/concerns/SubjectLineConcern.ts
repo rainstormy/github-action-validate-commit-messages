@@ -34,3 +34,11 @@ export function subjectLineConcern(
 		...props,
 	}
 }
+
+export function subjectLineConcerns(
+	rule: SubjectLineConcernRuleKey,
+	commitSha: CommitSha,
+	ranges: Array<CharacterRange>,
+): Array<SubjectLineConcern> {
+	return ranges.map((range) => subjectLineConcern(rule, commitSha, { range }))
+}

@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
 import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
-import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
+import { bodyLineConcern, bodyLineConcerns } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
-import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
+import { subjectLineConcern, subjectLineConcerns } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
@@ -67,13 +67,10 @@ describe.each`
 			const actualConcerns = mapCommitsToConcerns([commit], enabled)
 
 			it("raises concerns about the blocks of excessive whitespace characters", () => {
-				const expectedConcerns = [
-					...props.expectedSubjectLineRanges.map((range) =>
-						subjectLineConcern(rule, commit.sha, { range }),
-					),
-					...props.expectedBodyLineRanges.map((range) => bodyLineConcern(rule, commit.sha, range)),
-				]
-				expect(actualConcerns).toEqual<Concerns>(expectedConcerns)
+				expect(actualConcerns).toEqual<Concerns>([
+					...subjectLineConcerns(rule, commit.sha, props.expectedSubjectLineRanges),
+					...bodyLineConcerns(rule, commit.sha, props.expectedBodyLineRanges),
+				])
 			})
 		})
 
