@@ -1,5 +1,5 @@
 import type { Commits } from "#commits/Commit.ts"
-import { isNotToken, isToken } from "#commits/Token.ts"
+import { isNotToken, isToken, tokenOverflowRange } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -29,28 +29,13 @@ export function* useConciseSubjectLines(
 			continue
 		}
 
-		let textLength = 0
-		let overflowStartIndex = 0
-		let overflowEndIndex = 0
+		const overflowRange = tokenOverflowRange(
+			commit.subjectLine.filter(isNotToken("code", "hyperlink", "issuelink")),
+			maxLength,
+		)
 
-		const tokens = commit.subjectLine.filter(isNotToken("code", "hyperlink", "issuelink"))
-
-		for (const token of tokens) {
-			textLength += token.value.length
-
-			if (textLength > maxLength) {
-				if (overflowStartIndex === 0) {
-					const offset = maxLength - textLength + token.value.length
-					overflowStartIndex = token.range[0] + offset
-				}
-				overflowEndIndex = token.range[1]
-			}
-		}
-
-		if (overflowEndIndex !== overflowStartIndex) {
-			yield subjectLineConcern(rule, commit.sha, {
-				range: [overflowStartIndex, overflowEndIndex],
-			})
+		if (overflowRange !== null) {
+			yield subjectLineConcern(rule, commit.sha, { range: overflowRange })
 		}
 	}
 }

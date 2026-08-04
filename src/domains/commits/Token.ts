@@ -95,3 +95,23 @@ export function isNotToken<Type extends TokenType>(
 export function tokenRangeEnd(tokens: Tokens): number {
 	return tokens.at(-1)?.range[1] ?? 0
 }
+
+export function tokenOverflowRange(tokens: Tokens, maxLength: number): CharacterRange | null {
+	let length = 0
+	let overflowStart = 0
+	let overflowEnd = 0
+
+	for (const token of tokens) {
+		length += token.value.length
+
+		if (length > maxLength) {
+			if (overflowStart === 0) {
+				const offset = maxLength - length + token.value.length
+				overflowStart = token.range[0] + offset
+			}
+			overflowEnd = token.range[1]
+		}
+	}
+
+	return overflowEnd !== overflowStart ? [overflowStart, overflowEnd] : null
+}
