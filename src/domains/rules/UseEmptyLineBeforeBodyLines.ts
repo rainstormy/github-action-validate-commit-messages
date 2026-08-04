@@ -21,9 +21,7 @@ export function* useEmptyLineBeforeBodyLines(
 	}
 
 	for (const commit of commits) {
-		let lineNumber = 0
-
-		for (const bodyLine of commit.bodyLines) {
+		for (const [lineNumber, bodyLine] of commit.bodyLines.entries()) {
 			if (bodyLine.some(isNotToken("whitespace"))) {
 				if (lineNumber === 0) {
 					yield bodyLineConcern(rule, commit.sha, { line: 0, range: [0, 1] })
@@ -33,8 +31,6 @@ export function* useEmptyLineBeforeBodyLines(
 				}
 				break
 			}
-
-			lineNumber += 1
 		}
 	}
 }

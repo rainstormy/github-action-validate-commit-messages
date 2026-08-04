@@ -144,7 +144,7 @@ export function tokeniseBodyLines(
 	const lines: Array<Tokens> = []
 	let currentFence: "```" | "````" | null = null
 
-	for (const [index, line] of Object.entries(crudeBodyLines)) {
+	for (const [lineNumber, line] of crudeBodyLines.entries()) {
 		if (currentFence !== null) {
 			lines.push([codeblock(line)])
 
@@ -160,7 +160,6 @@ export function tokeniseBodyLines(
 			lines.push([codeblock(line)])
 			currentFence = "```"
 		} else {
-			const lineNumber = Math.trunc(Number(index))
 			lines.push(tokenise(line, lineNumber < firstTrailerLineNumber ? regex : TRAILERLINE_REGEX))
 		}
 	}
