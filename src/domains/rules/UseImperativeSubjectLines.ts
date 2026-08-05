@@ -39,7 +39,10 @@ export function* useImperativeSubjectLines(
 		if (firstToken !== null) {
 			const canonicalFirstWord = firstToken.value.toLowerCase()
 
-			if (!whitelist.has(canonicalFirstWord) && !isImperativeVerb(canonicalFirstWord)) {
+			if (
+				firstToken.type !== "word" ||
+				!(whitelist.has(canonicalFirstWord) || isImperativeVerb(canonicalFirstWord))
+			) {
 				yield subjectLineConcern(rule, commit.sha, { range: firstToken.range })
 			}
 		}
