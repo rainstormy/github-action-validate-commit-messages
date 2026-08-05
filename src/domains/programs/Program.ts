@@ -2,7 +2,8 @@ import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { getCrudeCommits } from "#commits/GetCrudeCommits.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
 import { mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
-import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
+import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
+import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import { assertError } from "#utilities/Assertions.ts"
 import { printError, printMessage } from "#utilities/logging/Logger.ts"
 
@@ -16,10 +17,12 @@ export async function program(_args: Array<string>): Promise<ExitCode> {
 
 		const concerns = mapCommitsToConcerns(commits, configuration.rules)
 
-		printMessage(JSON.stringify(concerns))
-		printMessage("Not implemented yet")
+		if (concerns.length > 0) {
+			printMessage(commitwiseReport(concerns, commits, configuration))
+			return EXIT_CODE_GENERAL_ERROR
+		}
 
-		return EXIT_CODE_GENERAL_ERROR
+		return EXIT_CODE_SUCCESS
 	} catch (error) {
 		assertError(error)
 		printError(error.message)
