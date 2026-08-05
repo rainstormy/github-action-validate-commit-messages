@@ -8,7 +8,9 @@ export async function getGitBranchCrudeCommits(): Promise<CrudeCommits> {
 	const fromRef = await getGitDefaultBranch()
 
 	if (fromRef === null) {
-		throw new Error("Cannot determine the default branch in Git")
+		throw new Error(
+			"Expected a default remote branch (e.g. 'origin/main') or a local branch named 'main' or 'master'",
+		)
 	}
 
 	const dtos = await getGitLog(fromRef, "HEAD")

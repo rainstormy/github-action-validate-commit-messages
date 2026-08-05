@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts"
-import { EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
+import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
-import { printMessage } from "#utilities/logging/Logger.ts"
+import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.fakes.ts"
+import { printError, printMessage } from "#utilities/logging/Logger.ts"
 import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
 import { mockCometVersion } from "#utilities/version/CometVersion.fakes.ts"
 
@@ -10,9 +11,22 @@ beforeEach(() => {
 	mockCometPlatform("cli")
 })
 
+describe("the help text", () => {
+	it("is a list of program arguments and options", () => {
+		expect(getHelpText()).toBe("Usage: comet [options]")
+	})
+
+	it("fits within a window of 80 characters", () => {
+		const lines = getHelpText().split("\n")
+
+		for (const line of lines) {
+			expect(line.length).toBeLessThanOrEqual(80)
+		}
+	})
+})
+
 describe.each`
 	args
-	${[]}
 	${["--help"]}
 	${["-h"]}
 	${["--config", "configs/comet.jsonc", "--help"]}
@@ -30,20 +44,6 @@ describe.each`
 
 	it("prints a help text with usage instructions", () => {
 		expect(printMessage).toHaveBeenCalledExactlyOnceWith(getHelpText())
-	})
-})
-
-describe("the help text", () => {
-	it("is a list of program arguments and options", () => {
-		expect(getHelpText()).toBe("Usage: comet [options]")
-	})
-
-	it("fits within a window of 80 characters", () => {
-		const lines = getHelpText().split("\n")
-
-		for (const line of lines) {
-			expect(line.length).toBeLessThanOrEqual(80)
-		}
 	})
 })
 
@@ -71,3 +71,84 @@ describe.each`
 		})
 	},
 )
+
+describe("when the default Git branch cannot be determined", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockGitCommand("remote", { output: "" })
+		mockGitCommand("rev-parse --verify --quiet main", { exitCode: 1 })
+		mockGitCommand("rev-parse --verify --quiet master", { exitCode: 1 })
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_GENERAL_ERROR)
+	})
+
+	it("prints an error message that describes the unexpected Git state", () => {
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
+			"Expected a default remote branch (e.g. 'origin/main') or a local branch named 'main' or 'master'",
+		)
+	})
+})
+
+describe("when the 'git remote' command raises an error", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockGitCommand("remote", { exitCode: 1 })
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_GENERAL_ERROR)
+	})
+
+	it("prints the error message raised by the local Git client", () => {
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
+			"Command 'git remote' failed with exit code 1",
+		)
+	})
+})
+
+describe("when the 'git rev-parse' command raises an error", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockGitCommand("remote", { output: "origin" })
+		mockGitCommand("rev-parse --abbrev-ref origin/HEAD", { exitCode: 128 })
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_GENERAL_ERROR)
+	})
+
+	it("prints the error message raised by the local Git client", () => {
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
+			"Command 'git rev-parse --abbrev-ref origin/HEAD' failed with exit code 128",
+		)
+	})
+})
+
+describe("when the 'git log' command raises an error", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockGitCommand("remote", { output: "origin" })
+		mockGitCommand("rev-parse --abbrev-ref origin/HEAD", { output: "origin/main" })
+		mockGitCommand("--no-pager log --format=raw --no-color origin/main..HEAD", { exitCode: 31 })
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_GENERAL_ERROR}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_GENERAL_ERROR)
+	})
+
+	it("prints the error message raised by the local Git client", () => {
+		expect(printError).toHaveBeenCalledExactlyOnceWith(
+			"Command 'git --no-pager log --format=raw --no-color origin/main..HEAD' failed with exit code 31",
+		)
+	})
+})

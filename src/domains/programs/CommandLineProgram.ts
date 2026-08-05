@@ -4,7 +4,7 @@ import { printMessage } from "#utilities/logging/Logger.ts"
 import type { CometVersion } from "#utilities/version/CometVersion.ts"
 
 export async function commandLineProgram(args: Array<string>): Promise<ExitCode> {
-	if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
+	if (args.includes("--help") || args.includes("-h")) {
 		return helpProgram()
 	}
 	if (args.includes("--version") || args.includes("-v")) {
