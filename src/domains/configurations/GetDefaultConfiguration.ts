@@ -41,7 +41,7 @@ function getDefaultCliConfiguration(): Configuration {
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: { whitelist: [] },
 			useIssueLinks: null,
-			useLineWrapping: {},
+			useLineWrapping: { maxLength: 72 },
 			useSignedCommits: {},
 		},
 	}
@@ -70,7 +70,7 @@ function getDefaultGhaConfiguration(): Configuration {
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: { whitelist: [] },
 			useIssueLinks: null,
-			useLineWrapping: {},
+			useLineWrapping: { maxLength: 72 },
 			useSignedCommits: {},
 		},
 	}

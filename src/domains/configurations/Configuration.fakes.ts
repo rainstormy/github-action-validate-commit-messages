@@ -52,7 +52,7 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 			useEmptyLineBeforeBodyLines: {},
 			useImperativeSubjectLines: { whitelist: [] },
 			useIssueLinks: { position: "anywhere" },
-			useLineWrapping: {},
+			useLineWrapping: { maxLength: 72 },
 			useSignedCommits: {},
 			...overrides.rules,
 		},

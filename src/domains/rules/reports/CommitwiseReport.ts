@@ -309,7 +309,9 @@ function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configurat
 			)
 		}
 		case "useLineWrapping": {
-			throw new Error(`Not implemented yet: ${rule}`)
+			const options = getRuleOptions(rule, configuration)
+			const characterPhrase = formatCount(options.maxLength, "character", "characters")
+			return ruleMessage(`Message body lines must not exceed ${characterPhrase}.`)
 		}
 	}
 }

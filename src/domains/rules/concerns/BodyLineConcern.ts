@@ -29,3 +29,11 @@ export function bodyLineConcern(
 		...props,
 	}
 }
+
+export function bodyLineConcerns(
+	rule: BodyLineConcernRuleKey,
+	commitSha: CommitSha,
+	props: Array<Pick<BodyLineConcern, "line" | "range">>,
+): Array<BodyLineConcern> {
+	return props.map((range) => bodyLineConcern(rule, commitSha, range))
+}
