@@ -1,10 +1,3 @@
-# Configure pnpm and manage third-party dependencies.
-# https://pnpm.io/settings
-
-# Declare third-party dependencies installed in `node_modules`.
-#
-# IMPORTANT: Always add a comment that describes why we need that dependency and if it has any special maintenance requirements.
-# Keep in mind that adding a new dependency may increase the risk of supply chain attacks, as the attack surface grows.
 catalog:
   # Predefined configurations for Oxfmt, Oxlint, and TypeScript.
   # https://github.com/rainstormy/presets-web
@@ -37,7 +30,7 @@ catalog:
 
   # Vite is a local development server and a bundler.
   # https://vitejs.dev
-  vite: 8.1.4
+  vite: 8.2.0
 
   # Vite+ is a unified toolchain and task runner for Oxfmt, Oxlint, Vite, and Vitest.
   # It is also a version manager of Node.js and pnpm.
@@ -60,6 +53,3 @@ trustPolicyIgnoreAfter: 4200 # minutes
 # Disallow all script execution during package installation.
 allowBuilds:
   lefthook: false
-
-# Let some packages bypass the minimum release age requirement to allow urgent security upgrades to be installed despite being less than 3 days old.
-# minimumReleaseAgeExclude:
