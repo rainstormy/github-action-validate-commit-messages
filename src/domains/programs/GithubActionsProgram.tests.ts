@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest"
+import { fakeCrudeCommit } from "#commits/CrudeCommit.fakes.ts"
+import { mockCrudeCommits } from "#commits/GetCrudeCommits.fakes.ts"
 import { githubActionsProgram } from "#programs/GithubActionsProgram.ts"
-import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
+import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import { mockJsonFile, mockNonexistingFile } from "#utilities/files/Files.fakes.ts"
 import {
 	mockNonexistingGithubResourceDto,
@@ -12,7 +14,7 @@ import {
 	mockEmptyGithubEventDto,
 	mockGithubPullRequestEventDto,
 } from "#utilities/github/event/FetchGithubEventDto.fakes.ts"
-import { printError } from "#utilities/logging/Logger.ts"
+import { printError, printMessage } from "#utilities/logging/Logger.ts"
 import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
 
 beforeEach(() => {
@@ -118,5 +120,64 @@ describe("when a network error occurs while fetching data from the GitHub REST A
 
 	it("prints an error message that describes the network error", () => {
 		expect(printError).toHaveBeenCalledExactlyOnceWith("Network timeout")
+	})
+})
+
+describe("when there are no commits", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockCrudeCommits([])
+		exitCode = await githubActionsProgram()
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("remains silent", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printError).not.toHaveBeenCalled()
+	})
+})
+
+describe("when there is 1 commit that raises no concerns in the default configuration", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockCrudeCommits([fakeCrudeCommit({ message: "Release the robot butler" })])
+		exitCode = await githubActionsProgram()
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("remains silent", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printError).not.toHaveBeenCalled()
+	})
+})
+
+describe("when there are 4 commits that raise no concerns in the default configuration", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockCrudeCommits([
+			fakeCrudeCommit({ message: "Establish the repository" }),
+			fakeCrudeCommit({ message: "Enable the coffee machine integration tests" }),
+			fakeCrudeCommit({ message: "Drop the legacy spaghetti tower module" }),
+			fakeCrudeCommit({ message: "Help fix the annoying bug" }),
+		])
+		exitCode = await githubActionsProgram()
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("remains silent", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printError).not.toHaveBeenCalled()
 	})
 })

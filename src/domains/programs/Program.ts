@@ -1,5 +1,5 @@
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
-import { getCrudeCommits } from "#commits/CrudeCommit.ts"
+import { getCrudeCommits } from "#commits/GetCrudeCommits.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
 import { mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"

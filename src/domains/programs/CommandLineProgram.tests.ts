@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
+import { fakeCrudeCommit } from "#commits/CrudeCommit.fakes.ts"
+import { mockCrudeCommits } from "#commits/GetCrudeCommits.fakes.ts"
 import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
@@ -150,5 +152,64 @@ describe("when the 'git log' command raises an error", () => {
 		expect(printError).toHaveBeenCalledExactlyOnceWith(
 			"Command 'git --no-pager log --format=raw --no-color origin/main..HEAD' failed with exit code 31",
 		)
+	})
+})
+
+describe("when there are no commits", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockCrudeCommits([])
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("remains silent", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printError).not.toHaveBeenCalled()
+	})
+})
+
+describe("when there is 1 commit that raises no concerns in the default configuration", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockCrudeCommits([fakeCrudeCommit({ message: "Release the robot butler" })])
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("remains silent", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printError).not.toHaveBeenCalled()
+	})
+})
+
+describe("when there are 4 commits that raise no concerns in the default configuration", () => {
+	let exitCode: ExitCode
+
+	beforeEach(async () => {
+		mockCrudeCommits([
+			fakeCrudeCommit({ message: "Establish the repository" }),
+			fakeCrudeCommit({ message: "Enable the coffee machine integration tests" }),
+			fakeCrudeCommit({ message: "Drop the legacy spaghetti tower module" }),
+			fakeCrudeCommit({ message: "Help fix the annoying bug" }),
+		])
+		exitCode = await commandLineProgram([])
+	})
+
+	it(`exits with ${EXIT_CODE_SUCCESS}`, () => {
+		expect(exitCode).toBe(EXIT_CODE_SUCCESS)
+	})
+
+	it("remains silent", () => {
+		expect(printMessage).not.toHaveBeenCalled()
+		expect(printError).not.toHaveBeenCalled()
 	})
 })
