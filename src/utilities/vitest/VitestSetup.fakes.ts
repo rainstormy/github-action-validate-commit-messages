@@ -3,12 +3,14 @@
  */
 
 import { expect } from "vitest"
+import { mockCrudeCommits } from "#commits/GetCrudeCommits.fakes.ts"
 import { mockFiles } from "#utilities/files/Files.fakes.ts"
 import { mockGitCli } from "#utilities/git/cli/RunGitCommand.fakes.ts"
 import { mockFetch } from "#utilities/http/Fetch.fakes.ts"
 import { mockLogger } from "#utilities/logging/Logger.fakes.ts"
 import { toContainToken } from "#utilities/vitest/VitestCustomMatchers.fakes.ts"
 
+mockCrudeCommits()
 mockFetch()
 mockFiles()
 mockGitCli()
