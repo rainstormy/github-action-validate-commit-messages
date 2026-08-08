@@ -3,7 +3,7 @@ import { isToken } from "#commits/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import { notEmptyString } from "#utilities/Arrays.ts"
+import { isNotEmptyString } from "#utilities/Arrays.ts"
 
 const rule = "noRestrictedTrailers" satisfies RuleKey
 
@@ -24,7 +24,7 @@ export function* noRestrictedTrailers(
 	}
 
 	const restrictedKeys = new Set(
-		options.restrictedKeys.map(normaliseTrailerKey).filter(notEmptyString),
+		options.restrictedKeys.map(normaliseTrailerKey).filter(isNotEmptyString),
 	)
 
 	for (const commit of commits) {

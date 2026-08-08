@@ -7,18 +7,18 @@ export function* splitToChunks<Item>(
 	}
 }
 
-export function notNullish<Item>(item: Item | null | undefined): item is Item {
+export function isNotNullish<Item>(item: Item | null | undefined): item is Item {
 	return item !== null && item !== undefined
 }
 
-export function notNullishValue<Item>(
+export function isNotNullishValue<Item>(
 	item: [key: string, value: Item | null | undefined],
 ): item is [key: string, value: Item] {
 	const [, value] = item
 	return value !== null && value !== undefined
 }
 
-export function notEmptyString(item: unknown): boolean {
+export function isNotEmptyString(item: unknown): boolean {
 	return item !== ""
 }
 

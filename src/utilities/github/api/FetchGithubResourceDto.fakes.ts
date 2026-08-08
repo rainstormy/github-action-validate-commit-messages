@@ -1,5 +1,5 @@
 import type { JsonValue } from "#types/JsonValue.ts"
-import { notNullish, splitToChunks } from "#utilities/Arrays.ts"
+import { isNotNullish, splitToChunks } from "#utilities/Arrays.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 import { mockFetchError, mockFetchableJsonResource } from "#utilities/http/Fetch.fakes.ts"
@@ -61,7 +61,7 @@ function linkHeader(props: {
 		`<${props.url}?per_page=${props.pageSize}&page=${props.pageCount}>; rel="last"`,
 		`<${props.url}?per_page=${props.pageSize}&page=1>; rel="first"`,
 	]
-		.filter(notNullish)
+		.filter(isNotNullish)
 		.join(", ")
 }
 

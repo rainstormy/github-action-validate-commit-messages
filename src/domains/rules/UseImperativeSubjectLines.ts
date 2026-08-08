@@ -3,7 +3,7 @@ import { isNotToken, isToken } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import { notEmptyString } from "#utilities/Arrays.ts"
+import { isNotEmptyString } from "#utilities/Arrays.ts"
 import { isImperativeVerb } from "#utilities/Verbs.ts"
 
 const rule = "useImperativeSubjectLines" satisfies RuleKey
@@ -25,7 +25,7 @@ export function* useImperativeSubjectLines(
 	}
 
 	const whitelist = new Set(
-		options.whitelist.map((word) => word.trim().toLowerCase()).filter(notEmptyString),
+		options.whitelist.map((word) => word.trim().toLowerCase()).filter(isNotEmptyString),
 	)
 
 	for (const commit of commits) {

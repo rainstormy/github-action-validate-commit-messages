@@ -1,8 +1,8 @@
-import { notEmptyString } from "#utilities/Arrays.ts"
+import { isNotEmptyString } from "#utilities/Arrays.ts"
 
 export function regexEnum(literals: Array<string>): string {
 	return literals
-		.filter(notEmptyString)
+		.filter(isNotEmptyString)
 		.map((literal) => RegExp.escape(literal))
 		.join("|")
 }
@@ -12,7 +12,7 @@ export function regexUnion(
 	options: Partial<{ preserveCapturingGroups?: boolean }> = {},
 ): string {
 	const preserveCapturingGroups = options.preserveCapturingGroups ?? false
-	const nonEmptyAlternatives = alternatives.filter(notEmptyString)
+	const nonEmptyAlternatives = alternatives.filter(isNotEmptyString)
 
 	return preserveCapturingGroups
 		? nonEmptyAlternatives.join("|")
