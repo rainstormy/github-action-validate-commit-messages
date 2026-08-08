@@ -1,4 +1,4 @@
-import { type GenericSchema, type InferOutput, array, parse } from "valibot"
+import * as v from "valibot"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { githubEnv } from "#utilities/github/env/GithubEnv.ts"
 
@@ -9,14 +9,14 @@ const nextPageRegex = /<(?<nextResourceUrl>\S*)>; rel="next"/iu
  *
  * @see https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28#example-creating-a-pagination-method
  */
-export async function fetchGithubResourceDto<Schema extends GenericSchema>(
+export async function fetchGithubResourceDto<Schema extends v.GenericSchema>(
 	resourceUrl: `${GithubUrlString}/${string}`,
 	schema: Schema,
-): Promise<Array<InferOutput<Schema>>> {
+): Promise<Array<v.InferOutput<Schema>>> {
 	const env = githubEnv()
 
-	const arraySchema = array(schema)
-	const deferredCheckedPages: Array<Promise<Array<InferOutput<Schema>>>> = []
+	const arraySchema = v.array(schema)
+	const deferredCheckedPages: Array<Promise<Array<v.InferOutput<Schema>>>> = []
 
 	let nextResourceUrl: string | null = resourceUrl
 
@@ -36,7 +36,7 @@ export async function fetchGithubResourceDto<Schema extends GenericSchema>(
 			)
 		}
 
-		deferredCheckedPages.push(response.json().then((data: unknown) => parse(arraySchema, data)))
+		deferredCheckedPages.push(response.json().then((data: unknown) => v.parse(arraySchema, data)))
 
 		const link = response.headers.get("link")
 		const nextPageMatch = link !== null ? nextPageRegex.exec(link) : null

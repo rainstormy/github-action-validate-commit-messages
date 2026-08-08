@@ -1,6 +1,6 @@
-import { type TransformAction, transform } from "valibot"
+import * as v from "valibot"
 
-export type NarrowToAction<Target> = TransformAction<InferInput<Target>, Target>
+export type NarrowToAction<Target> = v.TransformAction<InferInput<Target>, Target>
 
 // oxfmt-ignore
 type InferInput<Target> =
@@ -10,5 +10,5 @@ type InferInput<Target> =
 	: never
 
 export function narrowTo<Target>(): NarrowToAction<Target> {
-	return transform((value) => value as Target)
+	return v.transform((value) => value as Target)
 }

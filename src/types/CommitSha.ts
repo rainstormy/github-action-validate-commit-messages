@@ -1,4 +1,4 @@
-import { hexadecimal, pipe, string } from "valibot"
+import * as v from "valibot"
 import type { HexDigit } from "#types/HexDigit.ts"
 import { narrowTo } from "#utilities/valibot/NarrowToAction.ts"
 
@@ -8,5 +8,5 @@ export type CommitSha = `${HexDigit}${HexDigit}${string}`
 
 // oxlint-disable-next-line typescript/explicit-function-return-type -- Rely on type inference for Valibot schemas.
 export function commitSha() {
-	return pipe(string(), hexadecimal(), narrowTo<CommitSha>())
+	return v.pipe(v.string(), v.hexadecimal(), narrowTo<CommitSha>())
 }
