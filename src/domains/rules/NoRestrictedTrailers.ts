@@ -1,3 +1,4 @@
+import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import { isToken } from "#commits/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
@@ -6,6 +7,12 @@ import type { RuleKey } from "#rules/Rule.ts"
 import { isNotEmptyString } from "#utilities/Arrays.ts"
 
 const rule = "noRestrictedTrailers" satisfies RuleKey
+
+export type NoRestrictedTrailersOptions = v.InferOutput<typeof NO_RESTRICTED_TRAILERS_OPTIONS>
+
+export const NO_RESTRICTED_TRAILERS_OPTIONS = v.strictObject({
+	restrictedKeys: v.array(v.string()),
+})
 
 /**
  * Verifies that the message body does not contain trailers with certain keys.
@@ -17,7 +24,7 @@ const rule = "noRestrictedTrailers" satisfies RuleKey
  */
 export function* noRestrictedTrailers(
 	commits: Commits,
-	options: { restrictedKeys: Array<string> } | null,
+	options: NoRestrictedTrailersOptions | null,
 ): Generator<Concern> {
 	if (options === null || options.restrictedKeys.length === 0) {
 		return

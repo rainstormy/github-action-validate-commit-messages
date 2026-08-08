@@ -1,3 +1,4 @@
+import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import { isNotToken, isToken } from "#commits/Token.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
@@ -7,6 +8,14 @@ import { isNotEmptyString } from "#utilities/Arrays.ts"
 import { isImperativeVerb } from "#utilities/Verbs.ts"
 
 const rule = "useImperativeSubjectLines" satisfies RuleKey
+
+export type UseImperativeSubjectLinesOptions = v.InferOutput<
+	typeof USE_IMPERATIVE_SUBJECT_LINES_OPTIONS
+>
+
+export const USE_IMPERATIVE_SUBJECT_LINES_OPTIONS = v.strictObject({
+	whitelist: v.array(v.string()),
+})
 
 /**
  * Verifies that the subject line starts with a verb in the imperative mood.
@@ -18,7 +27,7 @@ const rule = "useImperativeSubjectLines" satisfies RuleKey
  */
 export function* useImperativeSubjectLines(
 	commits: Commits,
-	options: { whitelist: Array<string> } | null,
+	options: UseImperativeSubjectLinesOptions | null,
 ): Generator<Concern> {
 	if (options === null) {
 		return

@@ -27,8 +27,8 @@ export function mockGithubResourceDto(
 	const pages = [...splitToChunks(items, pageSize)]
 	const pageCount = pages.length
 
-	for (const [index, page] of Object.entries(pages)) {
-		const pageNumber = Math.trunc(Number(index)) + 1
+	for (const [index, page] of pages.entries()) {
+		const pageNumber = index + 1
 
 		mockFetchableJsonResource(
 			{

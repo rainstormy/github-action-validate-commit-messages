@@ -1,3 +1,5 @@
+import * as v from "valibot"
+
 export function* splitToChunks<Item>(
 	items: Array<Item>,
 	chunkSize: number,
@@ -23,6 +25,13 @@ export function isNotEmptyString(item: unknown): boolean {
 }
 
 export type NonEmptyArray<Item> = [Item, ...Array<Item>]
+
+// oxlint-disable-next-line typescript/explicit-function-return-type -- Rely on type inference for Valibot schemas.
+export function nonEmptyArray<
+	ItemSchema extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+>(itemSchema: ItemSchema) {
+	return v.pipe(v.array(itemSchema), v.nonEmpty())
+}
 
 export function isNonEmptyArray<Item>(items: Array<Item>): items is NonEmptyArray<Item> {
 	return items.length > 0

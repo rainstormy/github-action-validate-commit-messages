@@ -1,10 +1,18 @@
+import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import { isNotToken, isToken, tokenOverflowRange } from "#commits/Token.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import { naturalNumber } from "#types/NaturalNumber.ts"
 
 const rule = "useLineWrapping" satisfies RuleKey
+
+export type UseLineWrappingOptions = v.InferOutput<typeof USE_LINE_WRAPPING_OPTIONS>
+
+export const USE_LINE_WRAPPING_OPTIONS = v.strictObject({
+	maxLength: naturalNumber(),
+})
 
 /**
  * Verifies that the body lines do not exceed a given number of characters (default: 72 characters).
@@ -16,13 +24,11 @@ const rule = "useLineWrapping" satisfies RuleKey
  */
 export function* useLineWrapping(
 	commits: Commits,
-	options: { maxLength: number } | null,
+	options: UseLineWrappingOptions | null,
 ): Generator<Concern> {
-	if (options === null || options.maxLength < 1) {
+	if (options === null) {
 		return
 	}
-
-	const maxLength = Math.trunc(options.maxLength)
 
 	for (const commit of commits) {
 		if (commit.isMergeCommit) {
@@ -36,7 +42,7 @@ export function* useLineWrapping(
 
 			const overflowRange = tokenOverflowRange(
 				bodyLine.filter(isNotToken("code", "hyperlink", "issuelink")),
-				maxLength,
+				options.maxLength,
 			)
 
 			if (overflowRange !== null) {

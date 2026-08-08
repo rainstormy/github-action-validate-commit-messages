@@ -1,11 +1,18 @@
+import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import type { NonEmptyArray } from "#utilities/Arrays.ts"
+import { nonEmptyArray } from "#utilities/Arrays.ts"
 import { regexUnion } from "#utilities/Regexes.ts"
 
 const rule = "useAuthorEmailPatterns" satisfies RuleKey
+
+export type UseAuthorEmailPatternsOptions = v.InferOutput<typeof USE_AUTHOR_EMAIL_PATTERNS_OPTIONS>
+
+export const USE_AUTHOR_EMAIL_PATTERNS_OPTIONS = v.strictObject({
+	patterns: nonEmptyArray(v.string()),
+})
 
 /**
  * Verifies that the commit author has an email address that matches a given regex pattern.
@@ -15,7 +22,7 @@ const rule = "useAuthorEmailPatterns" satisfies RuleKey
  */
 export function* useAuthorEmailPatterns(
 	commits: Commits,
-	options: { patterns: NonEmptyArray<string> } | null,
+	options: UseAuthorEmailPatternsOptions | null,
 ): Generator<Concern> {
 	if (options === null) {
 		return
