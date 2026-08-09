@@ -1,10 +1,20 @@
+import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import { isToken } from "#commits/Token.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
+import { naturalNumber } from "#types/NaturalNumber.ts"
 
 const rule = "noExcessiveCommitsPerBranch" satisfies RuleKey
+
+export type NoExcessiveCommitsPerBranchOptions = v.InferOutput<
+	typeof NO_EXCESSIVE_COMMITS_PER_BRANCH_OPTIONS
+>
+
+export const NO_EXCESSIVE_COMMITS_PER_BRANCH_OPTIONS = v.strictObject({
+	maxCommits: naturalNumber(),
+})
 
 /**
  * Verifies that the branch does not contain more than a given number of commits.
@@ -16,7 +26,7 @@ const rule = "noExcessiveCommitsPerBranch" satisfies RuleKey
  */
 export function* noExcessiveCommitsPerBranch(
 	commits: Commits,
-	options: { maxCommits: number } | null,
+	options: NoExcessiveCommitsPerBranchOptions | null,
 ): Generator<Concern> {
 	if (options === null) {
 		return

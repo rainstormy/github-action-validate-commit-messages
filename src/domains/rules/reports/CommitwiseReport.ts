@@ -10,7 +10,7 @@ import type { UserIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts
 import { normaliseTrailerKey } from "#rules/NoRestrictedTrailers.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatRange } from "#types/CharacterRange.ts"
-import { ALPHABETICALLY, notEmptyString } from "#utilities/Arrays.ts"
+import { ALPHABETICALLY, isNotEmptyString } from "#utilities/Arrays.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
 import { capitalise, formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
 
@@ -297,7 +297,7 @@ function bodyLineRuleMessage(concern: BodyLineConcern, configuration: Configurat
 					"Disallowed trailers:",
 					[...options.restrictedKeys]
 						.map((key) => capitalise(normaliseTrailerKey(key)))
-						.filter(notEmptyString)
+						.filter(isNotEmptyString)
 						.toSorted(ALPHABETICALLY),
 					"\n",
 				),

@@ -1,20 +1,20 @@
-import { type InferOutput, is, object } from "valibot"
+import * as v from "valibot"
 import { naturalNumber } from "#types/NaturalNumber.ts"
 
 /**
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#pull_request
  */
-export type GithubPullRequestEventDto = InferOutput<ReturnType<typeof githubPullRequestEventDto>>
+export type GithubPullRequestEventDto = v.InferOutput<ReturnType<typeof githubPullRequestEventDto>>
 
 // oxlint-disable-next-line typescript/explicit-function-return-type -- Rely on type inference for Valibot schemas.
 export function githubPullRequestEventDto() {
-	return object({
-		pull_request: object({
-			number: naturalNumber(1),
+	return v.object({
+		pull_request: v.object({
+			number: naturalNumber(),
 		}),
 	})
 }
 
 export function isGithubPullRequestEventDto(dto: unknown): dto is GithubPullRequestEventDto {
-	return is(githubPullRequestEventDto(), dto)
+	return v.is(githubPullRequestEventDto(), dto)
 }

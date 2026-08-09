@@ -63,6 +63,7 @@ Insert the rule key or function into the existing alphabetically ordered lists f
 
 - `src/domains/rules/Rule.ts`
 - `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/domains/configurations/GetDefaultConfiguration.ts` with a null argument
+- `RULES_DTO` in `src/domains/configurations/dtos/JsonConfigurationDto.ts`
 - `emptyRuleConfiguration` and `fakeConfiguration` in `src/domains/configurations/Configuration.fakes.ts`
 - `mapCommitsToConcerns` in `src/domains/rules/concerns/Concern.ts`
 - Relevant concerns in `src/domains/rules/concerns/`
@@ -73,39 +74,59 @@ Use `EmptyObject` when the rule does not accept configurable options. This is th
 Update `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/domains/configurations/GetDefaultConfiguration.ts` with the empty object `{}` instead of null unless the rule should be disabled by default.
 Then skip the rest of this section and proceed to Step 4.
 
-Declare the set of options in an inline record type in the function signature, for example:
+For a rule with configurable options, declare and export a Valibot schema const in the rule file.
+The schema is the source of truth for the JSON configuration shape and its constraints.
+Use `v.strictObject()` to reject unknown option properties, and derive the TypeScript type from the schema with `v.InferOutput`, for example:
 
 ```ts
-export function* noTypos(
-  commits: Commits,
-  options: { whitelist: Array<string> } | null,
-): Generator<Concern> {}
+import * as v from "valibot"
+
+export type NoTyposOptions = v.InferOutput<typeof NO_TYPOS_OPTIONS>
+
+export const NO_TYPOS_OPTIONS = v.strictObject({
+  whitelist: v.array(v.string()),
+})
+
+/**
+ * Verifies that...
+ */
+export function* noTypos(commits: Commits, options: NoTyposOptions | null): Generator<Concern> {
+  // ...
+}
 ```
 
-Use simple, JSON-serialisable types like `number`, `string`, and `Array` in option props, as rule options are user-facing through the `comet.json` configuration file.
+Use Valibot schemas for simple JSON-serialisable values such as `v.number()`, `v.string()`, and `v.array()`.
+Use schemas such as `v.picklist()` and `v.pipe()` when an option has a finite set of allowed values or additional constraints.
+Prefer reusable helper functions from `src/types/` and `src/utilities/` when they express a common constraint, such as `naturalNumber()` or `nonEmptyArray()`.
 
-Extract the rule options into data structures that are easier to work with and sanitise the input, for example:
+Register the schema in `RULES_DTO` in `src/domains/configurations/dtos/JsonConfigurationDto.ts`, for example:
 
 ```ts
-export function* noTypos(
-  commits: Commits,
-  options: { whitelist: Array<string> } | null,
-): Generator<Concern> {
+const RULES_DTO = v.strictObject({
+  // ...
+  noTypos: ruleDto(NO_TYPOS_OPTIONS),
+})
+```
+
+Sanitise the validated input and prepare in a way that makes it easier to work with, for example:
+
+```ts
+export function* noTypos(commits: Commits, options: NoTyposOptions | null): Generator<Concern> {
   if (options === null) {
     return
   }
 
   const whitelist = new Set(
-    options.whitelist.map((word) => word.trim().toLowerCase()).filter(notEmptyString),
+    options.whitelist.map((word) => word.trim().toLowerCase()).filter(isNotEmptyString),
   )
 }
 ```
 
 Common sanitisation scenarios:
 
-- `number` -> `Math.trunc()` (when it should be an integer) and return early if negative values are not allowed (e.g. `if (options === null || options.numericValue < 0)`)
-- `string` -> `.trim().toLowerCase()` (when normalising for comparisons)
-- `Array` -> `.filter()`
+- `number` -> constrain with Valibot schemas like `v.integer()`, `v.maxValue()`, `naturalNumber()` (reusable helper function), etc.
+- `string` -> `.trim().toLowerCase()` when normalising for comparisons
+- `Array` -> `.filter()` to remove invalid or redundant items (e.g. with `isNotNullish` and `isNotEmptyString`), and/or `new Set()` to remove duplicates
 
 Update `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/domains/configurations/GetDefaultConfiguration.ts` with good default options.
 Look at the existing default values for inspiration. Usually, array options like `whitelist` should be empty by default.
@@ -231,10 +252,7 @@ Skip commits that should be ignored by the rule.
 For example:
 
 ```ts
-export function* noTypos(
-  commits: Commits,
-  options: { whitelist: Array<string> } | null,
-): Generator<Concern> {
+export function* noTypos(commits: Commits, options: NoTyposOptions | null): Generator<Concern> {
   if (options === null) {
     return
   }

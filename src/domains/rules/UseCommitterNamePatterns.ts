@@ -1,11 +1,20 @@
+import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
-import type { NonEmptyArray } from "#utilities/Arrays.ts"
+import { nonEmptyArray } from "#utilities/Arrays.ts"
 import { regexUnion } from "#utilities/Regexes.ts"
 
 const rule = "useCommitterNamePatterns" satisfies RuleKey
+
+export type UseCommitterNamePatternsOptions = v.InferOutput<
+	typeof USE_COMMITTER_NAME_PATTERNS_OPTIONS
+>
+
+export const USE_COMMITTER_NAME_PATTERNS_OPTIONS = v.strictObject({
+	patterns: nonEmptyArray(v.string()),
+})
 
 /**
  * Verifies that the committer has a name that matches a given regex pattern.
@@ -15,7 +24,7 @@ const rule = "useCommitterNamePatterns" satisfies RuleKey
  */
 export function* useCommitterNamePatterns(
 	commits: Commits,
-	options: { patterns: NonEmptyArray<string> } | null,
+	options: UseCommitterNamePatternsOptions | null,
 ): Generator<Concern> {
 	if (options === null) {
 		return

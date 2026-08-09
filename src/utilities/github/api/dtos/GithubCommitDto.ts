@@ -1,4 +1,4 @@
-import { type InferOutput, array, exactOptional, nullable, object, string } from "valibot"
+import * as v from "valibot"
 import { commitSha } from "#types/CommitSha.ts"
 import { githubCommitUserDto } from "#utilities/github/api/dtos/GithubCommitUserDto.ts"
 import { githubParentCommitDto } from "#utilities/github/api/dtos/GithubParentCommitDto.ts"
@@ -6,20 +6,20 @@ import { githubParentCommitDto } from "#utilities/github/api/dtos/GithubParentCo
 /**
  * @see https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-commits-on-a-pull-request
  */
-export type GithubCommitDto = InferOutput<ReturnType<typeof githubCommitDto>>
+export type GithubCommitDto = v.InferOutput<ReturnType<typeof githubCommitDto>>
 
 // oxlint-disable-next-line typescript/explicit-function-return-type -- Rely on type inference for Valibot schemas.
 export function githubCommitDto() {
-	return object({
+	return v.object({
 		sha: commitSha(),
-		parents: array(githubParentCommitDto()),
-		commit: object({
-			author: nullable(githubCommitUserDto()),
-			committer: nullable(githubCommitUserDto()),
-			message: string(),
-			verification: exactOptional(
-				object({
-					signature: nullable(string()),
+		parents: v.array(githubParentCommitDto()),
+		commit: v.object({
+			author: v.nullable(githubCommitUserDto()),
+			committer: v.nullable(githubCommitUserDto()),
+			message: v.string(),
+			verification: v.exactOptional(
+				v.object({
+					signature: v.nullable(v.string()),
 				}),
 			),
 		}),
