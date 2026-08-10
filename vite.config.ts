@@ -4,15 +4,6 @@ import { defineConfig } from "vite-plus"
 import { version } from "./package.json" with { type: "json" }
 
 export default defineConfig({
-	build: {
-		emptyOutDir: true,
-		minify: "oxc",
-		reportCompressedSize: false,
-		rolldownOptions: {
-			output: { entryFileNames: "index.js" },
-		},
-		target: "es2022",
-	},
 	envPrefix: "COMET_",
 	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }),
 	lint: defineOxlintConfig({
@@ -34,46 +25,42 @@ export default defineConfig({
 			},
 		],
 	}),
-	run: {
-		tasks: {
-			build: {
-				// language=sh
-				command: [
-					`COMET_PLATFORM='cli' COMET_VERSION='${version}' vite build --ssr src/main-cli.ts --outDir dist/cli/`,
-					"COMET_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/",
-				],
-				input: [{ auto: true }, "!dist/**/*"],
-			},
-			check: {
-				// language=sh
-				command: "vp check",
-			},
-			fmt: {
-				// language=sh
-				command: "vp check --fix",
-			},
-			install: {
-				// language=sh
-				command: [
-					"vp install --frozen-lockfile --ignore-scripts",
-					'if [ "$LEFTHOOK" != "0" ]; then lefthook install; fi',
-				],
-				cache: false,
-			},
-			test: {
-				// language=sh
-				command: "vp test",
-				input: [{ auto: true }, "!node_modules/.vite-temp/vite.config.ts.timestamp-*"],
-			},
-			yolo: {
-				// language=sh
-				command: "lefthook uninstall",
-				cache: false,
+	pack: [
+		{
+			entry: "src/main-cli.ts",
+			minify: { compress: true },
+			env: {
+				COMET_PLATFORM: "cli",
+				COMET_VERSION: version,
+				PROD: true,
 			},
 		},
-	},
-	ssr: {
-		noExternal: ["valibot"], // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
+		{
+			entry: "src/main-gha.ts",
+			minify: { compress: true },
+			env: {
+				COMET_PLATFORM: "gha",
+				PROD: true,
+			},
+			deps: {
+				alwaysBundle: ["valibot"],
+				onlyBundle: ["valibot"],
+			},
+		},
+	],
+	run: {
+		// language=sh
+		tasks: {
+			build: { command: "vp pack" },
+			check: { command: "vp check" },
+			fmt: { command: "vp check --fix" },
+			install: {
+				command: ["vp install --frozen-lockfile --ignore-scripts", "lefthook install"],
+				cache: false,
+			},
+			test: { command: "vp test" },
+			yolo: { command: "lefthook uninstall", cache: false },
+		},
 	},
 	test: {
 		include: ["src/**/*.tests.ts"],
