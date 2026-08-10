@@ -1,7 +1,6 @@
 import type { Commit, Commits } from "#commits/Commit.ts"
 import { type Tokens, tokenRangeEnd } from "#commits/Token.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
-import { pluralise } from "#legacy-v1/utilities/StringUtilities.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concern, Concerns } from "#rules/concerns/Concern.ts"
@@ -12,7 +11,13 @@ import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 import { formatRange } from "#types/CharacterRange.ts"
 import { ALPHABETICALLY, isNotEmptyString } from "#utilities/Arrays.ts"
 import { requireNotNullish } from "#utilities/Assertions.ts"
-import { capitalise, formatCount, indentString, prefixStringLines } from "#utilities/Strings.ts"
+import {
+	capitalise,
+	formatCount,
+	indentString,
+	pluralise,
+	prefixStringLines,
+} from "#utilities/Strings.ts"
 
 export function commitwiseReport(
 	concerns: Concerns,

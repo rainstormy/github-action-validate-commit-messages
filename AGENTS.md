@@ -40,7 +40,6 @@ Read only the relevant skill guides for the task at hand:
 
 - `src/main-cli.ts`: Comet CLI entrypoint. Uses the local Git client.
 - `src/main-gha.ts`: Comet GitHub Actions entrypoint. Uses the GitHub REST API.
-- `src/main-legacy-v1.ts`: Legacy entrypoint. No longer maintained.
 - `README.md`: Usage instructions for Comet end users.
 
 ## Directories
@@ -49,7 +48,6 @@ Read only the relevant skill guides for the task at hand:
 - `src/domains/configurations/`: Configurations to customise Comet's behaviour.
 - `src/domains/programs/`: Program flows invoked by entrypoints.
 - `src/domains/rules/`: Rule validation logic and reporters to output concerns.
-- `src/legacy-v1/`: Legacy code. No longer maintained.
 - `src/types/`: Self-contained TypeScript types and related utilities.
 - `src/utilities/`: General-purpose utility functions and adapters to externals such as the local Git client, GitHub REST API, local file system, console output, etc.
 
