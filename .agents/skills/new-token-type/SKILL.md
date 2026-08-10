@@ -13,7 +13,7 @@ It uses `hyperlink` as an example of a new token type to implement.
 
 Define the name and purpose of the new token type. All token type names must be concise, single-word, lowercase nouns such as `word`, `whitespace`, `codeblock`, `issuelink`, or `trailerkey`.
 
-Read `src/domains/commits/Token.ts` and `src/domains/commits/Tokenise.ts` and decide from the existing tokens if the intended kind of text segments is already represented adequately by an existing token type or if the desired name already exists.
+Read `src/commits/Token.ts` and `src/commits/Tokenise.ts` and decide from the existing tokens if the intended kind of text segments is already represented adequately by an existing token type or if the desired name already exists.
 Let me know if the new type overlaps substantially with an existing type, or if its name or boundaries are unclear, and ask whether an existing token should be modified instead.
 
 Identify what kinds of text in subject lines and/or body lines that the token should cover.
@@ -27,7 +27,7 @@ Consider whether the new token type is only valid in a specific context such as 
 
 ## Step 2: Scaffold the token type
 
-Add the token type to the `TokenType` union in `src/domains/commits/Token.ts`, preserving alphabetical order.
+Add the token type to the `TokenType` union in `src/commits/Token.ts`, preserving alphabetical order.
 Add a factory function on top of `tokenOf` named after the new token type, for example:
 
 ```ts
@@ -38,7 +38,7 @@ export function hyperlink(value: string, rangeStart = 0): Token<"hyperlink"> {
 
 ## Step 3: Scaffold the tokeniser
 
-Declare a top-level `String.raw` const in `src/domains/commits/Tokenise.ts` (in alphabetical order) with a regex pattern that contains exactly one named capturing group named exactly after the new token type, for example:
+Declare a top-level `String.raw` const in `src/commits/Tokenise.ts` (in alphabetical order) with a regex pattern that contains exactly one named capturing group named exactly after the new token type, for example:
 
 ```ts
 // language=jsunicoderegexp
@@ -71,20 +71,20 @@ export function hyperlinkPattern(configuration: TokenConfiguration): string {
 }
 ```
 
-Expand `TokenConfiguration` in `src/domains/configurations/Configuration.ts` accordingly.
+Expand `TokenConfiguration` in `src/configurations/Configuration.ts` accordingly.
 Update the following places with sensible defaults:
 
 - `getDefaultTokenConfiguration` in `GetDefaultConfiguration.ts`
-- `fakeTokenConfiguration` in `src/domains/configurations/Configuration.fakes.ts`
+- `fakeTokenConfiguration` in `src/configurations/Configuration.fakes.ts`
 
-Call the function from `mapCrudeCommitToCommit` in `src/domains/commits/Commit.ts`.
+Call the function from `mapCrudeCommitToCommit` in `src/commits/Commit.ts`.
 
 Note that trailers may not contain user-configurable tokens.
 
 ## Step 4: Outline unit tests
 
 Use `describe.each` in Vitest to cover many test cases easily.
-Add new top-level `describe.each` blocks in Vitest to `src/domains/commits/Tokenise.tests.ts` to cover these scenarios of the new token type (when applicable):
+Add new top-level `describe.each` blocks in Vitest to `src/commits/Tokenise.tests.ts` to cover these scenarios of the new token type (when applicable):
 
 - when the subject line contains one or more tokens of the new type -> it extracts the new tokens
 - when the subject line does not contain any tokens of the new type -> it does not extract the new tokens
@@ -158,11 +158,11 @@ For example:
 - `#42 Consolidate `BadgeFactory` with `BadgeService` and count to ten`
 - `1 2 3 beep! boop!`
 
-Read some existing tests in `src/domains/commits/Tokenise.tests.ts` for inspiration.
+Read some existing tests in `src/commits/Tokenise.tests.ts` for inspiration.
 
 ## Step 5: Implement regex pattern
 
-Ideally, the regex pattern scaffolded in Step 3 in `src/domains/commits/Tokenise.ts` should match exactly one token instance on one line.
+Ideally, the regex pattern scaffolded in Step 3 in `src/commits/Tokenise.ts` should match exactly one token instance on one line.
 Make boundaries explicit so it does not inadvertently consume adjacent whitespace, punctuation, or part of an established token.
 
 The prioritised order of patterns is behaviour. Place a pattern before every broader pattern that could consume the same text.
@@ -184,7 +184,7 @@ vpr test 'src/domains/commits/Tokenise.tests.ts'
 
 ## Step 6: Test rules
 
-Where relevant, update the existing unit tests of rules in `src/domains/rules/` to take the new token type into account.
+Where relevant, update the existing unit tests of rules in `src/rules/` to take the new token type into account.
 In general, add new test cases to cover the new token type in rule contexts, ensuring that the existing rules work as expected when facing the new token type.
 
 Run the mandatory project-wide checks before finishing:

@@ -44,10 +44,10 @@ Read only the relevant skill guides for the task at hand:
 
 ## Directories
 
-- `src/domains/commits/`: Platform-agnostic commits and tokenised commit messages.
-- `src/domains/configurations/`: Configurations to customise Comet's behaviour.
-- `src/domains/programs/`: Program flows invoked by entrypoints.
-- `src/domains/rules/`: Rule validation logic and reporters to output concerns.
+- `src/commits/`: Platform-agnostic commits and tokenised commit messages.
+- `src/configurations/`: Configurations to customise Comet's behaviour.
+- `src/programs/`: Program flows invoked by entrypoints.
+- `src/rules/`: Rule validation logic and reporters to output concerns.
 - `src/types/`: Self-contained TypeScript types and related utilities.
 - `src/utilities/`: General-purpose utility functions and adapters to externals such as the local Git client, GitHub REST API, local file system, console output, etc.
 
