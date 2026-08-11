@@ -1,10 +1,8 @@
 import { defineOxfmtConfig } from "@rainstormy/presets-web/oxfmt"
 import { defineOxlintConfig, oxlintRestrictedImportPatterns } from "@rainstormy/presets-web/oxlint"
 import { defineConfig } from "vite-plus"
-import { version } from "./package.json" with { type: "json" }
 
 export default defineConfig({
-	envPrefix: "COMET_",
 	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }),
 	lint: defineOxlintConfig({
 		ignorePatterns: ["dist/**/*"],
@@ -29,17 +27,12 @@ export default defineConfig({
 		{
 			entry: "src/main-cli.ts",
 			minify: { compress: true },
-			env: {
-				COMET_VERSION: version,
-				PROD: true,
-			},
+			env: { PROD: true },
 		},
 		{
 			entry: "src/main-gha.ts",
 			minify: { compress: true },
-			env: {
-				PROD: true,
-			},
+			env: { PROD: true },
 			deps: {
 				alwaysBundle: ["valibot"],
 				onlyBundle: ["valibot"],

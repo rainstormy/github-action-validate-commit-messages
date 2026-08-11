@@ -5,7 +5,7 @@ import { program } from "#programs/Program.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import { assertError } from "#utilities/Assertions.ts"
 import { printCommandLineError, printMessage } from "#utilities/logging/Logger.ts"
-import type { CometVersion } from "#utilities/version/CometVersion.ts"
+import { getPackageVersion } from "#utilities/package/Package.ts"
 
 export async function commandLineProgram(args: Array<string>): Promise<ExitCode> {
 	if (args.includes("--help") || args.includes("-h")) {
@@ -13,9 +13,7 @@ export async function commandLineProgram(args: Array<string>): Promise<ExitCode>
 		return EXIT_CODE_SUCCESS
 	}
 	if (args.includes("--version") || args.includes("-v")) {
-		const version: CometVersion = import.meta.env.COMET_VERSION
-
-		printMessage(version)
+		printMessage(getPackageVersion())
 		return EXIT_CODE_SUCCESS
 	}
 

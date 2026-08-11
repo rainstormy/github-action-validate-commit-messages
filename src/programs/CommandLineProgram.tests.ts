@@ -4,10 +4,9 @@ import { mockGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits
 import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts"
 import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
-import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.fakes.ts"
 import { printCommandLineError, printMessage } from "#utilities/logging/Logger.ts"
-import { mockCometVersion } from "#utilities/version/CometVersion.fakes.ts"
+import { mockPackageVersion } from "#utilities/package/Package.fakes.ts"
 
 describe("the help text", () => {
 	it("is a list of program arguments and options", () => {
@@ -52,11 +51,11 @@ describe.each`
 	${["--config", "configs/comet.jsonc", "--version"]} | ${"3.2.0-beta.1"}
 `(
 	"when the args of $args contain the '--version'/'-v' flag and the tool version in the 'package.json' file is $version",
-	(props: { args: Array<string>; version: SemanticVersionString }) => {
+	(props: { args: Array<string>; version: string }) => {
 		let exitCode: ExitCode
 
 		beforeEach(async () => {
-			mockCometVersion(props.version)
+			mockPackageVersion(props.version)
 			exitCode = await commandLineProgram(props.args)
 		})
 
