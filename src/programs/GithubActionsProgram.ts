@@ -1,6 +1,22 @@
+import { getGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.ts"
+import { getConfiguration } from "#configurations/GetConfiguration.ts"
+import { getDefaultGithubActionsConfiguration } from "#configurations/GetDefaultGithubActionsConfiguration.ts"
 import { program } from "#programs/Program.ts"
-import type { ExitCode } from "#types/ExitCode.ts"
+import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
+import { assertError } from "#utilities/Assertions.ts"
+import { printGithubActionsError } from "#utilities/logging/Logger.ts"
 
 export async function githubActionsProgram(): Promise<ExitCode> {
-	return program([])
+	try {
+		const [crudeCommits, configuration] = await Promise.all([
+			getGithubPullRequestCrudeCommits(),
+			getConfiguration(getDefaultGithubActionsConfiguration()),
+		])
+
+		return await program(crudeCommits, configuration)
+	} catch (error) {
+		assertError(error)
+		printGithubActionsError(error.message)
+		return EXIT_CODE_GENERAL_ERROR
+	}
 }

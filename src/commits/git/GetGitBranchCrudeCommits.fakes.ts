@@ -1,19 +1,19 @@
 import { vi } from "vitest"
 import type { CrudeCommits } from "#commits/CrudeCommit.ts"
 
-vi.mock(import("#commits/GetCrudeCommits.ts"), async (importOriginal) => ({
-	getCrudeCommits: vi.fn(async () => {
+vi.mock(import("#commits/git/GetGitBranchCrudeCommits.ts"), async (importOriginal) => ({
+	getGitBranchCrudeCommits: vi.fn(async () => {
 		if (mockedCrudeCommits) {
 			return mockedCrudeCommits
 		}
 
 		const original = await importOriginal()
-		return original.getCrudeCommits()
+		return original.getGitBranchCrudeCommits()
 	}),
 }))
 
 let mockedCrudeCommits: CrudeCommits | undefined
 
-export function mockCrudeCommits(crudeCommits?: CrudeCommits): void {
+export function mockGitBranchCrudeCommits(crudeCommits?: CrudeCommits): void {
 	mockedCrudeCommits = crudeCommits
 }

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fakes.ts"
-import { mockCrudeCommits } from "#commits/GetCrudeCommits.fakes.ts"
+import { mockGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.fakes.ts"
 import { githubActionsProgram } from "#programs/GithubActionsProgram.ts"
 import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
@@ -15,12 +15,7 @@ import {
 	mockEmptyGithubEventDto,
 	mockGithubPullRequestEventDto,
 } from "#utilities/github/event/FetchGithubEventDto.fakes.ts"
-import { printError, printMessage } from "#utilities/logging/Logger.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
-
-beforeEach(() => {
-	mockCometPlatform("gha")
-})
+import { printGithubActionsError, printMessage } from "#utilities/logging/Logger.ts"
 
 describe("when the event payload is not a pull request", () => {
 	let exitCode: ExitCode
@@ -35,7 +30,7 @@ describe("when the event payload is not a pull request", () => {
 	})
 
 	it("prints an error message that describes the expected event payload", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printGithubActionsError).toHaveBeenCalledExactlyOnceWith(
 			"The 'rainstormy/comet' action expects the workflow trigger to be a 'pull_request' event.",
 		)
 	})
@@ -56,7 +51,7 @@ describe("when the event payload is missing in the file system", () => {
 	})
 
 	it("prints the error message raised by the file system", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printGithubActionsError).toHaveBeenCalledExactlyOnceWith(
 			`Failed to read ${eventPath}: File not found`,
 		)
 	})
@@ -77,7 +72,7 @@ describe("when the 'github-token' input parameter is missing", () => {
 	})
 
 	it("prints an error message that describes the expected input parameter", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printGithubActionsError).toHaveBeenCalledExactlyOnceWith(
 			"The 'rainstormy/comet' action expects the 'github-token' input parameter to be set",
 		)
 	})
@@ -100,7 +95,7 @@ describe("when the pull request does not exist", () => {
 	})
 
 	it("prints the error message returned by the GitHub REST API", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printGithubActionsError).toHaveBeenCalledExactlyOnceWith(
 			`Failed to fetch '${resourceUrl}': 404 Not Found`,
 		)
 	})
@@ -120,7 +115,7 @@ describe("when a network error occurs while fetching data from the GitHub REST A
 	})
 
 	it("prints an error message that describes the network error", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith("Network timeout")
+		expect(printGithubActionsError).toHaveBeenCalledExactlyOnceWith("Network timeout")
 	})
 })
 
@@ -128,7 +123,7 @@ describe("when there are no commits", () => {
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([])
+		mockGithubPullRequestCrudeCommits([])
 		exitCode = await githubActionsProgram()
 	})
 
@@ -138,7 +133,7 @@ describe("when there are no commits", () => {
 
 	it("remains silent", () => {
 		expect(printMessage).not.toHaveBeenCalled()
-		expect(printError).not.toHaveBeenCalled()
+		expect(printGithubActionsError).not.toHaveBeenCalled()
 	})
 })
 
@@ -146,7 +141,7 @@ describe("when there is 1 commit that raises no concerns in the default configur
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([fakeCrudeCommit({ message: "Release the robot butler" })])
+		mockGithubPullRequestCrudeCommits([fakeCrudeCommit({ message: "Release the robot butler" })])
 		exitCode = await githubActionsProgram()
 	})
 
@@ -156,7 +151,7 @@ describe("when there is 1 commit that raises no concerns in the default configur
 
 	it("remains silent", () => {
 		expect(printMessage).not.toHaveBeenCalled()
-		expect(printError).not.toHaveBeenCalled()
+		expect(printGithubActionsError).not.toHaveBeenCalled()
 	})
 })
 
@@ -164,7 +159,7 @@ describe("when there are 4 commits that raise no concerns in the default configu
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGithubPullRequestCrudeCommits([
 			fakeCrudeCommit({ message: "Establish the repository" }),
 			fakeCrudeCommit({ message: "Enable the coffee machine integration tests" }),
 			fakeCrudeCommit({ message: "Drop the legacy spaghetti tower module" }),
@@ -179,7 +174,7 @@ describe("when there are 4 commits that raise no concerns in the default configu
 
 	it("remains silent", () => {
 		expect(printMessage).not.toHaveBeenCalled()
-		expect(printError).not.toHaveBeenCalled()
+		expect(printGithubActionsError).not.toHaveBeenCalled()
 	})
 })
 
@@ -187,7 +182,7 @@ describe("when there is 1 commit that raises concerns in the default configurati
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGithubPullRequestCrudeCommits([
 			fakeCrudeCommit({
 				sha: "98634c15dcab46ae1f23ca87a8d66467093415b3",
 				message: "fix!",
@@ -226,7 +221,7 @@ describe("when there are 2 commits that raise concerns in the default configurat
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGithubPullRequestCrudeCommits([
 			fakeCrudeCommit({
 				sha: "61a95da418709622ebb04c6bc08977c96ea915b5",
 				message: "Document the tea set\n\nA  small note",
@@ -273,7 +268,7 @@ describe("when there are 3 commits that raise concerns in the default configurat
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGithubPullRequestCrudeCommits([
 			fakeCrudeCommit({
 				sha: "335aee65f7a82c2f85771f45d9cfec47efab1547",
 				message: "polish the tea set",
@@ -325,7 +320,7 @@ describe("when there are 6 commits where 4 of them raise concerns in the default
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGithubPullRequestCrudeCommits([
 			fakeCrudeCommit({
 				sha: "b676d3809038f6c2dc2e5b3feb98877f773dfd4c",
 				message: "fixup! polish the tea set!",

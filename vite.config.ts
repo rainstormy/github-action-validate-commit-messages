@@ -30,7 +30,6 @@ export default defineConfig({
 			entry: "src/main-cli.ts",
 			minify: { compress: true },
 			env: {
-				COMET_PLATFORM: "cli",
 				COMET_VERSION: version,
 				PROD: true,
 			},
@@ -39,7 +38,6 @@ export default defineConfig({
 			entry: "src/main-gha.ts",
 			minify: { compress: true },
 			env: {
-				COMET_PLATFORM: "gha",
 				PROD: true,
 			},
 			deps: {

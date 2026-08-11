@@ -62,7 +62,8 @@ The JSDoc comment above the function should:
 Insert the rule key or function into the existing alphabetically ordered lists found in:
 
 - `src/rules/Rule.ts`
-- `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/configurations/GetDefaultConfiguration.ts` with a null argument
+- `src/configurations/GetDefaultCommandLineConfiguration.ts` with a null argument
+- `src/configurations/GetDefaultGithubActionsConfiguration.ts` with a null argument
 - `RULES_DTO` in `src/configurations/dtos/JsonConfigurationDto.ts`
 - `emptyRuleConfiguration` and `fakeConfiguration` in `src/configurations/Configuration.fakes.ts`
 - `mapCommitsToConcerns` in `src/rules/concerns/Concern.ts`
@@ -71,7 +72,7 @@ Insert the rule key or function into the existing alphabetically ordered lists f
 ## Step 3: Specify rule options
 
 Use `EmptyObject` when the rule does not accept configurable options. This is the most common scenario.
-Update `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/configurations/GetDefaultConfiguration.ts` with the empty object `{}` instead of null unless the rule should be disabled by default.
+Update `getDefaultCommandLineConfiguration` and `getDefaultGithubActionsConfiguration` with the empty object `{}` instead of null unless the rule should be disabled by default.
 Then skip the rest of this section and proceed to Step 4.
 
 For a rule with configurable options, declare and export a Valibot schema const in the rule file.
@@ -128,7 +129,7 @@ Common sanitisation scenarios:
 - `string` -> `.trim().toLowerCase()` when normalising for comparisons
 - `Array` -> `.filter()` to remove invalid or redundant items (e.g. with `isNotNullish` and `isNotEmptyString`), and/or `new Set()` to remove duplicates
 
-Update `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/configurations/GetDefaultConfiguration.ts` with good default options.
+Update `getDefaultCommandLineConfiguration` and `getDefaultGithubActionsConfiguration` with good default options.
 Look at the existing default values for inspiration. Usually, array options like `whitelist` should be empty by default.
 Leave the options as null if the rule should be disabled by default.
 Prompt me if you need my input.

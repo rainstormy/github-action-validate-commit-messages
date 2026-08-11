@@ -4,7 +4,10 @@ vi.mock(import("#utilities/logging/Logger.ts"), () => ({
 	printMessage: vi.fn(() => {
 		// Do nothing.
 	}),
-	printError: vi.fn(() => {
+	printCommandLineError: vi.fn(() => {
+		// Do nothing.
+	}),
+	printGithubActionsError: vi.fn(() => {
 		// Do nothing.
 	}),
 }))

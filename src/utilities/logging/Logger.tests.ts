@@ -1,6 +1,5 @@
 import { type MockInstance, beforeEach, describe, expect, it, vi } from "vitest"
-import { printError } from "#utilities/logging/Logger.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
+import { printGithubActionsError } from "#utilities/logging/Logger.ts"
 
 // Undo the automatic use of `mockLogger` in `VitestSetup.fakes.ts`.
 vi.unmock(import("#utilities/logging/Logger.ts"))
@@ -17,10 +16,8 @@ describe.each`
 		let consoleLog: ConsoleLogMock
 
 		beforeEach(() => {
-			mockCometPlatform("gha")
-
 			consoleLog = mockConsoleLog()
-			printError(props.errorMessage)
+			printGithubActionsError(props.errorMessage)
 		})
 
 		it("logs a message with escaped characters and an '::error::' prefix", () => {

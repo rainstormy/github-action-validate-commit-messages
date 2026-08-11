@@ -1,6 +1,7 @@
 import type { Configuration } from "#configurations/Configuration.ts"
-import { getDefaultConfiguration } from "#configurations/GetDefaultConfiguration.ts"
 
-export async function getConfiguration(): Promise<Configuration> {
-	return getDefaultConfiguration()
+export async function getConfiguration(
+	defaultConfiguraiton: Configuration,
+): Promise<Configuration> {
+	return defaultConfiguraiton
 }

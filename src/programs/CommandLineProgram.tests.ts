@@ -1,18 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import { fakeCrudeCommit } from "#commits/CrudeCommit.fakes.ts"
-import { mockCrudeCommits } from "#commits/GetCrudeCommits.fakes.ts"
+import { mockGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits.fakes.ts"
 import { commandLineProgram, getHelpText } from "#programs/CommandLineProgram.ts"
 import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import type { SemanticVersionString } from "#types/SemanticVersionString.ts"
 import { mockGitCommand } from "#utilities/git/cli/RunGitCommand.fakes.ts"
-import { printError, printMessage } from "#utilities/logging/Logger.ts"
-import { mockCometPlatform } from "#utilities/platform/CometPlatform.fakes.ts"
+import { printCommandLineError, printMessage } from "#utilities/logging/Logger.ts"
 import { mockCometVersion } from "#utilities/version/CometVersion.fakes.ts"
-
-beforeEach(() => {
-	mockCometPlatform("cli")
-})
 
 describe("the help text", () => {
 	it("is a list of program arguments and options", () => {
@@ -90,7 +85,7 @@ describe("when the default Git branch cannot be determined", () => {
 	})
 
 	it("prints an error message that describes the unexpected Git state", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printCommandLineError).toHaveBeenCalledExactlyOnceWith(
 			"Expected a default remote branch (e.g. 'origin/main') or a local branch named 'main' or 'master'",
 		)
 	})
@@ -109,7 +104,7 @@ describe("when the 'git remote' command raises an error", () => {
 	})
 
 	it("prints the error message raised by the local Git client", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printCommandLineError).toHaveBeenCalledExactlyOnceWith(
 			"Command 'git remote' failed with exit code 1",
 		)
 	})
@@ -129,7 +124,7 @@ describe("when the 'git rev-parse' command raises an error", () => {
 	})
 
 	it("prints the error message raised by the local Git client", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printCommandLineError).toHaveBeenCalledExactlyOnceWith(
 			"Command 'git rev-parse --abbrev-ref origin/HEAD' failed with exit code 128",
 		)
 	})
@@ -150,7 +145,7 @@ describe("when the 'git log' command raises an error", () => {
 	})
 
 	it("prints the error message raised by the local Git client", () => {
-		expect(printError).toHaveBeenCalledExactlyOnceWith(
+		expect(printCommandLineError).toHaveBeenCalledExactlyOnceWith(
 			"Command 'git --no-pager log --format=raw --no-color origin/main..HEAD' failed with exit code 31",
 		)
 	})
@@ -160,7 +155,7 @@ describe("when there are no commits", () => {
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([])
+		mockGitBranchCrudeCommits([])
 		exitCode = await commandLineProgram([])
 	})
 
@@ -170,7 +165,7 @@ describe("when there are no commits", () => {
 
 	it("remains silent", () => {
 		expect(printMessage).not.toHaveBeenCalled()
-		expect(printError).not.toHaveBeenCalled()
+		expect(printCommandLineError).not.toHaveBeenCalled()
 	})
 })
 
@@ -178,7 +173,7 @@ describe("when there is 1 commit that raises no concerns in the default configur
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([fakeCrudeCommit({ message: "Release the robot butler" })])
+		mockGitBranchCrudeCommits([fakeCrudeCommit({ message: "Release the robot butler" })])
 		exitCode = await commandLineProgram([])
 	})
 
@@ -188,7 +183,7 @@ describe("when there is 1 commit that raises no concerns in the default configur
 
 	it("remains silent", () => {
 		expect(printMessage).not.toHaveBeenCalled()
-		expect(printError).not.toHaveBeenCalled()
+		expect(printCommandLineError).not.toHaveBeenCalled()
 	})
 })
 
@@ -196,7 +191,7 @@ describe("when there are 4 commits that raise no concerns in the default configu
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGitBranchCrudeCommits([
 			fakeCrudeCommit({ message: "Establish the repository" }),
 			fakeCrudeCommit({ message: "Enable the coffee machine integration tests" }),
 			fakeCrudeCommit({ message: "Drop the legacy spaghetti tower module" }),
@@ -211,7 +206,7 @@ describe("when there are 4 commits that raise no concerns in the default configu
 
 	it("remains silent", () => {
 		expect(printMessage).not.toHaveBeenCalled()
-		expect(printError).not.toHaveBeenCalled()
+		expect(printCommandLineError).not.toHaveBeenCalled()
 	})
 })
 
@@ -219,7 +214,7 @@ describe("when there is 1 commit that raises concerns in the default configurati
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGitBranchCrudeCommits([
 			fakeCrudeCommit({
 				sha: "98634c15dcab46ae1f23ca87a8d66467093415b3",
 				message: "fix!",
@@ -258,7 +253,7 @@ describe("when there are 2 commits that raise concerns in the default configurat
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGitBranchCrudeCommits([
 			fakeCrudeCommit({
 				sha: "61a95da418709622ebb04c6bc08977c96ea915b5",
 				message: "Document the tea set\n\nA  small note",
@@ -305,7 +300,7 @@ describe("when there are 3 commits that raise concerns in the default configurat
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGitBranchCrudeCommits([
 			fakeCrudeCommit({
 				sha: "335aee65f7a82c2f85771f45d9cfec47efab1547",
 				message: "polish the tea set",
@@ -357,7 +352,7 @@ describe("when there are 6 commits where 4 of them raise concerns in the default
 	let exitCode: ExitCode
 
 	beforeEach(async () => {
-		mockCrudeCommits([
+		mockGitBranchCrudeCommits([
 			fakeCrudeCommit({
 				sha: "7e63a377f295406fea7cfd5ea4dbe9aecc88e142",
 				message: "polish the tea set!",
