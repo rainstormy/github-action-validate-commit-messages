@@ -13,6 +13,7 @@ node_modules/
 .claude/
 .codex/
 .cursor/
+.gemini/
 .github/copilot-instructions.md
 .idea/
 .junie/
@@ -26,6 +27,7 @@ node_modules/
 *-local.*
 .ws-context
 CLAUDE.md
+GEMINI.md
 
 # Operating system artefacts
 *~
