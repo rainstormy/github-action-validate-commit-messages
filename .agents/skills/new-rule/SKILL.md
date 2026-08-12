@@ -13,7 +13,7 @@ It uses `noTypos` as an example of a new rule to implement.
 
 Define the name and purpose of the new rule. All rule names must start with `no` or `use`.
 
-Read `src/domains/rules/Rule.ts` and decide from the existing rule names if the intended behaviour has already been implemented or if the desired name already exists.
+Read `src/rules/Rule.ts` and decide from the existing rule names if the intended behaviour has already been implemented or if the desired name already exists.
 Read any existing rule files that may sound similar to the intended behaviour before making the final call.
 Note that every rule is focused to a narrow scope. For example, `useAuthorEmailPatterns`, `useAuthorNamePatterns`, and `useCommitterEmailPatterns` are separate rules.
 Let me know if the new rule is too similar to an existing rule and prompt for new instructions to clarify if you should modify an existing rule instead of implementing a new one.
@@ -22,7 +22,7 @@ Identify the unit(s) under validation: subject line, body lines, user identity (
 
 ## Step 2: Scaffold function signature
 
-Create a new file in `src/domains/rules/` named after the new rule, for example `NoTypos.ts` or `UseCapitalisedBodyLines.ts` (recall that filenames must be in PascalCase).
+Create a new file in `src/rules/` named after the new rule, for example `NoTypos.ts` or `UseCapitalisedBodyLines.ts` (recall that filenames must be in PascalCase).
 Export a named generator function that yields concerns, for example:
 
 ```ts
@@ -61,17 +61,18 @@ The JSDoc comment above the function should:
 
 Insert the rule key or function into the existing alphabetically ordered lists found in:
 
-- `src/domains/rules/Rule.ts`
-- `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/domains/configurations/GetDefaultConfiguration.ts` with a null argument
-- `RULES_DTO` in `src/domains/configurations/dtos/JsonConfigurationDto.ts`
-- `emptyRuleConfiguration` and `fakeConfiguration` in `src/domains/configurations/Configuration.fakes.ts`
-- `mapCommitsToConcerns` in `src/domains/rules/concerns/Concern.ts`
-- Relevant concerns in `src/domains/rules/concerns/`
+- `src/rules/Rule.ts`
+- `src/configurations/GetDefaultCommandLineConfiguration.ts` with a null argument
+- `src/configurations/GetDefaultGithubActionsConfiguration.ts` with a null argument
+- `RULES_DTO` in `src/configurations/dtos/JsonConfigurationDto.ts`
+- `emptyRuleConfiguration` and `fakeConfiguration` in `src/configurations/Configuration.fakes.ts`
+- `mapCommitsToConcerns` in `src/rules/concerns/Concern.ts`
+- Relevant concerns in `src/rules/concerns/`
 
 ## Step 3: Specify rule options
 
 Use `EmptyObject` when the rule does not accept configurable options. This is the most common scenario.
-Update `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/domains/configurations/GetDefaultConfiguration.ts` with the empty object `{}` instead of null unless the rule should be disabled by default.
+Update `getDefaultCommandLineConfiguration` and `getDefaultGithubActionsConfiguration` with the empty object `{}` instead of null unless the rule should be disabled by default.
 Then skip the rest of this section and proceed to Step 4.
 
 For a rule with configurable options, declare and export a Valibot schema const in the rule file.
@@ -99,7 +100,7 @@ Use Valibot schemas for simple JSON-serialisable values such as `v.number()`, `v
 Use schemas such as `v.picklist()` and `v.pipe()` when an option has a finite set of allowed values or additional constraints.
 Prefer reusable helper functions from `src/types/` and `src/utilities/` when they express a common constraint, such as `naturalNumber()` or `nonEmptyArray()`.
 
-Register the schema in `RULES_DTO` in `src/domains/configurations/dtos/JsonConfigurationDto.ts`, for example:
+Register the schema in `RULES_DTO` in `src/configurations/dtos/JsonConfigurationDto.ts`, for example:
 
 ```ts
 const RULES_DTO = v.strictObject({
@@ -128,7 +129,7 @@ Common sanitisation scenarios:
 - `string` -> `.trim().toLowerCase()` when normalising for comparisons
 - `Array` -> `.filter()` to remove invalid or redundant items (e.g. with `isNotNullish` and `isNotEmptyString`), and/or `new Set()` to remove duplicates
 
-Update `getDefaultCliConfiguration` and `getDefaultGhaConfiguration` in `src/domains/configurations/GetDefaultConfiguration.ts` with good default options.
+Update `getDefaultCommandLineConfiguration` and `getDefaultGithubActionsConfiguration` with good default options.
 Look at the existing default values for inspiration. Usually, array options like `whitelist` should be empty by default.
 Leave the options as null if the rule should be disabled by default.
 Prompt me if you need my input.
@@ -278,7 +279,7 @@ export function* noTypos(commits: Commits, options: NoTyposOptions | null): Gene
 }
 ```
 
-If the rule concerns the subject line or the body lines, consult `src/domains/commits/Token.ts` for a list of all tokens and associated utility functions.
+If the rule concerns the subject line or the body lines, consult `src/commits/Token.ts` for a list of all tokens and associated utility functions.
 
 If you need to add or modify commit message tokens, follow the instructions in `.agents/skills/new-token-type/SKILL.md` and implement those changes in a separate commit.
 
@@ -291,13 +292,13 @@ vpr test 'src/domains/rules/NoTypos.tests.ts'
 
 ## Step 6: Implement reports
 
-Add at least 2 test cases to `src/domains/rules/reports/CommitwiseReport.tests.ts` to cover the new rule.
+Add at least 2 test cases to `src/rules/reports/CommitwiseReport.tests.ts` to cover the new rule.
 Note that test cases appear in alphabetical order by rule names.
 
 The test cases also serve as visual documentation of how concerns will appear to the end users.
 Prompt me if you want feedback on the message that appear when the new rule is violated.
 
-Implement the message in `src/domains/rules/reports/CommitwiseReport.ts`.
+Implement the message in `src/rules/reports/CommitwiseReport.ts`.
 
 Run the mandatory project-wide checks before finishing:
 

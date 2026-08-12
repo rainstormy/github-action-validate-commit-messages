@@ -1,22 +1,8 @@
-import { env } from "node:process"
 import { defineOxfmtConfig } from "@rainstormy/presets-web/oxfmt"
 import { defineOxlintConfig, oxlintRestrictedImportPatterns } from "@rainstormy/presets-web/oxlint"
 import { defineConfig } from "vite-plus"
-import { version } from "./package.json" with { type: "json" }
 
 export default defineConfig({
-	build: {
-		emptyOutDir: Boolean(env.COMET_PLATFORM), // Prevent the `build-legacy-v1` task from deleting the `dist/cli` and `dist/gha` directories.
-		minify: "oxc",
-		reportCompressedSize: false,
-		rolldownOptions: {
-			output: {
-				entryFileNames: env.COMET_PLATFORM !== undefined ? "index.js" : "main.mjs",
-			},
-		},
-		target: "es2022",
-	},
-	envPrefix: "COMET_",
 	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }),
 	lint: defineOxlintConfig({
 		ignorePatterns: ["dist/**/*"],
@@ -24,7 +10,6 @@ export default defineConfig({
 			{
 				files: [
 					"src/main-*.ts",
-					"src/legacy-v1/adapters/gha/LegacyV1GithubActionsConfiguration.ts",
 					"src/utilities/files/Files.ts",
 					"src/utilities/git/cli/RunGitCommand.ts",
 					"src/utilities/github/env/GithubEnv.ts",
@@ -38,47 +23,35 @@ export default defineConfig({
 			},
 		],
 	}),
-	run: {
-		tasks: {
-			build: {
-				// language=sh
-				command: [
-					`COMET_PLATFORM='cli' COMET_VERSION='${version}' vite build --ssr src/main-cli.ts --outDir dist/cli/`,
-					"COMET_PLATFORM='gha' vite build --ssr src/main-gha.ts --outDir dist/gha/",
-					"vite build --ssr src/main-legacy-v1.ts --outDir dist/",
-				],
-				input: [{ auto: true }, "!dist/**/*"],
-			},
-			check: {
-				// language=sh
-				command: "vp check",
-			},
-			fmt: {
-				// language=sh
-				command: "vp check --fix",
-			},
-			install: {
-				// language=sh
-				command: [
-					"vp install --frozen-lockfile --ignore-scripts",
-					'if [ "$LEFTHOOK" != "0" ]; then lefthook install; fi',
-				],
-				cache: false,
-			},
-			test: {
-				// language=sh
-				command: "vp test",
-				input: [{ auto: true }, "!node_modules/.vite-temp/vite.config.ts.timestamp-*"],
-			},
-			yolo: {
-				// language=sh
-				command: "lefthook uninstall",
-				cache: false,
+	pack: [
+		{
+			entry: "src/main-cli.ts",
+			minify: { compress: true },
+			env: { PROD: true },
+		},
+		{
+			entry: "src/main-gha.ts",
+			minify: { compress: true },
+			env: { PROD: true },
+			deps: {
+				alwaysBundle: ["valibot"],
+				onlyBundle: ["valibot"],
 			},
 		},
-	},
-	ssr: {
-		noExternal: ["valibot"], // Inline production dependencies into the build artefacts to produce a standalone executable that runs without installing `node_modules`.
+	],
+	run: {
+		// language=sh
+		tasks: {
+			build: { command: "vp pack" },
+			check: { command: "vp check" },
+			fmt: { command: "vp check --fix" },
+			install: {
+				command: ["vp install --frozen-lockfile --ignore-scripts", "lefthook install"],
+				cache: false,
+			},
+			test: { command: "vp test" },
+			yolo: { command: "lefthook uninstall", cache: false },
+		},
 	},
 	test: {
 		include: ["src/**/*.tests.ts"],
