@@ -56,17 +56,9 @@ const TOKENS_DTO = v.strictObject({
 	),
 })
 
-const OVERRIDE_SCOPE = v.picklist(["cli", "github-actions"])
-
-const OVERRIDE_DTO = v.strictObject({
-	scope: v.union([OVERRIDE_SCOPE, v.array(OVERRIDE_SCOPE)]),
-	rules: v.exactOptional(RULES_DTO),
-	tokens: v.exactOptional(TOKENS_DTO),
-})
-
 export const JSON_CONFIGURATION_DTO = v.strictObject({
 	$schema: v.exactOptional(v.string()),
+	extends: v.exactOptional(v.string()),
 	rules: v.exactOptional(RULES_DTO),
 	tokens: v.exactOptional(TOKENS_DTO),
-	overrides: v.exactOptional(v.array(OVERRIDE_DTO)),
 })
