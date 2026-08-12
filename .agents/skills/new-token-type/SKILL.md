@@ -74,8 +74,8 @@ export function hyperlinkPattern(configuration: TokenConfiguration): string {
 Expand `TokenConfiguration` in `src/configurations/Configuration.ts` accordingly.
 Update the following places with sensible defaults:
 
-- `src/configurations/GetDefaultCommandLineConfiguration.ts`
-- `src/configurations/GetDefaultGithubActionsConfiguration.ts`
+- `src/configurations/defaults/GetDefaultCommandLineConfiguration.ts`
+- `src/configurations/defaults/GetDefaultGithubActionsConfiguration.ts`
 - `fakeTokenConfiguration` in `src/configurations/Configuration.fakes.ts`
 
 Call the function from `mapCrudeCommitToCommit` in `src/commits/Commit.ts`.

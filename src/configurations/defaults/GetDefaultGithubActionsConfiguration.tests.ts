@@ -1,8 +1,8 @@
 import { expect, it } from "vitest"
-import { getDefaultCommandLineConfiguration } from "#configurations/GetDefaultCommandLineConfiguration.ts"
+import { getDefaultGithubActionsConfiguration } from "#configurations/defaults/GetDefaultGithubActionsConfiguration.ts"
 import type { RuleKey } from "#rules/Rule.ts"
 
-const configuration = getDefaultCommandLineConfiguration()
+const configuration = getDefaultGithubActionsConfiguration()
 
 it("recognises GitHub- and GitLab-style issue links", () => {
 	expect(configuration.tokens.issueLinks?.prefixes).toEqual(["#", "GH-", "GL-"])
@@ -18,7 +18,10 @@ it.each`
 	${"noExcessiveCommitsPerBranch"} | ${{ maxCommits: 10 }}
 	${"noExcessiveWhitespace"}       | ${{}}
 	${"noMergeCommits"}              | ${{}}
+	${"noRepeatedSubjectLines"}      | ${{}}
+	${"noRevertRevertCommits"}       | ${{}}
 	${"noSingleWordSubjectLines"}    | ${{}}
+	${"noSquashMarkers"}             | ${{}}
 	${"noUnexpectedPunctuation"}     | ${{}}
 	${"useCapitalisedSubjectLines"}  | ${{}}
 	${"useConciseSubjectLines"}      | ${{ maxLength: 50 }}
@@ -33,10 +36,7 @@ it.each`
 
 it.each`
 	disabledRuleKey
-	${"noRepeatedSubjectLines"}
 	${"noRestrictedTrailers"}
-	${"noRevertRevertCommits"}
-	${"noSquashMarkers"}
 	${"useAuthorEmailPatterns"}
 	${"useAuthorNamePatterns"}
 	${"useCommitterEmailPatterns"}
