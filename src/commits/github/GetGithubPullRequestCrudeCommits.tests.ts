@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest"
 import type { CrudeCommit } from "#commits/CrudeCommit.ts"
 import { getGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.ts"
-import type { GithubPullRequestReference } from "#commits/github/GithubPullRequestReference.fakes.ts"
 import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { Vector } from "#types/Vector.ts"
@@ -15,6 +14,7 @@ import {
 } from "#utilities/github/api/FetchGithubResourceDto.fakes.ts"
 import type { GithubUrlString } from "#utilities/github/api/GithubUrlString.ts"
 import { mockGithubPullRequestEventDto } from "#utilities/github/event/FetchGithubEventDto.fakes.ts"
+import type { GithubPullRequestReference } from "#utilities/github/event/GithubPullRequestReference.fakes.ts"
 
 describe.each`
 	sha
