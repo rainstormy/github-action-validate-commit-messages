@@ -1,5 +1,5 @@
 import { type TokenType, type Tokens, codeblock, tokenOf } from "#commits/Token.ts"
-import type { TokenConfiguration } from "#configurations/Configuration.ts"
+import type { TokenConfiguration } from "#commits/TokenConfiguration.ts"
 import { regexEnum, regexUnion } from "#utilities/Regexes.ts"
 
 /**

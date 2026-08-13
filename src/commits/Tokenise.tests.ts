@@ -16,8 +16,8 @@ import {
 	whitespace,
 	word,
 } from "#commits/Token.ts"
-import { fakeTokenConfiguration } from "#configurations/Configuration.fakes.ts"
-import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
+import { fakeTokenConfiguration } from "#commits/TokenConfiguration.fakes.ts"
+import { issueLinkTokenConfiguration } from "#commits/TokenConfiguration.ts"
 
 const configuration = fakeTokenConfiguration()
 
@@ -624,7 +624,7 @@ describe.each`
 
 describe("when issue link tokenisation accepts GitHub-/GitLab-style prefixes and custom wildcards", () => {
 	const githubIssueLinks = fakeTokenConfiguration({
-		issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]),
+		issueLinks: issueLinkTokenConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]),
 	})
 
 	describe.each`
@@ -702,7 +702,7 @@ describe("when issue link tokenisation accepts GitHub-/GitLab-style prefixes and
 
 describe("when issue link tokenisation accepts Jira-style prefixes and custom wildcards", () => {
 	const jiraIssueLinks = fakeTokenConfiguration({
-		issueLinks: issueLinkConfiguration(["UNICORN-"], ["#SECURITY"]),
+		issueLinks: issueLinkTokenConfiguration(["UNICORN-"], ["#SECURITY"]),
 	})
 
 	describe.each`
@@ -763,7 +763,7 @@ describe("when issue link tokenisation accepts Jira-style prefixes and custom wi
 
 describe("when issue link tokenisation accepts Jira-style prefixes and no wildcards", () => {
 	const noWildcardIssueLinks = fakeTokenConfiguration({
-		issueLinks: issueLinkConfiguration(["COMET-"]),
+		issueLinks: issueLinkTokenConfiguration(["COMET-"]),
 	})
 
 	describe.each`
@@ -787,7 +787,7 @@ describe("when issue link tokenisation accepts Jira-style prefixes and no wildca
 
 describe("when issue link tokenisation accepts wildcards only", () => {
 	const wildcardOnlyIssueLinks = fakeTokenConfiguration({
-		issueLinks: issueLinkConfiguration([], ["[incident]"]),
+		issueLinks: issueLinkTokenConfiguration([], ["[incident]"]),
 	})
 
 	describe.each`

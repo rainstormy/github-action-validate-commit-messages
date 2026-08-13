@@ -1,12 +1,10 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import {
-	emptyRuleConfiguration,
-	fakeTokenConfiguration,
-} from "#configurations/Configuration.fakes.ts"
+import { fakeTokenConfiguration } from "#commits/TokenConfiguration.fakes.ts"
+import { issueLinkTokenConfiguration } from "#commits/TokenConfiguration.ts"
+import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
 import type { RuleConfiguration } from "#configurations/Configuration.ts"
-import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -24,7 +22,7 @@ const enabledSuffix = emptyRuleConfiguration({ [rule]: { position: "suffix" } })
 
 const fakeCommit = fakeCommitFactory(
 	fakeTokenConfiguration({
-		issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]),
+		issueLinks: issueLinkTokenConfiguration(["#", "GH-", "GL-"], ["(no-issue)", "[incident]"]),
 	}),
 )
 
@@ -526,7 +524,7 @@ describe("when verifying a set of multiple commits and all commits end with an i
 })
 
 const fakeJiraStyleCommit = fakeCommitFactory(
-	fakeTokenConfiguration({ issueLinks: issueLinkConfiguration(["UNICORN-"]) }),
+	fakeTokenConfiguration({ issueLinks: issueLinkTokenConfiguration(["UNICORN-"]) }),
 )
 
 describe.each`

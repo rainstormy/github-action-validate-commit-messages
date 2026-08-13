@@ -1,4 +1,4 @@
-import type { IssueLinkTokenConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
+import type { TokenConfiguration } from "#commits/TokenConfiguration.ts"
 import type { RuleKey, RuleOptions } from "#rules/Rule.ts"
 
 export type Configuration = {
@@ -11,8 +11,4 @@ export type Configuration = {
  */
 export type RuleConfiguration = {
 	[Key in RuleKey]: RuleOptions<Key> | null
-}
-
-export type TokenConfiguration = {
-	issueLinks: IssueLinkTokenConfiguration | null
 }

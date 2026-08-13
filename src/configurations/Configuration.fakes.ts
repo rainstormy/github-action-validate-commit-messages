@@ -1,9 +1,6 @@
-import type {
-	Configuration,
-	RuleConfiguration,
-	TokenConfiguration,
-} from "#configurations/Configuration.ts"
-import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
+import { fakeTokenConfiguration } from "#commits/TokenConfiguration.fakes.ts"
+import type { TokenConfiguration } from "#commits/TokenConfiguration.ts"
+import type { Configuration, RuleConfiguration } from "#configurations/Configuration.ts"
 
 export type ConfigurationTemplate = {
 	rules?: Partial<RuleConfiguration>
@@ -85,15 +82,6 @@ export function emptyRuleConfiguration(
 		useIssueLinks: null,
 		useLineWrapping: null,
 		useSignedCommits: null,
-		...overrides,
-	}
-}
-
-export function fakeTokenConfiguration(
-	overrides: Partial<TokenConfiguration> = {},
-): TokenConfiguration {
-	return {
-		issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"]),
 		...overrides,
 	}
 }
