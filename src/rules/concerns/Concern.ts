@@ -1,5 +1,5 @@
 import type { Commits } from "#commits/Commit.ts"
-import type { RuleConfiguration } from "#configurations/Configuration.ts"
+import type { RulesetConfiguration } from "#configurations/Configuration.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -31,7 +31,7 @@ import { requireNotNullish } from "#utilities/Assertions.ts"
 export type Concern = BodyLineConcern | CommitConcern | SubjectLineConcern | UserIdentityConcern
 export type Concerns = Array<Concern>
 
-export function mapCommitsToConcerns(commits: Commits, rules: RuleConfiguration): Concerns {
+export function mapCommitsToConcerns(commits: Commits, rules: RulesetConfiguration): Concerns {
 	const allConcerns: Concerns = [
 		...noBlankSubjectLines(commits, rules.noBlankSubjectLines),
 		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),

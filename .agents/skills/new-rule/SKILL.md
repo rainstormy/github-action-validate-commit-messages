@@ -65,7 +65,7 @@ Insert the rule key or function into the existing alphabetically ordered lists f
 - `src/configurations/GetDefaultCommandLineConfiguration.ts` with a null argument
 - `src/configurations/GetDefaultGithubActionsConfiguration.ts` with a null argument
 - `RULES_DTO` in `src/configurations/dtos/JsonConfigurationDto.ts`
-- `emptyRuleConfiguration` and `fakeConfiguration` in `src/configurations/Configuration.fakes.ts`
+- `emptyRulesetConfiguration` and `fakeConfiguration` in `src/configurations/Configuration.fakes.ts`
 - `mapCommitsToConcerns` in `src/rules/concerns/Concern.ts`
 - Relevant concerns in `src/rules/concerns/`
 
@@ -143,8 +143,8 @@ Start by setting up the rule configuration for the test. For example, for a rule
 ```ts
 const rule = "noTypos" satisfies RuleKey
 
-const disabled = emptyRuleConfiguration()
-const enabled = emptyRuleConfiguration({ [rule]: {} })
+const disabled = emptyRulesetConfiguration()
+const enabled = emptyRulesetConfiguration({ [rule]: {} })
 
 const fakeCommit = fakeCommitFactory()
 ```
@@ -154,9 +154,9 @@ For a rule with options, it has multiple `enabled` scenarios, for example:
 ```ts
 const rule = "noTypos" satisfies RuleKey
 
-const disabled = emptyRuleConfiguration()
-const enabled = emptyRuleConfiguration({ [rule]: {} })
-const enabledWhitelist = emptyRuleConfiguration({ [rule]: { whitelist: ["chatify", "rainstormed"] } })
+const disabled = emptyRulesetConfiguration()
+const enabled = emptyRulesetConfiguration({ [rule]: {} })
+const enabledWhitelist = emptyRulesetConfiguration({ [rule]: { whitelist: ["chatify", "rainstormed"] } })
 
 const fakeCommit = fakeCommitFactory()
 ```

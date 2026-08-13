@@ -1,9 +1,9 @@
 import { fakeTokenConfiguration } from "#commits/TokenConfiguration.fakes.ts"
 import type { TokenConfiguration } from "#commits/TokenConfiguration.ts"
-import type { Configuration, RuleConfiguration } from "#configurations/Configuration.ts"
+import type { Configuration, RulesetConfiguration } from "#configurations/Configuration.ts"
 
 export type ConfigurationTemplate = {
-	rules?: Partial<RuleConfiguration>
+	rules?: Partial<RulesetConfiguration>
 	tokens?: Partial<TokenConfiguration>
 }
 
@@ -57,9 +57,9 @@ export function fakeConfiguration(overrides: ConfigurationTemplate = {}): Config
 	}
 }
 
-export function emptyRuleConfiguration(
-	overrides: Partial<RuleConfiguration> = {},
-): RuleConfiguration {
+export function emptyRulesetConfiguration(
+	overrides: Partial<RulesetConfiguration> = {},
+): RulesetConfiguration {
 	return {
 		noBlankSubjectLines: null,
 		noExcessiveCommitsPerBranch: null,

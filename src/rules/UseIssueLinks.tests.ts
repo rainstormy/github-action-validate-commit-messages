@@ -3,8 +3,8 @@ import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
 import { fakeTokenConfiguration } from "#commits/TokenConfiguration.fakes.ts"
 import { issueLinkTokenConfiguration } from "#commits/TokenConfiguration.ts"
-import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
-import type { RuleConfiguration } from "#configurations/Configuration.ts"
+import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import type { RulesetConfiguration } from "#configurations/Configuration.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -15,10 +15,10 @@ import type { Vector } from "#types/Vector.ts"
 
 const rule = "useIssueLinks" satisfies RuleKey
 
-const disabled = emptyRuleConfiguration()
-const enabledAnywhere = emptyRuleConfiguration({ [rule]: { position: "anywhere" } })
-const enabledPrefix = emptyRuleConfiguration({ [rule]: { position: "prefix" } })
-const enabledSuffix = emptyRuleConfiguration({ [rule]: { position: "suffix" } })
+const disabled = emptyRulesetConfiguration()
+const enabledAnywhere = emptyRulesetConfiguration({ [rule]: { position: "anywhere" } })
+const enabledPrefix = emptyRulesetConfiguration({ [rule]: { position: "prefix" } })
+const enabledSuffix = emptyRulesetConfiguration({ [rule]: { position: "suffix" } })
 
 const fakeCommit = fakeCommitFactory(
 	fakeTokenConfiguration({
@@ -256,7 +256,7 @@ describe.each`
 			${enabledSuffix}
 		`(
 			"and the rule is enabled with position $rules.useIssueLinks.position",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -300,7 +300,7 @@ describe.each`
 			${enabledSuffix}
 		`(
 			"and the rule is enabled with position $rules.useIssueLinks.position",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -336,7 +336,7 @@ describe.each`
 			${enabledSuffix}
 		`(
 			"and the rule is enabled with position $rules.useIssueLinks.position",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -439,7 +439,7 @@ describe("when verifying a set of multiple commits and all commits start with an
 		${enabledPrefix}
 	`(
 		"and the rule is enabled with position $rules.useIssueLinks.position",
-		(configProps: { rules: RuleConfiguration }) => {
+		(configProps: { rules: RulesetConfiguration }) => {
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {
@@ -491,7 +491,7 @@ describe("when verifying a set of multiple commits and all commits end with an i
 		${enabledSuffix}
 	`(
 		"and the rule is enabled with position $rules.useIssueLinks.position",
-		(configProps: { rules: RuleConfiguration }) => {
+		(configProps: { rules: RulesetConfiguration }) => {
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {

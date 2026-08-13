@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
-import type { RuleConfiguration } from "#configurations/Configuration.ts"
+import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import type { RulesetConfiguration } from "#configurations/Configuration.ts"
 import { bodyLineConcern, bodyLineConcerns } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -11,17 +11,17 @@ import type { Vector } from "#types/Vector.ts"
 
 const rule = "noRestrictedTrailers" satisfies RuleKey
 
-const disabled = emptyRuleConfiguration()
-const enabledNone = emptyRuleConfiguration({
+const disabled = emptyRulesetConfiguration()
+const enabledNone = emptyRulesetConfiguration({
 	[rule]: { restrictedKeys: [] },
 })
-const enabled1 = emptyRuleConfiguration({
+const enabled1 = emptyRulesetConfiguration({
 	[rule]: { restrictedKeys: ["signed-off-by"] },
 })
-const enabled2 = emptyRuleConfiguration({
+const enabled2 = emptyRulesetConfiguration({
 	[rule]: { restrictedKeys: ["co-authored-by", "breaking change"] },
 })
-const enabled3 = emptyRuleConfiguration({
+const enabled3 = emptyRulesetConfiguration({
 	[rule]: { restrictedKeys: ["co-authored-by:", "refs:", "reviewed-by"] },
 })
 
@@ -66,7 +66,7 @@ describe.each`
 		`(
 			"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
 			(configProps: {
-				rules: RuleConfiguration
+				rules: RulesetConfiguration
 				expectedRanges: Array<{ line: number; range: CharacterRange }>
 			}) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
@@ -125,7 +125,7 @@ describe.each`
 			${enabled3}
 		`(
 			"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -181,7 +181,7 @@ describe("when verifying a set of multiple commits and some commits contain rest
 		${enabled3} | ${[bodyLineConcern(rule, commits[1].sha, { line: 1, range: [0, 14] }), bodyLineConcern(rule, commits[1].sha, { line: 2, range: [1, 12] }), bodyLineConcern(rule, commits[2].sha, { line: 1, range: [0, 11] })]}
 	`(
 		"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
-		(configProps: { rules: RuleConfiguration; expectedConcerns: Concerns }) => {
+		(configProps: { rules: RulesetConfiguration; expectedConcerns: Concerns }) => {
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it(
@@ -244,7 +244,7 @@ describe("when verifying a set of multiple commits and no commits contain restri
 		${enabled3}
 	`(
 		"and the rule is enabled with restrictions on $rules.noRestrictedTrailers.restrictedKeys",
-		(configProps: { rules: RuleConfiguration }) => {
+		(configProps: { rules: RulesetConfiguration }) => {
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {
