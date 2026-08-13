@@ -28,6 +28,7 @@ Always use `vpr` to install dependencies and run tasks. Never use npm, npx, pnpm
 - **Concern:** Describes how and where a commit violates the policy enforced by a rule. May overlap with other concerns.
 - **Reporter:** Summary of concerns in a particular output format such as human-readable console output, concise agent-friendly console output, or Markdown output.
 - **Configuration:** Customisable declaration of how to tokenise commit messages and which rules to enforce, including their parameters. Comet provides a default configuration, but end users may override it by providing a `comet.json` configuration file.
+- **Ruleset:** The set of all rules and their configurations.
 
 ## Skills
 

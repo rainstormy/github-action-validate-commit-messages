@@ -1,18 +1,18 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import { emptyRulesetConfiguration } from "#configurations/GetConfiguration.fakes.ts"
+import type { RuleKey } from "#configurations/RulesetConfiguration.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule = "noMergeCommits" satisfies RuleKey
+const rule: RuleKey = "noMergeCommits"
 
 const disabled = emptyRulesetConfiguration()
-const enabled = emptyRulesetConfiguration({ [rule]: {} })
+const enabled = emptyRulesetConfiguration({ [rule]: { level: "error" } })
 
 const fakeCommit = fakeCommitFactory()
 

@@ -1,18 +1,8 @@
-import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import { nonEmptyArray } from "#utilities/Arrays.ts"
 import { regexUnion } from "#utilities/Regexes.ts"
-
-const rule = "useAuthorNamePatterns" satisfies RuleKey
-
-export type UseAuthorNamePatternsOptions = v.InferOutput<typeof USE_AUTHOR_NAME_PATTERNS_OPTIONS>
-
-export const USE_AUTHOR_NAME_PATTERNS_OPTIONS = v.strictObject({
-	patterns: nonEmptyArray(v.string()),
-})
 
 /**
  * Verifies that the commit author has a name that matches a given regex pattern.
@@ -22,13 +12,16 @@ export const USE_AUTHOR_NAME_PATTERNS_OPTIONS = v.strictObject({
  */
 export function* useAuthorNamePatterns(
 	commits: Commits,
-	options: UseAuthorNamePatternsOptions | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "useAuthorNamePatterns"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 
-	const patterns = options.patterns
+	const patterns = configuration.options.patterns
 
 	if (patterns.length === 0) {
 		return

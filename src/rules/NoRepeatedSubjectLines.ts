@@ -1,11 +1,8 @@
 import type { Commits } from "#commits/Commit.ts"
 import { isNotToken, isToken } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "noRepeatedSubjectLines" satisfies RuleKey
 
 /**
  * Verifies that each commit has a unique subject line within the branch.
@@ -18,9 +15,12 @@ const rule = "noRepeatedSubjectLines" satisfies RuleKey
  */
 export function* noRepeatedSubjectLines(
 	commits: Commits,
-	options: EmptyObject | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "noRepeatedSubjectLines"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 

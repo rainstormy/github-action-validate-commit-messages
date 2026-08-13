@@ -1,8 +1,8 @@
 import { expect, it } from "vitest"
-import { getDefaultGithubActionsConfiguration } from "#configurations/defaults/GetDefaultGithubActionsConfiguration.ts"
-import type { RuleKey } from "#rules/Rule.ts"
+import { DEFAULT_GITHUB_ACTIONS_CONFIGURATION } from "#configurations/defaults/DefaultGithubActionsConfiguration.ts"
+import type { RuleKey } from "#configurations/RulesetConfiguration.ts"
 
-const configuration = getDefaultGithubActionsConfiguration()
+const configuration = DEFAULT_GITHUB_ACTIONS_CONFIGURATION
 
 it("recognises GitHub- and GitLab-style issue links", () => {
 	expect(configuration.tokens.issueLinks?.prefixes).toEqual(["#", "GH-", "GL-"])
@@ -30,19 +30,22 @@ it.each`
 	${"useLineWrapping"}             | ${{ maxLength: 72 }}
 	${"useSignedCommits"}            | ${{}}
 `("enables $enabledRuleKey", (props: { enabledRuleKey: RuleKey; expectedRuleOptions: object }) => {
-	const ruleOptions = configuration.rules[props.enabledRuleKey]
-	expect(ruleOptions).toEqual(props.expectedRuleOptions)
+	const rule = configuration.rules[props.enabledRuleKey]
+	expect(rule).toEqual({ level: "error", options: props.expectedRuleOptions })
 })
 
 it.each`
-	disabledRuleKey
-	${"noRestrictedTrailers"}
-	${"useAuthorEmailPatterns"}
-	${"useAuthorNamePatterns"}
-	${"useCommitterEmailPatterns"}
-	${"useCommitterNamePatterns"}
-	${"useIssueLinks"}
-`("does not enable $disabledRuleKey'", (props: { disabledRuleKey: RuleKey }) => {
-	const ruleOptions = configuration.rules[props.disabledRuleKey]
-	expect(ruleOptions).toBeNull()
-})
+	disabledRuleKey                | expectedRuleOptions
+	${"noRestrictedTrailers"}      | ${{ restrictedKeys: [] }}
+	${"useAuthorEmailPatterns"}    | ${{ patterns: [] }}
+	${"useAuthorNamePatterns"}     | ${{ patterns: [] }}
+	${"useCommitterEmailPatterns"} | ${{ patterns: [] }}
+	${"useCommitterNamePatterns"}  | ${{ patterns: [] }}
+	${"useIssueLinks"}             | ${{ position: "anywhere" }}
+`(
+	"does not enable $disabledRuleKey'",
+	(props: { disabledRuleKey: RuleKey; expectedRuleOptions: object }) => {
+		const rule = configuration.rules[props.disabledRuleKey]
+		expect(rule).toEqual({ level: "off", options: props.expectedRuleOptions })
+	},
+)

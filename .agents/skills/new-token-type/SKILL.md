@@ -71,12 +71,13 @@ export function hyperlinkPattern(configuration: TokenConfiguration): string {
 }
 ```
 
-Expand `TokenConfiguration` in `src/configurations/Configuration.ts` accordingly.
+Expand `TokenConfiguration` in `src/commits/TokenConfiguration.ts` accordingly.
+Keep token settings in `TokenConfiguration`; do not add them to the ruleset configuration.
 Update the following places with sensible defaults:
 
-- `src/configurations/defaults/GetDefaultCommandLineConfiguration.ts`
-- `src/configurations/defaults/GetDefaultGithubActionsConfiguration.ts`
-- `fakeTokenConfiguration` in `src/configurations/Configuration.fakes.ts`
+- `tokens` in `src/configurations/defaults/DefaultCommandLineConfiguration.ts`
+- `tokens` in `src/configurations/defaults/DefaultGithubActionsConfiguration.ts`
+- `fakeTokenConfiguration` in `src/commits/TokenConfiguration.fakes.ts`
 
 Call the function from `mapCrudeCommitToCommit` in `src/commits/Commit.ts`.
 
@@ -180,7 +181,7 @@ Keep this exception narrow; patterns that are valid everywhere should remain pur
 Iterate over the tokeniser implementation and the unit tests in a TDD-like manner until it satisfies all requirements as clarified in Step 1:
 
 ```shell
-vpr test 'src/domains/commits/Tokenise.tests.ts'
+vpr test 'src/commits/Tokenise.tests.ts'
 ```
 
 ## Step 6: Test rules

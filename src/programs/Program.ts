@@ -1,6 +1,6 @@
 import { mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import type { CrudeCommits } from "#commits/CrudeCommit.ts"
-import type { Configuration } from "#configurations/Configuration.ts"
+import type { Configuration } from "#configurations/GetConfiguration.ts"
 import { mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { commitwiseReport } from "#rules/reports/CommitwiseReport.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
