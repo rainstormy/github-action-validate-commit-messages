@@ -1,7 +1,7 @@
 import { type Commit, mapCrudeCommitToCommit } from "#commits/Commit.ts"
 import { type CrudeCommitTemplate, fakeCrudeCommit } from "#commits/CrudeCommit.fakes.ts"
-import { fakeTokenConfiguration } from "#configurations/Configuration.fakes.ts"
-import type { TokenConfiguration } from "#configurations/Configuration.ts"
+import { fakeTokenConfiguration } from "#commits/TokenConfiguration.fakes.ts"
+import type { TokenConfiguration } from "#commits/TokenConfiguration.ts"
 
 export function fakeCommitFactory(
 	configuration: TokenConfiguration = fakeTokenConfiguration(),

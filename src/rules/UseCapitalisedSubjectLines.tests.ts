@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
+import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -10,8 +10,8 @@ import type { Vector } from "#types/Vector.ts"
 
 const rule = "useCapitalisedSubjectLines" satisfies RuleKey
 
-const disabled = emptyRuleConfiguration()
-const enabled = emptyRuleConfiguration({ [rule]: {} })
+const disabled = emptyRulesetConfiguration()
+const enabled = emptyRulesetConfiguration({ [rule]: {} })
 
 const fakeCommit = fakeCommitFactory()
 

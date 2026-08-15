@@ -1,10 +1,10 @@
+import { issueLinkTokenConfiguration } from "#commits/TokenConfiguration.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
-import { issueLinkConfiguration } from "#configurations/IssueLinkTokenConfiguration.ts"
 
 export function getDefaultCommandLineConfiguration(): Configuration {
 	return {
 		tokens: {
-			issueLinks: issueLinkConfiguration(["#", "GH-", "GL-"]),
+			issueLinks: issueLinkTokenConfiguration(["#", "GH-", "GL-"]),
 		},
 		rules: {
 			noBlankSubjectLines: {},

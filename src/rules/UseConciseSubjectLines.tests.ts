@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRuleConfiguration } from "#configurations/Configuration.fakes.ts"
-import type { RuleConfiguration } from "#configurations/Configuration.ts"
+import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import type { RulesetConfiguration } from "#configurations/Configuration.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
 import type { RuleKey } from "#rules/Rule.ts"
@@ -13,10 +13,10 @@ import type { Vector } from "#types/Vector.ts"
 
 const rule = "useConciseSubjectLines" satisfies RuleKey
 
-const disabled = emptyRuleConfiguration()
-const enabled20 = emptyRuleConfiguration({ [rule]: { maxLength: 20 } })
-const enabled50 = emptyRuleConfiguration({ [rule]: { maxLength: 50 } })
-const enabled72 = emptyRuleConfiguration({ [rule]: { maxLength: 72 } })
+const disabled = emptyRulesetConfiguration()
+const enabled20 = emptyRulesetConfiguration({ [rule]: { maxLength: 20 } })
+const enabled50 = emptyRulesetConfiguration({ [rule]: { maxLength: 50 } })
+const enabled72 = emptyRulesetConfiguration({ [rule]: { maxLength: 72 } })
 
 const fakeCommit = fakeCommitFactory()
 
@@ -268,7 +268,7 @@ describe.each`
 			${enabled72}
 		`(
 			"and the rule is enabled with a maximum length of $rules.useConciseSubjectLines.maxLength characters",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -303,7 +303,7 @@ describe.each`
 			${enabled72}
 		`(
 			"and the rule is enabled with a maximum length of $rules.useConciseSubjectLines.maxLength characters",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -347,7 +347,7 @@ describe.each`
 			${enabled72}
 		`(
 			"and the rule is enabled with a maximum length of $rules.useConciseSubjectLines.maxLength characters",
-			(configProps: { rules: RuleConfiguration }) => {
+			(configProps: { rules: RulesetConfiguration }) => {
 				const actualConcerns = mapCommitsToConcerns([commit], configProps.rules)
 
 				it("does not raise any concerns", () => {
@@ -457,7 +457,7 @@ describe("when verifying a set of multiple commits and all commits have concise 
 		${enabled72}
 	`(
 		"and the rule is enabled with a maximum length of $rules.useConciseSubjectLines.maxLength characters",
-		(configProps: { rules: RuleConfiguration }) => {
+		(configProps: { rules: RulesetConfiguration }) => {
 			const actualConcerns = mapCommitsToConcerns(commits, configProps.rules)
 
 			it("does not raise any concerns", () => {
