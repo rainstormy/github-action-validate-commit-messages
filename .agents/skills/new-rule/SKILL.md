@@ -62,9 +62,9 @@ The JSDoc comment above the function should:
 Insert the rule key or function into the existing alphabetically ordered lists found in:
 
 - `src/rules/Rule.ts`
-- `src/configurations/GetDefaultCommandLineConfiguration.ts` with a null argument
-- `src/configurations/GetDefaultGithubActionsConfiguration.ts` with a null argument
-- `RULES_DTO` in `src/configurations/dtos/JsonConfigurationDto.ts`
+- `src/configurations/defaults/GetDefaultCommandLineConfiguration.ts` with a null argument
+- `src/configurations/defaults/GetDefaultGithubActionsConfiguration.ts` with a null argument
+- `RULES_DTO` in `src/configurations/json/dtos/JsonConfigurationDto.ts`
 - `emptyRulesetConfiguration` and `fakeConfiguration` in `src/configurations/Configuration.fakes.ts`
 - `mapCommitsToConcerns` in `src/rules/concerns/Concern.ts`
 - Relevant concerns in `src/rules/concerns/`
@@ -100,7 +100,7 @@ Use Valibot schemas for simple JSON-serialisable values such as `v.number()`, `v
 Use schemas such as `v.picklist()` and `v.pipe()` when an option has a finite set of allowed values or additional constraints.
 Prefer reusable helper functions from `src/types/` and `src/utilities/` when they express a common constraint, such as `naturalNumber()` or `nonEmptyArray()`.
 
-Register the schema in `RULES_DTO` in `src/configurations/dtos/JsonConfigurationDto.ts`, for example:
+Register the schema in `RULES_DTO` in `src/configurations/json/dtos/JsonConfigurationDto.ts`, for example:
 
 ```ts
 const RULES_DTO = v.strictObject({

@@ -1,6 +1,6 @@
 import { getGitBranchCrudeCommits } from "#commits/git/GetGitBranchCrudeCommits.ts"
+import { getDefaultCommandLineConfiguration } from "#configurations/defaults/GetDefaultCommandLineConfiguration.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
-import { getDefaultCommandLineConfiguration } from "#configurations/GetDefaultCommandLineConfiguration.ts"
 import { program } from "#programs/Program.ts"
 import { EXIT_CODE_GENERAL_ERROR, EXIT_CODE_SUCCESS, type ExitCode } from "#types/ExitCode.ts"
 import { assertError } from "#utilities/Assertions.ts"

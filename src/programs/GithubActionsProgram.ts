@@ -1,6 +1,6 @@
 import { getGithubPullRequestCrudeCommits } from "#commits/github/GetGithubPullRequestCrudeCommits.ts"
+import { getDefaultGithubActionsConfiguration } from "#configurations/defaults/GetDefaultGithubActionsConfiguration.ts"
 import { getConfiguration } from "#configurations/GetConfiguration.ts"
-import { getDefaultGithubActionsConfiguration } from "#configurations/GetDefaultGithubActionsConfiguration.ts"
 import { program } from "#programs/Program.ts"
 import { EXIT_CODE_GENERAL_ERROR, type ExitCode } from "#types/ExitCode.ts"
 import { assertError } from "#utilities/Assertions.ts"
