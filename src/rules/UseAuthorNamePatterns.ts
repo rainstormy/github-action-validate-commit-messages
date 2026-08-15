@@ -28,7 +28,13 @@ export function* useAuthorNamePatterns(
 		return
 	}
 
-	const regex = new RegExp(`^${regexUnion(options.patterns)}$`, "u")
+	const patterns = options.patterns
+
+	if (patterns.length === 0) {
+		return
+	}
+
+	const regex = new RegExp(`^${regexUnion(patterns)}$`, "u")
 	const field = { field: "author:name" } as const
 
 	for (const commit of commits) {

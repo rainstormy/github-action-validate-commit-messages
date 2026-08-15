@@ -31,7 +31,9 @@ export function* useIssueLinks(
 		return
 	}
 
-	if (options.position === "anywhere") {
+	const position = options.position
+
+	if (position === "anywhere") {
 		for (const commit of commits) {
 			if (
 				commit.isMergeCommit ||
@@ -49,7 +51,7 @@ export function* useIssueLinks(
 		return
 	}
 
-	if (options.position === "prefix") {
+	if (position === "prefix") {
 		for (const commit of commits) {
 			if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver"))) {
 				continue

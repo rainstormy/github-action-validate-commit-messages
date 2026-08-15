@@ -32,6 +32,7 @@ export function* noExcessiveCommitsPerBranch(
 		return
 	}
 
+	const maxCommits = options.maxCommits
 	let commitCount = 0
 
 	for (const commit of commits) {
@@ -41,7 +42,7 @@ export function* noExcessiveCommitsPerBranch(
 
 		commitCount += 1
 
-		if (commitCount > options.maxCommits) {
+		if (commitCount > maxCommits) {
 			yield commitConcern(rule, commit.sha)
 		}
 	}

@@ -30,6 +30,8 @@ export function* useConciseSubjectLines(
 		return
 	}
 
+	const maxLength = options.maxLength
+
 	for (const commit of commits) {
 		if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver", "squash"))) {
 			continue
@@ -37,7 +39,7 @@ export function* useConciseSubjectLines(
 
 		const overflowRange = tokenOverflowRange(
 			commit.subjectLine.filter(isNotToken("code", "hyperlink", "issuelink")),
-			options.maxLength,
+			maxLength,
 		)
 
 		if (overflowRange !== null) {

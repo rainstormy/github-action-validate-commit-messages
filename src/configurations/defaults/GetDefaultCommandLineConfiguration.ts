@@ -1,5 +1,6 @@
 import { issueLinkTokenConfiguration } from "#commits/TokenConfiguration.ts"
 import type { Configuration } from "#configurations/Configuration.ts"
+import { getDefaultRuleOptions } from "#configurations/defaults/GetDefaultRuleOptions.ts"
 
 export function getDefaultCommandLineConfiguration(): Configuration {
 	return {
@@ -7,27 +8,16 @@ export function getDefaultCommandLineConfiguration(): Configuration {
 			issueLinks: issueLinkTokenConfiguration(["#", "GH-", "GL-"]),
 		},
 		rules: {
-			noBlankSubjectLines: {},
-			noExcessiveCommitsPerBranch: { maxCommits: 10 },
-			noExcessiveWhitespace: {},
-			noMergeCommits: {},
+			...getDefaultRuleOptions(),
 			noRepeatedSubjectLines: null,
 			noRestrictedTrailers: null,
 			noRevertRevertCommits: null,
-			noSingleWordSubjectLines: {},
 			noSquashMarkers: null,
-			noUnexpectedPunctuation: {},
 			useAuthorEmailPatterns: null,
 			useAuthorNamePatterns: null,
-			useCapitalisedSubjectLines: {},
 			useCommitterEmailPatterns: null,
 			useCommitterNamePatterns: null,
-			useConciseSubjectLines: { maxLength: 50 },
-			useEmptyLineBeforeBodyLines: {},
-			useImperativeSubjectLines: { whitelist: [] },
 			useIssueLinks: null,
-			useLineWrapping: { maxLength: 72 },
-			useSignedCommits: {},
 		},
 	}
 }

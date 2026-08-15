@@ -26,13 +26,17 @@ export function* noRestrictedTrailers(
 	commits: Commits,
 	options: NoRestrictedTrailersOptions | null,
 ): Generator<Concern> {
-	if (options === null || options.restrictedKeys.length === 0) {
+	if (options === null) {
 		return
 	}
 
 	const restrictedKeys = new Set(
 		options.restrictedKeys.map(normaliseTrailerKey).filter(isNotEmptyString),
 	)
+
+	if (restrictedKeys.size === 0) {
+		return
+	}
 
 	for (const commit of commits) {
 		for (const [lineNumber, bodyLine] of commit.bodyLines.entries()) {

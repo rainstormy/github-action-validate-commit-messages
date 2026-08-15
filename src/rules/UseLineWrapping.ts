@@ -30,6 +30,8 @@ export function* useLineWrapping(
 		return
 	}
 
+	const maxLength = options.maxLength
+
 	for (const commit of commits) {
 		if (commit.isMergeCommit) {
 			continue
@@ -42,7 +44,7 @@ export function* useLineWrapping(
 
 			const overflowRange = tokenOverflowRange(
 				bodyLine.filter(isNotToken("code", "hyperlink", "issuelink")),
-				options.maxLength,
+				maxLength,
 			)
 
 			if (overflowRange !== null) {
