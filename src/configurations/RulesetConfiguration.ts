@@ -4,7 +4,7 @@ import { type DeepPartial, deepMerge } from "#utilities/Objects.ts"
 
 export type RulesetConfiguration = v.InferOutput<typeof RULESET_CONFIGURATION_SCHEMA>
 
-const RULE_LEVEL = v.picklist(["off", "error"])
+export const RULE_LEVEL_SCHEMA = v.picklist(["off", "error"])
 const EMPTY_RULE_CONFIGURATION = ruleConfiguration({})
 
 export const RULESET_CONFIGURATION_SCHEMA = v.strictObject({
@@ -33,7 +33,7 @@ export const RULESET_CONFIGURATION_SCHEMA = v.strictObject({
 
 // oxlint-disable-next-line typescript/explicit-function-return-type -- Rely on type inference for Valibot schemas.
 function ruleConfiguration<Options extends v.ObjectEntries>(options: Options) {
-	return v.strictObject({ level: RULE_LEVEL, options: v.strictObject(options) })
+	return v.strictObject({ level: RULE_LEVEL_SCHEMA, options: v.strictObject(options) })
 }
 
 export type RuleKey = keyof RulesetConfiguration
