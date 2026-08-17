@@ -1,18 +1,8 @@
-import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import { isNotToken, isToken, tokenOverflowRange } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import { naturalNumber } from "#types/NaturalNumber.ts"
-
-const rule = "useConciseSubjectLines" satisfies RuleKey
-
-export type UseConciseSubjectLinesOptions = v.InferOutput<typeof USE_CONCISE_SUBJECT_LINES_OPTIONS>
-
-export const USE_CONCISE_SUBJECT_LINES_OPTIONS = v.strictObject({
-	maxLength: naturalNumber(),
-})
 
 /**
  * Verifies that the subject line does not exceed a given number of characters (default: 50 characters).
@@ -24,19 +14,21 @@ export const USE_CONCISE_SUBJECT_LINES_OPTIONS = v.strictObject({
  */
 export function* useConciseSubjectLines(
 	commits: Commits,
-	options: UseConciseSubjectLinesOptions | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "useConciseSubjectLines"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 
-	const maxLength = options.maxLength
+	const maxLength = configuration.options.maxLength
 
 	for (const commit of commits) {
 		if (commit.isMergeCommit || commit.subjectLine.some(isToken("revert", "semver", "squash"))) {
 			continue
 		}
-
 		const overflowRange = tokenOverflowRange(
 			commit.subjectLine.filter(isNotToken("code", "hyperlink", "issuelink")),
 			maxLength,

@@ -1,11 +1,8 @@
 import type { Commits } from "#commits/Commit.ts"
 import { isNotToken } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "useEmptyLineBeforeBodyLines" satisfies RuleKey
 
 /**
  * Verifies that the subject line and message body is separated by exactly one empty line.
@@ -14,9 +11,12 @@ const rule = "useEmptyLineBeforeBodyLines" satisfies RuleKey
  */
 export function* useEmptyLineBeforeBodyLines(
 	commits: Commits,
-	options: EmptyObject | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "useEmptyLineBeforeBodyLines"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 

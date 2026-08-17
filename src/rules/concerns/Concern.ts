@@ -1,5 +1,5 @@
 import type { Commits } from "#commits/Commit.ts"
-import type { RulesetConfiguration } from "#configurations/Configuration.ts"
+import type { RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { BodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { CommitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { SubjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
@@ -31,29 +31,29 @@ import { requireNotNullish } from "#utilities/Assertions.ts"
 export type Concern = BodyLineConcern | CommitConcern | SubjectLineConcern | UserIdentityConcern
 export type Concerns = Array<Concern>
 
-export function mapCommitsToConcerns(commits: Commits, rules: RulesetConfiguration): Concerns {
+export function mapCommitsToConcerns(commits: Commits, ruleset: RulesetConfiguration): Concerns {
 	const allConcerns: Concerns = [
-		...noBlankSubjectLines(commits, rules.noBlankSubjectLines),
-		...noExcessiveCommitsPerBranch(commits, rules.noExcessiveCommitsPerBranch),
-		...noExcessiveWhitespace(commits, rules.noExcessiveWhitespace),
-		...noMergeCommits(commits, rules.noMergeCommits),
-		...noRepeatedSubjectLines(commits, rules.noRepeatedSubjectLines),
-		...noRestrictedTrailers(commits, rules.noRestrictedTrailers),
-		...noRevertRevertCommits(commits, rules.noRevertRevertCommits),
-		...noSingleWordSubjectLines(commits, rules.noSingleWordSubjectLines),
-		...noSquashMarkers(commits, rules.noSquashMarkers),
-		...noUnexpectedPunctuation(commits, rules.noUnexpectedPunctuation),
-		...useAuthorEmailPatterns(commits, rules.useAuthorEmailPatterns),
-		...useAuthorNamePatterns(commits, rules.useAuthorNamePatterns),
-		...useCapitalisedSubjectLines(commits, rules.useCapitalisedSubjectLines),
-		...useCommitterEmailPatterns(commits, rules.useCommitterEmailPatterns),
-		...useCommitterNamePatterns(commits, rules.useCommitterNamePatterns),
-		...useConciseSubjectLines(commits, rules.useConciseSubjectLines),
-		...useEmptyLineBeforeBodyLines(commits, rules.useEmptyLineBeforeBodyLines),
-		...useImperativeSubjectLines(commits, rules.useImperativeSubjectLines),
-		...useIssueLinks(commits, rules.useIssueLinks),
-		...useLineWrapping(commits, rules.useLineWrapping),
-		...useSignedCommits(commits, rules.useSignedCommits),
+		...noBlankSubjectLines(commits, ruleset),
+		...noExcessiveCommitsPerBranch(commits, ruleset),
+		...noExcessiveWhitespace(commits, ruleset),
+		...noMergeCommits(commits, ruleset),
+		...noRepeatedSubjectLines(commits, ruleset),
+		...noRestrictedTrailers(commits, ruleset),
+		...noRevertRevertCommits(commits, ruleset),
+		...noSingleWordSubjectLines(commits, ruleset),
+		...noSquashMarkers(commits, ruleset),
+		...noUnexpectedPunctuation(commits, ruleset),
+		...useAuthorEmailPatterns(commits, ruleset),
+		...useAuthorNamePatterns(commits, ruleset),
+		...useCapitalisedSubjectLines(commits, ruleset),
+		...useCommitterEmailPatterns(commits, ruleset),
+		...useCommitterNamePatterns(commits, ruleset),
+		...useConciseSubjectLines(commits, ruleset),
+		...useEmptyLineBeforeBodyLines(commits, ruleset),
+		...useImperativeSubjectLines(commits, ruleset),
+		...useIssueLinks(commits, ruleset),
+		...useLineWrapping(commits, ruleset),
+		...useSignedCommits(commits, ruleset),
 	]
 
 	const uniqueConcerns = uniqueItemsByKey(allConcerns, (concern) => concern.key)

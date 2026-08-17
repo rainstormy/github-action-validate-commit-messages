@@ -1,22 +1,36 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
-import type { RulesetConfiguration } from "#configurations/Configuration.ts"
+import { emptyRulesetConfiguration } from "#configurations/GetConfiguration.fakes.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import { bodyLineConcern, bodyLineConcerns } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import { fakeCommitSha } from "#types/CommitSha.fakes.ts"
 import type { CommitSha } from "#types/CommitSha.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule = "useLineWrapping" satisfies RuleKey
+const rule: RuleKey = "useLineWrapping"
 
 const disabled = emptyRulesetConfiguration()
-const enabled20 = emptyRulesetConfiguration({ [rule]: { maxLength: 20 } })
-const enabled50 = emptyRulesetConfiguration({ [rule]: { maxLength: 50 } })
-const enabled72 = emptyRulesetConfiguration({ [rule]: { maxLength: 72 } })
+const enabled20 = emptyRulesetConfiguration({
+	[rule]: {
+		level: "error",
+		options: { maxLength: 20 },
+	},
+})
+const enabled50 = emptyRulesetConfiguration({
+	[rule]: {
+		level: "error",
+		options: { maxLength: 50 },
+	},
+})
+const enabled72 = emptyRulesetConfiguration({
+	[rule]: {
+		level: "error",
+		options: { maxLength: 72 },
+	},
+})
 
 const fakeCommit = fakeCommitFactory()
 

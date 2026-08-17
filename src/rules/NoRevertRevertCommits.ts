@@ -1,12 +1,9 @@
 import type { Commits } from "#commits/Commit.ts"
 import { isToken } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import { rangeBetween } from "#types/CharacterRange.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "noRevertRevertCommits" satisfies RuleKey
 
 /**
  * Verifies that the subject line contains at most one revert marker.
@@ -16,9 +13,12 @@ const rule = "noRevertRevertCommits" satisfies RuleKey
  */
 export function* noRevertRevertCommits(
 	commits: Commits,
-	options: EmptyObject | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "noRevertRevertCommits"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 

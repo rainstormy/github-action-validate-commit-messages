@@ -1,10 +1,7 @@
 import type { Commits } from "#commits/Commit.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "useSignedCommits" satisfies RuleKey
 
 /**
  * Verifies that the commit has been signed cryptographically with a signing key.
@@ -13,9 +10,12 @@ const rule = "useSignedCommits" satisfies RuleKey
  */
 export function* useSignedCommits(
 	commits: Commits,
-	options: EmptyObject | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "useSignedCommits"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 

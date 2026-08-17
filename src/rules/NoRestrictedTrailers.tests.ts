@@ -1,28 +1,39 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
-import type { RulesetConfiguration } from "#configurations/Configuration.ts"
+import { emptyRulesetConfiguration } from "#configurations/GetConfiguration.fakes.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import { bodyLineConcern, bodyLineConcerns } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule = "noRestrictedTrailers" satisfies RuleKey
+const rule: RuleKey = "noRestrictedTrailers"
 
 const disabled = emptyRulesetConfiguration()
 const enabledNone = emptyRulesetConfiguration({
-	[rule]: { restrictedKeys: [] },
+	[rule]: {
+		level: "error",
+		options: { restrictedKeys: [] },
+	},
 })
 const enabled1 = emptyRulesetConfiguration({
-	[rule]: { restrictedKeys: ["signed-off-by"] },
+	[rule]: {
+		level: "error",
+		options: { restrictedKeys: ["signed-off-by"] },
+	},
 })
 const enabled2 = emptyRulesetConfiguration({
-	[rule]: { restrictedKeys: ["co-authored-by", "breaking change"] },
+	[rule]: {
+		level: "error",
+		options: { restrictedKeys: ["co-authored-by", "breaking change"] },
+	},
 })
 const enabled3 = emptyRulesetConfiguration({
-	[rule]: { restrictedKeys: ["co-authored-by:", "refs:", "reviewed-by"] },
+	[rule]: {
+		level: "error",
+		options: { restrictedKeys: ["co-authored-by:", "refs:", "reviewed-by"] },
+	},
 })
 
 const fakeCommit = fakeCommitFactory()

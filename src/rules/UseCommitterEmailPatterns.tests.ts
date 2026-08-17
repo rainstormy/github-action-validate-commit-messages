@@ -1,22 +1,25 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import { emptyRulesetConfiguration } from "#configurations/GetConfiguration.fakes.ts"
+import type { RuleKey } from "#configurations/RulesetConfiguration.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { userIdentityConcern } from "#rules/concerns/UserIdentityConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule = "useCommitterEmailPatterns" satisfies RuleKey
+const rule: RuleKey = "useCommitterEmailPatterns"
 
 const disabled = emptyRulesetConfiguration()
 const enabled = emptyRulesetConfiguration({
 	[rule]: {
-		patterns: [
-			String.raw`\d+\+.+@users\.noreply\.github\.com`,
-			String.raw`noreply@github\.com`,
-			String.raw`.+@fastforward\.com`,
-		],
+		level: "error",
+		options: {
+			patterns: [
+				String.raw`\d+\+.+@users\.noreply\.github\.com`,
+				String.raw`noreply@github\.com`,
+				String.raw`.+@fastforward\.com`,
+			],
+		},
 	},
 })
 

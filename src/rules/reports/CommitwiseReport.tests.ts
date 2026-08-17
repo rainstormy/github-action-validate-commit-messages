@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commits } from "#commits/Commit.ts"
 import { issueLinkTokenConfiguration } from "#commits/TokenConfiguration.ts"
-import { fakeConfiguration } from "#configurations/Configuration.fakes.ts"
+import { fakeConfiguration } from "#configurations/GetConfiguration.fakes.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import { commitConcern } from "#rules/concerns/CommitConcern.ts"
 import type { Concerns } from "#rules/concerns/Concern.ts"
@@ -71,7 +71,7 @@ describe("when 'noBlankSubjectLines' has a concern about characters 13-17 of the
 
 describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive commit when the limit is 1", () => {
 	const configuration = fakeConfiguration({
-		rules: { noExcessiveCommitsPerBranch: { maxCommits: 1 } },
+		noExcessiveCommitsPerBranch: { options: { maxCommits: 1 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -96,7 +96,7 @@ describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive co
 
 describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive commit when the limit is 3", () => {
 	const configuration = fakeConfiguration({
-		rules: { noExcessiveCommitsPerBranch: { maxCommits: 3 } },
+		noExcessiveCommitsPerBranch: { options: { maxCommits: 3 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -121,7 +121,7 @@ describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive co
 
 describe("when 'noExcessiveCommitsPerBranch' has a concern about an excessive commit when the limit is 10", () => {
 	const configuration = fakeConfiguration({
-		rules: { noExcessiveCommitsPerBranch: { maxCommits: 10 } },
+		noExcessiveCommitsPerBranch: { options: { maxCommits: 10 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -389,10 +389,8 @@ f3359c9 GH-246 Replace guesswork with a tiny chart and upgrade the \`ButterflySe
 
 describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Co-authored-by' trailer", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			noRestrictedTrailers: {
-				restrictedKeys: ["CO-AUTHORED-BY:"],
-			},
+		noRestrictedTrailers: {
+			options: { restrictedKeys: ["CO-AUTHORED-BY:"] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -428,10 +426,8 @@ a04ada4 Wire the release breadcrumb trail
 
 describe("when 'noRestrictedTrailers' has a concern about a body line with a 'Refs' trailer", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			noRestrictedTrailers: {
-				restrictedKeys: ["signed-off-by", "co-authored-by", "refs", "reviewed-by"],
-			},
+		noRestrictedTrailers: {
+			options: { restrictedKeys: ["signed-off-by", "co-authored-by", "refs", "reviewed-by"] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -721,10 +717,8 @@ describe("when 'noUnexpectedPunctuation' has a concern about characters 27-31 of
 
 describe("when 'useAuthorEmailPatterns' has a concern about a missing author email address", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useAuthorEmailPatterns: {
-				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
-			},
+		useAuthorEmailPatterns: {
+			options: { patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -757,8 +751,8 @@ describe("when 'useAuthorEmailPatterns' has a concern about a missing author ema
 
 describe("when 'useAuthorEmailPatterns' has a concern about the author's email address", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useAuthorEmailPatterns: {
+		useAuthorEmailPatterns: {
+			options: {
 				patterns: [
 					String.raw`\d+\+.+@users\.noreply\.github\.com`,
 					String.raw`.+@fictivecompany\.com`,
@@ -797,10 +791,8 @@ describe("when 'useAuthorEmailPatterns' has a concern about the author's email a
 
 describe("when 'useAuthorNamePatterns' has a concern about a missing author name", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useAuthorNamePatterns: {
-				patterns: [String.raw`\p{Lu}.*\s.+`],
-			},
+		useAuthorNamePatterns: {
+			options: { patterns: [String.raw`\p{Lu}.*\s.+`] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -833,10 +825,8 @@ f16fc9f overpowered code
 
 describe("when 'useAuthorNamePatterns' has a concern about the author's name", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useAuthorNamePatterns: {
-				patterns: [String.raw`\p{Lu}.*\s.+`, String.raw`dependabot\[bot\]`],
-			},
+		useAuthorNamePatterns: {
+			options: { patterns: [String.raw`\p{Lu}.*\s.+`, String.raw`dependabot\[bot\]`] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -916,10 +906,8 @@ describe("when 'useCapitalisedSubjectLines' has a concern about characters 7-8 o
 
 describe("when 'useCommitterEmailPatterns' has a concern about a missing committer email address", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useCommitterEmailPatterns: {
-				patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`],
-			},
+		useCommitterEmailPatterns: {
+			options: { patterns: [String.raw`\d+\+.+@users\.noreply\.github\.com`] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -952,8 +940,8 @@ describe("when 'useCommitterEmailPatterns' has a concern about a missing committ
 
 describe("when 'useCommitterEmailPatterns' has a concern about the committer's email address", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useCommitterEmailPatterns: {
+		useCommitterEmailPatterns: {
+			options: {
 				patterns: [
 					String.raw`\d+\+.+@users\.noreply\.github\.com`,
 					String.raw`noreply@github\.com`,
@@ -992,10 +980,8 @@ describe("when 'useCommitterEmailPatterns' has a concern about the committer's e
 
 describe("when 'useCommitterNamePatterns' has a concern about a missing committer name", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useCommitterNamePatterns: {
-				patterns: [String.raw`\p{Lu}.*\s.+`],
-			},
+		useCommitterNamePatterns: {
+			options: { patterns: [String.raw`\p{Lu}.*\s.+`] },
 		},
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
@@ -1028,8 +1014,8 @@ describe("when 'useCommitterNamePatterns' has a concern about a missing committe
 
 describe("when 'useCommitterNamePatterns' has a concern about the committer's name", () => {
 	const configuration = fakeConfiguration({
-		rules: {
-			useCommitterNamePatterns: {
+		useCommitterNamePatterns: {
+			options: {
 				patterns: [
 					String.raw`\p{Lu}.*\s.+`,
 					String.raw`dependabot\[bot\]`,
@@ -1072,7 +1058,7 @@ describe("when 'useCommitterNamePatterns' has a concern about the committer's na
 
 describe("when 'useConciseSubjectLines' has a concern about characters 20-25 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useConciseSubjectLines: { maxLength: 20 } },
+		useConciseSubjectLines: { options: { maxLength: 20 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1097,7 +1083,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-25 of 
 
 describe("when 'useConciseSubjectLines' has a concern about characters 20-67 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useConciseSubjectLines: { maxLength: 20 } },
+		useConciseSubjectLines: { options: { maxLength: 20 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1122,7 +1108,7 @@ describe("when 'useConciseSubjectLines' has a concern about characters 20-67 of 
 
 describe("when 'useConciseSubjectLines' has a concern about characters 50-52 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useConciseSubjectLines: { maxLength: 50 } },
+		useConciseSubjectLines: { options: { maxLength: 50 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1147,7 +1133,7 @@ e8c95d6 Retrieve data from the exclusive third-party service
 
 describe("when 'useConciseSubjectLines' has a concern about characters 72-76 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useConciseSubjectLines: { maxLength: 72 } },
+		useConciseSubjectLines: { options: { maxLength: 72 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1278,7 +1264,7 @@ describe("when 'useImperativeSubjectLines' has a concern about characters 14-18 
 
 describe("when 'useIssueLinks' with position 'anywhere' has a concern about characters 0-1 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "anywhere" } },
+		useIssueLinks: { options: { position: "anywhere" } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1305,7 +1291,7 @@ c861aea Organise the robot uprising without a ticket
 
 describe("when 'useIssueLinks' with position 'prefix' has a concern about characters 7-8 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "prefix" } },
+		useIssueLinks: { options: { position: "prefix" } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1332,7 +1318,7 @@ fb10023 amend! Teach the unit tests to write themselves
 
 describe("when 'useIssueLinks' with position 'suffix' has a concern about characters 49-50 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "suffix" } },
+		useIssueLinks: { options: { position: "suffix" } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1359,7 +1345,7 @@ d9a30bb make the automated tests question their existence
 
 describe("when 'useIssueLinks' with position 'suffix' has a concern about characters 26-27 of the subject line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "suffix" } },
+		useIssueLinks: { options: { position: "suffix" } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1385,10 +1371,10 @@ describe("when 'useIssueLinks' with position 'suffix' has a concern about charac
 })
 
 describe("when 'useIssueLinks' with position 'anywhere' and a wildcard has a concern about characters 0-1 of the subject line", () => {
-	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "anywhere" } },
-		tokens: { issueLinks: issueLinkTokenConfiguration(["#"], ["(no-issue)"]) },
-	})
+	const configuration = fakeConfiguration(
+		{ useIssueLinks: { options: { position: "anywhere" } } },
+		{ issueLinks: issueLinkTokenConfiguration(["#"], ["(no-issue)"]) },
+	)
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
@@ -1413,10 +1399,10 @@ ca745a7 attend the acoustic show
 })
 
 describe("when 'useIssueLinks' with position 'anywhere' and Jira-style issue links has a concern about characters 10-11 of the subject line", () => {
-	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "anywhere" } },
-		tokens: { issueLinks: issueLinkTokenConfiguration(["ABC-"]) },
-	})
+	const configuration = fakeConfiguration(
+		{ useIssueLinks: { options: { position: "anywhere" } } },
+		{ issueLinks: issueLinkTokenConfiguration(["ABC-"]) },
+	)
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
@@ -1441,10 +1427,10 @@ d0709d2  squash!  made the code so clean that it sparkles
 })
 
 describe("when 'useIssueLinks' with position 'prefix' and custom-style issue links has a concern about characters 0-1 of the subject line", () => {
-	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "prefix" } },
-		tokens: { issueLinks: issueLinkTokenConfiguration(["test#", "experiment#"], ["[incident]"]) },
-	})
+	const configuration = fakeConfiguration(
+		{ useIssueLinks: { options: { position: "prefix" } } },
+		{ issueLinks: issueLinkTokenConfiguration(["test#", "experiment#"], ["[incident]"]) },
+	)
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
@@ -1469,10 +1455,10 @@ f6fc239 Refactored code, now it’s overpowered
 })
 
 describe("when 'useIssueLinks' with position 'suffix' and Jira-style issue links has a concern about characters 41-42 of the subject line", () => {
-	const configuration = fakeConfiguration({
-		rules: { useIssueLinks: { position: "suffix" } },
-		tokens: { issueLinks: issueLinkTokenConfiguration(["AWESOME-", "UNICORN-", "PROJECT-"]) },
-	})
+	const configuration = fakeConfiguration(
+		{ useIssueLinks: { options: { position: "suffix" } } },
+		{ issueLinks: issueLinkTokenConfiguration(["AWESOME-", "UNICORN-", "PROJECT-"]) },
+	)
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
 	const commit = fakeCommit({
@@ -1498,7 +1484,7 @@ cccee2c Fixed a bad typo in comment (yes, really)
 
 describe("when 'useLineWrapping' has a concern about characters 20-22 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 20 } },
+		useLineWrapping: { options: { maxLength: 20 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1528,7 +1514,7 @@ describe("when 'useLineWrapping' has a concern about characters 20-22 of a body 
 
 describe("when 'useLineWrapping' has a concern about characters 20-56 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 20 } },
+		useLineWrapping: { options: { maxLength: 20 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1559,7 +1545,7 @@ describe("when 'useLineWrapping' has a concern about characters 20-56 of a body 
 
 describe("when 'useLineWrapping' has a concern about characters 50-77 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 50 } },
+		useLineWrapping: { options: { maxLength: 50 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1590,7 +1576,7 @@ df31f7e squash! refine the deploy notes
 
 describe("when 'useLineWrapping' has a concern about characters 72-73 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 72 } },
+		useLineWrapping: { options: { maxLength: 72 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1620,7 +1606,7 @@ e0121c8 Ship to production
 
 describe("when 'useLineWrapping' has a concern about characters 72-91 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 72 } },
+		useLineWrapping: { options: { maxLength: 72 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1650,7 +1636,7 @@ describe("when 'useLineWrapping' has a concern about characters 72-91 of a body 
 
 describe("when 'useLineWrapping' has a concern about characters 72-95 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 72 } },
+		useLineWrapping: { options: { maxLength: 72 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1681,7 +1667,7 @@ describe("when 'useLineWrapping' has a concern about characters 72-95 of a body 
 
 describe("when 'useLineWrapping' has a concern about characters 130-154 of a body line", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 72 } },
+		useLineWrapping: { options: { maxLength: 72 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 
@@ -1711,7 +1697,7 @@ a5fa821 Document the audit breadcrumb
 
 describe("when 'useLineWrapping' has concerns about two body lines", () => {
 	const configuration = fakeConfiguration({
-		rules: { useLineWrapping: { maxLength: 20 } },
+		useLineWrapping: { options: { maxLength: 20 } },
 	})
 	const fakeCommit = fakeCommitFactory(configuration.tokens)
 

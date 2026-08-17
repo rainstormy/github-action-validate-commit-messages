@@ -1,12 +1,9 @@
 import type { Commits } from "#commits/Commit.ts"
 import { isToken, tokenRangeEnd } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import { nonEmptyRangeOf } from "#types/CharacterRange.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "noBlankSubjectLines" satisfies RuleKey
 
 /**
  * Verifies that the subject line contains at least one alphanumeric character.
@@ -18,9 +15,12 @@ const rule = "noBlankSubjectLines" satisfies RuleKey
  */
 export function* noBlankSubjectLines(
 	commits: Commits,
-	options: EmptyObject | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "noBlankSubjectLines"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 

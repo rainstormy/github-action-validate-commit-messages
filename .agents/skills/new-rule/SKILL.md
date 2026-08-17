@@ -13,7 +13,7 @@ It uses `noTypos` as an example of a new rule to implement.
 
 Define the name and purpose of the new rule. All rule names must start with `no` or `use`.
 
-Read `src/rules/Rule.ts` and decide from the existing rule names if the intended behaviour has already been implemented or if the desired name already exists.
+Read `src/configurations/RulesetConfiguration.ts` and decide from the existing rule names if the intended behaviour has already been implemented or if the desired name already exists.
 Read any existing rule files that may sound similar to the intended behaviour before making the final call.
 Note that every rule is focused to a narrow scope. For example, `useAuthorEmailPatterns`, `useAuthorNamePatterns`, and `useCommitterEmailPatterns` are separate rules.
 Let me know if the new rule is too similar to an existing rule and prompt for new instructions to clarify if you should modify an existing rule instead of implementing a new one.
@@ -27,11 +27,8 @@ Export a named generator function that yields concerns, for example:
 
 ```ts
 import type { Commits } from "#commits/Commit.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "noTypos" satisfies RuleKey
 
 /**
  * Verifies that the subject line and body lines do not contain typos.
@@ -39,8 +36,11 @@ const rule = "noTypos" satisfies RuleKey
  * It ignores revert commits.
  * It disregards inline code phrases and fenced code blocks.
  */
-export function* noTypos(commits: Commits, options: EmptyObject | null): Generator<Concern> {
-  if (options === null) {
+export function* noTypos(commits: Commits, ruleset: RulesetConfiguration): Generator<Concern> {
+  const rule: RuleKey = "noTypos"
+  const configuration = ruleset[rule]
+
+  if (configuration.level === "off") {
     return
   }
 
@@ -48,8 +48,10 @@ export function* noTypos(commits: Commits, options: EmptyObject | null): Generat
 }
 ```
 
-The function must always accept exactly two arguments: `commits` and `options`.
-If `options` is `null`, the rule is disabled by configuration and the function must return immediately without yielding any concerns.
+The function must always accept exactly two arguments: `commits` and `ruleset`.
+`ruleset` is the complete `RulesetConfiguration`; select the configuration of the specific rule with its rule key (same as the rule name).
+If `configuration.level` is `off`, the rule is disabled and must return immediately without yielding any concerns.
+`configuration.options` is always an object, including for rules without configurable options in which case it is an empty object.
 
 The `rule` const with the rule key reduces code duplication when yielding concerns.
 
@@ -61,38 +63,48 @@ The JSDoc comment above the function should:
 
 Insert the rule key or function into the existing alphabetically ordered lists found in:
 
-- `src/rules/Rule.ts`
-- `src/configurations/defaults/GetDefaultCommandLineConfiguration.ts` with a null argument
-- `src/configurations/defaults/GetDefaultGithubActionsConfiguration.ts` with a null argument
-- `RULES_DTO` in `src/configurations/json/dtos/JsonConfigurationDto.ts`
-- `emptyRulesetConfiguration` and `fakeConfiguration` in `src/configurations/Configuration.fakes.ts`
-- `mapCommitsToConcerns` in `src/rules/concerns/Concern.ts`
-- Relevant concerns in `src/rules/concerns/`
+- `RULESET_CONFIGURATION_SCHEMA` in `src/configurations/RulesetConfiguration.ts`.
+- `DEFAULT_RULESET_CONFIGURATION`  in `src/configurations/defaults/DefaultRulesetConfiguration.ts`.
+- `emptyRulesetConfiguration` (always set to `off`) and `fakeRulesetConfiguration` (only if it needs special handling) in `src/configurations/GetConfiguration.fakes.ts`.
+- `mapCommitsToConcerns` in `src/rules/concerns/Concern.ts`.
+- Relevant concerns in `src/rules/concerns/`, depending on the scope and intent of the rule.
 
 ## Step 3: Specify rule options
 
-Use `EmptyObject` when the rule does not accept configurable options. This is the most common scenario.
-Update `getDefaultCommandLineConfiguration` and `getDefaultGithubActionsConfiguration` with the empty object `{}` instead of null unless the rule should be disabled by default.
-Then skip the rest of this section and proceed to Step 4.
+`RULESET_CONFIGURATION_SCHEMA` is a Valibot schema that defines the shape and constraints of every rule configuration.
+`DEFAULT_RULESET_CONFIGURATION` provides default values. It must always be possible to enable a rule without specifying its options, in which case it falls back to using the default values.
 
-For a rule with configurable options, declare and export a Valibot schema const in the rule file.
-The schema is the source of truth for the JSON configuration shape and its constraints.
-Use `v.strictObject()` to reject unknown option properties, and derive the TypeScript type from the schema with `v.InferOutput`, for example:
+For a rule without configurable options, add `EMPTY_RULE_CONFIGURATION` to the Valibot schema and an empty object as default value, for example:
 
 ```ts
-import * as v from "valibot"
-
-export type NoTyposOptions = v.InferOutput<typeof NO_TYPOS_OPTIONS>
-
-export const NO_TYPOS_OPTIONS = v.strictObject({
-  whitelist: v.array(v.string()),
-})
-
-/**
- * Verifies that...
- */
-export function* noTypos(commits: Commits, options: NoTyposOptions | null): Generator<Concern> {
+export const RULESET_CONFIGURATION_SCHEMA = v.strictObject({
   // ...
+  noTypos: EMPTY_RULE_CONFIGURATION,
+})
+```
+
+```ts
+export const DEFAULT_RULESET_CONFIGURATION: RulesetConfiguration = {
+  // ...
+  noTypos: { level: "error", options: {} },
+}
+```
+
+For a rule with configurable options, wrap the configuration object in `ruleConfiguration`, for example:
+
+```ts
+export const RULESET_CONFIGURATION_SCHEMA = v.strictObject({
+  // ...
+  noTypos: ruleConfiguration({
+    whitelist: v.array(v.string()),
+  }),
+})
+```
+
+```ts
+export const DEFAULT_RULESET_CONFIGURATION: RulesetConfiguration = {
+  // ...
+  noTypos: { level: "error", options: { whitelist: [] } },
 }
 ```
 
@@ -100,25 +112,34 @@ Use Valibot schemas for simple JSON-serialisable values such as `v.number()`, `v
 Use schemas such as `v.picklist()` and `v.pipe()` when an option has a finite set of allowed values or additional constraints.
 Prefer reusable helper functions from `src/types/` and `src/utilities/` when they express a common constraint, such as `naturalNumber()` or `nonEmptyArray()`.
 
-Register the schema in `RULES_DTO` in `src/configurations/json/dtos/JsonConfigurationDto.ts`, for example:
+JSON configuration files reuse `RULESET_CONFIGURATION_SCHEMA` in `JSON_CONFIGURATION_DTO`, for example:
 
-```ts
-const RULES_DTO = v.strictObject({
-  // ...
-  noTypos: ruleDto(NO_TYPOS_OPTIONS),
-})
+```json
+{
+  "rules": {
+    "noTypos": {
+      "level": "error",
+      "options": { "whitelist": ["chatify", "rainstormed"] }
+    }
+  }
+}
 ```
 
 Sanitise the validated input and prepare in a way that makes it easier to work with, for example:
 
 ```ts
-export function* noTypos(commits: Commits, options: NoTyposOptions | null): Generator<Concern> {
-  if (options === null) {
+export function* noTypos(commits: Commits, ruleset: RulesetConfiguration): Generator<Concern> {
+  const rule: RuleKey = "noTypos"
+  const configuration = ruleset[rule]
+
+  if (configuration.level === "off") {
     return
   }
 
   const whitelist = new Set(
-    options.whitelist.map((word) => word.trim().toLowerCase()).filter(isNotEmptyString),
+    configuration.options.whitelist
+      .map((word) => word.trim().toLowerCase())
+      .filter(isNotEmptyString),
   )
 }
 ```
@@ -129,10 +150,24 @@ Common sanitisation scenarios:
 - `string` -> `.trim().toLowerCase()` when normalising for comparisons
 - `Array` -> `.filter()` to remove invalid or redundant items (e.g. with `isNotNullish` and `isNotEmptyString`), and/or `new Set()` to remove duplicates
 
-Update `getDefaultCommandLineConfiguration` and `getDefaultGithubActionsConfiguration` with good default options.
-Look at the existing default values for inspiration. Usually, array options like `whitelist` should be empty by default.
-Leave the options as null if the rule should be disabled by default.
+Set reasonably good default values in `DEFAULT_RULESET_CONFIGURATION` that are applicable in most real-world scenarios and which will not decrease the quality of existing commit workflows among the Comet end users.
 Prompt me if you need my input.
+
+`DEFAULT_RULESET_CONFIGURATION` always enables all rules by default.
+If the rule should be disabled by default, override its level in the respective entrypoint(s):
+
+- For the Comet CLI entrypoint, update `DEFAULT_COMMAND_LINE_CONFIGURATION` in `src/configurations/defaults/DefaultCommandLineConfiguration.ts`.
+- For the Comet GitHub Actions entrypoint, update `DEFAULT_GITHUB_ACTIONS_CONFIGURATION` in `src/configurations/defaults/DefaultGithubActionsConfiguration.ts`.
+
+Update `fakeRulesetConfiguration` with realistic rule options when a test needs them.
+
+Look at the existing default values and rule configurations for inspiration. Usually, array options like `whitelist` should be empty by default.
+
+Due to their nature, some rules like `noRestrictedTrailers` and `useAuthorEmailPatterns` depend entirely on their configuration in order to know when to raise concerns.
+They use empty arrays in their default values; hence, they never raise any concerns if they are enabled with default values. Such rules are usually disabled by default in all entrypoints to improve performance.
+
+Note that other rules like `useImperativeSubjectLines` (and `noTypos` in our example) may also use empty arrays in their default values, but they are not entirely dependent on their configuration to raise concerns.
+They are still able to raise concerns even if the configured array is empty. They should not necessarily be disabled by default.
 
 ## Step 4: Outline unit tests
 
@@ -141,10 +176,10 @@ Create a new `.tests.ts` file next to the rule file, for example `NoTypos.tests.
 Start by setting up the rule configuration for the test. For example, for a rule without options:
 
 ```ts
-const rule = "noTypos" satisfies RuleKey
+const rule: RuleKey = "noTypos"
 
 const disabled = emptyRulesetConfiguration()
-const enabled = emptyRulesetConfiguration({ [rule]: {} })
+const enabled = emptyRulesetConfiguration({ [rule]: { level: "error" } })
 
 const fakeCommit = fakeCommitFactory()
 ```
@@ -152,11 +187,16 @@ const fakeCommit = fakeCommitFactory()
 For a rule with options, it has multiple `enabled` scenarios, for example:
 
 ```ts
-const rule = "noTypos" satisfies RuleKey
+const rule: RuleKey = "noTypos"
 
 const disabled = emptyRulesetConfiguration()
-const enabled = emptyRulesetConfiguration({ [rule]: {} })
-const enabledWhitelist = emptyRulesetConfiguration({ [rule]: { whitelist: ["chatify", "rainstormed"] } })
+const enabled = emptyRulesetConfiguration({ [rule]: { level: "error" } })
+const enabledWhitelist = emptyRulesetConfiguration({
+	[rule]: {
+		level: "error",
+		options: { whitelist: ["chatify", "rainstormed"] },
+	},
+})
 
 const fakeCommit = fakeCommitFactory()
 ```
@@ -231,8 +271,7 @@ Be sure to cover many different tokens, for example (but not exhaustive):
 - trailers
 
 Prefer creative, realistic, lowkey funny commit messages and author names over repetitive placeholder data.
-They should resemble a large variety of real-world commit messages to improve the general test coverage.
-For example:
+They should resemble a large variety of real-world commit messages to improve the general test coverage, for example:
 
 - `Release the robot butler`
 - `made the console less dramatic`
@@ -253,13 +292,18 @@ Skip commits that should be ignored by the rule.
 For example:
 
 ```ts
-export function* noTypos(commits: Commits, options: NoTyposOptions | null): Generator<Concern> {
-  if (options === null) {
+export function* noTypos(commits: Commits, ruleset: RulesetConfiguration): Generator<Concern> {
+  const rule: RuleKey = "noTypos"
+  const configuration = ruleset[rule]
+
+  if (configuration.level === "off") {
     return
   }
 
   const whitelist = new Set(
-    options.whitelist.map((word) => word.trim().toLowerCase()).filter(notEmptyString),
+    configuration.options.whitelist
+      .map((word) => word.trim().toLowerCase())
+      .filter(isNotEmptyString),
   )
 
   for (const commit of commits) {
@@ -283,11 +327,10 @@ If the rule concerns the subject line or the body lines, consult `src/commits/To
 
 If you need to add or modify commit message tokens, follow the instructions in `.agents/skills/new-token-type/SKILL.md` and implement those changes in a separate commit.
 
-Iterate over the rule implementation and its unit tests in a TDD-like manner until it satisfies all requirements as clarified in Step 1.
-For example:
+Iterate over the rule implementation and its unit tests in a TDD-like manner until it satisfies all requirements as clarified in Step 1, for example:
 
 ```shell
-vpr test 'src/domains/rules/NoTypos.tests.ts'
+vpr test 'src/rules/NoTypos.tests.ts'
 ```
 
 ## Step 6: Implement reports

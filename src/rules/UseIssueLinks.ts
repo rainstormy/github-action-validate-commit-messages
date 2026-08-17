@@ -1,17 +1,8 @@
-import * as v from "valibot"
 import type { Commits } from "#commits/Commit.ts"
 import { isNotToken, isToken, tokenRangeEnd } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-
-const rule = "useIssueLinks" satisfies RuleKey
-
-export type UseIssueLinksOptions = v.InferOutput<typeof USE_ISSUE_LINKS_OPTIONS>
-
-export const USE_ISSUE_LINKS_OPTIONS = v.strictObject({
-	position: v.picklist(["anywhere", "prefix", "suffix"]),
-})
 
 /**
  * Verifies that the subject line contains at least one issue link.
@@ -25,13 +16,16 @@ export const USE_ISSUE_LINKS_OPTIONS = v.strictObject({
  */
 export function* useIssueLinks(
 	commits: Commits,
-	options: UseIssueLinksOptions | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "useIssueLinks"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 
-	const position = options.position
+	const position = configuration.options.position
 
 	if (position === "anywhere") {
 		for (const commit of commits) {

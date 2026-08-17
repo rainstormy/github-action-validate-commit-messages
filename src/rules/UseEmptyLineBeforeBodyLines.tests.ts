@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import { emptyRulesetConfiguration } from "#configurations/GetConfiguration.fakes.ts"
+import type { RuleKey } from "#configurations/RulesetConfiguration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule = "useEmptyLineBeforeBodyLines" satisfies RuleKey
+const rule: RuleKey = "useEmptyLineBeforeBodyLines"
 
 const disabled = emptyRulesetConfiguration()
-const enabled = emptyRulesetConfiguration({ [rule]: {} })
+const enabled = emptyRulesetConfiguration({ [rule]: { level: "error" } })
 
 const fakeCommit = fakeCommitFactory()
 

@@ -1,12 +1,9 @@
 import type { Commits } from "#commits/Commit.ts"
 import { type Tokens, isToken } from "#commits/Token.ts"
+import type { RuleKey, RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
 import { bodyLineConcern } from "#rules/concerns/BodyLineConcern.ts"
 import type { Concern } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
-import type { EmptyObject } from "#types/EmptyObject.ts"
-
-const rule = "noExcessiveWhitespace" satisfies RuleKey
 
 /**
  * Verifies that the subject line does not contain leading, trailing, or consecutive whitespace characters,
@@ -18,9 +15,12 @@ const rule = "noExcessiveWhitespace" satisfies RuleKey
  */
 export function* noExcessiveWhitespace(
 	commits: Commits,
-	options: EmptyObject | null,
+	ruleset: RulesetConfiguration,
 ): Generator<Concern> {
-	if (options === null) {
+	const rule: RuleKey = "noExcessiveWhitespace"
+	const configuration = ruleset[rule]
+
+	if (configuration.level === "off") {
 		return
 	}
 

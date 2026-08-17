@@ -1,19 +1,27 @@
 import { describe, expect, it } from "vitest"
 import { fakeCommitFactory } from "#commits/Commit.fakes.ts"
 import type { Commit } from "#commits/Commit.ts"
-import { emptyRulesetConfiguration } from "#configurations/Configuration.fakes.ts"
+import { emptyRulesetConfiguration } from "#configurations/GetConfiguration.fakes.ts"
+import type { RuleKey } from "#configurations/RulesetConfiguration.ts"
 import { type Concerns, mapCommitsToConcerns } from "#rules/concerns/Concern.ts"
 import { subjectLineConcern } from "#rules/concerns/SubjectLineConcern.ts"
-import type { RuleKey } from "#rules/Rule.ts"
 import type { CharacterRange } from "#types/CharacterRange.ts"
 import type { Vector } from "#types/Vector.ts"
 
-const rule = "useImperativeSubjectLines" satisfies RuleKey
+const rule: RuleKey = "useImperativeSubjectLines"
 
 const disabled = emptyRulesetConfiguration()
-const enabled = emptyRulesetConfiguration({ [rule]: { whitelist: [] } })
+const enabled = emptyRulesetConfiguration({
+	[rule]: {
+		level: "error",
+		options: { whitelist: [] },
+	},
+})
 const enabledWhitelist = emptyRulesetConfiguration({
-	[rule]: { whitelist: ["chatify", "DECKENIZE"] },
+	[rule]: {
+		level: "error",
+		options: { whitelist: ["chatify", "DECKENIZE"] },
+	},
 })
 
 const fakeCommit = fakeCommitFactory()

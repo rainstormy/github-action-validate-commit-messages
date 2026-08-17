@@ -1,0 +1,25 @@
+import type { RulesetConfiguration } from "#configurations/RulesetConfiguration.ts"
+
+export const DEFAULT_RULESET_CONFIGURATION: RulesetConfiguration = {
+	noBlankSubjectLines: { level: "error", options: {} },
+	noExcessiveCommitsPerBranch: { level: "error", options: { maxCommits: 10 } },
+	noExcessiveWhitespace: { level: "error", options: {} },
+	noMergeCommits: { level: "error", options: {} },
+	noRepeatedSubjectLines: { level: "error", options: {} },
+	noRestrictedTrailers: { level: "error", options: { restrictedKeys: [] } },
+	noRevertRevertCommits: { level: "error", options: {} },
+	noSingleWordSubjectLines: { level: "error", options: {} },
+	noSquashMarkers: { level: "error", options: {} },
+	noUnexpectedPunctuation: { level: "error", options: {} },
+	useAuthorEmailPatterns: { level: "error", options: { patterns: [] } },
+	useAuthorNamePatterns: { level: "error", options: { patterns: [] } },
+	useCapitalisedSubjectLines: { level: "error", options: {} },
+	useCommitterEmailPatterns: { level: "error", options: { patterns: [] } },
+	useCommitterNamePatterns: { level: "error", options: { patterns: [] } },
+	useConciseSubjectLines: { level: "error", options: { maxLength: 50 } },
+	useEmptyLineBeforeBodyLines: { level: "error", options: {} },
+	useImperativeSubjectLines: { level: "error", options: { whitelist: [] } },
+	useIssueLinks: { level: "error", options: { position: "anywhere" } },
+	useLineWrapping: { level: "error", options: { maxLength: 72 } },
+	useSignedCommits: { level: "error", options: {} },
+}
