@@ -214,21 +214,12 @@ catalogs:
     lefthook:
       specifier: 2.1.10
       version: 2.1.10
-    oxfmt:
-      specifier: 0.60.0
-      version: 0.60.0
-    oxlint:
-      specifier: 1.75.0
-      version: 1.75.0
     typescript:
       specifier: 7.0.2
       version: 7.0.2
     valibot:
       specifier: 1.4.2
       version: 1.4.2
-    vite:
-      specifier: 8.1.4
-      version: 8.1.4
     vite-plus:
       specifier: 0.2.6
       version: 0.2.6
@@ -256,18 +247,9 @@ importers:
       node:
         specifier: runtime:24.18.1
         version: runtime:24.18.1
-      oxfmt:
-        specifier: 'catalog:'
-        version: 0.60.0(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3)))
-      oxlint:
-        specifier: 'catalog:'
-        version: 1.75.0(oxlint-tsgolint@7.0.2001)(vite-plus@0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3)))
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
-      vite:
-        specifier: 'catalog:'
-        version: 8.1.4(@types/node@24.13.3)
       vite-plus:
         specifier: 'catalog:'
         version: 0.2.6(@types/node@24.13.3)(@vitest/ui@4.1.10)(typescript@7.0.2)(vite@8.1.4(@types/node@24.13.3))

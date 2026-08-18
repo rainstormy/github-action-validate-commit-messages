@@ -27,12 +27,10 @@ export default defineConfig({
 		{
 			entry: "src/main-cli.ts",
 			minify: { compress: true },
-			env: { PROD: true },
 		},
 		{
 			entry: "src/main-gha.ts",
 			minify: { compress: true },
-			env: { PROD: true },
 			deps: {
 				alwaysBundle: ["valibot"],
 				onlyBundle: ["valibot"],

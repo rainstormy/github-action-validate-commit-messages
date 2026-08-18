@@ -1,5 +1,5 @@
 import { vi } from "vitest"
-import type { GithubEnv } from "#utilities/github/env/GithubEnv.ts"
+import { type GithubEnv, clearCachedGithubEnv } from "#utilities/github/env/GithubEnv.ts"
 
 export function mockGithubEnv(overrides: Partial<GithubEnv> = {}): void {
 	const {
@@ -9,6 +9,8 @@ export function mockGithubEnv(overrides: Partial<GithubEnv> = {}): void {
 	} = overrides
 
 	const [githubApiUrl, repository] = apiBaseUrl.split("/repos/")
+
+	clearCachedGithubEnv()
 
 	vi.stubEnv("GITHUB_API_URL", githubApiUrl)
 	vi.stubEnv("GITHUB_EVENT_PATH", eventPath)

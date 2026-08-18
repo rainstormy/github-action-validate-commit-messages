@@ -16,7 +16,7 @@ let cachedEnv: GithubEnv | null = null
  * @see https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax#example-specifying-inputs
  */
 export function githubEnv(): GithubEnv {
-	if (import.meta.env.PROD && cachedEnv !== null) {
+	if (cachedEnv !== null) {
 		return cachedEnv
 	}
 
@@ -27,6 +27,10 @@ export function githubEnv(): GithubEnv {
 	}
 
 	return cachedEnv
+}
+
+export function clearCachedGithubEnv(): void {
+	cachedEnv = null
 }
 
 function envHttpUrlString(key: EnvKey): HttpUrlString {

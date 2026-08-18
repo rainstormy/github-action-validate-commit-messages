@@ -16,10 +16,7 @@
 		"@rainstormy/presets-web": "catalog:",
 		"@types/node": "catalog:",
 		"lefthook": "catalog:",
-		"oxfmt": "catalog:",
-		"oxlint": "catalog:",
 		"typescript": "catalog:",
-		"vite": "catalog:",
 		"vite-plus": "catalog:",
 		"vitest": "catalog:"
 	},
