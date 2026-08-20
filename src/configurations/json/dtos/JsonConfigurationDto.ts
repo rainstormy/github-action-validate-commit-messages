@@ -6,6 +6,9 @@ import {
 
 export type JsonConfigurationDto = v.InferOutput<typeof JSON_CONFIGURATION_DTO>
 
+export type JsonConfigurationTokensDto = JsonConfigurationDto["tokens"]
+export type JsonConfigurationRulesDto = JsonConfigurationDto["rules"]
+
 const TOKENS_DTO = v.strictObject({
 	issueLinks: v.exactOptional(
 		v.strictObject({
