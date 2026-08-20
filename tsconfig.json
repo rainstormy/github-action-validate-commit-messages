@@ -7,7 +7,7 @@
 		"module": "ESNext",
 		"target": "ESNext",
 		"tsBuildInfoFile": "node_modules/.cache/typescript/.tsbuildinfo",
-		"types": ["node", "vite/client"]
+		"types": ["node"]
 	},
 	"include": ["**/*.ts"],
 	"exclude": ["dist/", "node_modules/"]

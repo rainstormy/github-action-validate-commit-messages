@@ -19,14 +19,6 @@ catalog:
   # https://lefthook.dev
   lefthook: 2.1.10
 
-  # Oxfmt is an opinionated code formatter.
-  # https://oxc.rs/docs/guide/usage/formatter.html
-  oxfmt: 0.60.0
-
-  # Oxlint is a TypeScript linter.
-  # https://oxc.rs/docs/guide/usage/linter.html
-  oxlint: 1.75.0
-
   # The official 'tsc' CLI for TypeScript, including the language service (LSP) and Go-powered compiler (tsgo).
   # https://www.typescriptlang.org
   typescript: 7.0.2
@@ -35,14 +27,13 @@ catalog:
   # https://valibot.dev
   valibot: 1.4.2
 
-  # Vite is a local development server and a bundler.
-  # https://vitejs.dev
-  vite: 8.1.4
-
-  # Vite+ is a unified toolchain and task runner for Oxfmt, Oxlint, Vite, and Vitest.
+  # Vite+ is a unified toolchain and task runner for Oxfmt (an opinionated code formatter), Oxlint (a TypeScript linter), tsdown (a bundler), Vite, and Vitest.
   # It is also a version manager of Node.js and pnpm.
+  # https://oxc.rs/docs/guide/usage/formatter.html
+  # https://oxc.rs/docs/guide/usage/linter.html
+  # https://vitejs.dev
   # https://viteplus.dev
-  vite-plus: 0.2.6
+  vite-plus: 0.2.9
 
   # Vitest is a unit testing framework.
   # https://vitest.dev

@@ -16,22 +16,19 @@
 		"@rainstormy/presets-web": "catalog:",
 		"@types/node": "catalog:",
 		"lefthook": "catalog:",
-		"oxfmt": "catalog:",
-		"oxlint": "catalog:",
 		"typescript": "catalog:",
-		"vite": "catalog:",
 		"vite-plus": "catalog:",
 		"vitest": "catalog:"
 	},
 	"devEngines": {
 		"packageManager": {
 			"name": "pnpm",
-			"version": "11.19.0",
+			"version": "11.22.0",
 			"onFail": "download"
 		},
 		"runtime": {
 			"name": "node",
-			"version": "24.18.1",
+			"version": "24.19.0",
 			"onFail": "download"
 		}
 	}

@@ -594,12 +594,10 @@ describe.each`
 		const commits = await getGitBranchCrudeCommits()
 		expect(commits).toHaveLength(count)
 		expect(commits).toMatchObject(
-			commitDtos.map(
-				(dto, index): Partial<CrudeCommit> => ({
-					sha: dto.commit[0] as CommitSha,
-					message: `Commit ${index + 1}\n\nMore lines of text.`,
-				}),
-			),
+			commitDtos.map((dto, index): Partial<CrudeCommit> => ({
+				sha: dto.commit[0] as CommitSha,
+				message: `Commit ${index + 1}\n\nMore lines of text.`,
+			})),
 		)
 	})
 })

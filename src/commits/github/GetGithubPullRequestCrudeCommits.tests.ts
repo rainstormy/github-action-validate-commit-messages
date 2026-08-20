@@ -686,12 +686,10 @@ describe.each`
 			const commits = await getGithubPullRequestCrudeCommits()
 			expect(commits).toHaveLength(count)
 			expect(commits).toMatchObject(
-				commitDtos.map(
-					(dto, index): Partial<CrudeCommit> => ({
-						sha: dto.sha,
-						message: `Commit ${index + 1}\n\nMore lines of text.`,
-					}),
-				),
+				commitDtos.map((dto, index): Partial<CrudeCommit> => ({
+					sha: dto.sha,
+					message: `Commit ${index + 1}\n\nMore lines of text.`,
+				})),
 			)
 		})
 	},
@@ -718,12 +716,10 @@ describe.each`
 			const commits = await getGithubPullRequestCrudeCommits()
 			expect(commits).toHaveLength(count)
 			expect(commits).toMatchObject(
-				commitDtos.map(
-					(dto, index): Partial<CrudeCommit> => ({
-						sha: dto.sha,
-						message: `Commit ${index + 1}\n\nMore lines of text.`,
-					}),
-				),
+				commitDtos.map((dto, index): Partial<CrudeCommit> => ({
+					sha: dto.sha,
+					message: `Commit ${index + 1}\n\nMore lines of text.`,
+				})),
 			)
 		})
 	},

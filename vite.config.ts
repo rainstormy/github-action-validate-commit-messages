@@ -1,9 +1,11 @@
 import { defineOxfmtConfig } from "@rainstormy/presets-web/oxfmt"
 import { defineOxlintConfig, oxlintRestrictedImportPatterns } from "@rainstormy/presets-web/oxlint"
-import { defineConfig } from "vite-plus"
+import { type UserConfig, defineConfig } from "vite-plus"
+
+type UserOxfmtConfig = NonNullable<UserConfig["fmt"]>
 
 export default defineConfig({
-	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }),
+	fmt: defineOxfmtConfig({ ignorePatterns: ["dist/**/*", "**/*.md"] }) as UserOxfmtConfig,
 	lint: defineOxlintConfig({
 		ignorePatterns: ["dist/**/*"],
 		overrides: [
@@ -27,12 +29,10 @@ export default defineConfig({
 		{
 			entry: "src/main-cli.ts",
 			minify: { compress: true },
-			env: { PROD: true },
 		},
 		{
 			entry: "src/main-gha.ts",
 			minify: { compress: true },
-			env: { PROD: true },
 			deps: {
 				alwaysBundle: ["valibot"],
 				onlyBundle: ["valibot"],
