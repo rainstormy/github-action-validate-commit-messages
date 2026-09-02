@@ -1,5 +1,8 @@
 # Validate Commit Messages in Pull Requests
 
+> [!IMPORTANT]  
+> This repository has been archived, but you can find future versions of the action here: https://github.com/rainstormy/comet
+
 This repository implements a reusable GitHub Action that validates commit
 messages in pull requests on GitHub to ensure that the commit messages meet
 certain standards and to remind you about squash commits that must be
